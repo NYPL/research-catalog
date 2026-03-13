@@ -47,3 +47,8 @@ export interface FieldMapping {
   label: string
   field: string
 }
+
+export interface ContributorEntry {
+  display: string
+  "@value": string
+}

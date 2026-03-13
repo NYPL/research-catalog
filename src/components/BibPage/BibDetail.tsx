@@ -135,7 +135,7 @@ const LinkElement = (
       >
         {url.urlLabel}
       </Link>
-      {url.text && <span>, {url.text}</span>}
+      {url.text && <span>{url.text}</span>}
     </>
   )
 }

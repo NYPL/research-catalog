@@ -7,6 +7,7 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
+  ContributorEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -72,67 +73,36 @@ export default class BibDetails {
     literalField: "creatorLiteral" | "contributorLiteral",
     label: string
   ): LinkedBibDetail | null {
-    const packedField =
+    const displayField =
       literalField === "creatorLiteral"
-        ? "creatorsPacked"
-        : "contributorsPacked"
+        ? "creatorsDisplay"
+        : "contributorsDisplay"
 
-    const packedArray: string[] = this.bib?.[packedField] ?? []
-    const literalArray: string[] = this.bib?.[literalField] ?? []
-
-    if (!literalArray.length) return null
-
-    const personMap = new Map<string, string[]>()
-
-    literalArray.forEach((name) => {
-      const packedEntries = packedArray.filter((p) => p.startsWith(name + "||"))
-
-      const roles = packedEntries
-        .map((entry) => {
-          const raw = entry.split("||")[1] || ""
-          const cleaned = raw.replace(/\.$/, "").trim()
-
-          // Remove duplicate name prefix
-          const namePrefix = `${name}, `
-          const stripped = cleaned.startsWith(namePrefix)
-            ? cleaned.slice(namePrefix.length)
-            : cleaned
-
-          if (!stripped || stripped === name) return null
-          return stripped
+    const value: BibDetailURL[] = Array.isArray(this.bib[displayField])
+      ? this.bib[displayField].map(
+          ({ display, "@value": name }: ContributorEntry) => {
+            const [, roles] = display.split(name)
+            return {
+              url: getContributorSearchURL(name),
+              urlLabel: name,
+              text: roles,
+            }
+          }
+        )
+      : this.bib[literalField]?.map((name) => {
+          return {
+            url: getContributorSearchURL(name),
+            urlLabel: name,
+          }
         })
-        .filter(Boolean)
-        // Split roles on commas in case of multiple roles
-        .flatMap((r) => r.split(",").map((role) => role.trim()))
-        .filter(Boolean) // remove empty strings
-        // deduplicate roles
-        .filter((role, idx, arr) => arr.indexOf(role) === idx)
 
-      if (!personMap.has(name)) {
-        personMap.set(name, [])
-      }
-
-      const existingRoles = personMap.get(name)
-      roles.forEach((role) => {
-        if (!existingRoles.includes(role)) {
-          existingRoles.push(role)
+    return value.length > 0
+      ? {
+          label,
+          link: "internal",
+          value,
         }
-      })
-    })
-
-    const value: BibDetailURL[] = Array.from(personMap.entries()).map(
-      ([name, roles]) => ({
-        url: getContributorSearchURL(name),
-        urlLabel: name,
-        text: roles.length ? roles.join(", ") : undefined,
-      })
-    )
-
-    return {
-      label,
-      link: "internal",
-      value,
-    }
+      : null
   }
 
   buildAnnotatedMarcDetails(
