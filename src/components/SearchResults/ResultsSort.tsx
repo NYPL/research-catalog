@@ -6,20 +6,34 @@ interface ResultsSortProps {
   params: SearchParams | BrowseParams
   handleSortChange: (string) => Promise<void>
   sortOptions: Record<string, string>
+  defaultSort: string
 }
 
 /**
- * The ResultsSort component renders a Select element used for sorting Search or Browse results.
+ * The ResultsSort component renders a Menu component used for sorting search or browse results.
  */
 const ResultsSort = ({
   params,
   handleSortChange,
   sortOptions,
+  defaultSort,
 }: ResultsSortProps) => {
-  const value = params.order
-    ? `${params.sortBy}_${params.order}`
-    : params.sortBy || "relevance"
-
+  let value
+  if (params.sortBy && params.order) {
+    value = `${params.sortBy}_${params.order}`
+  }
+  // Reflect Discovery API default sort orders
+  else if (params.sortBy == "title" || params.sortBy == "creator") {
+    value = `${params.sortBy}_asc`
+  } else if (
+    params.sortBy == "date" ||
+    params.sortBy == "count" ||
+    params.sortBy == "termLabel"
+  ) {
+    value = `${params.sortBy}_desc`
+  } else {
+    value = defaultSort
+  }
   return (
     <Menu
       id="results-sort"

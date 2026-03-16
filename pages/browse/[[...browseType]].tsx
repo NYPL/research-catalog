@@ -193,6 +193,7 @@ export default function Browse({
                 : browseContributorSortOptions
             }
             handleSortChange={handleSortChange}
+            defaultSort="count_desc"
           />
         </Flex>
         {isLoading ? (

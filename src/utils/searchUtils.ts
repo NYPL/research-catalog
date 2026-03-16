@@ -317,6 +317,8 @@ export const sortOptions: Record<string, string> = {
   title_desc: "Title (Z - A)",
   date_asc: "Date (Old to New)",
   date_desc: "Date (New to Old)",
+  creator_asc: "Author (A - Z)",
+  creator_desc: "Author (Z - A)",
 }
 
 /**
