@@ -96,7 +96,7 @@ export default class BibDetails {
           }
         })
 
-    return value.length > 0
+    return value?.length > 0
       ? {
           label,
           link: "internal",

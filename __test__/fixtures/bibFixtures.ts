@@ -11,9 +11,21 @@ export const physicalDescriptionBib = {
     },
   ],
   contributorLiteral: ["Kavenoki, Severin"],
+  contributorsDisplay: [
+    {
+      display: "Kavenoki, Severin",
+      "@value": "Kavenoki, Severin",
+    },
+  ],
   createdString: ["1935"],
   createdYear: 1935,
   creatorLiteral: ["Copley, Richard"],
+  creatorsDisplay: [
+    {
+      display: "Copley, Richard",
+      "@value": "Copley, Richard",
+    },
+  ],
   dateEndString: ["1939"],
   dateEndYear: 1939,
   dateStartYear: 1935,
@@ -257,9 +269,21 @@ export const princetonRecord = {
     },
   ],
   contributorLiteral: ["Brown, David, journalist, joint author."],
+  contributorsDisplay: [
+    {
+      display: "Brown, David, journalist, joint author.",
+      "@value": "Brown, David",
+    },
+  ],
   createdString: ["1943"],
   createdYear: 1943,
   creatorLiteral: ["Wagg, Alfred."],
+  creatorsDisplay: [
+    {
+      display: "Wagg, Alfred.",
+      "@value": "Wagg, Alfred.",
+    },
+  ],
   dateStartYear: 1943,
   dateString: ["1943"],
   dimensions: ["23 cm."],
@@ -8776,11 +8800,20 @@ export const noParallels = {
     createdString: ["2005"],
     createdYear: 2005,
     creatorLiteral: ["Cortanze, Gérard de."],
-    creatorsPacked: [
-      "Cortanze, Gérard de.||Cortanze, Gérard de., arranger of music,, composer,, conductor.",
+    creatorsDisplay: [
+      {
+        display:
+          "Cortanze, Gérard de., arranger of music, composer, conductor.",
+        "@value": "Cortanze, Gérard de.",
+      },
     ],
     contributorLiteral: ["Smith, John"],
-    contributorsPacked: ["Smith, John||Smith, John, ballet dancer."],
+    contributorsDisplay: [
+      {
+        display: "Smith, John, ballet dancer.",
+        "@value": "Smith, John",
+      },
+    ],
     dateStartYear: 2005,
     dateString: ["2005"],
     dimensions: ["19 cm."],
@@ -9250,6 +9283,12 @@ export const yiddishBib = {
       },
     ],
     contributorLiteral: ["Sztokfisz, David."],
+    contributorsDisplay: [
+      {
+        display: "Sztokfisz, David.",
+        "@value": "Sztokfisz, David.",
+      },
+    ],
     createdString: ["1968"],
     createdYear: 1968,
     dateStartYear: 1968,
@@ -10030,6 +10069,12 @@ export const bibManyEResources = {
       },
     ],
     contributorLiteral: ["Société de gens de lettres."],
+    contributorsDisplay: [
+      {
+        display: "Société de gens de lettres.",
+        "@value": "Société de gens de lettres.",
+      },
+    ],
     createdString: ["17uu"],
     createdYear: 17,
     dateEndString: ["1uuu"],
@@ -13077,6 +13122,12 @@ export const bibWithSingleAeonItem = {
       },
     ],
     contributorLiteral: ["Street & Smith, publisher."],
+    contributorsDisplay: [
+      {
+        display: "Street & Smith, publisher.",
+        "@value": "Street & Smith, publisher.",
+      },
+    ],
     createdString: [1939],
     createdYear: 1939,
     dateEndString: [1941],

@@ -150,7 +150,7 @@ describe("BibDetail component", () => {
         )
       )
       const authorTextWithRoles = screen.getByText(
-        ", arranger of music, composer, conductor"
+        /, arranger of music, composer, conductor/
       )
       expect(authorTextWithRoles).toBeInTheDocument()
     })
@@ -168,7 +168,7 @@ describe("BibDetail component", () => {
         "href",
         expect.stringContaining("/browse/authors/Smith")
       )
-      const authorTextWithRoles = screen.getByText(", ballet dancer")
+      const authorTextWithRoles = screen.getByText(/, ballet dancer./)
       expect(authorTextWithRoles).toBeInTheDocument()
     })
     it("renders series field with search filter series link", () => {
