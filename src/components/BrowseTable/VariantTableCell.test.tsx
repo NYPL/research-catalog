@@ -56,7 +56,7 @@ describe("VariantTableCell: contributor", () => {
     const link = screen.getByRole("link", { name: "John Smith" })
     expect(link).toHaveAttribute(
       "href",
-      "/browse/authors?q=John Smith&search_scope=starts_with"
+      "/research/research-catalog/browse/authors?q=John Smith&search_scope=starts_with"
     )
   })
 })
@@ -87,7 +87,7 @@ describe("VariantTableCell: subject", () => {
     const link = screen.getByRole("link", { name: "Beagle" })
     expect(link).toHaveAttribute(
       "href",
-      "/browse?q=Beagle&search_scope=starts_with"
+      "/research/research-catalog/browse?q=Beagle&search_scope=starts_with"
     )
   })
 

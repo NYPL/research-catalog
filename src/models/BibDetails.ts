@@ -78,7 +78,8 @@ export default class BibDetails {
         ? "creatorsDisplay"
         : "contributorsDisplay"
 
-    const value: BibDetailURL[] = Array.isArray(this.bib[displayField])
+    // Main display field
+    const displayValues: BibDetailURL[] = Array.isArray(this.bib[displayField])
       ? this.bib[displayField].map(
           ({ display, "@value": name }: ContributorEntry) => {
             const [, roles] = display.split(name)
@@ -89,18 +90,28 @@ export default class BibDetails {
             }
           }
         )
-      : this.bib[literalField]?.map((name) => {
-          return {
-            url: getContributorSearchURL(name),
-            urlLabel: name,
-          }
-        })
+      : []
 
-    return value?.length > 0
+    // fallback / append any additional parallel values
+    const literalValues: string[] = this.bib[literalField] || []
+
+    // Filter out duplicates
+    const displayNames = new Set(displayValues.map((v) => v.urlLabel))
+    const parallelValues: BibDetailURL[] = literalValues
+      .filter((name) => !displayNames.has(name))
+      .map((name) => ({
+        url: getContributorSearchURL(name),
+        urlLabel: name,
+      }))
+
+    // Combine display + parallel
+    const combinedValues = [...displayValues, ...parallelValues]
+
+    return combinedValues?.length > 0
       ? {
           label,
           link: "internal",
-          value,
+          value: combinedValues,
         }
       : null
   }

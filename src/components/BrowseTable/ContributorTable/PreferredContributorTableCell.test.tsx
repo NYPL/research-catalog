@@ -57,11 +57,11 @@ describe("PreferredContributorTableCell", () => {
     expect(screen.getByText("See also:")).toBeInTheDocument()
     expect(screen.getByRole("link", { name: "Francis Bacon" })).toHaveAttribute(
       "href",
-      "/browse/authors?q=Francis%20Bacon&search_scope=starts_with"
+      "/research/research-catalog/browse/authors?q=Francis%20Bacon&search_scope=starts_with"
     )
     expect(screen.getByRole("link", { name: "Anne Hathaway" })).toHaveAttribute(
       "href",
-      "/browse/authors?q=Anne%20Hathaway&search_scope=starts_with"
+      "/research/research-catalog/browse/authors?q=Anne%20Hathaway&search_scope=starts_with"
     )
   })
 
@@ -86,7 +86,7 @@ describe("PreferredContributorTableCell", () => {
       screen.getByRole("link", { name: "An earlier heading" })
     ).toHaveAttribute(
       "href",
-      "/browse/authors?q=An earlier heading&search_scope=starts_with"
+      "/research/research-catalog/browse/authors?q=An earlier heading&search_scope=starts_with"
     )
   })
 })
