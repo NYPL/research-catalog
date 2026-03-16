@@ -1,12 +1,12 @@
-import { Link, Table } from "@nypl/design-system-react-components"
+import { Table } from "@nypl/design-system-react-components"
 import type { TermLink } from "../../types/browseTypes"
+import { BASE_URL } from "../../config/constants"
 
 export function commaSeparatedTermLinks(terms: TermLink[]) {
   return terms.map((term, i) => (
     <span key={term.url}>
-      <Link href={term.url} isUnderlined={false}>
-        {term.termLabel}
-      </Link>
+      {/* Using standard link instead of CSR, to trigger full reload */}
+      <a href={`${BASE_URL}${term.url}`}>{term.termLabel}</a>
       {i < terms.length - 1 && ", "}
     </span>
   ))

@@ -1,13 +1,13 @@
-import { Flex, Link, List, Text } from "@nypl/design-system-react-components"
+import { Flex, List, Text } from "@nypl/design-system-react-components"
 import type { TermLink, Variant } from "../../types/browseTypes"
+import { BASE_URL } from "../../config/constants"
 
 const VariantTableCell = ({ record }: { record: Variant }) => {
   const PreferredTermLink = (prefTerm: TermLink) => (
     <Text size="body2" mt="-23px">
       <span style={{ fontWeight: "bold" }}>See:</span>{" "}
-      <Link href={prefTerm.url} isUnderlined={false}>
-        {prefTerm.termLabel}
-      </Link>{" "}
+      {/* Using standard link instead of CSR, to trigger full reload */}
+      <a href={`${BASE_URL}${prefTerm.url}`}>{prefTerm.termLabel}</a>{" "}
     </Text>
   )
 

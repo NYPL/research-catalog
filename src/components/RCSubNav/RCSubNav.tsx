@@ -7,6 +7,7 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
+import { useBrowseContext } from "../../context/BrowseContext"
 
 interface SubNavProps {
   activePage: RCPage
@@ -48,6 +49,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
           >
             Search the Catalog
           </SubNavLink>
+
           <SubNavLink
             href="/browse"
             as={NextLink}

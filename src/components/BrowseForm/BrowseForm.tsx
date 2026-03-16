@@ -48,6 +48,8 @@ const BrowseForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
+  // Set the browseType, applied filters, and back to index URL
+  // from the current URL
   useEffect(() => {
     setBrowseType(getBrowseTypeFromPath(router.asPath))
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
@@ -58,6 +60,16 @@ const BrowseForm = ({
         setBackUrl(ref)
     }
   }, [router.query])
+
+  // Set the default selected option for the current browseType
+  useEffect(() => {
+    const defaultOption = getBrowseFormKey(
+      browseType,
+      (router?.query?.search_scope as string) || "has"
+    )
+
+    setSelectedOption(defaultOption)
+  }, [browseType, router?.query?.search_scope])
 
   const optionData = BROWSE_FORM_OPTIONS[selectedOption]
   const placeholder = optionData.placeholder

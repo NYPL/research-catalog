@@ -1,5 +1,4 @@
 import { Flex, List, Text } from "@nypl/design-system-react-components"
-import Link from "../../Link/Link"
 import type {
   PreferredContributor,
   ContributorRole,
@@ -14,10 +13,7 @@ const PreferredContributorTableCell = ({
 }) => {
   const contributorRoleLink = (role: ContributorRole) => (
     <span key={role.roleLabel}>
-      <Link href={role.url} isUnderlined={false}>
-        {role.roleLabel}
-      </Link>{" "}
-      ({role.count})
+      <a href={`${BASE_URL}${role.url}`}>{role.roleLabel}</a> ({role.count})
     </span>
   )
 
