@@ -1,6 +1,7 @@
 import { Menu } from "@nypl/design-system-react-components"
 import type { SearchParams } from "../../types/searchTypes"
 import type { BrowseParams } from "../../types/browseTypes"
+import { useMemo } from "react"
 
 interface ResultsSortProps {
   params: SearchParams | BrowseParams
@@ -18,22 +19,27 @@ const ResultsSort = ({
   sortOptions,
   defaultSort,
 }: ResultsSortProps) => {
-  let value
-  if (params.sortBy && params.order) {
-    value = `${params.sortBy}_${params.order}`
-  }
-  // Reflect Discovery API default sort orders
-  else if (params.sortBy == "title" || params.sortBy == "creator") {
-    value = `${params.sortBy}_asc`
-  } else if (
-    params.sortBy == "date" ||
-    params.sortBy == "count" ||
-    params.sortBy == "termLabel"
-  ) {
-    value = `${params.sortBy}_desc`
-  } else {
-    value = defaultSort
-  }
+  const value = useMemo(() => {
+    if (params.sortBy && params.order) {
+      return `${params.sortBy}_${params.order}`
+    }
+
+    // Reflect Discovery API default sort orders
+    if (params.sortBy === "title" || params.sortBy === "creator") {
+      return `${params.sortBy}_asc`
+    }
+
+    if (
+      params.sortBy === "date" ||
+      params.sortBy === "count" ||
+      params.sortBy === "termLabel"
+    ) {
+      return `${params.sortBy}_desc`
+    }
+
+    return defaultSort
+  }, [params.sortBy, params.order, defaultSort])
+
   return (
     <Menu
       id="results-sort"
