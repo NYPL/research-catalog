@@ -11,6 +11,7 @@ import type {
 import { rtlOrLtr } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
 import type { BrowseType } from "../../types/browseTypes"
+import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -101,9 +102,11 @@ export const BrowseLinkDetailElement = ({
           {" - "}
           {LinkElement(
             {
-              url: `/browse${browseType === "subjects" ? "" : "/authors/"}?q=${
+              url: `/browse${
+                browseType === "subjects" ? "" : "/authors/"
+              }?q=${encodeURIComponentWithPeriods(
                 urlInfo.urlLabel
-              }&search_scope=starts_with`,
+              )}&search_scope=starts_with`,
               urlLabel: `[${indexLinkLabel}]`,
             },
             "internal",
