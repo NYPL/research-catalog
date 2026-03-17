@@ -2,7 +2,6 @@ import {
   Box,
   Flex,
   Icon,
-  Link,
   SearchBar,
   Text,
 } from "@nypl/design-system-react-components"
@@ -22,6 +21,7 @@ import { idConstants, useFocusContext } from "../../context/FocusContext"
 import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
+import Link from "../Link/Link"
 
 const SearchForm = ({
   aggregations,
