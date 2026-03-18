@@ -5,17 +5,28 @@ export class BrowsePage {
   readonly searchterm: string
   searchType: string
 
+  readonly banner: Locator
   readonly search_dropdown: Locator
   readonly search_input: Locator
   readonly search_submit_button: Locator
   readonly searchResultsContainer: Locator
-  readonly searchResults: Locator
   readonly searchResultsTitle: Locator
+  readonly sortCountHighToLow: Locator
+  readonly sortCountLowToHigh: Locator
+  readonly sortAtoZ: Locator
+  readonly sortZtoA: Locator
+  readonly titleCount: Locator
 
-  constructor(page: Page, searchterm: string, searchType = "Keyword") {
+  constructor(
+    page: Page,
+    searchterm: string,
+    searchType = "Subject Headings containing"
+  ) {
     this.page = page
     this.searchterm = searchterm
     this.searchType = searchType
+    this.banner = page.getByTestId("ds-banner")
+
 
     this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
@@ -24,11 +35,24 @@ export class BrowsePage {
       exact: true,
     })
 
-    this.searchResultsContainer = page.locator("#search-results-list")
-    this.searchResults = page.locator("#search-results-list h3 a")
     this.searchResultsTitle = page.locator("//span/div/a", {
       hasText: this.searchterm,
     })
+    this.sortCountHighToLow = page.getByRole("button", {
+      name: "Sort by: Count (High - Low): Count (High - Low)",
+    })
+    this.sortCountLowToHigh = page.getByRole("menuitem", {
+      name: "Count (Low - High)",
+    })
+    this.sortAtoZ = page.getByRole("button", {
+      name: "Sort by: Subject Heading (A-Z)",
+    })
+    this.sortZtoA = page.getByRole("button", {
+      name: "Sort by: Subject Heading (Z-A)",
+    })
+    this.titleCount = page.locator(
+      "//span[preceding-sibling::span[text()='Results']]"
+    )
   }
 
   get searchResultsHeading() {
