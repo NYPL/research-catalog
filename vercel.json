@@ -7,9 +7,15 @@
   ],
   "functions": {
     "pages/search/index.tsx": {
+      "runtime": "@vercel/node@1.13.0",
       "maxDuration": 60
     },
     "pages/api/*.js": {
+      "runtime": "@vercel/node@1.13.0",
+      "maxDuration": 60
+    },
+    "pages/api/**/*.ts": {
+      "runtime": "@vercel/node@1.13.0",
       "maxDuration": 60
     }
   }

@@ -168,6 +168,7 @@ export default function Browse({
             params={browseParams}
             sortOptions={browseSortOptions}
             handleSortChange={handleSortChange}
+            defaultSort="count_desc"
           />
         </Flex>
         {isLoading ? (
