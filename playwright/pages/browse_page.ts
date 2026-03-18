@@ -27,7 +27,6 @@ export class BrowsePage {
     this.searchType = searchType
     this.banner = page.getByTestId("ds-banner")
 
-
     this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
     this.search_submit_button = page.getByRole("button", {
