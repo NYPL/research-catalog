@@ -211,6 +211,23 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
+  const populatedAdvancedFields = advancedSearchFields
+    .map(({ name }) => name)
+    .filter((name) => name !== "q" && params[name])
+
+  const isOnlyCallNumberPopulated =
+    populatedAdvancedFields.length === 1 &&
+    populatedAdvancedFields[0] === "callnumber"
+
+  const isOnlyCallNumberQuery =
+    field === "callnumber" || isOnlyCallNumberPopulated
+  console.log(
+    "sortQuery",
+    sortQuery,
+    "isCallnumber",
+    isOnlyCallNumberQuery,
+    populatedAdvancedFields
+  )
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
@@ -280,6 +297,7 @@ export const sortOptions: Record<string, string> = {
   date_desc: "Date (New to Old)",
   creator_asc: "Author (A - Z)",
   creator_desc: "Author (Z - A)",
+  call_number: "Call number",
 }
 
 /**
