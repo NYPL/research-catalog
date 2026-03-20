@@ -101,8 +101,14 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
 /**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
+ * Handle defaults for relevance and call number.
  */
-function getSortQuery(sortBy = "", order = ""): string {
+function getSortQuery(
+  sortBy = "",
+  order = "",
+  field,
+  populatedAdvancedFields
+): string {
   const reset = sortBy === "relevance"
   let sortQuery = ""
   const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
@@ -110,6 +116,18 @@ function getSortQuery(sortBy = "", order = ""): string {
   if (sortBy?.length && !reset) {
     sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
   }
+
+  const isOnlyCallNumberPopulated =
+    populatedAdvancedFields.length === 1 &&
+    populatedAdvancedFields[0] === "callnumber"
+
+  const isOnlyCallNumberQuery =
+    field === "callnumber" || isOnlyCallNumberPopulated
+
+  if (sortBy === "" && isOnlyCallNumberQuery) {
+    sortQuery = "&sort=callnumber"
+  }
+  console.log("final sort query", sortQuery)
 
   return sortQuery
 }
@@ -185,7 +203,6 @@ export function getSearchQuery(params: SearchParams): string {
     page = 1,
   } = params
   const searchKeywordsQuery = encodeURIComponentWithPeriods(q)
-  const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(filters)
   const fieldQuery = getFieldQuery(field)
@@ -213,21 +230,8 @@ export function getSearchQuery(params: SearchParams): string {
 
   const populatedAdvancedFields = advancedSearchFields
     .map(({ name }) => name)
-    .filter((name) => name !== "q" && params[name])
-
-  const isOnlyCallNumberPopulated =
-    populatedAdvancedFields.length === 1 &&
-    populatedAdvancedFields[0] === "callnumber"
-
-  const isOnlyCallNumberQuery =
-    field === "callnumber" || isOnlyCallNumberPopulated
-  console.log(
-    "sortQuery",
-    sortQuery,
-    "isCallnumber",
-    isOnlyCallNumberQuery,
-    populatedAdvancedFields
-  )
+    .filter((name) => params[name])
+  const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
@@ -297,7 +301,7 @@ export const sortOptions: Record<string, string> = {
   date_desc: "Date (New to Old)",
   creator_asc: "Author (A - Z)",
   creator_desc: "Author (Z - A)",
-  call_number: "Call number",
+  callnumber_asc: "Call number",
 }
 
 /**

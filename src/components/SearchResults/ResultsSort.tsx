@@ -23,7 +23,11 @@ const ResultsSort = ({
     value = `${params.sortBy}_${params.order}`
   }
   // Reflect Discovery API default sort orders
-  else if (params.sortBy == "title" || params.sortBy == "creator") {
+  else if (
+    params.sortBy == "title" ||
+    params.sortBy == "creator" ||
+    params.sortBy == "callnumber"
+  ) {
     value = `${params.sortBy}_asc`
   } else if (
     params.sortBy == "date" ||
