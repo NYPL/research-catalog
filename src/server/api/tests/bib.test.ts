@@ -56,10 +56,8 @@ describe("fetchBib", () => {
     expect(bibResponse.status).toBe(200)
   })
 
-  it("accepts an optional item id", async () => {
-    mockClient.get
-      .mockResolvedValueOnce(mockBibResponse())
-      .mockResolvedValueOnce(mockAMResponse())
+  it("accepts an optional item id, and does not return AM on item id", async () => {
+    mockClient.get.mockResolvedValueOnce(mockBibResponse())
 
     const bibResponse = (await fetchBib(
       "b17418167",
@@ -68,6 +66,7 @@ describe("fetchBib", () => {
     )) as BibResponse
 
     expect(bibResponse.discoveryBibResult.numItemsTotal).toBe(1)
+    expect(bibResponse.annotatedMarc).toBe(null)
     expect(bibResponse.status).toBe(200)
   })
 
