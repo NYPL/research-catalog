@@ -106,7 +106,7 @@ export default class BibDetails {
 
     const combinedValues = [...displayValues, ...literals]
 
-    return combinedValues.length > 0
+    return combinedValues?.length > 0
       ? {
           label,
           link: "internal",
