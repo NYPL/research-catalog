@@ -36,9 +36,10 @@ export async function fetchBib(
     isNyplBibID(standardizedId) &&
       !itemId &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
-          itemId ? `-${itemId}` : ""
-        }.annotated-marc${getBibQueryString(bibQuery, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )),
   ])
 
