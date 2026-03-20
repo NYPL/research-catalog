@@ -32,12 +32,14 @@ export async function fetchBib(
         itemId ? `-${itemId}` : ""
       }${getBibQueryString(bibQuery)}`
     ),
-    // Don't fetch annotated marc for partner records:
+    // Don't fetch annotated marc for partner records or hold requests (item ID passed):
     isNyplBibID(standardizedId) &&
+      !itemId &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
-          itemId ? `-${itemId}` : ""
-        }.annotated-marc${getBibQueryString(bibQuery, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )),
   ])
 
