@@ -78,36 +78,35 @@ export default class BibDetails {
         ? "creatorsDisplay"
         : "contributorsDisplay"
 
-    // Main display field
-    const displayValues: BibDetailURL[] = Array.isArray(this.bib[displayField])
-      ? this.bib[displayField].map(
-          ({ display, "@value": name }: ContributorEntry) => {
+    const mapDisplay = (arr?: ContributorEntry[]): BibDetailURL[] =>
+      Array.isArray(arr)
+        ? arr.map(({ display, "@value": name }) => {
             const [, roles] = display.split(name)
             return {
               url: getContributorSearchURL(name),
               urlLabel: name,
-              text: roles,
+              text: roles?.trim() || undefined,
             }
-          }
-        )
-      : []
+          })
+        : []
 
-    // fallback / append any additional parallel values
+    const displayValues = mapDisplay(this.bib[displayField])
+
+    // Set of displayed names for deduping
+    const seen = new Set(displayValues.map((v) => v.urlLabel))
+
+    // Literals (fallback)
     const literalValues: string[] = this.bib[literalField] || []
-
-    // Filter out duplicates
-    const displayNames = new Set(displayValues.map((v) => v.urlLabel))
-    const parallelValues: BibDetailURL[] = literalValues
-      .filter((name) => !displayNames.has(name))
+    const literals: BibDetailURL[] = literalValues
+      .filter((name) => !seen.has(name))
       .map((name) => ({
         url: getContributorSearchURL(name),
         urlLabel: name,
       }))
 
-    // Combine display + parallel
-    const combinedValues = [...displayValues, ...parallelValues]
+    const combinedValues = [...displayValues, ...literals]
 
-    return combinedValues?.length > 0
+    return combinedValues.length > 0
       ? {
           label,
           link: "internal",
