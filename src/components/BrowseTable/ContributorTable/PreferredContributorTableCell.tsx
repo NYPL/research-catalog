@@ -31,12 +31,15 @@ const PreferredContributorTableCell = ({
         <List
           variant="ul"
           m="0"
-          listItems={contributor.roles.map((role) => (
-            <Text size="body2" mt="-23px" key={role.roleLabel}>
-              <span style={{ fontWeight: "bold" }}>As:</span>{" "}
-              {contributorRoleLink(role)}
-            </Text>
-          ))}
+          listItems={contributor.roles
+            // Drop unlabeled roles
+            .filter((role) => role.roleLabel?.trim())
+            .map((role) => (
+              <Text size="body2" mt="-23px" key={role.roleLabel}>
+                <span style={{ fontWeight: "bold" }}>As:</span>{" "}
+                {contributorRoleLink(role)}
+              </Text>
+            ))}
         />
       )}
       {relatedTerms.length > 0 && (
