@@ -63,6 +63,8 @@ const Search = ({
   const searchResultsHeadingRef = useRef(null)
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  // DS Menu component remounts, needs extra focus handling
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (liveLoadingRegionRef.current) {
@@ -160,10 +162,10 @@ const Search = ({
                 )}
               </Heading>
               <ResultsSort
+                ref={sortMenuRef}
                 sortOptions={sortOptions}
                 params={searchParams}
                 handleSortChange={handleSortChange}
-                defaultSort="relevance"
               />
             </Flex>
             {isLoading ? (

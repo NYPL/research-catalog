@@ -103,33 +103,33 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
  * Get the sort type and order and format into query param snippet.
  * Handle defaults for relevance and call number.
  */
+
 function getSortQuery(
-  sortBy = "",
-  order = "",
-  field,
-  populatedAdvancedFields
+  sortBy: string | undefined,
+  order: string | undefined,
+  field: string | undefined,
+  populatedAdvancedFields: string[],
+  sortWasProvided: boolean
 ): string {
-  const reset = sortBy === "relevance"
-  let sortQuery = ""
-  const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
-
-  if (sortBy?.length && !reset) {
-    sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
-  }
-
-  const isOnlyCallNumberPopulated =
-    populatedAdvancedFields.length === 1 &&
-    populatedAdvancedFields[0] === "callnumber"
+  const sortDirectionQuery = order ? `&sort_direction=${order}` : ""
 
   const isOnlyCallNumberQuery =
-    field === "callnumber" || isOnlyCallNumberPopulated
+    field === "callnumber" ||
+    (populatedAdvancedFields.length === 1 &&
+      populatedAdvancedFields[0] === "callnumber")
 
-  if (sortBy === "" && isOnlyCallNumberQuery) {
-    sortQuery = "&sort=callnumber"
+  // default call number if no user choice
+  if (!sortWasProvided && isOnlyCallNumberQuery) {
+    return "&sort=callnumber"
   }
-  console.log("final sort query", sortQuery)
 
-  return sortQuery
+  // otherwise respect user choice
+  if (sortBy) {
+    return `&sort=${sortBy}${sortDirectionQuery}`
+  }
+
+  // otherwise default to relevance ("")
+  return ""
 }
 
 /**
@@ -228,10 +228,17 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
+  const sortWasProvided = "sortBy" in params && params.sortBy !== undefined
   const populatedAdvancedFields = advancedSearchFields
     .map(({ name }) => name)
     .filter((name) => params[name])
-  const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
+  const sortQuery = getSortQuery(
+    sortBy,
+    order,
+    field,
+    populatedAdvancedFields,
+    sortWasProvided
+  )
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }

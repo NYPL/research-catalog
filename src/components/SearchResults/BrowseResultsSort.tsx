@@ -1,38 +1,39 @@
 import { Menu } from "@nypl/design-system-react-components"
-import type { SearchParams } from "../../types/searchTypes"
-import { useMemo, forwardRef, useEffect } from "react"
+import type { BrowseParams } from "../../types/browseTypes"
+import { forwardRef, useEffect, useMemo } from "react"
 import { idConstants, useFocusContext } from "../../context/FocusContext"
 
-interface ResultsSortProps {
-  params: SearchParams
+interface BrowseResultsSortProps {
+  params: BrowseParams
   handleSortChange: (string) => Promise<void>
   sortOptions: Record<string, string>
+  defaultSort: string
 }
-/**
- * The ResultsSort component renders a Menu component used for sorting search results.
- */
-const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
-  ({ params, handleSortChange, sortOptions }, ref) => {
-    const { activeElementId } = useFocusContext()
 
+/**
+ * The BrowseResultsSort component renders a Menu component used for sorting browse results.
+ */
+const BrowseResultsSort = forwardRef<HTMLDivElement, BrowseResultsSortProps>(
+  ({ params, handleSortChange, sortOptions, defaultSort }, ref) => {
+    const { activeElementId } = useFocusContext()
     const selectedValue = useMemo(() => {
-      if (params.sortBy === "relevance") return "relevance"
+      if (params.sortBy && params.order) {
+        return `${params.sortBy}_${params.order}`
+      }
       // Reflect Discovery API default sort orders
-      if (params.sortBy)
-        return params.order
-          ? `${params.sortBy}_${params.order}`
-          : `${params.sortBy}_asc`
-      if (params.field === "callnumber" || params.callnumber)
-        return "callnumber_asc"
-      return "relevance"
-    }, [params.sortBy, params.order, params.field, params.callnumber])
+      if (params.sortBy === "count" || params.sortBy === "termLabel") {
+        return `${params.sortBy}_desc`
+      }
+
+      return defaultSort
+    }, [params.sortBy, params.order, defaultSort])
 
     // Uses current focus context value and wrapping ref to refocus Menu's internal button
     useEffect(() => {
       if (
         ref &&
         typeof ref !== "function" &&
-        activeElementId === idConstants.searchResultsSort
+        activeElementId === idConstants.browseResultsSort
       ) {
         const btn = ref.current?.querySelector("button")
         btn?.focus()
@@ -42,8 +43,9 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
     return (
       <div style={{ zIndex: "9999" }} ref={ref}>
         <Menu
-          key={selectedValue}
-          id="results-sort"
+          zIndex="9999"
+          key={selectedValue} // forcing full remount
+          id="browse-results-sort"
           showLabel
           className="no-print"
           selectedItem={selectedValue}
@@ -60,5 +62,6 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
   }
 )
 
-export default ResultsSort
-ResultsSort.displayName = "ResultsSort"
+export default BrowseResultsSort
+
+BrowseResultsSort.displayName = "BrowseResultsSort"
