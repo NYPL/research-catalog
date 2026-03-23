@@ -16,6 +16,7 @@ export class BrowsePage {
   readonly sortAtoZ: Locator
   readonly sortZtoA: Locator
   readonly titleCount: Locator
+  readonly seeAlsoLinks: Locator
 
   constructor(
     page: Page,
@@ -52,6 +53,10 @@ export class BrowsePage {
     this.titleCount = page.locator(
       "//span[preceding-sibling::span[text()='Results']]"
     )
+    this.seeAlsoLinks = page
+      .locator("p")
+      .filter({ hasText: "See also:" })
+      .locator("a[data-testid='ds-link']")
   }
 
   get searchResultsHeading() {
