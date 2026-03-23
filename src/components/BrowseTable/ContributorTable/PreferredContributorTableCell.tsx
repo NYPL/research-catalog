@@ -23,32 +23,31 @@ const PreferredContributorTableCell = ({
     contributor.laterHeadings,
   ].filter(Boolean)
 
+  const roleItems =
+    contributor.roles
+      ?.filter((role) => role.roleLabel?.trim())
+      .map((role) => (
+        <Text size="body2" mt="-23px" key={role.roleLabel}>
+          <strong>As:</strong> {contributorRoleLink(role)}
+        </Text>
+      )) ?? []
+
+  const relatedItems = relatedTerms.map(({ label, terms }) => (
+    <Text size="body2" mt="-23px" key={label}>
+      <strong>{label}:</strong> {commaSeparatedTermLinks(terms)}
+    </Text>
+  ))
+  const listItems = [...roleItems, ...relatedItems]
+
   return (
     <Flex flexDir="column">
       {/* Using standard link instead of CSR, to trigger back to index button */}
       <a style={{ marginTop: "xs" }} href={`${BASE_URL}${contributor.url}`}>
         {contributor.termLabel}
       </a>
-      {(contributor.roles?.length > 0 || relatedTerms.length > 0) && (
+      {listItems.length > 0 && (
         <Flex flexDir="column" mt="xs">
-          <List
-            variant="ul"
-            m="0"
-            listItems={[
-              ...contributor.roles
-                .filter((role) => role.roleLabel?.trim())
-                .map((role) => (
-                  <Text size="body2" mt="-23px" key={role.roleLabel}>
-                    <strong>As:</strong> {contributorRoleLink(role)}
-                  </Text>
-                )),
-              ...relatedTerms.map(({ label, terms }) => (
-                <Text size="body2" mt="-23px" key={label}>
-                  <strong>{label}:</strong> {commaSeparatedTermLinks(terms)}
-                </Text>
-              )),
-            ]}
-          />
+          <List variant="ul" m="0" listItems={listItems} />
         </Flex>
       )}
     </Flex>
