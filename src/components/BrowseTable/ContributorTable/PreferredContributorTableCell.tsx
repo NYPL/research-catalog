@@ -24,32 +24,32 @@ const PreferredContributorTableCell = ({
   ].filter(Boolean)
 
   return (
-    <Flex flexDir="column" gap="xs">
+    <Flex flexDir="column">
       {/* Using standard link instead of CSR, to trigger back to index button */}
-      <a href={`${BASE_URL}${contributor.url}`}>{contributor.termLabel}</a>
-      {contributor.roles?.length > 0 && (
-        <List
-          variant="ul"
-          m="0"
-          listItems={contributor.roles.map((role) => (
-            <Text size="body2" mt="-23px" key={role.roleLabel}>
-              <span style={{ fontWeight: "bold" }}>As:</span>{" "}
-              {contributorRoleLink(role)}
-            </Text>
-          ))}
-        />
-      )}
-      {relatedTerms.length > 0 && (
-        <List
-          variant="ul"
-          m="0"
-          listItems={relatedTerms?.map(({ label, terms }) => (
-            <Text size="body2" mt="-23px" key={label}>
-              <span style={{ fontWeight: "bold" }}>{label}:</span>{" "}
-              {commaSeparatedTermLinks(terms)}
-            </Text>
-          ))}
-        />
+      <a style={{ marginTop: "xs" }} href={`${BASE_URL}${contributor.url}`}>
+        {contributor.termLabel}
+      </a>
+      {(contributor.roles?.length > 0 || relatedTerms.length > 0) && (
+        <Flex flexDir="column" mt="xs">
+          <List
+            variant="ul"
+            m="0"
+            listItems={[
+              ...contributor.roles
+                .filter((role) => role.roleLabel?.trim())
+                .map((role) => (
+                  <Text size="body2" mt="-23px" key={role.roleLabel}>
+                    <strong>As:</strong> {contributorRoleLink(role)}
+                  </Text>
+                )),
+              ...relatedTerms.map(({ label, terms }) => (
+                <Text size="body2" mt="-23px" key={label}>
+                  <strong>{label}:</strong> {commaSeparatedTermLinks(terms)}
+                </Text>
+              )),
+            ]}
+          />
+        </Flex>
       )}
     </Flex>
   )
