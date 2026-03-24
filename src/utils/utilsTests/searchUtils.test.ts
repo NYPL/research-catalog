@@ -25,8 +25,7 @@ describe("searchUtils", () => {
     })
     it("includes advanced search query params when field is set to 'all'", () => {
       const testQuery =
-        "?q=shel%20silverstein&contributor=shel%20silverstein&title=the%20giving%20tree&subject=books"
-
+        "?q=shel%20silverstein&contributor=shel%20silverstein&title=the%20giving%20tree&subject=books&sort=relevance"
       expect(
         checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
@@ -38,7 +37,9 @@ describe("searchUtils", () => {
       ).toBe(true)
     })
     it("clears advanced search query params when field param is anything other than 'all'", () => {
-      const titleQuery = "?q=shel%20silverstein&search_scope=title"
+      const titleQuery =
+        "?q=shel%20silverstein&sort=relevance&search_scope=title"
+
       expect(
         checkQueryParamsEquality(titleQuery, {
           q: "shel silverstein",
@@ -49,7 +50,8 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
 
-      const subjectQuery = "?q=shel%20silverstein&search_scope=subject"
+      const subjectQuery =
+        "?q=shel%20silverstein&sort=relevance&search_scope=subject"
       expect(
         checkQueryParamsEquality(subjectQuery, {
           q: "shel silverstein",
@@ -60,7 +62,8 @@ describe("searchUtils", () => {
         })
       ).toBe(true)
 
-      const contributorQuery = "?q=shel%20silverstein&search_scope=contributor"
+      const contributorQuery =
+        "?q=shel%20silverstein&sort=relevance&search_scope=contributor"
       expect(
         checkQueryParamsEquality(contributorQuery, {
           q: "shel silverstein",
@@ -73,7 +76,7 @@ describe("searchUtils", () => {
     })
     it("encodes special characters in advanced search params", () => {
       const testQuery =
-        "?q=uber&title=%C3%9Cber%20den%20Prozess&contributor=G%C3%BCnther&subject=%C3%84sthetik"
+        "?q=uber&title=%C3%9Cber%20den%20Prozess&contributor=G%C3%BCnther&subject=%C3%84sthetik&sort=relevance"
 
       expect(
         checkQueryParamsEquality(testQuery, {

@@ -1,8 +1,8 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
 import ResultsSort from "./ResultsSort"
 import userEvent from "@testing-library/user-event"
 import { sortOptions } from "../../utils/searchUtils"
+import { render, screen } from "../../utils/testUtils"
 
 describe("Search results sort menu", () => {
   it("calls the callback function when changed", async () => {
