@@ -266,9 +266,9 @@ export default class BibDetails {
     if (Object.keys(keptByLabel).length > 0) {
       console.log(
         `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
-        {
+        JSON.stringify({
           keptMarcFields: keptByLabel,
-        }
+        })
       )
     }
 
