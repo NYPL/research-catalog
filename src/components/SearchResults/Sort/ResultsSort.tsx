@@ -1,7 +1,7 @@
 import { Menu } from "@nypl/design-system-react-components"
-import type { SearchParams } from "../../types/searchTypes"
+import type { SearchParams } from "../../../types/searchTypes"
 import { useMemo, forwardRef, useEffect } from "react"
-import { idConstants, useFocusContext } from "../../context/FocusContext"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface ResultsSortProps {
   params: SearchParams
@@ -17,13 +17,15 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
 
     const selectedValue = useMemo(() => {
       if (params.sortBy === "relevance") return "relevance"
-      // Reflect Discovery API default sort orders
+      // Reflect Discovery API's default sort orders
       if (params.sortBy)
         return params.order
           ? `${params.sortBy}_${params.order}`
           : `${params.sortBy}_asc`
       if (params.field === "callnumber" || params.callnumber)
         return "callnumber_asc"
+
+      // Default for search
       return "relevance"
     }, [params.sortBy, params.order, params.field, params.callnumber])
 
@@ -42,7 +44,7 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
     return (
       <div style={{ zIndex: "9999" }} ref={ref}>
         <Menu
-          key={selectedValue}
+          key={selectedValue} // TODO: Forcing remount, replace with repaired Menu component
           id="results-sort"
           showLabel
           className="no-print"

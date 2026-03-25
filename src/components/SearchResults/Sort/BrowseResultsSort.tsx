@@ -1,32 +1,31 @@
 import { Menu } from "@nypl/design-system-react-components"
-import type { BrowseParams } from "../../types/browseTypes"
+import type { BrowseParams } from "../../../types/browseTypes"
 import { forwardRef, useEffect, useMemo } from "react"
-import { idConstants, useFocusContext } from "../../context/FocusContext"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface BrowseResultsSortProps {
   params: BrowseParams
   handleSortChange: (string) => Promise<void>
   sortOptions: Record<string, string>
-  defaultSort: string
 }
 
 /**
  * The BrowseResultsSort component renders a Menu component used for sorting browse results.
  */
 const BrowseResultsSort = forwardRef<HTMLDivElement, BrowseResultsSortProps>(
-  ({ params, handleSortChange, sortOptions, defaultSort }, ref) => {
+  ({ params, handleSortChange, sortOptions }, ref) => {
     const { activeElementId } = useFocusContext()
     const selectedValue = useMemo(() => {
       if (params.sortBy && params.order) {
         return `${params.sortBy}_${params.order}`
       }
-      // Reflect Discovery API default sort orders
+      // Reflect Discovery API's default sort orders
       if (params.sortBy === "count" || params.sortBy === "termLabel") {
         return `${params.sortBy}_desc`
       }
-
-      return defaultSort
-    }, [params.sortBy, params.order, defaultSort])
+      // Default for browse
+      return "count_desc"
+    }, [params.sortBy, params.order])
 
     // Uses current focus context value and wrapping ref to refocus Menu's internal button
     useEffect(() => {
@@ -44,7 +43,7 @@ const BrowseResultsSort = forwardRef<HTMLDivElement, BrowseResultsSortProps>(
       <div style={{ zIndex: "9999" }} ref={ref}>
         <Menu
           zIndex="9999"
-          key={selectedValue} // forcing full remount
+          key={selectedValue} // TODO: Forcing remount, replace with repaired Menu component
           id="browse-results-sort"
           showLabel
           className="no-print"

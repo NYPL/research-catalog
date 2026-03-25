@@ -29,7 +29,7 @@ import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
-import BrowseResultsSort from "../../src/components/SearchResults/BrowseResultsSort"
+import BrowseResultsSort from "../../src/components/SearchResults/Sort/BrowseResultsSort"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse
@@ -172,7 +172,6 @@ export default function Browse({
             params={browseParams}
             sortOptions={browseSortOptions}
             handleSortChange={handleSortChange}
-            defaultSort="count_desc"
           />
         </Flex>
         {isLoading ? (
