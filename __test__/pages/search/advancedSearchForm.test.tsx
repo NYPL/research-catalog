@@ -60,6 +60,7 @@ describe("Advanced search form", () => {
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
   })
+
   it("displays alert when no fields are submitted", () => {
     submit()
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
@@ -70,7 +71,7 @@ describe("Advanced search form", () => {
     submit()
 
     expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food&searched_from=advanced"
+      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food&sort=relevance&searched_from=advanced"
     )
   })
   it("renders inputs for all text input fields", () => {
@@ -79,6 +80,17 @@ describe("Advanced search form", () => {
       expect(input).toBeInTheDocument()
     })
   })
+
+  it("defaults to call number sort when call number is the only field passed", async () => {
+    const callNumberInput = screen.getByLabelText("Call number")
+    fireEvent.change(callNumberInput, { target: { value: "12345" } })
+    await delay(500)
+    submit()
+    expect(mockRouter.asPath).toBe(
+      "/search?q=&callnumber=12345&sort=callnumber&searched_from=advanced"
+    )
+  })
+
   it("can select languages", async () => {
     const languageMultiselect = screen.getByLabelText(/Language/, {
       selector: "button",
@@ -93,7 +105,7 @@ describe("Advanced search form", () => {
     submit()
     // expect the label for Afrikaans (afr) to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
+      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&sort=relevance&searched_from=advanced"
     )
   })
   it("can search and select division checkboxes", async () => {
@@ -121,7 +133,7 @@ describe("Advanced search form", () => {
     submit()
     // expect Jean Blackwell Hutson collection code (scf) in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&searched_from=advanced"
+      "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&sort=relevance&searched_from=advanced"
     )
   })
 
@@ -166,7 +178,7 @@ describe("Advanced search form", () => {
     submit()
 
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&searched_from=advanced"
+      "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&sort=relevance&searched_from=advanced"
     )
   })
 

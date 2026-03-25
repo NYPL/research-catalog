@@ -57,7 +57,7 @@ describe("fetchSearchResults", () => {
       error: expect.stringContaining("No connection"),
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: No connection Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+      "Error in fetchSearchResults: No connection Requests: search ?q=cat&sort=relevance&per_page=50, aggregations /aggregations?q=cat&sort=relevance"
     )
   })
 
@@ -90,7 +90,7 @@ describe("fetchSearchResults", () => {
       error: "Invalid query",
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: Invalid query Requests: search ?q=!!!&per_page=50, aggregations /aggregations?q=!!!"
+      "Error in fetchSearchResults: Invalid query Requests: search ?q=!!!&sort=relevance&per_page=50, aggregations /aggregations?q=!!!&sort=relevance"
     )
   })
 
@@ -109,7 +109,7 @@ describe("fetchSearchResults", () => {
     expect(response).toEqual({
       status: 404,
       error:
-        "No results found for search ?q=empty&per_page=50, aggregations /aggregations?q=empty",
+        "No results found for search ?q=empty&sort=relevance&per_page=50, aggregations /aggregations?q=empty&sort=relevance",
     })
   })
 })

@@ -34,7 +34,7 @@ describe("Search Results page", () => {
 
       const pageButton = screen.getByLabelText("Page 2")
       fireEvent.click(pageButton)
-      expect(mockRouter.asPath).toBe("/?q=spaghetti&page=2")
+      expect(mockRouter.asPath).toBe("/?q=spaghetti&sort=relevance&page=2")
     })
     it("renders the sort select fields and updates the query string in the url on changes", async () => {
       await mockRouter.push(`/search?q=${query}`)

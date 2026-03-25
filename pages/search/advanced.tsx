@@ -153,7 +153,9 @@ export default function AdvancedSearch({
     }
 
     const queryString = getSearchQuery(searchFormState as SearchParams)
-    if (!queryString.length) {
+
+    // If empty search (even with default sort) set error
+    if (!queryString.length || queryString === "?q=&sort=relevance") {
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
     } else {
