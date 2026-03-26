@@ -40,6 +40,7 @@ const BrowseResultsSort = forwardRef<HTMLDivElement, BrowseResultsSortProps>(
     }, [selectedValue, ref])
 
     return (
+      // TODO: Forcing focus, remove with repaired Menu component
       <div style={{ zIndex: "9999" }} ref={ref}>
         <Menu
           zIndex="9999"
