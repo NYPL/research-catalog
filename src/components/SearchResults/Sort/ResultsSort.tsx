@@ -16,18 +16,15 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
     const { activeElementId } = useFocusContext()
 
     const selectedValue = useMemo(() => {
-      if (params.sortBy === "relevance") return "relevance"
+      // Default for search
+      if (!params.sortBy || params.sortBy === "relevance") return "relevance"
       // Reflect Discovery API's default sort orders
       if (params.sortBy)
         return params.order
           ? `${params.sortBy}_${params.order}`
           : `${params.sortBy}_asc`
-      if (params.field === "callnumber" || params.callnumber)
-        return "callnumber_asc"
-
-      // Default for search
       return "relevance"
-    }, [params.sortBy, params.order, params.field, params.callnumber])
+    }, [params.sortBy, params.order])
 
     // Uses current focus context value and wrapping ref to refocus Menu's internal button
     useEffect(() => {

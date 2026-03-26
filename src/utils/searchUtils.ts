@@ -108,8 +108,7 @@ function getSortQuery(
   sortBy: string | undefined,
   order: string | undefined,
   field: string | undefined,
-  populatedAdvancedFields: string[],
-  sortWasProvided: boolean
+  populatedAdvancedFields: string[]
 ): string {
   const sortDirectionQuery = order ? `&sort_direction=${order}` : ""
 
@@ -119,7 +118,7 @@ function getSortQuery(
       populatedAdvancedFields[0] === "callnumber")
 
   // default call number if no user choice
-  if (!sortWasProvided && isOnlyCallNumberQuery) {
+  if (!sortBy && isOnlyCallNumberQuery) {
     return "&sort=callnumber"
   }
 
@@ -194,7 +193,7 @@ function getFilterQuery(filters: SearchFilters) {
  */
 export function getSearchQuery(params: SearchParams): string {
   const {
-    sortBy = "relevance",
+    sortBy,
     field = "all",
     order,
     filters = {},
@@ -228,17 +227,10 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
-  const sortWasProvided = "sortBy" in params && params.sortBy !== undefined
   const populatedAdvancedFields = advancedSearchFields
     .map(({ name }) => name)
     .filter((name) => params[name])
-  const sortQuery = getSortQuery(
-    sortBy,
-    order,
-    field,
-    populatedAdvancedFields,
-    sortWasProvided
-  )
+  const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
   const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }

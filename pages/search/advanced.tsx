@@ -159,6 +159,7 @@ export default function AdvancedSearch({
       setErrorMessage(defaultEmptySearchErrorMessage)
       setAlert(true)
     } else {
+      setPersistentFocus(idConstants.searchResultsHeading)
       await router.push(`${PATHS.SEARCH}${queryString}&searched_from=advanced`)
     }
   }

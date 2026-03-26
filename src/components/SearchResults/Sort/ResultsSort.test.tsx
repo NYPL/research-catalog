@@ -24,17 +24,10 @@ describe("Search results sort menu", () => {
   })
 
   describe("selects the expected sort", () => {
-    const mockSortOptions = {
-      relevance: "Relevance",
-      title_asc: "Title (A - Z)",
-      title_desc: "Title (Z - A)",
-      callnumber_asc: "Call Number (A - Z)",
-    }
-
     it("defaults to relevance when no params are provided", () => {
       render(
         <ResultsSort
-          sortOptions={mockSortOptions}
+          sortOptions={sortOptions}
           params={{}}
           handleSortChange={jest.fn()}
         />
@@ -45,7 +38,7 @@ describe("Search results sort menu", () => {
     it("uses sortBy and order from params", () => {
       render(
         <ResultsSort
-          sortOptions={mockSortOptions}
+          sortOptions={sortOptions}
           params={{ sortBy: "title", order: "desc" }}
           handleSortChange={jest.fn()}
         />
@@ -56,38 +49,12 @@ describe("Search results sort menu", () => {
     it("defaults to asc if only sortBy is provided", () => {
       render(
         <ResultsSort
-          sortOptions={mockSortOptions}
+          sortOptions={sortOptions}
           params={{ sortBy: "title" }}
           handleSortChange={jest.fn()}
         />
       )
       expect(screen.getByText("Sort by: Title (A - Z)")).toBeInTheDocument()
-    })
-
-    it("defaults to callnumber_asc if field is callnumber", () => {
-      render(
-        <ResultsSort
-          sortOptions={mockSortOptions}
-          params={{ field: "callnumber" }}
-          handleSortChange={jest.fn()}
-        />
-      )
-      expect(
-        screen.getByText("Sort by: Call Number (A - Z)")
-      ).toBeInTheDocument()
-    })
-
-    it("defaults to callnumber_asc if callnumber param is provided", () => {
-      render(
-        <ResultsSort
-          sortOptions={mockSortOptions}
-          params={{ callnumber: "1234" }}
-          handleSortChange={jest.fn()}
-        />
-      )
-      expect(
-        screen.getByText("Sort by: Call Number (A - Z)")
-      ).toBeInTheDocument()
     })
   })
 })

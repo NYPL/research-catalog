@@ -33,7 +33,7 @@ describe("SearchForm", () => {
 
     await userEvent.type(input, "spaghetti")
     submit()
-    expect(mockRouter.asPath).toBe("/search?q=spaghetti&sort=relevance")
+    expect(mockRouter.asPath).toBe("/search?q=spaghetti")
   })
   it("submits a journal_title query", async () => {
     render(component)
@@ -44,7 +44,7 @@ describe("SearchForm", () => {
     await userEvent.selectOptions(searchScopeSelect, "journal_title")
     submit()
     expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&sort=relevance&search_scope=journal_title"
+      "/search?q=spaghetti&search_scope=journal_title"
     )
   })
   it("gets keyword from url", () => {
