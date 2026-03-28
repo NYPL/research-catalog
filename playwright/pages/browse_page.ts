@@ -9,16 +9,10 @@ export class BrowsePage {
   readonly search_dropdown: Locator
   readonly search_input: Locator
   readonly search_submit_button: Locator
-  readonly searchResultsContainer: Locator
   readonly searchResultsTitle: Locator
   readonly searchResultsTitleLinks: Locator
-  readonly searchResultsTitleNoLink: Locator
-  readonly sortCountHighToLow: Locator
   readonly sortCountLowToHigh: Locator
-  readonly sortAtoZ: Locator
-  readonly sortZtoA: Locator
   readonly titleCount: Locator
-  readonly see: Locator
 
   constructor(
     page: Page,
@@ -43,31 +37,13 @@ export class BrowsePage {
     this.searchResultsTitleLinks = page.locator("//span/div/a", {
       hasText: this.searchterm,
     })
-    this.searchResultsTitleNoLink = page.locator(
-      "//span/div[not(.//a[@href])]",
-      {
-        hasText: this.searchterm,
-      }
-    )
 
-    this.sortCountHighToLow = page.getByRole("button", {
-      name: "Sort by: Count (High - Low): Count (High - Low)",
-    })
     this.sortCountLowToHigh = page.getByRole("menuitem", {
       name: "Count (Low - High)",
-    })
-    this.sortAtoZ = page.getByRole("button", {
-      name: "Sort by: Subject Heading (A-Z)",
-    })
-    this.sortZtoA = page.getByRole("button", {
-      name: "Sort by: Subject Heading (Z-A)",
     })
     this.titleCount = page.locator(
       "//span[preceding-sibling::span[text()='Results']]"
     )
-    this.see = page
-      .locator("p[data-testid='ds-text']")
-      .filter({ hasText: "See:" })
   }
 
   get searchResultsHeading() {
