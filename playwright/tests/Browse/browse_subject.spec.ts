@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 import { BrowsePage } from "../../pages/browse_page"
 
 let browsePage: BrowsePage
-const searchterm = "Warr"
+const searchterm = "church"
 
 test.beforeEach(async ({ page }) => {
   browsePage = new BrowsePage(page, searchterm)
@@ -23,10 +23,10 @@ test.describe("Subject Heading Containing search", () => {
 
     await expect(async () => {
       const count = await browsePage.searchResultsTitle.count()
-      expect(count).toBeGreaterThan(20)
+      expect(count).toBeGreaterThan(15)
     }).toPass({ timeout: 5000 })
     // assert that the href of each returned title contains the expected path for a subject heading browse result
-    const links = browsePage.searchResultsTitle
+    const links = browsePage.searchResultsTitleLinks
     const linkCount = await links.count()
     expect(linkCount).toBeGreaterThan(0)
 
@@ -40,18 +40,31 @@ test.describe("Subject Heading Containing search", () => {
 })
 
 test.describe("Subject Heading variants", () => {
-  test("Do a subject heading search and assert that at least one result has a 'See also:' label followed by at least one link", async () => {
+  test("Do a subject heading search and assert that variants do not have a link, does not have a count, and has a 'See:' label", async () => {
     await expect(browsePage.banner).toBeVisible({ timeout: 15000 })
     await browsePage.searchFor(searchterm, "Subject Headings containing")
-
-    await expect(browsePage.searchResultsHeading).toBeVisible({
-      timeout: 15000,
-    })
-
     await expect(async () => {
-      const count = await browsePage.seeAlsoLinks.count()
-      expect(count).toBeGreaterThan(0)
-    }).toPass({ timeout: 5000 })
+      const rows = browsePage.page.locator("table tbody tr")
+      const variantRows = rows.filter({ hasText: "See:" })
+
+      const variantRowCount = await variantRows.count()
+      expect(variantRowCount).toBeGreaterThan(0)
+
+      for (let i = 0; i < variantRowCount; i++) {
+        const row = variantRows.nth(i)
+        const subjectCell = row.locator("td").nth(0)
+        const countCell = row.locator("td").nth(1)
+
+        // Assert the variant title itself does not have a link
+        await expect(subjectCell.locator("span > div > a[href]")).toHaveCount(0)
+
+        // Assert it has a "See:" label
+        await expect(subjectCell).toContainText("See:")
+
+        // Assert it does not have a count
+        await expect(countCell).not.toContainText(/\d{1,3}(,\d{3})*/)
+      }
+    }).toPass({ timeout: 15000 })
   })
 })
 

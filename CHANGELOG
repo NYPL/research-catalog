@@ -13,7 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Playwright test for Subject Heading variants test [SCC-5232] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
+- Added Playwright tests for Browse Subjects [SCC-5232] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
 - Added author ascending/descending sort options to search sort [SCC-5207](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5207)
 - Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
 
@@ -25,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Playwright tests for Browse Subjects [SCC-5232] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added Playwright tests for bib and MARC pages
 - Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
