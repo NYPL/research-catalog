@@ -52,9 +52,7 @@ const FindingAid = ({
             Archival collections{" "}
             <Link
               isExternal
-              href={
-                "https://libguides.nypl.org/special-collections-account-tutorial"
-              }
+              href={"https://libguides.nypl.org/NYPLSpecialCollectionsAccount"}
             >
               may require an appointment
             </Link>{" "}
