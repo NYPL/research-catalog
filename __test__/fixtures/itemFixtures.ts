@@ -455,3 +455,81 @@ export const shelfItemAvailable = {
   uri: "i16557252",
   idNyplSourceId: { "@type": "SierraNypl", "@value": "16557252" },
 }
+
+export const itemUnavailableDueDate = {
+  "@id": "res:i40698952",
+  "@type": ["bf:Item"],
+  accessMessage: [
+    {
+      "@id": "accessMessage:2",
+      prefLabel: "Request in advance",
+    },
+  ],
+  catalogItemType: [
+    {
+      "@id": "catalogItemType:3",
+      prefLabel: "serial",
+    },
+  ],
+  dateRange: [
+    {
+      gte: "2022",
+      lte: "2022",
+    },
+  ],
+  dueDate: ["2024-07-07"],
+  eddFulfillment: {
+    "@id": "fulfillment:recap-edd",
+  },
+  eddRequestable: true,
+  enumerationChronology: ["v. 35 (2022)"],
+  formatLiteral: ["Book/text"],
+  holdingLocation: [
+    {
+      "@id": "loc:rc2ma",
+      prefLabel: "Offsite",
+    },
+  ],
+  idBarcode: ["33433136685777"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "JFM 94-740",
+    },
+    {
+      "@type": "bf:Barcode",
+      "@value": "33433136685777",
+    },
+  ],
+  owner: [
+    {
+      "@id": "orgs:1000",
+      prefLabel: "Stephen A. Schwarzman Building",
+    },
+  ],
+  physFulfillment: {
+    "@id": "fulfillment:recap-offsite",
+  },
+  physRequestable: true,
+  physicalLocation: ["JFM 94-740"],
+  requestable: [true],
+  shelfMark: ["JFM 94-740"],
+  specRequestable: false,
+  status: [
+    {
+      "@id": "status:na",
+      prefLabel: "Not available",
+    },
+  ],
+  uri: "i40698952",
+  volumeRange: [
+    {
+      gte: 35,
+      lte: 35,
+    },
+  ],
+  idNyplSourceId: {
+    "@type": "SierraNypl",
+    "@value": "40698952",
+  },
+}

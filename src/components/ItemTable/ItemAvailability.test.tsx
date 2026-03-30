@@ -11,6 +11,7 @@ import {
   itemUnavailable,
   shelfItemAvailable,
   deskItemAvailable,
+  itemUnavailableDueDate,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -221,6 +222,17 @@ describe("ItemAvailability", () => {
     expect(screen.getByText("Not available")).toBeInTheDocument()
     expect(
       screen.getByText(/Please contact the division for assistance/)
+    ).toBeInTheDocument()
+  })
+  it("renders the correct text for unavailable NYPL items with a known due date", async () => {
+    const item = new Item(itemUnavailableDueDate, parentBib)
+    render(<ItemAvailability item={item} />)
+    expect(screen.getByText("Not available")).toBeInTheDocument()
+    // Due date on the item is 2024-07-07.
+    expect(
+      screen.getByText(
+        /In use through July 7, 2024. Please contact the division for assistance/
+      )
     ).toBeInTheDocument()
   })
 })
