@@ -231,7 +231,7 @@ export default function AdvancedSearch({
       setPersistentFocus(idConstants.advancedSearchError)
     }
   }, [alert, dateError, setPersistentFocus])
-
+  const [expand, setExpand] = useState("expand")
   const multiselects = useMemo(
     () =>
       fields.map((field) => {
@@ -247,8 +247,6 @@ export default function AdvancedSearch({
               id={field.value}
               isSearchable
               closeOnBlur
-              listOverflow="expand"
-              defaultItemsVisible={8}
               buttonText={field.label}
               selectedItems={{
                 [field.value]: {
@@ -256,7 +254,9 @@ export default function AdvancedSearch({
                 },
               }}
               items={field.options}
-              onChange={(e) => handleFilterChange(field.value, e.target.id)}
+              onChange={(e) => {
+                handleFilterChange(field.value, e.target.id)
+              }}
               onClear={() => handleFilterChange(field.value, null)}
             />
           </div>
