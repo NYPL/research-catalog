@@ -127,7 +127,7 @@ describe("ItemAvailabilityFactory", () => {
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.DESK_AVAILABLE)
   })
-  it("available shef", () => {
+  it("available shelf", () => {
     const availability = new ItemAvailability({
       isAvailable: true,
       isReCAP: false,
