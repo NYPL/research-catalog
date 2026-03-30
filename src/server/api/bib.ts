@@ -7,8 +7,7 @@ import {
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
-import { logServerError } from "../../utils/logUtils"
-import { logger } from "@nypl/node-utils"
+import { logServerError, logServerWarn } from "../../utils/logUtils"
 import type { APIError } from "../../types/appTypes"
 
 export async function fetchBib(
@@ -76,7 +75,8 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
-      logger.warn(
+      logServerWarn(
+        "fetchBib",
         `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
       )
       const sierraBibResponse = await client.get(
@@ -89,16 +89,22 @@ export async function fetchBib(
             appConfig.urls.circulatingCatalog
           }/search/card?recordId=${id.replace(/^b/, "")}`,
         }
-        // Otherwise forward the Discovery API error
+        // Otherwise log and forward the Discovery API error
       } else {
-        logServerError(
-          "fetchBib",
-          `${
-            discoveryBibResult.error && discoveryBibResult.error
-          } Request: ${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
-            itemId ? `-${itemId}` : ""
-          }${getBibQueryString(bibQuery)}`
-        )
+        const errorContents = `${
+          discoveryBibResult.error || ""
+        } Request: ${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
+          itemId ? `-${itemId}` : ""
+        }${getBibQueryString(bibQuery)}`
+
+        if (
+          discoveryBibResult.error?.status === "422" ||
+          discoveryBibResult.error?.status === "404"
+        ) {
+          logServerWarn("fetchBib", errorContents)
+        } else {
+          logServerError("fetchBib", errorContents)
+        }
         return {
           status: discoveryBibResult.status,
           name: discoveryBibResult.name,
@@ -109,7 +115,7 @@ export async function fetchBib(
 
     // Log annotated marc error (but don't return an error– we still display bib)
     if (annotatedMarc.status) {
-      logServerError(
+      logServerWarn(
         "fetchBib",
         `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
           itemId ? `-${itemId}` : ""

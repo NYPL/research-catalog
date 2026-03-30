@@ -63,6 +63,7 @@ function Error({ activePage, statusCode }: ErrorPageProps) {
 
 Error.getInitialProps = ({ res, err }: { res?: any; err?: any }) => {
   const statusCode = res?.statusCode ?? err?.statusCode ?? 500
+  console.error(`Error: ${err}`)
   return { statusCode }
 }
 
