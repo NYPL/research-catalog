@@ -7,6 +7,7 @@ describe("ItemAvailabilityFactory", () => {
       isAvailable: false,
       isReCAP: false,
       aeonUrl: null,
+      collectionAccessType: null,
       findingAid: null,
       isSpecRequestable: false,
     })
@@ -18,6 +19,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: true,
       aeonUrl: null,
       findingAid: null,
+      collectionAccessType: null,
       isSpecRequestable: false,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_GENERAL_COLLECTIONS)
@@ -28,6 +30,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: true,
       aeonUrl: "spaghetti.com",
       findingAid: null,
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON)
@@ -38,6 +41,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: true,
       aeonUrl: "spaghetti.com",
       findingAid: "meatballs.com",
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON_FINDING_AID)
@@ -48,6 +52,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: false,
       aeonUrl: "spaghetti.com",
       findingAid: false,
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON)
@@ -58,6 +63,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: false,
       aeonUrl: "spaghetti.com",
       findingAid: "meatballs.com",
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON_FINDING_AID)
@@ -68,6 +74,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: false,
       aeonUrl: false,
       findingAid: "meatballs.com",
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_FINDING_AID)
@@ -78,6 +85,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: true,
       aeonUrl: false,
       findingAid: "meatballs.com",
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_FINDING_AID)
@@ -88,6 +96,7 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: true,
       aeonUrl: false,
       findingAid: false,
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(
@@ -100,10 +109,33 @@ describe("ItemAvailabilityFactory", () => {
       isReCAP: false,
       aeonUrl: false,
       findingAid: false,
+      collectionAccessType: null,
       isSpecRequestable: true,
     })
     expect(availability.key).toBe(
       AVAILABILITY_KEYS.ONSITE_NO_FINDING_AID_NO_AEON
     )
+  })
+  it("available desk", () => {
+    const availability = new ItemAvailability({
+      isAvailable: true,
+      isReCAP: false,
+      aeonUrl: false,
+      findingAid: false,
+      collectionAccessType: "desk",
+      isSpecRequestable: true,
+    })
+    expect(availability.key).toBe(AVAILABILITY_KEYS.DESK_AVAILABLE)
+  })
+  it("available shef", () => {
+    const availability = new ItemAvailability({
+      isAvailable: true,
+      isReCAP: false,
+      aeonUrl: false,
+      findingAid: false,
+      collectionAccessType: "shelf",
+      isSpecRequestable: true,
+    })
+    expect(availability.key).toBe(AVAILABILITY_KEYS.SHELF_AVAILABLE)
   })
 })
