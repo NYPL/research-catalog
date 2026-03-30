@@ -1,5 +1,5 @@
 import { Box, useMultiStyleConfig } from "@chakra-ui/react"
-import React, { useEffect, useRef, useState } from "react"
+import React, { useEffect, useMemo, useRef, useState, useCallback } from "react"
 import {
   Accordion,
   Checkbox,
@@ -53,6 +53,10 @@ const MultiSelectWithGroupTitles = ({
 
   const selectedItemsCount: number =
     selectedItems[field.value]?.items?.length || 0
+  const selectedItemSet = useMemo(
+    () => new Set(selectedItems[field.value]?.items || []),
+    [selectedItems, field.value]
+  )
   const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
   const ariaLabelValue = `${field.label} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
 
@@ -61,16 +65,16 @@ const MultiSelectWithGroupTitles = ({
     width: "full",
   })
 
-  const handleClickOutside = (e: MouseEvent) => {
+  const handleClickOutside = useCallback((e: MouseEvent) => {
     const multiSelect = containerRef.current
     if (multiSelect && !multiSelect.contains(e.target as Node)) {
       setUserClickedOutside(true)
     } else {
       setUserClickedOutside(false)
     }
-  }
+  }, [])
 
-  const handleTabOutside = (e: KeyboardEvent) => {
+  const handleTabOutside = useCallback((e: KeyboardEvent) => {
     if (e.key === "Tab") {
       const multiSelect = containerRef.current
       setTimeout(() => {
@@ -81,7 +85,7 @@ const MultiSelectWithGroupTitles = ({
         }
       }, 0)
     }
-  }
+  }, [])
 
   const NoSearchResults = (): JSX.Element => {
     return (
@@ -91,9 +95,12 @@ const MultiSelectWithGroupTitles = ({
     )
   }
 
-  const onChangeSearch = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(event.target.value.trim().toLowerCase())
-  }
+  const onChangeSearch = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setSearchTerm(event.target.value.trim().toLowerCase())
+    },
+    []
+  )
 
   useEffect(() => {
     document.addEventListener("mousedown", handleClickOutside)
@@ -102,55 +109,71 @@ const MultiSelectWithGroupTitles = ({
       document.removeEventListener("mousedown", handleClickOutside)
       document.removeEventListener("keydown", handleTabOutside)
     }
-  }, [])
+  }, [handleClickOutside, handleTabOutside])
 
-  const isChecked = (multiSelectId: string, itemId: string): boolean => {
-    return !!selectedItems[multiSelectId]?.items?.includes(itemId)
-  }
+  const isChecked = useCallback(
+    (multiSelectId: string, itemId: string): boolean => {
+      void multiSelectId
+      return selectedItemSet.has(itemId)
+    },
+    [selectedItemSet]
+  )
 
   // Filter by search term without losing grouping.
-  const filteredGroups = groupedItems
-    .map((group) => {
-      if (!searchTerm) return group
-      const matchingChildren = group.children.filter((child) =>
-        child.name.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-      return matchingChildren.length > 0
-        ? { ...group, children: matchingChildren }
-        : null
-    })
-    .filter(Boolean) as MultiSelectItem[]
+  const filteredGroups = useMemo(
+    () =>
+      groupedItems
+        .map((group) => {
+          if (!searchTerm) return group
+          const matchingChildren = (group.children || []).filter((child) =>
+            child.name.toLowerCase().includes(searchTerm)
+          )
+          return matchingChildren.length > 0
+            ? { ...group, children: matchingChildren }
+            : null
+        })
+        .filter(Boolean) as MultiSelectItem[],
+    [groupedItems, searchTerm]
+  )
 
   // Render group titles with checkbox groups.
-  const renderGroups = (groups: MultiSelectItem[]) =>
-    groups.map((group) => (
-      <Box key={group.id} mb="xs">
-        <Text size="body2" mb="12px">
-          {group.name}
-        </Text>
-        <CheckboxGroup
-          id={`division-checkboxGroup-${group.id}`}
-          layout="column"
-          isFullWidth
-          labelText={group.name}
-          showLabel={false}
-          name={`multi-select-checkbox-group-${group.id}`}
-          marginLeft={isBlockElement ? 0 : "m"}
-          mb="0"
-        >
-          {group.children.map((item) => (
-            <Checkbox
-              key={item.id}
-              id={item.id}
-              labelText={item.name}
-              name={item.name}
-              isChecked={isChecked(field.value, item.id)}
-              onChange={onChange}
-            />
-          ))}
-        </CheckboxGroup>
-      </Box>
-    ))
+  const renderGroups = useCallback(
+    (groups: MultiSelectItem[]) =>
+      groups.map((group) => (
+        <Box key={group.id} mb="xs">
+          <Text size="body2" mb="12px">
+            {group.name}
+          </Text>
+          <CheckboxGroup
+            id={`division-checkboxGroup-${group.id}`}
+            layout="column"
+            isFullWidth
+            labelText={group.name}
+            showLabel={false}
+            name={`multi-select-checkbox-group-${group.id}`}
+            marginLeft={isBlockElement ? 0 : "m"}
+            mb="0"
+          >
+            {(group.children || []).map((item) => (
+              <Checkbox
+                key={item.id}
+                id={item.id}
+                labelText={item.name}
+                name={item.name}
+                isChecked={isChecked(field.value, item.id)}
+                onChange={onChange}
+              />
+            ))}
+          </CheckboxGroup>
+        </Box>
+      )),
+    [field.value, isBlockElement, isChecked, onChange]
+  )
+
+  const renderedGroups = useMemo(
+    () => renderGroups(filteredGroups),
+    [filteredGroups, renderGroups]
+  )
 
   const searchInput = (
     <TextInput
@@ -193,11 +216,7 @@ const MultiSelectWithGroupTitles = ({
         paddingLeft="xs"
         paddingBottom="xxs"
       >
-        {filteredGroups.length === 0 ? (
-          <NoSearchResults />
-        ) : (
-          renderGroups(filteredGroups)
-        )}
+        {filteredGroups.length === 0 ? <NoSearchResults /> : renderedGroups}
       </Box>
     </Box>
   )

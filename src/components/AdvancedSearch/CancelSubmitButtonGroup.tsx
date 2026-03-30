@@ -1,5 +1,6 @@
 import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
+import useLoading from "../../hooks/useLoading"
 
 interface CancelSubmitButtonGroupProps {
   cancelHandler: (e: SyntheticEvent) => void
@@ -16,6 +17,7 @@ const CancelSubmitButtonGroup = ({
   formName,
   disableSubmit,
 }: CancelSubmitButtonGroupProps) => {
+  const isLoading = useLoading()
   const submitIcon = submitLabel.toLowerCase().includes("search")
     ? "actionSearch"
     : "check"
@@ -27,7 +29,7 @@ const CancelSubmitButtonGroup = ({
         id={`submit-${formName}`}
         type="submit"
         variant="primary"
-        isDisabled={disableSubmit}
+        isDisabled={isLoading || disableSubmit}
       >
         <Icon name={submitIcon} align="left" size="large" />
         {submitLabel}
