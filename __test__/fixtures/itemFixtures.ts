@@ -391,3 +391,67 @@ export const itemUseInLibrary = {
     "@value": "14119377",
   },
 }
+
+export const deskItemAvailable = {
+  "@id": "res:i10016576",
+  "@type": ["bf:Item"],
+  accessMessage: [{ "@id": "accessMessage:-", prefLabel: "No restrictions" }],
+  catalogItemType: [{ "@id": "catalogItemType:2", prefLabel: "book non-circ" }],
+  eddFulfillment: { "@id": "fulfillment:sasb-edd" },
+  eddRequestable: true,
+  formatLiteral: ["Book/text"],
+  holdingLocation: [
+    {
+      "@id": "loc:maff3",
+      prefLabel: "Schwarzman Building - Dorot Jewish Division Desk Room 111",
+      collectionAccessType: "desk",
+    },
+  ],
+  idBarcode: ["33433075353460"],
+  identifier: [
+    { "@type": "bf:ShelfMark", "@value": "Desk-JWS PA2365.E5 A7 1969" },
+    { "@type": "bf:Barcode", "@value": "33433075353460" },
+  ],
+  owner: [{ "@id": "orgs:1103", prefLabel: "Dorot Jewish Division" }],
+  physRequestable: false,
+  physicalLocation: ["Desk-JWS PA2365.E5 A7 1969"],
+  requestable: [true],
+  shelfMark: ["Desk-JWS PA2365.E5 A7 1969"],
+  specRequestable: false,
+  status: [{ "@id": "status:a", prefLabel: "Available" }],
+  uri: "i10016576",
+  idNyplSourceId: { "@type": "SierraNypl", "@value": "10016576" },
+}
+
+export const shelfItemAvailable = {
+  "@id": "res:i16557252",
+  "@type": ["bf:Item"],
+  accessMessage: [{ "@id": "accessMessage:-", prefLabel: "No restrictions" }],
+  catalogItemType: [{ "@id": "catalogItemType:2", prefLabel: "book non-circ" }],
+  eddRequestable: false,
+  formatLiteral: ["Book/text"],
+  holdingLocation: [
+    {
+      "@id": "loc:mall1",
+      prefLabel: "Schwarzman Building - Main Reading Room 315 - Reference",
+      collectionAccessType: "shelf",
+    },
+  ],
+  idBarcode: ["33433076708936"],
+  identifier: [
+    {
+      "@type": "bf:ShelfMark",
+      "@value": "*R-RMRR PA2365.E5 .M67 1998",
+    },
+    { "@type": "bf:Barcode", "@value": "33433076708936" },
+  ],
+  owner: [{ "@id": "orgs:1101", prefLabel: "General Research Division" }],
+  physRequestable: false,
+  physicalLocation: ["*R-RMRR PA2365.E5 .M67 1998"],
+  requestable: [false],
+  shelfMark: ["*R-RMRR PA2365.E5 .M67 1998"],
+  specRequestable: false,
+  status: [{ "@id": "status:o", prefLabel: "Use in library" }],
+  uri: "i16557252",
+  idNyplSourceId: { "@type": "SierraNypl", "@value": "16557252" },
+}
