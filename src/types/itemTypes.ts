@@ -30,6 +30,7 @@ export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
   endpoint?: string
+  collectionAccessType?: string
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
@@ -39,6 +40,8 @@ export interface ItemTableParams {
   inSearchResult?: boolean
   isArchiveCollection?: boolean
 }
+
+export type ItemCollectionAccess = "shelf" | "desk" | "special" | null
 
 export interface ItemMetadata {
   id?: string
