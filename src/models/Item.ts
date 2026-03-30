@@ -2,6 +2,7 @@ import type {
   JSONLDValue,
   ItemLocation,
   DiscoveryItemResult,
+  ItemCollectionAccess,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -66,6 +67,7 @@ export default class Item {
       isAvailable: this.isAvailable,
       isReCAP: this.isReCAP,
       aeonUrl: this.aeonUrl,
+      collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       findingAid: bib.findingAid,
     })
   }
@@ -115,6 +117,14 @@ export default class Item {
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
+  }
+
+  getCollectionAccessTypeFromItem(
+    item: DiscoveryItemResult
+  ): ItemCollectionAccess {
+    return item.holdingLocation?.length
+      ? (item.holdingLocation[0]?.collectionAccessType as ItemCollectionAccess)
+      : null
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute

@@ -1,11 +1,13 @@
 import { AVAILABILITY_KEYS } from "../config/constants"
+import type { ItemCollectionAccess } from "../types/itemTypes"
 
 const {
   EDGE_CASE,
   RECAP_GENERAL_COLLECTIONS,
   ONSITE_GENERAL_COLLECTIONS,
   NOT_AVAILABLE,
-  // special collections availability keys
+  DESK_AVAILABLE,
+  SHELF_AVAILABLE,
   RECAP_AEON,
   ONSITE_AEON,
   ONSITE_AEON_FINDING_AID,
@@ -22,6 +24,7 @@ class ItemAvailability {
   isReCAP: boolean
   aeonUrl: string
   findingAid: string
+  collectionAccessType: ItemCollectionAccess
   isSpecRequestable?: boolean
   isOnsite: boolean
 
@@ -29,30 +32,37 @@ class ItemAvailability {
     isAvailable,
     isReCAP,
     aeonUrl,
+    collectionAccessType,
     findingAid,
     isSpecRequestable,
   }) {
     this.findingAid = findingAid
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
+    this.collectionAccessType = collectionAccessType
     this.aeonUrl = aeonUrl
     this.isOnsite = !this.isReCAP
     this.isSpecRequestable = isSpecRequestable
     this.key = this.buildKey()
   }
   buildKey() {
-    // All unavailable records have the same messaging.
-    // general collections messages
+    // General collections
     if (!this.isAvailable) {
       return NOT_AVAILABLE
     }
-    if (this.isReCAP && !this.isSpecRequestable) {
-      return RECAP_GENERAL_COLLECTIONS
+    if (this.collectionAccessType === "desk") {
+      return DESK_AVAILABLE
+    }
+    if (this.collectionAccessType === "shelf") {
+      return SHELF_AVAILABLE
     }
     if (this.isOnsite && !this.isSpecRequestable) {
       return ONSITE_GENERAL_COLLECTIONS
     }
-    // special collections messaging
+    if (this.isReCAP && !this.isSpecRequestable) {
+      return RECAP_GENERAL_COLLECTIONS
+    }
+    // Special collections
     if (this.aeonUrl && this.isReCAP && !this.findingAid) {
       return RECAP_AEON
     }
