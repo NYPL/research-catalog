@@ -117,9 +117,10 @@ export async function fetchBib(
     if (annotatedMarc.status) {
       logServerWarn(
         "fetchBib",
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
-          itemId ? `-${itemId}` : ""
-        }.annotated-marc${getBibQueryString(bibQuery, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )
     }
 
