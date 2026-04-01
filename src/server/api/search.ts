@@ -11,7 +11,6 @@ import {
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
-import { bootstrapConfig } from "../../../lib/bootstrap"
 
 export async function fetchSearchResults(
   searchParams: SearchParams

@@ -32,9 +32,9 @@ import { useRef, useEffect } from "react"
 import ResultsError from "../../src/components/Error/ResultsError"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import type { SortOrder } from "../../src/types/searchTypes"
-import ResultsSort from "../../src/components/SearchResults/ResultsSort"
 import { useBrowseContext } from "../../src/context/BrowseContext"
 import ContributorTable from "../../src/components/BrowseTable/ContributorTable/ContributorTable"
+import BrowseResultsSort from "../../src/components/SearchResults/Sort/BrowseResultsSort"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -62,8 +62,11 @@ export default function Browse({
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
 
+  // DS Menu component remounts, needs extra focus handling
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+
   useEffect(() => {
     if (liveLoadingRegionRef.current) {
       liveLoadingRegionRef.current.textContent = "Loading results"
@@ -185,7 +188,8 @@ export default function Browse({
               results.totalResults
             )}
           </Heading>
-          <ResultsSort
+          <BrowseResultsSort
+            ref={sortMenuRef}
             params={browseParams}
             sortOptions={
               resultsType === "subjects"
@@ -193,7 +197,6 @@ export default function Browse({
                 : browseContributorSortOptions
             }
             handleSortChange={handleSortChange}
-            defaultSort="count_desc"
           />
         </Flex>
         {isLoading ? (

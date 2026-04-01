@@ -26,7 +26,6 @@ describe("searchUtils", () => {
     it("includes advanced search query params when field is set to 'all'", () => {
       const testQuery =
         "?q=shel%20silverstein&contributor=shel%20silverstein&title=the%20giving%20tree&subject=books"
-
       expect(
         checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
@@ -39,6 +38,7 @@ describe("searchUtils", () => {
     })
     it("clears advanced search query params when field param is anything other than 'all'", () => {
       const titleQuery = "?q=shel%20silverstein&search_scope=title"
+
       expect(
         checkQueryParamsEquality(titleQuery, {
           q: "shel silverstein",
