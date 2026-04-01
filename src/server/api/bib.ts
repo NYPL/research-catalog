@@ -32,12 +32,14 @@ export async function fetchBib(
         itemId ? `-${itemId}` : ""
       }${getBibQueryString(bibQuery)}`
     ),
-    // Don't fetch annotated marc for partner records:
+    // Don't fetch annotated marc for partner records or hold requests (item ID passed):
     isNyplBibID(standardizedId) &&
+      !itemId &&
       (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
-          itemId ? `-${itemId}` : ""
-        }.annotated-marc${getBibQueryString(bibQuery, true)}`
+        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+          bibQuery,
+          true
+        )}`
       )),
   ])
 
@@ -74,7 +76,7 @@ export async function fetchBib(
       !discoveryBibResult.uri ||
       !id.includes(discoveryBibResult.uri)
     ) {
-      logger.info(
+      logger.warn(
         `Missing discoveryBibResult for id ${id}, or id does not match uri on returned result`
       )
       const sierraBibResponse = await client.get(

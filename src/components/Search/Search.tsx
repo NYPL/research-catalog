@@ -20,7 +20,7 @@ import AppliedFilters from "../AppliedFilters/AppliedFilters"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
 import SearchFilters from "../SearchFilters/SearchFilters"
-import ResultsSort from "../SearchResults/ResultsSort"
+import ResultsSort from "../SearchResults/Sort/ResultsSort"
 import SearchResult from "../SearchResults/SearchResult"
 import { useRef, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
@@ -63,6 +63,8 @@ const Search = ({
   const searchResultsHeadingRef = useRef(null)
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  // DS Menu component remounts, needs extra focus handling
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (liveLoadingRegionRef.current) {
@@ -160,6 +162,7 @@ const Search = ({
                 )}
               </Heading>
               <ResultsSort
+                ref={sortMenuRef}
                 sortOptions={sortOptions}
                 params={searchParams}
                 handleSortChange={handleSortChange}

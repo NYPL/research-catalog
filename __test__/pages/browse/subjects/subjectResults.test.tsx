@@ -66,10 +66,12 @@ describe("Browse subject heading results page", () => {
     const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
     userEvent.click(sortBy)
     await userEvent.click(screen.getByText("Title (A - Z)"))
-    expect(sortBy).toHaveTextContent("Sort by: Title (A - Z)")
+
     expect(mockRouter.asPath).toBe(
       "/browse/subjects/test?sort=title&sort_direction=asc&page=1"
     )
+    const sortByPost = screen.getAllByLabelText("Sort by", { exact: false })[0]
+    await expect(sortByPost).toHaveTextContent("Sort by: Title (A - Z)")
   })
 })
 
