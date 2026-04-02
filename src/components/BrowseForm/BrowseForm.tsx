@@ -48,18 +48,26 @@ const BrowseForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
-  // Set the browseType, applied filters, and back to index URL
-  // from the current URL
+  // Set the browseType and applied filters from the current URL
   useEffect(() => {
     setBrowseType(getBrowseTypeFromPath(router.asPath))
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
-
-    if (typeof window !== "undefined") {
-      const ref = document.referrer
-      if (ref.includes("/browse?q") || ref.includes("/browse/authors?q"))
-        setBackUrl(ref)
-    }
   }, [router.query])
+
+  // Set back to index URL from session storage
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const prevPath = sessionStorage.getItem("previousPath")
+      if (
+        prevPath?.includes("/browse?q=") ||
+        prevPath?.includes("/browse/authors?q=")
+      ) {
+        setBackUrl(prevPath)
+      } else {
+        setBackUrl(null)
+      }
+    }
+  }, [router.asPath])
 
   // Set the default selected option for the current browseType
   useEffect(() => {

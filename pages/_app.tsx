@@ -8,9 +8,19 @@ import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 import { BrowseProvider } from "../src/context/BrowseContext"
+import { useRouter } from "next/router"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
+  const router = useRouter()
+  if (typeof window !== "undefined") {
+    const current = sessionStorage.getItem("currentPath")
+    if (current !== router.asPath) {
+      sessionStorage.setItem("previousPath", current || "")
+      sessionStorage.setItem("currentPath", router.asPath)
+    }
+  }
+
   // Remove header and footer injections before print
   useEffect(() => {
     const handleBeforePrint = () => {
@@ -99,8 +109,9 @@ function App({ Component, pageProps }) {
       <FeedbackProvider value={null}>
         <FocusProvider>
           <BrowseProvider>
+            {" "}
             <Component {...pageProps} />
-          </BrowseProvider>
+          </BrowseProvider>{" "}
         </FocusProvider>
       </FeedbackProvider>
     </>
