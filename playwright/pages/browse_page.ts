@@ -38,11 +38,7 @@ export class BrowsePage {
       hasText: this.searchterm,
     })
 
-<<<<<<< no-ref/rework-back2index
-    this.sortCountLowToHigh = page.getByRole("menuitem", {
-=======
     this.sortResultsLowToHigh = page.getByRole("menuitem", {
->>>>>>> main
       name: "Results (Low - High)",
     })
     this.titleCount = page.locator(
