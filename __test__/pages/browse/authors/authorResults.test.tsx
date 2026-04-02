@@ -72,7 +72,8 @@ describe("Browse author/contributor results page", () => {
 
     await userEvent.click(screen.getByText("Title (A - Z)"))
 
-    expect(sortBy).toHaveTextContent("Sort by: Title (A - Z)")
+    const sortByPost = screen.getAllByLabelText("Sort by", { exact: false })[0]
+    expect(sortByPost).toHaveTextContent("Sort by: Title (A - Z)")
     expect(mockRouter.asPath).toBe(
       "/browse/authors/test?sort=title&sort_direction=asc&page=1"
     )

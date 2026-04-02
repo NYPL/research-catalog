@@ -39,7 +39,7 @@ export class BrowsePage {
     })
 
     this.sortCountLowToHigh = page.getByRole("menuitem", {
-      name: "Count (Low - High)",
+      name: "Results (Low - High)",
     })
     this.titleCount = page.locator(
       "//span[preceding-sibling::span[text()='Results']]"

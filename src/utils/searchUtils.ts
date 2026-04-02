@@ -262,7 +262,7 @@ export function getSearchQuery(params: SearchParams): string {
     .map(({ name }) => name)
     .filter((name) => params[name])
   const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
-  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${identifierQuery}${roleQuery}${pageQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
