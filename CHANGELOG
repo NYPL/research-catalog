@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
+- Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
+- Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
+- Added browse links, roles to author/additional author fields on bib page [SCC-4968](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4968)
+
+### Updated
+
+- Display non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
+
 ## [1.8.1] 2026-04-01
 
 ### Updated
@@ -38,10 +49,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
 - Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
 - Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
-- Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
-- Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
-- Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
-- Added browse links, roles to author/additional author fields on bib page [SCC-4968](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4968)
 
 ### Updated
 

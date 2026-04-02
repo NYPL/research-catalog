@@ -117,7 +117,7 @@ test.describe("Subject sort order", () => {
       timeout: 60000,
     })
     await browsePage.page.getByRole("button", { name: /Sort by:/i }).click()
-    await browsePage.sortCountLowToHigh.click()
+    await browsePage.sortResultsLowToHigh.click()
 
     await expect(async () => {
       const rawCounts = await browsePage.titleCount.allTextContents()
