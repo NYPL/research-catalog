@@ -2,14 +2,14 @@ import React from "react"
 import userEvent from "@testing-library/user-event"
 import { render, screen } from "../../../utils/testUtils"
 import BrowseResultsSort from "./BrowseResultsSort"
-import { browseSortOptions } from "../../../utils/browseUtils"
+import { browseSubjectSortOptions } from "../../../utils/browseUtils"
 
 describe("Browse results sort menu", () => {
   it("calls the callback function when changed", async () => {
     const onChange = jest.fn()
     render(
       <BrowseResultsSort
-        sortOptions={browseSortOptions}
+        sortOptions={browseSubjectSortOptions}
         params={{}}
         handleSortChange={onChange}
       />
@@ -27,20 +27,20 @@ describe("Browse results sort menu", () => {
     it("defaults to descending count when no params are provided", () => {
       render(
         <BrowseResultsSort
-          sortOptions={browseSortOptions}
+          sortOptions={browseSubjectSortOptions}
           params={{}}
           handleSortChange={jest.fn()}
         />
       )
       expect(
-        screen.getByText("Sort by: Count (High - Low)")
+        screen.getByText("Sort by: Results (High - Low)")
       ).toBeInTheDocument()
     })
 
     it("uses sortBy and order from params", () => {
       render(
         <BrowseResultsSort
-          sortOptions={browseSortOptions}
+          sortOptions={browseSubjectSortOptions}
           params={{ sortBy: "termLabel", order: "desc" }}
           handleSortChange={jest.fn()}
         />
