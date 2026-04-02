@@ -109,9 +109,8 @@ function App({ Component, pageProps }) {
       <FeedbackProvider value={null}>
         <FocusProvider>
           <BrowseProvider>
-            {" "}
             <Component {...pageProps} />
-          </BrowseProvider>{" "}
+          </BrowseProvider>
         </FocusProvider>
       </FeedbackProvider>
     </>
