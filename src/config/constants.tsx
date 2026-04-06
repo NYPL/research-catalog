@@ -135,6 +135,8 @@ export const AVAILABILITY_KEYS = {
   NOT_AVAILABLE: "notAvailable",
   RECAP_GENERAL_COLLECTIONS: "Recap",
   ONSITE_GENERAL_COLLECTIONS: "Onsite",
+  DESK_AVAILABLE: "deskAvailable",
+  SHELF_AVAILABLE: "shelfAvailable",
   // special collections availability keys
   RECAP_AEON: "RecapAeon",
   AEON: "Aeon",

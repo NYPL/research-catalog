@@ -13,6 +13,7 @@ import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
 import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
 import Link from "../Link/Link"
+import AvailableText from "./ItemAvailability/AvailableText"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -23,6 +24,8 @@ const {
   RECAP_GENERAL_COLLECTIONS,
   ONSITE_GENERAL_COLLECTIONS,
   NOT_AVAILABLE,
+  DESK_AVAILABLE,
+  SHELF_AVAILABLE,
   // special collections availability keys
   RECAP_AEON,
   ONSITE_AEON,
@@ -49,6 +52,22 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     bibId: item.bibId,
   }
   switch (item.availability.key) {
+    case DESK_AVAILABLE:
+      return (
+        <AvailableText
+          text={
+            "Item located at service desk. Please visit the service desk in this room to request this item."
+          }
+        />
+      )
+    case SHELF_AVAILABLE:
+      return (
+        <AvailableText
+          text={
+            "Item located on open reference shelves. Please contact a staff member in this room for assistance if you cannot locate this item."
+          }
+        />
+      )
     case RECAP_GENERAL_COLLECTIONS:
       return (
         <Link
@@ -121,7 +140,8 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = <AvailableOnsite location={item.location} />
       break
     case NOT_AVAILABLE:
-      message = <NotAvailable item={itemMetadata} dueDate={item.dueDate} />
+      // Closed stacks, offsite NYPL should have due date
+      message = <NotAvailable dueDate={item.dueDate} />
       break
   }
 

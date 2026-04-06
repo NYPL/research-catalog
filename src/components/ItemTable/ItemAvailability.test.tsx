@@ -1,18 +1,17 @@
 import React from "react"
 import { render, screen } from "../../utils/testUtils"
-import userEvent from "@testing-library/user-event"
-
 import ItemAvailabilityModel from "../../models/ItemAvailability"
-
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
-import FeedbackForm from "../FeedbackForm/FeedbackForm"
 import {
   itemNYPLReCAP,
   itemPhysicallyRequestable,
   itemAvailableOnsite,
   itemUnavailable,
+  shelfItemAvailable,
+  deskItemAvailable,
+  itemUnavailableDueDate,
 } from "../../../__test__/fixtures/itemFixtures"
 import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResultPhysicalItems"
 
@@ -39,6 +38,7 @@ describe("ItemAvailability", () => {
         isAvailable: true,
         isReCAP: false,
         aeonUrl: "spaghetti.com",
+        collectionAccessType: null,
         findingAid: "meatballs.com",
         isSpecRequestable: true,
       })
@@ -53,6 +53,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: true,
+        collectionAccessType: null,
         aeonUrl: "spaghetti.com",
         findingAid: "meatballs.com",
         isSpecRequestable: true,
@@ -69,6 +70,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: true,
+        collectionAccessType: null,
         aeonUrl: "spaghetti.com",
         findingAid: null,
         isSpecRequestable: true,
@@ -85,6 +87,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: false,
+        collectionAccessType: null,
         aeonUrl: "spaghetti.com",
         findingAid: null,
         isSpecRequestable: true,
@@ -101,6 +104,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: false,
+        collectionAccessType: null,
         aeonUrl: null,
         findingAid: "meatballs.com",
         isSpecRequestable: true,
@@ -120,6 +124,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: true,
+        collectionAccessType: null,
         aeonUrl: null,
         findingAid: "meatballs.com",
         isSpecRequestable: true,
@@ -138,6 +143,7 @@ describe("ItemAvailability", () => {
       item.availability = new ItemAvailabilityModel({
         isAvailable: true,
         isReCAP: true,
+        collectionAccessType: null,
         aeonUrl: null,
         findingAid: null,
         isSpecRequestable: true,
@@ -158,6 +164,7 @@ describe("ItemAvailability", () => {
         isAvailable: true,
         isReCAP: false,
         aeonUrl: null,
+        collectionAccessType: null,
         findingAid: null,
         isSpecRequestable: true,
       })
@@ -197,30 +204,34 @@ describe("ItemAvailability", () => {
       screen.getByText("to submit a request in person.", { exact: false })
     ).toBeInTheDocument()
   })
+  it("renders the correct text for an available shelf reference item", async () => {
+    const shelfItem = new Item(shelfItemAvailable, parentBib)
+    render(<ItemAvailability item={shelfItem} />)
+    expect(
+      screen.getByText(/Item located on open reference shelves/)
+    ).toBeInTheDocument()
+  })
+  it("renders the correct text for an available desk reference item", async () => {
+    const deskItem = new Item(deskItemAvailable, parentBib)
+    render(<ItemAvailability item={deskItem} />)
+    expect(screen.getByText(/Item located at service desk/)).toBeInTheDocument()
+  })
   it("renders the correct text for unavailable items", async () => {
     const item = new Item(itemUnavailable, parentBib)
     render(<ItemAvailability item={item} />)
     expect(screen.getByText("Not available")).toBeInTheDocument()
-    expect(screen.getByText("- Please", { exact: false })).toBeInTheDocument()
-    expect(screen.getByText("contact a librarian")).toBeInTheDocument()
     expect(
-      screen.getByText("for assistance.", { exact: false })
+      screen.getByText(/Please contact the division for assistance/)
     ).toBeInTheDocument()
   })
-  it("pre-populates the metadata in the feedback form for unavailable items", async () => {
-    const item = new Item(itemUnavailable, parentBib)
-    render(
-      <>
-        <ItemAvailability item={item} />
-        <FeedbackForm />
-      </>
-    )
-    const feedbackButton = screen.getByText("contact a librarian")
-    await userEvent.click(feedbackButton)
-
+  it("renders the correct text for unavailable NYPL items with a known due date", async () => {
+    const item = new Item(itemUnavailableDueDate, parentBib)
+    render(<ItemAvailability item={item} />)
+    expect(screen.getByText("Not available")).toBeInTheDocument()
+    // Due date on the item is 2024-07-07.
     expect(
       screen.getByText(
-        "You are asking for help or information about NCOV 2803 in this record."
+        /In use through July 7, 2024. Please contact the division for assistance/
       )
     ).toBeInTheDocument()
   })

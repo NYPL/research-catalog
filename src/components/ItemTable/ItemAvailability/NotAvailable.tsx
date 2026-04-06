@@ -1,29 +1,24 @@
-import { Box } from "@nypl/design-system-react-components"
-import ContactALibrarian from "./ContactALibrarian"
-import type Item from "../../../models/Item"
+import { Box, Icon, Text } from "@nypl/design-system-react-components"
+import { formatDueDate } from "../../../utils/itemUtils"
 
-const NotAvailable = ({
-  item,
-  dueDate,
-}: {
-  dueDate: string
-  item: Pick<Item, "id" | "barcode" | "callNumber" | "bibId" | "volume">
-}) => {
-  const itemMetadata = {
-    id: item.id,
-    barcode: item.barcode,
-    callNumber: item.callNumber,
-    bibId: item.bibId,
-    volume: item.volume,
-  }
+const NotAvailable = ({ dueDate }: { dueDate?: string }) => {
   return (
     <>
-      <Box as="span" color="ui.warning.tertiary">
-        Not available
+      <Box as="span" display="inline-flex" gap="xxs" alignItems="center">
+        <Icon
+          name="errorOutline"
+          color="ui.gray.semi-dark"
+          iconRotation="rotate180"
+          size="medium"
+        />
+        <Text as="span" color="ui.warning.secondary" fontWeight="500">
+          Not available
+        </Text>
+        <Text as="span" size="body2" fontStyle="italic">
+          {dueDate ? `- In use through ${formatDueDate(dueDate)}. ` : "- "}
+          Please contact the division for assistance.
+        </Text>
       </Box>
-      {" -"}
-      {dueDate && ` - In use until ${dueDate} -`}
-      <ContactALibrarian item={itemMetadata} />
     </>
   )
 }
