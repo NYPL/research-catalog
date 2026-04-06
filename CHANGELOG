@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added author ascending/descending sort options to search sort [SCC-5207](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5207)
 - Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
 - Add call number default sort and rework sort utilities [SCC-5279](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5279)
+- Added more granular logging to support error alarm [SCC-5293](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5293)
 
 ## Hot fix 2026-03-12
 
