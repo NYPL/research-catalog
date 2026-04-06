@@ -16,7 +16,11 @@ function App({ Component, pageProps }) {
   if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
     if (current !== router.asPath) {
-      sessionStorage.setItem("previousPath", current || "")
+      const currentBasePath = current?.split(/[?#]/)[0]
+      const newBasePath = router.asPath.split(/[?#]/)[0]
+      if (currentBasePath !== newBasePath) {
+        sessionStorage.setItem("previousPath", current || "")
+      }
       sessionStorage.setItem("currentPath", router.asPath)
     }
   }

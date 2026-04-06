@@ -48,14 +48,18 @@ const BrowseForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
-  // Set the browseType and applied filters from the current URL
+  // Sync applied filters, back URL, and browse context when the URL changes
   useEffect(() => {
-    setBrowseType(getBrowseTypeFromPath(router.asPath))
+    const currentBrowseType = getBrowseTypeFromPath(router.asPath)
+    setBrowseType(currentBrowseType)
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
-  }, [router.query])
 
-  // Set back to index URL from session storage
-  useEffect(() => {
+    const defaultOption = getBrowseFormKey(
+      currentBrowseType,
+      (router?.query?.search_scope as string) || "has"
+    )
+    setSelectedOption(defaultOption)
+
     if (typeof window !== "undefined") {
       const prevPath = sessionStorage.getItem("previousPath")
       if (
@@ -67,17 +71,7 @@ const BrowseForm = ({
         setBackUrl(null)
       }
     }
-  }, [router.asPath])
-
-  // Set the default selected option for the current browseType
-  useEffect(() => {
-    const defaultOption = getBrowseFormKey(
-      browseType,
-      (router?.query?.search_scope as string) || "has"
-    )
-
-    setSelectedOption(defaultOption)
-  }, [browseType, router?.query?.search_scope])
+  }, [router.asPath, router.query, setBrowseType])
 
   const optionData = BROWSE_FORM_OPTIONS[selectedOption]
   const placeholder = optionData.placeholder
