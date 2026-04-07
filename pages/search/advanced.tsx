@@ -205,6 +205,8 @@ export default function AdvancedSearch({
           id={field.value}
           isSearchable
           closeOnBlur
+          listOverflow="expand"
+          defaultItemsVisible={8}
           buttonText={field.label}
           selectedItems={{
             [field.value]: {
