@@ -7,7 +7,7 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
-  ContributorEntry,
+  DisplayPackedEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -78,7 +78,7 @@ export default class BibDetails {
         ? "creatorsDisplay"
         : "contributorsDisplay"
 
-    const mapDisplay = (arr?: ContributorEntry[]): BibDetailURL[] =>
+    const mapDisplay = (arr?: DisplayPackedEntry[]): BibDetailURL[] =>
       Array.isArray(arr)
         ? arr.map(({ display, "@value": name }) => {
             const [, roles] = display.split(name)
@@ -86,6 +86,47 @@ export default class BibDetails {
               url: getContributorSearchURL(name),
               urlLabel: name,
               text: roles?.trim() || undefined,
+            }
+          })
+        : []
+
+    const displayValues = mapDisplay(this.bib[displayField])
+
+    // Set of displayed names for deduping
+    const seen = new Set(displayValues.map((v) => v.urlLabel))
+
+    // Literals (fallback)
+    const literalValues: string[] = this.bib[literalField] || []
+    const literals: BibDetailURL[] = literalValues
+      .filter((name) => !seen.has(name))
+      .map((name) => ({
+        url: getContributorSearchURL(name),
+        urlLabel: name,
+      }))
+
+    const combinedValues = [...displayValues, ...literals]
+
+    return combinedValues?.length > 0
+      ? {
+          label,
+          link: "internal",
+          value: combinedValues,
+        }
+      : null
+  }
+
+  buildLinkedSeriesDetail(field): LinkedBibDetail | null {
+    const displayField =
+      field === "series" ? "seriesDisplay" : "seriesAddedEntryDisplay"
+
+    const mapDisplay = (arr?: DisplayPackedEntry[]): BibDetailURL[] =>
+      Array.isArray(arr)
+        ? arr.map(({ display, "@value": name }) => {
+            const [, unlinkedText] = display.split(name)
+            return {
+              url: 
+              urlLabel: name,
+              text: unlinkedText?.trim() || undefined,
             }
           })
         : []
@@ -212,6 +253,7 @@ export default class BibDetails {
       "addedAuthorTitle",
       "placeOfPublication",
       "series",
+      "seriesAddedEntry",
       "uniformTitle",
       "subjectLiteral",
       "titleAlt",
@@ -228,7 +270,7 @@ export default class BibDetails {
       { field: "summary", label: "Summary" },
       { field: "donor", label: "Donor/sponsor" },
       { field: "series", label: "Series" },
-      { field: "seriesStatement", label: "Series statement" },
+      { field: "seriesAddedEntry", label: "Series added entry" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
@@ -358,6 +400,7 @@ export default class BibDetails {
     label: string
     field: string
   }): LinkedBibDetail {
+    console.log(fieldMapping)
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
     if (fieldMapping.field === "contributorLiteral") {
@@ -365,6 +408,12 @@ export default class BibDetails {
         "contributorLiteral",
         "Additional authors"
       )
+    }
+    if (
+      fieldMapping.field === "seriesAddedEntry" ||
+      fieldMapping.field === "series"
+    ) {
+      return this.buildLinkedSeriesDetail(fieldMapping.field)
     }
     return {
       link: "internal",

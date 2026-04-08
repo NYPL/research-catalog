@@ -48,7 +48,7 @@ export interface FieldMapping {
   field: string
 }
 
-export interface ContributorEntry {
+export interface DisplayPackedEntry {
   display: string
   "@value": string
 }
