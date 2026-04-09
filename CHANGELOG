@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.8.2] 2026-04-09
+
+### Updated
+
+- Updated homepage copy to reflect legacy deprecation dates May/June [SCC-5316](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5316)
+
 ## [1.8.1] 2026-04-01
 
 ### Updated
