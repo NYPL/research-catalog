@@ -54,3 +54,15 @@ test("SHEP link with unknown uuid/path redirects to browse", async ({
   await page.goto(`${BASE_URL}/subject_headings/something-something`)
   await expect(page).toHaveURL(`${BASE_URL}/browse`)
 })
+
+test("RC sends circ bib requests to Vega", async ({ request }) => {
+  const response = await request.get(`${BASE_URL}/bib/b17782484`, {
+    maxRedirects: 0,
+  })
+
+  expect(response.status()).toBeGreaterThanOrEqual(300)
+  expect(response.status()).toBeLessThan(400)
+
+  const location = response.headers()["location"]
+  expect(location).toBe("https://borrow.nypl.org/search/card?recordId=17782484")
+})
