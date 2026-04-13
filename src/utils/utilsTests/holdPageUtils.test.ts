@@ -13,8 +13,8 @@ describe("holdPageUtils", () => {
     })
     it("b-i", () => {
       expect(stripPrefixes({ bibId: "b1234", itemId: "i5678" })).toStrictEqual({
-        itemId: "1234",
-        bibId: "5678",
+        bibId: "1234",
+        itemId: "5678",
       })
     })
   })
