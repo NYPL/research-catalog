@@ -1,9 +1,23 @@
 import {
   defaultValidatedEDDFields,
   getUpdatedInvalidFields,
+  stripPrefixes,
 } from "../holdPageUtils"
 
 describe("holdPageUtils", () => {
+  describe("stripPrefixes", () => {
+    it("cb-ciit", () => {
+      expect(
+        stripPrefixes({ bibId: "cb1234", itemId: "ciit5678" })
+      ).toStrictEqual({ bibId: "1234", itemId: "it5678" })
+    })
+    it("b-i", () => {
+      expect(stripPrefixes({ bibId: "b1234", itemId: "i5678" })).toStrictEqual({
+        itemId: "1234",
+        bibId: "5678",
+      })
+    })
+  })
   describe("getUpdatedInvalidFields", () => {
     it("returns correctly updated field validation statuses for different inputs", () => {
       expect(
