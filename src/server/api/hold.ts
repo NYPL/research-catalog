@@ -86,7 +86,10 @@ export async function postHoldRequest(
   const { itemId, patronId, source, bibId, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
-  const [itemIdStripped, bibIdStripped] = stripPrefixes({ bibId, itemId })
+  const { bibId: bibIdStripped, itemId: itemIdStripped } = stripPrefixes({
+    bibId,
+    itemId,
+  })
   const holdPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
     record: itemIdStripped,
@@ -131,7 +134,10 @@ export async function postEDDRequest(
 ): Promise<HoldPostResult> {
   const { itemId, patronId, source, bibId, ...rest } = eddRequestParams
 
-  const [bibIdStripped, itemIdStripped] = stripPrefixes({ bibId, itemId })
+  const { bibId: bibIdStripped, itemId: itemIdStripped } = stripPrefixes({
+    bibId,
+    itemId,
+  })
 
   const eddPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
