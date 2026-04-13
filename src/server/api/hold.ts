@@ -133,8 +133,8 @@ export async function postEDDRequest(
   const { itemId, patronId, source, bibId, ...rest } = eddRequestParams
 
   // Remove non-numeric characters from item ID
-  const itemIdNumeric = itemId.replace(/\D/g, "")
-  const bibIdNumeric = bibId.replace(/\D/g, "")
+  const itemIdNumeric = itemId.replace(/^\D?i/, "")
+  const bibIdNumeric = bibId.replace(/^\D?b/, "")
 
   const eddPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
