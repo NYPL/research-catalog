@@ -24,6 +24,7 @@ import {
 import { appConfig } from "../../config/appConfig"
 import { logServerError } from "../../utils/logUtils"
 import { logger } from "@nypl/node-utils"
+import { stripPrefixes } from "../../utils/holdPageUtils"
 
 /**
  * Getter function for hold delivery locations.
