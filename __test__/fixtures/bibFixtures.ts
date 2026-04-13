@@ -1231,6 +1231,677 @@ export const bibWithItems = {
   },
 }
 
+export const bibWithSeries = {
+  resource: {
+    "@context":
+      "http://discovery-api-qa.nypl.org/api/v0.1/discovery/context_all.jsonld",
+    "@type": ["nypl:Item", "nypl:Resource"],
+    "@id": "res:b16470373",
+    buildingLocationIds: ["rc"],
+    carrierType: [
+      {
+        "@id": "carriertypes:nc",
+        prefLabel: "volume",
+      },
+    ],
+    contributorLiteral: ["Spada, Pietro, 1935-"],
+    contributorsDisplay: [
+      {
+        display: "Spada, Pietro, 1935-, editor",
+        "@value": "Spada, Pietro, 1935-",
+      },
+    ],
+    createdString: ["2006"],
+    createdYear: 2006,
+    creatorLiteral: ["Rossini, Gioacchino, 1792-1868"],
+    creatorsDisplay: [
+      {
+        display: "Rossini, Gioacchino, 1792-1868",
+        "@value": "Rossini, Gioacchino, 1792-1868",
+      },
+    ],
+    dateStartYear: 2006,
+    dateString: ["2006"],
+    dates: [
+      {
+        range: {
+          lt: "2007",
+          gte: "2006",
+        },
+        raw: "061108s2006    it uua   i     n    lat cccm4a ",
+        tag: "s",
+      },
+    ],
+    dimensions: ["31 cm."],
+    extent: ["1 score ([ii], 18 p.) ;"],
+    idOclc: ["75399987"],
+    identifier: [
+      {
+        "@type": "bf:ShelfMark",
+        "@value": "JMG 06-1852",
+      },
+      {
+        "@type": "nypl:Bnumber",
+        "@value": "16470373",
+      },
+      {
+        "@type": "nypl:Oclc",
+        "@value": "75399987",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "BS. 1607 Boccaccini & Spada",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)72521271",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(OCoLC)75399987",
+      },
+      {
+        "@type": "bf:Identifier",
+        "@value": "(WaOLN)M060000006",
+      },
+    ],
+    issuance: [
+      {
+        "@id": "urn:biblevel:m",
+        prefLabel: "monograph/item",
+      },
+    ],
+    itemAggregations: [
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:location",
+        id: "location",
+        field: "location",
+        values: [
+          {
+            value: "loc:rcpm2",
+            count: 1,
+            label: "Offsite",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:format",
+        id: "format",
+        field: "format",
+        values: [
+          {
+            value: "Notated music",
+            count: 1,
+            label: "Notated music",
+          },
+        ],
+      },
+      {
+        "@type": "nypl:Aggregation",
+        "@id": "res:status",
+        id: "status",
+        field: "status",
+        values: [
+          {
+            value: "status:a",
+            count: 1,
+            label: "Available",
+          },
+        ],
+      },
+    ],
+    items: [
+      {
+        "@id": "res:i17270445",
+        "@type": ["bf:Item"],
+        accessMessage: [
+          {
+            "@id": "accessMessage:2",
+            prefLabel: "Request in advance",
+          },
+        ],
+        catalogItemType: [
+          {
+            "@id": "catalogItemType:57",
+            prefLabel: "printed music limited circ MaRLI",
+          },
+        ],
+        eddFulfillment: {
+          "@id": "fulfillment:recap-edd",
+        },
+        eddRequestable: true,
+        formatLiteral: ["Notated music"],
+        holdingLocation: [
+          {
+            "@id": "loc:rcpm2",
+            prefLabel: "Offsite",
+          },
+        ],
+        idBarcode: ["33433073832424"],
+        identifier: [
+          {
+            "@type": "bf:ShelfMark",
+            "@value": "JMG 06-1852",
+          },
+          {
+            "@type": "bf:Barcode",
+            "@value": "33433073832424",
+          },
+        ],
+        owner: [
+          {
+            "@id": "orgs:1002",
+            prefLabel:
+              "New York Public Library for the Performing Arts, Dorothy and Lewis B. Cullman Center",
+          },
+        ],
+        physFulfillment: {
+          "@id": "fulfillment:recap-offsite",
+        },
+        physRequestable: true,
+        physicalLocation: ["JMG 06-1852"],
+        recapCustomerCode: ["NP"],
+        requestable: [true],
+        shelfMark: ["JMG 06-1852"],
+        specRequestable: false,
+        status: [
+          {
+            "@id": "status:a",
+            prefLabel: "Available",
+          },
+        ],
+        uri: "i17270445",
+        idNyplSourceId: {
+          "@type": "SierraNypl",
+          "@value": "17270445",
+        },
+      },
+    ],
+    language: [
+      {
+        "@id": "lang:lat",
+        prefLabel: "Latin",
+      },
+    ],
+    lccClassification: ["M2018.R83 C57"],
+    materialType: [
+      {
+        "@id": "resourcetypes:not",
+        prefLabel: "Notated music",
+      },
+    ],
+    mediaType: [
+      {
+        "@id": "mediatypes:n",
+        prefLabel: "unmediated",
+      },
+    ],
+    note: [
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel: "For vocal soloists (TTB) with orchestra.",
+      },
+      {
+        noteType: "Note",
+        "@type": "bf:Note",
+        prefLabel:
+          "Preface in Italian with English, French, and German translations.",
+      },
+      {
+        noteType: "Language",
+        "@type": "bf:Note",
+        prefLabel: "Latin words.",
+      },
+    ],
+    numCheckinCardItems: 0,
+    numElectronicResources: 0,
+    numItemDatesParsed: 0,
+    numItemVolumesParsed: 0,
+    numItemsMatched: 1,
+    numItemsTotal: 1,
+    nyplSource: ["sierra-nypl"],
+    parallelContributorLiteral: [null],
+    parallelContributorsDisplay: [],
+    parallelCreatorLiteral: [null],
+    parallelCreatorsDisplay: [],
+    parallelSeriesAddedEntry: [],
+    parallelSeriesAddedEntryDisplay: [],
+    parallelSubjectLiteral: [],
+    physicalDescription: ["1 score ([ii], 18 p.) ; 31 cm."],
+    placeOfPublication: ["Pavona di Albano Laziale, Roma"],
+    popularity: 1,
+    publicationStatement: [
+      "Pavona di Albano Laziale, Roma : Boccaccini & Spada, c2006.",
+    ],
+    publisherLiteral: ["Boccaccini & Spada"],
+    series: ["Inediti e rarità rossiniane ;"],
+    seriesDisplay: [
+      {
+        display: "Inediti e rarità rossiniane ; 12",
+        "@value": "Inediti e rarità rossiniane ;",
+      },
+    ],
+    seriesUniformTitle: [
+      "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;",
+    ],
+    seriesUniformTitleDisplay: [
+      {
+        display:
+          "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ; 12.",
+        "@value":
+          "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;",
+      },
+    ],
+    shelfMark: ["JMG 06-1852"],
+    subjectLiteral: ["Sacred vocal trios with orchestra -- Scores."],
+    title: ["Christe : per 2 tenori, basso ed orchestra"],
+    titleDisplay: [
+      "Christe : per 2 tenori, basso ed orchestra / Gioacchino Rossini ; a cura di Pietro Spada.",
+    ],
+    type: ["nypl:Item"],
+    updatedAt: 1776009782717,
+    uri: "b16470373",
+    updatedAtDate: "2026-04-12T16:03:02.717Z",
+    hasItemVolumes: false,
+    hasItemDates: false,
+    collection: [
+      {
+        "@id": "pam",
+        prefLabel: "Music Division",
+        buildingLocationLabel:
+          "The New York Public Library for the Performing Arts (LPA)",
+        locationsPath: "locations/lpa/music-division",
+      },
+    ],
+    format: [
+      {
+        "@id": "c",
+        prefLabel: "Notated music",
+      },
+    ],
+    electronicResources: [],
+  },
+  annotatedMarc: {
+    id: "16470373",
+    nyplSource: "sierra-nypl",
+    fields: [
+      {
+        label: "Author",
+        values: [
+          {
+            content: "Rossini, Gioacchino, 1792-1868.",
+            source: {
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              marcTag: "100",
+              fieldTag: "a",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Rossini, Gioacchino,",
+                },
+                {
+                  tag: "d",
+                  content: "1792-1868.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Title",
+        values: [
+          {
+            content:
+              "Christe : per 2 tenori, basso ed orchestra / Gioacchino Rossini ; a cura di Pietro Spada.",
+            source: {
+              ind1: "1",
+              ind2: "0",
+              content: null,
+              marcTag: "245",
+              fieldTag: "t",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Christe :",
+                },
+                {
+                  tag: "b",
+                  content: "per 2 tenori, basso ed orchestra /",
+                },
+                {
+                  tag: "c",
+                  content: "Gioacchino Rossini ; a cura di Pietro Spada.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Imprint",
+        values: [
+          {
+            content:
+              "Pavona di Albano Laziale, Roma : Boccaccini & Spada, c2006.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "260",
+              fieldTag: "p",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Pavona di Albano Laziale, Roma :",
+                },
+                {
+                  tag: "b",
+                  content: "Boccaccini & Spada,",
+                },
+                {
+                  tag: "c",
+                  content: "c2006.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Format",
+        values: [
+          {
+            content: "Partitura.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "254",
+              fieldTag: "e",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Partitura.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Description",
+        values: [
+          {
+            content: "1 score ([ii], 18 p.) ; 31 cm.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "300",
+              fieldTag: "r",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "1 score ([ii], 18 p.) ;",
+                },
+                {
+                  tag: "c",
+                  content: "31 cm.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Playing Time",
+        values: [
+          {
+            content: "000700",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "306",
+              fieldTag: "r",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "000700",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Series",
+        values: [
+          {
+            content: "Inediti e rarità rossiniane ; 12",
+            source: {
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              marcTag: "490",
+              fieldTag: "s",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Inediti e rarità rossiniane ;",
+                },
+                {
+                  tag: "v",
+                  content: "12",
+                },
+              ],
+            },
+          },
+          {
+            content:
+              "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ; 12.",
+            source: {
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              marcTag: "830",
+              fieldTag: "s",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Rossini, Gioacchino",
+                },
+                {
+                  tag: "d",
+                  content: "1792-1868.",
+                },
+                {
+                  tag: "t",
+                  content: "Works.",
+                },
+                {
+                  tag: "k",
+                  content: "Selections (Boccaccini & Spada editore) ;",
+                },
+                {
+                  tag: "v",
+                  content: "12.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Note",
+        values: [
+          {
+            content: "For vocal soloists (TTB) with orchestra.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "500",
+              fieldTag: "n",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "For vocal soloists (TTB) with orchestra.",
+                },
+              ],
+            },
+          },
+          {
+            content:
+              "Preface in Italian with English, French, and German translations.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "500",
+              fieldTag: "n",
+              subfields: [
+                {
+                  tag: "a",
+                  content:
+                    "Preface in Italian with English, French, and German translations.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Language",
+        values: [
+          {
+            content: "Latin words.",
+            source: {
+              ind1: " ",
+              ind2: " ",
+              content: null,
+              marcTag: "546",
+              fieldTag: "n",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Latin words.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Subject",
+        values: [
+          {
+            content: "Sacred vocal trios with orchestra -- Scores.",
+            source: {
+              ind1: " ",
+              ind2: "0",
+              content: null,
+              marcTag: "650",
+              fieldTag: "d",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Sacred vocal trios with orchestra",
+                },
+                {
+                  tag: "v",
+                  content: "Scores.",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Added Author",
+        values: [
+          {
+            content: "Spada, Pietro, 1935- Editor",
+            source: {
+              ind1: "1",
+              ind2: " ",
+              content: null,
+              marcTag: "700",
+              fieldTag: "b",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "Spada, Pietro,",
+                },
+                {
+                  tag: "d",
+                  content: "1935-",
+                },
+                {
+                  tag: "4",
+                  content: "edt",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Publisher No.",
+        values: [
+          {
+            content: "BS. 1607 Boccaccini & Spada",
+            source: {
+              ind1: "2",
+              ind2: "2",
+              content: null,
+              marcTag: "028",
+              fieldTag: "l",
+              subfields: [
+                {
+                  tag: "a",
+                  content: "BS. 1607",
+                },
+                {
+                  tag: "b",
+                  content: "Boccaccini & Spada",
+                },
+              ],
+            },
+          },
+        ],
+      },
+      {
+        label: "Research Call Number",
+        values: [
+          {
+            content: "JMG 06-1852",
+            source: {
+              ind1: "8",
+              ind2: " ",
+              content: null,
+              marcTag: "852",
+              fieldTag: "q",
+              subfields: [
+                {
+                  tag: "h",
+                  content: "JMG 06-1852",
+                },
+              ],
+            },
+          },
+        ],
+      },
+    ],
+  },
+}
+
 export const bibNoItems = {
   resource: {
     "@context":
@@ -8971,7 +9642,6 @@ export const noParallels = {
     publicationStatement: ["[Paris, France] : Gallimard, c2005."],
     publisherLiteral: ["Gallimard,"],
     series: ["Childhood"],
-    seriesStatement: ["Haute enfance"],
     shelfMark: ["JFC 06-438"],
     subjectLiteral: [
       "Authors, French -- 20th century -- Biography.",
@@ -12771,7 +13441,6 @@ export const bibWithSubjectHeadings = {
     popularity: 1,
     publicationStatement: ["[Paris, France] : Gallimard, c2005."],
     publisherLiteral: ["Gallimard"],
-    seriesStatement: ["Haute enfance"],
     shelfMark: ["JFC 06-438"],
     subjectLiteral: [
       "Cortanze, Gérard de -- Childhood and youth.",

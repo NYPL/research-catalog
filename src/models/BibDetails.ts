@@ -139,7 +139,7 @@ export default class BibDetails {
         return {
           url: getSeriesSearchUrl(name),
           urlLabel: name,
-          text: unlinkedText?.trim() || undefined,
+          text: unlinkedText || undefined,
         }
       }
     )
@@ -338,10 +338,12 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
+    // Merge series added entry and series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
     )
 
+    // Normalize and merge bib and annotated marc fields
     const normalizeValues = (val: any) => {
       if (!val) return []
       if (Array.isArray(val)) {
@@ -437,7 +439,6 @@ export default class BibDetails {
     label: string
     field: string
   }): LinkedBibDetail {
-    console.log(fieldMapping)
     if (fieldMapping.field === "contributorLiteral") {
       return this.buildLinkedContributorDetail(
         "contributorLiteral",

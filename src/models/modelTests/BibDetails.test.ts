@@ -9,6 +9,7 @@ import {
   princetonRecord,
   bibWithItems,
   physicalDescriptionBib,
+  bibWithSeries,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -45,6 +46,12 @@ describe("Bib Details model", () => {
     bibWithSubjectHeadings.resource,
     bibWithSubjectHeadings.annotatedMarc
   )
+
+  const bibWithSeriesModel = new BibDetailsModel(
+    bibWithSeries.resource,
+    bibWithSeries.annotatedMarc
+  )
+
   describe("owner", () => {
     it("populates owner when owner is present", () => {
       const partnerBib = new BibDetailsModel(princetonRecord)
@@ -251,6 +258,22 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(subjects.link).toBe("internal")
       expect(subjects.value[0].url).toContain("/browse/subjects/")
+    })
+    it("creates series fields and merges series uniform title into series added entry", () => {
+      const series = bibWithSeriesModel.bottomDetails.find(
+        (d) => d.label === "Series"
+      ) as LinkedBibDetail
+      expect(series.link).toBe("internal")
+      expect(series.value[0].url).toContain("search?filters[series][0]")
+      expect(series.value[0].urlLabel).toEqual("Inediti e rarità rossiniane ;")
+      expect(series.value[0].text).toEqual(" 12")
+      const seriesAddedEntry = bibWithSeriesModel.bottomDetails.find(
+        (d) => d.label === "Series added entry"
+      ) as LinkedBibDetail
+      // Value is from seriesUniformTitle
+      expect(seriesAddedEntry.value[0].urlLabel).toEqual(
+        "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;"
+      )
     })
   })
 
