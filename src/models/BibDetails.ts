@@ -116,44 +116,52 @@ export default class BibDetails {
   }
 
   buildLinkedSeriesDetail(field): LinkedBibDetail | null {
-    const displayField =
-      field === "series" ? "seriesDisplay" : "seriesAddedEntryDisplay"
+    let displayField = "seriesDisplay"
+    let label = "Series"
+    switch (field) {
+      case "seriesAddedEntry":
+        displayField = "seriesAddedEntryDisplay"
+        label = "Series added entry"
+        break
+      case "seriesUniformTitle":
+        displayField = "seriesUniformTitleDisplay"
+        label = "Series uniform title"
+        break
+    }
 
-    const mapDisplay = (arr?: DisplayPackedEntry[]): BibDetailURL[] =>
-      Array.isArray(arr)
-        ? arr.map(({ display, "@value": name }) => {
-            const [, unlinkedText] = display.split(name)
-            return {
-              url: 
-              urlLabel: name,
-              text: unlinkedText?.trim() || undefined,
-            }
-          })
-        : []
+    const getSeriesSearchUrl = (name: string) =>
+      `/search?filters[series][0]=${encodeURIComponentWithPeriods(name)}`
 
-    const displayValues = mapDisplay(this.bib[displayField])
+    const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
+    const displayValues: BibDetailURL[] = displayData.map(
+      ({ display, "@value": name }) => {
+        const [, unlinkedText] = display.split(name)
+        return {
+          url: getSeriesSearchUrl(name),
+          urlLabel: name,
+          text: unlinkedText?.trim() || undefined,
+        }
+      }
+    )
 
-    // Set of displayed names for deduping
-    const seen = new Set(displayValues.map((v) => v.urlLabel))
+    // Set of field values for deduping
+    const seen = new Set(
+      displayData.map((v) =>
+        field === "seriesAddedEntry" ? v.display : v["@value"]
+      )
+    )
 
     // Literals (fallback)
-    const literalValues: string[] = this.bib[literalField] || []
-    const literals: BibDetailURL[] = literalValues
+    const literals: BibDetailURL[] = (this.bib[field] || [])
       .filter((name) => !seen.has(name))
       .map((name) => ({
-        url: getContributorSearchURL(name),
+        url: getSeriesSearchUrl(name),
         urlLabel: name,
       }))
 
-    const combinedValues = [...displayValues, ...literals]
+    const value = [...displayValues, ...literals]
 
-    return combinedValues?.length > 0
-      ? {
-          label,
-          link: "internal",
-          value: combinedValues,
-        }
-      : null
+    return value.length ? { label, link: "internal", value } : null
   }
 
   buildAnnotatedMarcDetails(
@@ -254,6 +262,7 @@ export default class BibDetails {
       "placeOfPublication",
       "series",
       "seriesAddedEntry",
+      "seriesUniformTitle",
       "uniformTitle",
       "subjectLiteral",
       "titleAlt",
@@ -271,6 +280,7 @@ export default class BibDetails {
       { field: "donor", label: "Donor/sponsor" },
       { field: "series", label: "Series" },
       { field: "seriesAddedEntry", label: "Series added entry" },
+      { field: "seriesUniformTitle", label: "Series uniform title" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
@@ -301,10 +311,37 @@ export default class BibDetails {
     )
   }
 
+  // Series uniform title values should display under Series added entry,
+  // combine these details
+  combineSeriesAddedEntries(resourceEndpointDetails: AnyBibDetail[]) {
+    const addedEntry = resourceEndpointDetails.find(
+      (d) => d.label === "Series added entry"
+    ) as LinkedBibDetail
+    const uniformTitle = resourceEndpointDetails.find(
+      (d) => d.label === "Series uniform title"
+    ) as LinkedBibDetail
+
+    if (uniformTitle) {
+      if (addedEntry) {
+        addedEntry.value = [...addedEntry.value, ...uniformTitle.value]
+        return resourceEndpointDetails.filter(
+          (d) => d.label !== "Series uniform title"
+        )
+      }
+      uniformTitle.label = "Series added entry"
+    }
+
+    return resourceEndpointDetails
+  }
+
   combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
+    resourceEndpointDetails = this.combineSeriesAddedEntries(
+      resourceEndpointDetails
+    )
+
     const normalizeValues = (val: any) => {
       if (!val) return []
       if (Array.isArray(val)) {
@@ -401,8 +438,6 @@ export default class BibDetails {
     field: string
   }): LinkedBibDetail {
     console.log(fieldMapping)
-    const value = this.bib[fieldMapping.field]
-    if (!value?.length) return null
     if (fieldMapping.field === "contributorLiteral") {
       return this.buildLinkedContributorDetail(
         "contributorLiteral",
@@ -411,10 +446,15 @@ export default class BibDetails {
     }
     if (
       fieldMapping.field === "seriesAddedEntry" ||
-      fieldMapping.field === "series"
+      fieldMapping.field === "series" ||
+      fieldMapping.field === "seriesUniformTitle"
     ) {
       return this.buildLinkedSeriesDetail(fieldMapping.field)
     }
+
+    const value = this.bib[fieldMapping.field]
+    if (!value?.length) return null
+
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
