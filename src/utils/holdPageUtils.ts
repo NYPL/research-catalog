@@ -59,6 +59,10 @@ export const getUpdatedInvalidFields = (
   })
 }
 
+export const stripPrefixes = ({ bibId, itemId }) => {
+  return [bibId.replace(/^\D?b/, ""), itemId.replace(/^\D?i/, "")]
+}
+
 // Validates all fields on submit in case the user hasn't typed in all the required fields
 export const validateEDDForm = (
   eddForm: EDDRequestParams,
