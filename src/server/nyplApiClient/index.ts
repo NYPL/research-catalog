@@ -2,7 +2,7 @@ import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
-import { withTimeout } from "../serverUtils"
+import { withTimeout } from "../../utils/serverUtils"
 
 const CACHE: Record<string, NyplApiClient> = {}
 

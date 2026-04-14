@@ -2,7 +2,7 @@ import wrapper from "@nypl/sierra-wrapper"
 import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 import { appConfig } from "../../config/appConfig"
-import { withTimeout } from "../serverUtils"
+import { withTimeout } from "../../utils/serverUtils"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
