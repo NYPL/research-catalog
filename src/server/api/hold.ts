@@ -24,6 +24,7 @@ import {
 import { appConfig } from "../../config/appConfig"
 import { logServerError } from "../../utils/logUtils"
 import { logger } from "@nypl/node-utils"
+import { stripPrefixes } from "../../utils/holdPageUtils"
 
 /**
  * Getter function for hold delivery locations.
@@ -85,14 +86,15 @@ export async function postHoldRequest(
   const { itemId, patronId, source, bibId, pickupLocation } = holdRequestParams
 
   // Remove non-numeric characters from item ID
-  const itemIdNumeric = itemId.replace(/\D/g, "")
-  const bibIdNumeric = bibId.replace(/\D/g, "")
-
+  const { bibId: bibIdStripped, itemId: itemIdStripped } = stripPrefixes({
+    bibId,
+    itemId,
+  })
   const holdPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
-    record: itemIdNumeric,
+    record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdNumeric),
+    bibId: parseInt(bibIdStripped),
     requestType: "hold",
     recordType: "i",
     pickupLocation,
@@ -132,15 +134,16 @@ export async function postEDDRequest(
 ): Promise<HoldPostResult> {
   const { itemId, patronId, source, bibId, ...rest } = eddRequestParams
 
-  // Remove non-numeric characters from item ID
-  const itemIdNumeric = itemId.replace(/\D/g, "")
-  const bibIdNumeric = bibId.replace(/\D/g, "")
+  const { bibId: bibIdStripped, itemId: itemIdStripped } = stripPrefixes({
+    bibId,
+    itemId,
+  })
 
   const eddPostParams: DiscoveryHoldPostParams = {
     patron: patronId,
-    record: itemIdNumeric,
+    record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdNumeric),
+    bibId: parseInt(bibIdStripped),
     requestType: "edd",
     recordType: "i",
     docDeliveryData: {
