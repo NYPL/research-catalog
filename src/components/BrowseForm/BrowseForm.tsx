@@ -48,28 +48,30 @@ const BrowseForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
-  // Set the browseType, applied filters, and back to index URL
-  // from the current URL
+  // Sync applied filters, back URL, and browse context when the URL changes
   useEffect(() => {
-    setBrowseType(getBrowseTypeFromPath(router.asPath))
+    const currentBrowseType = getBrowseTypeFromPath(router.asPath)
+    setBrowseType(currentBrowseType)
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
 
-    if (typeof window !== "undefined") {
-      const ref = document.referrer
-      if (ref.includes("/browse?q") || ref.includes("/browse/authors?q"))
-        setBackUrl(ref)
-    }
-  }, [router.query])
-
-  // Set the default selected option for the current browseType
-  useEffect(() => {
     const defaultOption = getBrowseFormKey(
-      browseType,
+      currentBrowseType,
       (router?.query?.search_scope as string) || "has"
     )
-
     setSelectedOption(defaultOption)
-  }, [browseType, router?.query?.search_scope])
+
+    if (typeof window !== "undefined") {
+      const prevPath = sessionStorage.getItem("previousPath")
+      if (
+        prevPath?.includes("/browse?q=") ||
+        prevPath?.includes("/browse/authors?q=")
+      ) {
+        setBackUrl(prevPath)
+      } else {
+        setBackUrl(null)
+      }
+    }
+  }, [router.asPath, router.query, setBrowseType])
 
   const optionData = BROWSE_FORM_OPTIONS[selectedOption]
   const placeholder = optionData.placeholder

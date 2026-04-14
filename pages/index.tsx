@@ -67,8 +67,10 @@ export default function Home({ isAuthenticated }: HomeProps) {
                 <Link isExternal href={appConfig.urls.legacyCatalog}>
                   Legacy Catalog
                 </Link>{" "}
-                in early 2026. After this time it will be available onsite only.
-                The Legacy Catalog does not include our{" "}
+                in May 2026. After this time it will be available onsite only,
+                and in June 2026, we will completely remove access to the Legacy
+                Catalog both onsite and offsite. The Legacy Catalog does not
+                include our{" "}
                 <Link
                   isExternal
                   href={
