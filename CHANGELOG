@@ -21,6 +21,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Display non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
 
+## Hot fix 2026-04-13
+
+- Update bib/item ID parsing to correctly strip partner prefixes
+
 ## [1.8.2] 2026-04-09
 
 ### Updated
