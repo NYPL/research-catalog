@@ -11,7 +11,7 @@ export class BrowsePage {
   readonly search_submit_button: Locator
   readonly searchResultsTitle: Locator
   readonly searchResultsTitleLinks: Locator
-  readonly sortCountLowToHigh: Locator
+  readonly sortResultsLowToHigh: Locator
   readonly titleCount: Locator
 
   constructor(
@@ -38,8 +38,8 @@ export class BrowsePage {
       hasText: this.searchterm,
     })
 
-    this.sortCountLowToHigh = page.getByRole("menuitem", {
-      name: "Count (Low - High)",
+    this.sortResultsLowToHigh = page.getByRole("menuitem", {
+      name: "Results (Low - High)",
     })
     this.titleCount = page.locator(
       "//span[preceding-sibling::span[text()='Results']]"

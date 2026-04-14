@@ -19,7 +19,10 @@ const BrowseResultsSort = forwardRef<HTMLDivElement, BrowseResultsSortProps>(
       if (params.sortBy && params.order) {
         return `${params.sortBy}_${params.order}`
       }
-      // Reflect Discovery API's default sort orders
+      // Reflect Discovery API default sort orders
+      if (params.sortBy === "creator") {
+        return `${params.sortBy}_asc`
+      }
       if (params.sortBy === "count" || params.sortBy === "termLabel") {
         return `${params.sortBy}_desc`
       }

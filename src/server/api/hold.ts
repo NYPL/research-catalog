@@ -71,7 +71,6 @@ export async function fetchDeliveryLocations(
     }
   } catch (error) {
     logServerError("fetchDeliveryLocations", error.message)
-
     return {
       status: 500,
     }

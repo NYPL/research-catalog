@@ -45,7 +45,6 @@ describe("Browse subject heading results page", () => {
         results={{ results, status: 200 }}
       />
     )
-    screen.getByLabelText("Pagination")
 
     const pageButton = screen.getByLabelText("Page 2")
     fireEvent.click(pageButton)

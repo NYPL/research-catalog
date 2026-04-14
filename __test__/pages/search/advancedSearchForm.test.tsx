@@ -34,7 +34,7 @@ describe("Advanced search form", () => {
     ] = [
       "Keyword",
       "Title",
-      "Author/contributor",
+      "Author/Contributor",
       "Subject",
       "Call number",
       "Unique identifier",

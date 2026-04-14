@@ -3,8 +3,13 @@ import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import BrowseForm from "./BrowseForm"
 import { fireEvent, render, screen } from "../../utils/testUtils"
+import { BrowseProvider, useBrowseContext } from "../../context/BrowseContext"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+const BrowseTypeDebugger = () => {
+  const { browseType } = useBrowseContext()
+  return <div data-testid="browse-type">{browseType}</div>
+}
 
 describe("BrowseForm", () => {
   const submit = () =>
@@ -14,6 +19,7 @@ describe("BrowseForm", () => {
     )
 
   beforeEach(() => {
+    mockRouter.push("/", undefined, { shallow: true })
     mockRouter.query = {}
   })
 
@@ -22,7 +28,12 @@ describe("BrowseForm", () => {
     await userEvent.clear(input)
   })
 
-  const component = <BrowseForm activePage="browse" />
+  const component = (
+    <BrowseProvider>
+      <BrowseForm activePage="browse" />
+      <BrowseTypeDebugger />
+    </BrowseProvider>
+  )
 
   it("submits a browse term by default", async () => {
     render(component)
@@ -41,7 +52,7 @@ describe("BrowseForm", () => {
     const select = screen.getByLabelText("Select a category")
 
     await userEvent.type(input, "Vietnam War")
-    await userEvent.selectOptions(select, "starts_with")
+    await userEvent.selectOptions(select, "subject_starts_with")
     submit()
     expect(mockRouter.asPath).toBe(
       "/browse?q=Vietnam+War&search_scope=starts_with&sort=termLabel&sort_direction=asc"
@@ -75,12 +86,39 @@ describe("BrowseForm", () => {
     const select = screen.getByLabelText(
       "Select a category"
     ) as HTMLSelectElement
-    expect(select.value).toBe("starts_with")
+    expect(select.value).toBe("subject_starts_with")
   })
 
   it("renders the browse tip", () => {
     render(component)
     const tip = screen.getByText(/browse tip/i)
     expect(tip).toBeInTheDocument()
+  })
+
+  it("updates the browse type when changing the dropdown", async () => {
+    render(component)
+
+    const select = screen.getByLabelText("Select a category")
+
+    // Default browseType
+    expect(screen.getByTestId("browse-type")).toHaveTextContent("subjects")
+
+    // Switch to contributors
+    await userEvent.selectOptions(select, "contributor_has")
+
+    expect(screen.getByTestId("browse-type")).toHaveTextContent("contributors")
+  })
+
+  it("maintains the search term when changing browse type", async () => {
+    render(component)
+    const input = screen.getByRole("textbox")
+    const select = screen.getByLabelText("Select a category")
+
+    await userEvent.type(input, "Ornithology")
+    expect(input).toHaveValue("Ornithology")
+
+    await userEvent.selectOptions(select, "subject_starts_with")
+
+    expect(input).toHaveValue("Ornithology")
   })
 })
