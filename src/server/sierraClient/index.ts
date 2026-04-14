@@ -2,6 +2,7 @@ import wrapper from "@nypl/sierra-wrapper"
 import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 import { appConfig } from "../../config/appConfig"
+import { withTimeout } from "../serverUtils"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
@@ -41,7 +42,7 @@ async function buildClient() {
       path,
       method: "GET",
     })
-    return await get(path)
+    return await withTimeout(get(path))
   }
   const post = wrapper.post.bind(wrapper)
   wrapper.post = async function (path, body) {
@@ -50,7 +51,7 @@ async function buildClient() {
       method: "POST",
       body: JSON.stringify(body),
     })
-    return await post(path, body)
+    return await withTimeout(post(path, body))
   }
   const put = wrapper.put.bind(wrapper)
   wrapper.put = async function (path, body) {
@@ -59,7 +60,7 @@ async function buildClient() {
       method: "PUT",
       body: JSON.stringify(body),
     })
-    return await put(path, body)
+    return await withTimeout(put(path, body))
   }
   const deleteRequest = wrapper.deleteRequest.bind(wrapper)
   wrapper.deleteRequest = async function (path, body) {
@@ -68,7 +69,7 @@ async function buildClient() {
       method: "DELETE",
       body: JSON.stringify(body),
     })
-    return await deleteRequest(path, body)
+    return await withTimeout(deleteRequest(path, body))
   }
 
   return wrapper
