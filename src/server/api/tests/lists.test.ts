@@ -30,7 +30,10 @@ describe("lists", () => {
   describe("fetchLists", () => {
     it("returns lists on success with sort", async () => {
       mockClient.get.mockResolvedValueOnce([{ id: "list1" }, { id: "list2" }])
-      const result = await fetchLists("12345", "modifiedDate")
+      const result = await fetchLists({
+        patronId: "12345",
+        sort: "modifiedDate",
+      })
       expect(mockClient.get).toHaveBeenCalledWith(
         "/patrons/12345/lists?sort=modifiedDate"
       )
@@ -42,7 +45,7 @@ describe("lists", () => {
 
     it("returns lists on success without sort", async () => {
       mockClient.get.mockResolvedValueOnce([{ id: "list1" }])
-      const result = await fetchLists("12345")
+      const result = await fetchLists({ patronId: "12345" })
       expect(mockClient.get).toHaveBeenCalledWith("/patrons/12345/lists")
       expect(result).toEqual({ status: 200, lists: [{ id: "list1" }] })
     })
@@ -53,7 +56,7 @@ describe("lists", () => {
         name: "error",
         error: "error message",
       })
-      const result = await fetchLists("12345")
+      const result = await fetchLists({ patronId: "12345" })
       expect(logServerError).toHaveBeenCalledWith(
         "fetchLists",
         "error message Request: /patrons/12345/lists"
@@ -67,7 +70,7 @@ describe("lists", () => {
 
     it("returns 500 on exception", async () => {
       mockClient.get.mockRejectedValueOnce(new Error("server error"))
-      const result = await fetchLists("12345")
+      const result = await fetchLists({ patronId: "12345" })
       expect(logServerError).toHaveBeenCalledWith("fetchLists", "server error")
       expect(result).toEqual({ status: 500 })
     })
@@ -76,7 +79,7 @@ describe("lists", () => {
   describe("fetchList", () => {
     it("returns list on success", async () => {
       mockClient.get.mockResolvedValueOnce({ id: "list1" })
-      const result = await fetchList("12345", "list1")
+      const result = await fetchList({ patronId: "12345", listId: "list1" })
       expect(mockClient.get).toHaveBeenCalledWith("/patrons/12345/list/list1")
       expect(result).toEqual({ status: 200, list: { id: "list1" } })
     })
@@ -85,7 +88,12 @@ describe("lists", () => {
   describe("createList", () => {
     it("returns created list on success", async () => {
       mockClient.post.mockResolvedValueOnce({ id: "list1" })
-      const result = await createList("12345", "My List", ["b123"], "desc")
+      const result = await createList({
+        patronId: "12345",
+        listName: "My List",
+        records: ["b123"],
+        description: "desc",
+      })
       expect(mockClient.post).toHaveBeenCalledWith("/list", {
         listName: "My List",
         description: "desc",
@@ -101,7 +109,10 @@ describe("lists", () => {
         name: "DuplicateNameError",
         error: "List with this name already exists",
       })
-      const result = await createList("12345", "My List")
+      const result = await createList({
+        patronId: "12345",
+        listName: "My List",
+      })
       expect(logServerError).toHaveBeenCalledWith(
         "createList",
         "List with this name already exists Request: /list"
@@ -115,7 +126,10 @@ describe("lists", () => {
 
     it("returns 500 on exception", async () => {
       mockClient.post.mockRejectedValueOnce(new Error("server error"))
-      const result = await createList("12345", "My List")
+      const result = await createList({
+        patronId: "12345",
+        listName: "My List",
+      })
       expect(logServerError).toHaveBeenCalledWith("createList", "server error")
       expect(result).toEqual({ status: 500 })
     })
@@ -124,7 +138,12 @@ describe("lists", () => {
   describe("updateList", () => {
     it("returns updated list on success", async () => {
       mockClient.post.mockResolvedValueOnce({ id: "list1" })
-      const result = await updateList("12345", "list1", "New Name", "new desc")
+      const result = await updateList({
+        patronId: "12345",
+        listId: "list1",
+        listName: "New Name",
+        description: "new desc",
+      })
       expect(mockClient.post).toHaveBeenCalledWith(
         "/patrons/12345/list/list1",
         {
@@ -143,7 +162,7 @@ describe("lists", () => {
   describe("deleteList", () => {
     it("returns success on successful deletion", async () => {
       mockClient.delete.mockResolvedValueOnce({ success: true })
-      const result = await deleteList("12345", "list1")
+      const result = await deleteList({ patronId: "12345", listId: "list1" })
       expect(mockClient.delete).toHaveBeenCalledWith(
         "/patrons/12345/list/list1"
       )
@@ -156,7 +175,7 @@ describe("lists", () => {
         name: "ListNotFound",
         error: "List not found",
       })
-      const result = await deleteList("12345", "list1")
+      const result = await deleteList({ patronId: "12345", listId: "list1" })
       expect(logServerError).toHaveBeenCalledWith(
         "deleteList",
         "List not found Request: /patrons/12345/list/list1"
@@ -172,10 +191,11 @@ describe("lists", () => {
   describe("deleteRecordsFromList", () => {
     it("returns success on successful deletion", async () => {
       mockClient.delete.mockResolvedValueOnce({ success: true })
-      const result = await deleteRecordsFromList("12345", "list1", [
-        "b123",
-        "b345",
-      ])
+      const result = await deleteRecordsFromList({
+        patronId: "12345",
+        listId: "list1",
+        records: ["b123", "b345"],
+      })
       expect(mockClient.delete).toHaveBeenCalledWith(
         "/patrons/12345/list/list1/records",
         {
@@ -189,7 +209,11 @@ describe("lists", () => {
   describe("addRecordsToList", () => {
     it("returns success on successful addition", async () => {
       mockClient.post.mockResolvedValueOnce({ success: true })
-      const result = await addRecordsToList("12345", "list1", ["b123", "b345"])
+      const result = await addRecordsToList({
+        patronId: "12345",
+        listId: "list1",
+        records: ["b123", "b345"],
+      })
       expect(mockClient.post).toHaveBeenCalledWith(
         "/patrons/12345/list/list1/records",
         {

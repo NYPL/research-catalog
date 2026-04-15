@@ -3,8 +3,19 @@ import nyplApiClient from "../nyplApiClient"
 
 /**
  * Get all of a patron's lists.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} [params.sort] - Optional sort parameter.
+ * @returns {Promise<object>} The patron's lists or an error object.
  */
-export async function fetchLists(patronId: string, sort?: string) {
+export async function fetchLists({
+  patronId,
+  sort,
+}: {
+  patronId: string
+  sort?: string
+}) {
   try {
     const client = await nyplApiClient()
     const path = sort
@@ -30,8 +41,19 @@ export async function fetchLists(patronId: string, sort?: string) {
 
 /**
  * Get a single list.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listId - The ID of the list to fetch.
+ * @returns {Promise<object>} The requested list or an error object.
  */
-export async function fetchList(patronId: string, listId: string) {
+export async function fetchList({
+  patronId,
+  listId,
+}: {
+  patronId: string
+  listId: string
+}) {
   try {
     const client = await nyplApiClient()
     const path = `/patrons/${patronId}/list/${listId}`
@@ -55,17 +77,29 @@ export async function fetchList(patronId: string, listId: string) {
 
 /**
  * Create a list.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listName - The name of the new list.
+ * @param {string[]} [params.records] - Optional array of record IDs to add to the list.
+ * @param {string} [params.description] - Optional description for the list.
+ * @returns {Promise<object>} The created list or an error object.
  */
-export async function createList(
-  patronId: string,
-  listName: string,
-  records?: string[],
+export async function createList({
+  patronId,
+  listName,
+  records,
+  description,
+}: {
+  patronId: string
+  listName: string
+  records?: string[]
   description?: string
-) {
+}) {
   try {
     const client = await nyplApiClient()
     const path = "/list"
-    // TO DO: Add handling for defeault first list
+    // TO DO: Add handling for default first list
     // (listName = "My workspace (default list)")
     const body = {
       listName,
@@ -93,13 +127,25 @@ export async function createList(
 
 /**
  * Update a list's metadata.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listId - The ID of the list to update.
+ * @param {string} params.listName - The new name for the list.
+ * @param {string} [params.description] - Optional new description for the list.
+ * @returns {Promise<object>} The updated list or an error object.
  */
-export async function updateList(
-  patronId: string,
-  listId: string,
-  listName: string,
+export async function updateList({
+  patronId,
+  listId,
+  listName,
+  description,
+}: {
+  patronId: string
+  listId: string
+  listName: string
   description?: string
-) {
+}) {
   try {
     const client = await nyplApiClient()
     const path = `/patrons/${patronId}/list/${listId}`
@@ -128,8 +174,19 @@ export async function updateList(
 
 /**
  * Delete a list.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listId - The ID of the list to delete.
+ * @returns {Promise<object>} A success status or an error object.
  */
-export async function deleteList(patronId: string, listId: string) {
+export async function deleteList({
+  patronId,
+  listId,
+}: {
+  patronId: string
+  listId: string
+}) {
   try {
     const client = await nyplApiClient()
     const path = `/patrons/${patronId}/list/${listId}`
@@ -153,12 +210,22 @@ export async function deleteList(patronId: string, listId: string) {
 
 /**
  * Delete records from a list.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listId - The ID of the list to update.
+ * @param {string[]} params.records - An array of record IDs to remove from the list.
+ * @returns {Promise<object>} A success status or an error object.
  */
-export async function deleteRecordsFromList(
-  patronId: string,
-  listId: string,
+export async function deleteRecordsFromList({
+  patronId,
+  listId,
+  records,
+}: {
+  patronId: string
+  listId: string
   records: string[]
-) {
+}) {
   try {
     const client = await nyplApiClient()
     const path = `/patrons/${patronId}/list/${listId}/records`
@@ -188,12 +255,22 @@ export async function deleteRecordsFromList(
 
 /**
  * Add records to a list.
+ *
+ * @param {object} params
+ * @param {string} params.patronId - The patron's ID.
+ * @param {string} params.listId - The ID of the list to update.
+ * @param {string[]} params.records - An array of record IDs to add to the list.
+ * @returns {Promise<object>} A success status or an error object.
  */
-export async function addRecordsToList(
-  patronId: string,
-  listId: string,
+export async function addRecordsToList({
+  patronId,
+  listId,
+  records,
+}: {
+  patronId: string
+  listId: string
   records: string[]
-) {
+}) {
   try {
     const client = await nyplApiClient()
     const path = `/patrons/${patronId}/list/${listId}/records`
