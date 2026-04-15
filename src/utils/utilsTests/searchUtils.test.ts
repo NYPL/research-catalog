@@ -26,7 +26,6 @@ describe("searchUtils", () => {
     it("includes advanced search query params when field is set to 'all'", () => {
       const testQuery =
         "?q=shel%20silverstein&contributor=shel%20silverstein&title=the%20giving%20tree&subject=books"
-
       expect(
         checkQueryParamsEquality(testQuery, {
           q: "shel silverstein",
@@ -39,6 +38,7 @@ describe("searchUtils", () => {
     })
     it("clears advanced search query params when field param is anything other than 'all'", () => {
       const titleQuery = "?q=shel%20silverstein&search_scope=title"
+
       expect(
         checkQueryParamsEquality(titleQuery, {
           q: "shel silverstein",
@@ -82,6 +82,18 @@ describe("searchUtils", () => {
           contributor: "Günther",
           subject: "Ästhetik",
           field: "all",
+        })
+      ).toBe(true)
+    })
+
+    it("appends role when there's one contributor literal filter and a role is passed", () => {
+      const testQuery =
+        "?q=merrily&filters[contributorLiteral][0]=Sondheim%2C%20Stephen&role=lyricist%2E"
+      expect(
+        checkQueryParamsEquality(testQuery, {
+          q: "merrily",
+          filters: { contributorLiteral: ["Sondheim, Stephen"] },
+          role: "lyricist.",
         })
       ).toBe(true)
     })
@@ -173,16 +185,16 @@ describe("searchUtils", () => {
     it("handles the special case for the author search scope", () => {
       const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+        'Displaying 1-50 of 100 results for Author/Contributor "spaghetti"'
       )
     })
     it("handles the special case for the contributorLiteral filter", () => {
       const heading = getSearchResultsHeading(
-        { filters: { contributorLiteral: ["spaghetti"] } },
+        { filters: { contributorLiteral: ["spaghetti", "pasta"] } },
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+        'Displaying 1-50 of 100 results for Authors/Contributors "spaghetti, pasta"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {
@@ -198,7 +210,7 @@ describe("searchUtils", () => {
         100
       )
       expect(heading).toEqual(
-        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
+        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and Author/Contributor "pasta mama" and subject "italian"'
       )
     })
     it("displays the appropriate string for certain values", () => {
@@ -266,13 +278,24 @@ describe("searchUtils", () => {
       })
     })
     describe("browse result searches", () => {
-      it("returns heading with browseOptions when slug and browseType are provided", () => {
+      it("returns subject heading", () => {
         const heading = getSearchResultsHeading({ page: 1, q: "" }, 100, {
           slug: "History",
-          browseType: "Subject Heading",
+          browseType: "subjects",
         })
         expect(heading).toContain(
           'Displaying 1-50 of 100 results for Subject Heading "History"'
+        )
+      })
+
+      it("returns heading with contributor and role", () => {
+        const heading = getSearchResultsHeading({ page: 1, q: "" }, 100, {
+          slug: "Sondheim, Stephen",
+          browseType: "contributors",
+          role: "editor.",
+        })
+        expect(heading).toContain(
+          'Displaying 1-50 of 100 results for Author/Contributor "Sondheim, Stephen, editor."'
         )
       })
     })

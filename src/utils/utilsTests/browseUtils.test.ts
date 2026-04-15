@@ -1,12 +1,14 @@
 import {
-  browseSortOptions,
-  buildSubjectLinks,
+  browseSubjectSortOptions,
   getBrowseQuery,
   getBrowseIndexHeading,
   getSubjectSearchURL,
-  isPreferredSubject,
   mapQueryToBrowseParams,
   buildLockedBrowseQuery,
+  browseContributorSortOptions,
+  getBrowseFormKey,
+  isPreferredTerm,
+  buildTermLinks,
 } from "../browseUtils"
 
 describe("browseUtils", () => {
@@ -120,56 +122,73 @@ describe("browseUtils", () => {
     })
   })
 
-  describe("isPreferredSubject", () => {
+  describe("isPreferredTerm", () => {
     it("returns true if object has @type preferredTerm", () => {
       const subj = { "@type": "preferredTerm", termLabel: "foo", count: 3 }
-      expect(isPreferredSubject(subj)).toBe(true)
+      expect(isPreferredTerm(subj)).toBe(true)
     })
 
     it("returns false if object has @type variant", () => {
       const subj = { "@type": "variant", termLabel: "foo" }
-      expect(isPreferredSubject(subj)).toBe(false)
+      expect(isPreferredTerm(subj)).toBe(false)
     })
   })
 
   describe("getBrowseIndexHeading", () => {
     it("returns correct heading with totalResults less than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "cats", page: 1, searchScope: "has" }
-      const heading = getBrowseIndexHeading(params, 20)
+      const heading = getBrowseIndexHeading("subjects", params, 20)
       expect(heading).toContain("20")
       expect(heading).toContain('containing "cats"')
     })
 
     it("returns correct heading with totalResults more than BROWSE_RESULTS_PER_PAGE", () => {
       const params = { q: "dogs", page: 2, searchScope: "starts_with" }
-      const heading = getBrowseIndexHeading(params, 200)
+      const heading = getBrowseIndexHeading("subjects", params, 200)
       expect(heading).toContain("26-50")
       expect(heading).toContain('beginning with "dogs"')
     })
 
     it("adds 'over' for 10000 totalResults", () => {
       const params = { q: "", page: 1, searchScope: "has" }
-      const heading = getBrowseIndexHeading(params, 10000)
+      const heading = getBrowseIndexHeading("subjects", params, 10000)
       expect(heading).toContain("over")
     })
-  })
 
-  describe("browseSortOptions", () => {
-    it("has expected keys and labels", () => {
-      expect(browseSortOptions).toHaveProperty("termLabel_asc")
-      expect(browseSortOptions.termLabel_asc).toBe("Subject Heading (A - Z)")
-      expect(browseSortOptions.count_desc).toBe("Count (High - Low)")
+    it("returns correct heading for authors/contributors", () => {
+      const params = { q: "", page: 1, searchScope: "has" }
+      const heading = getBrowseIndexHeading("contributors", params, 10000)
+      expect(heading).toContain("Authors/Contributors")
     })
   })
 
-  describe("buildSubjectLinks", () => {
+  describe("browseSortOptions: subject and contributor", () => {
+    it("has expected keys and labels for subject sorts", () => {
+      expect(browseSubjectSortOptions).toHaveProperty("termLabel_asc")
+      expect(browseSubjectSortOptions.termLabel_asc).toBe(
+        "Subject Heading (A - Z)"
+      )
+      expect(browseSubjectSortOptions.count_desc).toBe("Results (High - Low)")
+    })
+    it("has expected keys and labels for contributor sorts", () => {
+      expect(browseContributorSortOptions).toHaveProperty("termLabel_asc")
+      expect(browseContributorSortOptions.termLabel_asc).toBe(
+        "Author/Contributor (A - Z)"
+      )
+      expect(browseContributorSortOptions.count_desc).toBe(
+        "Results (High - Low)"
+      )
+    })
+  })
+
+  describe("buildTermLinks", () => {
     it("builds links with termLabel, url, and count", () => {
       const terms = [
         { termLabel: "foo", count: 123 },
         { termLabel: "bar", count: 0 },
         { termLabel: "baz" },
       ]
-      const results = buildSubjectLinks(terms)
+      const results = buildTermLinks("subjects", terms)
       expect(results).toHaveLength(3)
       expect(results[0]).toMatchObject({
         termLabel: "foo",
@@ -178,6 +197,18 @@ describe("browseUtils", () => {
       expect(results[0].url).toContain("/browse?q=foo&search_scope=starts_with")
 
       expect(results[2].count).toBe("")
+    })
+  })
+
+  describe("getBrowseFormKey", () => {
+    it("returns expected key", () => {
+      const result = getBrowseFormKey("contributors", "has")
+      expect(result).toBe("contributor_has")
+    })
+    it("returns default browse option", () => {
+      // @ts-ignore
+      const result = getBrowseFormKey("xxxx", "xxxxx")
+      expect(result).toBe("subject_has")
     })
   })
 

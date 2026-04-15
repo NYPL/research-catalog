@@ -21,6 +21,7 @@ RUN npm install
 # Add application code.
 COPY . .
 
+ENV NODE_ENV=production
 ENV NEXT_PUBLIC_APP_ENV=${NEXT_PUBLIC_APP_ENV}
 RUN npm run build
 

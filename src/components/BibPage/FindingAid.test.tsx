@@ -28,7 +28,7 @@ describe("FindingAid component", () => {
     })
     expect(appointmentsLink).toHaveAttribute(
       "href",
-      "https://libguides.nypl.org/special-collections-account-tutorial"
+      "https://libguides.nypl.org/NYPLSpecialCollectionsAccount"
     )
   })
 })

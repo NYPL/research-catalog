@@ -13,7 +13,7 @@ test.describe("Author Search", () => {
   test("Do an author search and assert that at least 5 returned titles contain the supplied author name", async ({
     page,
   }) => {
-    await searchPage.searchFor(searchterm, "Author/contributor")
+    await searchPage.searchFor(searchterm, "Author/Contributor")
     await expect(searchPage.searchResultsHeading).toBeVisible({
       timeout: 10000,
     })
@@ -31,7 +31,7 @@ test.describe("Author Search", () => {
     for (const url of urls) {
       await page.goto(url)
       await expect(
-        page.getByRole("link", { name: new RegExp(searchterm) })
+        page.getByRole("link", { name: new RegExp(searchterm) }).first()
       ).toBeVisible({ timeout: 10000 })
     }
   })

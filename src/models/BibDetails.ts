@@ -7,6 +7,7 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
+  ContributorEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -18,6 +19,10 @@ import type {
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
+import {
+  getContributorSearchURL,
+  getSubjectSearchURL,
+} from "../utils/browseUtils"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -62,6 +67,52 @@ export default class BibDetails {
     // Only consider items with an `owner` (should be all, in practice)
     const owner = firstRecapItem?.owner?.[0]?.prefLabel
     if (owner) return [owner]
+  }
+
+  buildLinkedContributorDetail(
+    literalField: "creatorLiteral" | "contributorLiteral",
+    label: string
+  ): LinkedBibDetail | null {
+    const displayField =
+      literalField === "creatorLiteral"
+        ? "creatorsDisplay"
+        : "contributorsDisplay"
+
+    const mapDisplay = (arr?: ContributorEntry[]): BibDetailURL[] =>
+      Array.isArray(arr)
+        ? arr.map(({ display, "@value": name }) => {
+            const [, roles] = display.split(name)
+            return {
+              url: getContributorSearchURL(name),
+              urlLabel: name,
+              text: roles?.trim() || undefined,
+            }
+          })
+        : []
+
+    const displayValues = mapDisplay(this.bib[displayField])
+
+    // Set of displayed names for deduping
+    const seen = new Set(displayValues.map((v) => v.urlLabel))
+
+    // Literals (fallback)
+    const literalValues: string[] = this.bib[literalField] || []
+    const literals: BibDetailURL[] = literalValues
+      .filter((name) => !seen.has(name))
+      .map((name) => ({
+        url: getContributorSearchURL(name),
+        urlLabel: name,
+      }))
+
+    const combinedValues = [...displayValues, ...literals]
+
+    return combinedValues?.length > 0
+      ? {
+          label,
+          link: "internal",
+          value: combinedValues,
+        }
+      : null
   }
 
   buildAnnotatedMarcDetails(
@@ -147,7 +198,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildSearchFilterUrl(fieldMapping)
+            return this.buildLinkedContributorDetail("creatorLiteral", "Author")
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -266,9 +317,9 @@ export default class BibDetails {
     if (Object.keys(keptByLabel).length > 0) {
       console.log(
         `Bib details: Keeping annotated MARC fields on ${this.bib["@id"]}`,
-        {
+        JSON.stringify({
           keptMarcFields: keptByLabel,
-        }
+        })
       )
     }
 
@@ -309,7 +360,12 @@ export default class BibDetails {
   }): LinkedBibDetail {
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
-
+    if (fieldMapping.field === "contributorLiteral") {
+      return this.buildLinkedContributorDetail(
+        "contributorLiteral",
+        "Additional authors"
+      )
+    }
     return {
       link: "internal",
       label: convertToSentenceCase(fieldMapping.label),
@@ -318,12 +374,7 @@ export default class BibDetails {
         let internalUrl: string
         switch (field) {
           case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
-            break
-          case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
-              v
-            )}`
+            internalUrl = getSubjectSearchURL(v)
             break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(

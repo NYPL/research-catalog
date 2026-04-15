@@ -8,7 +8,7 @@ import { aggregationsResults } from "../../../__test__/fixtures/searchResultsMan
 
 describe("Applied Filter utils", () => {
   describe("addLabelPropAndParseFilters", () => {
-    it("does not return values for filters we don't display", () => {
+    it("returns filter values as labels for filters without matching field aggregations", () => {
       const aggregations = [
         {
           "@type": "nypl:Aggregation",
@@ -23,31 +23,43 @@ describe("Applied Filter utils", () => {
             },
           ],
         },
-        {
-          "@type": "nypl:Aggregation",
-          "@id": "res:contributorLiteral",
-          id: "contributorLiteral",
-          field: "contributorLiteral",
-          values: [
-            {
-              value: "Schomburg Children's Collection.",
-              count: 54,
-              label: "Schomburg Children's Collection.",
-            },
-            {
-              value: "Schomburg Children's Collection. ",
-              count: 11,
-              label: "Schomburg Children's Collection. ",
-            },
-          ],
-        },
       ]
       const appliedFilterValues = {
         holdingLocation: ["loc:scff2"],
       }
       expect(
         addLabelPropAndParseFilters(aggregations, appliedFilterValues)
-      ).toStrictEqual({})
+      ).toStrictEqual({
+        holdingLocation: [
+          { value: "loc:scff2", count: null, label: "loc:scff2" },
+        ],
+      })
+    })
+
+    it("returns filter values as labels for filters without matching option in aggregations", () => {
+      const aggregations = [
+        {
+          "@type": "nypl:Aggregation",
+          "@id": "res:owner",
+          id: "owner",
+          field: "owner",
+          values: [
+            {
+              value: "orgs:1121",
+              count: 1,
+              label: "Jerome Robbins Dance Division",
+            },
+          ],
+        },
+      ]
+      const appliedFilterValues = {
+        owner: ["orgs:xxxx"],
+      }
+      expect(
+        addLabelPropAndParseFilters(aggregations, appliedFilterValues)
+      ).toStrictEqual({
+        owner: [{ value: "orgs:xxxx", count: null, label: "orgs:xxxx" }],
+      })
     })
 
     it("takes applied filter values and adds the appropriate label", () => {

@@ -34,7 +34,7 @@ describe("Advanced search form", () => {
     ] = [
       "Keyword",
       "Title",
-      "Author/contributor",
+      "Author/Contributor",
       "Subject",
       "Call number",
       "Unique identifier",
@@ -60,6 +60,7 @@ describe("Advanced search form", () => {
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
   })
+
   it("displays alert when no fields are submitted", () => {
     submit()
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
@@ -79,6 +80,17 @@ describe("Advanced search form", () => {
       expect(input).toBeInTheDocument()
     })
   })
+
+  it("defaults to call number sort when call number is the only field passed", async () => {
+    const callNumberInput = screen.getByLabelText("Call number")
+    fireEvent.change(callNumberInput, { target: { value: "12345" } })
+    await delay(500)
+    submit()
+    expect(mockRouter.asPath).toBe(
+      "/search?q=&callnumber=12345&sort=callnumber&searched_from=advanced"
+    )
+  })
+
   it("can select languages", async () => {
     const languageMultiselect = screen.getByLabelText(/Language/, {
       selector: "button",

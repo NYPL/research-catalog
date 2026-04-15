@@ -7,9 +7,24 @@ import { appConfig } from "../src/config/appConfig"
 import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
+import { BrowseProvider } from "../src/context/BrowseContext"
+import { useRouter } from "next/router"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
+  const router = useRouter()
+  if (typeof window !== "undefined") {
+    const current = sessionStorage.getItem("currentPath")
+    if (current !== router.asPath) {
+      const currentBasePath = current?.split(/[?#]/)[0]
+      const newBasePath = router.asPath.split(/[?#]/)[0]
+      if (currentBasePath !== newBasePath) {
+        sessionStorage.setItem("previousPath", current || "")
+      }
+      sessionStorage.setItem("currentPath", router.asPath)
+    }
+  }
+
   // Remove header and footer injections before print
   useEffect(() => {
     const handleBeforePrint = () => {
@@ -97,7 +112,9 @@ function App({ Component, pageProps }) {
       </Head>
       <FeedbackProvider value={null}>
         <FocusProvider>
-          <Component {...pageProps} />
+          <BrowseProvider>
+            <Component {...pageProps} />
+          </BrowseProvider>
         </FocusProvider>
       </FeedbackProvider>
     </>

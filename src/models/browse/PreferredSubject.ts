@@ -1,8 +1,8 @@
 import type {
   DiscoveryPreferredSubjectResult,
-  SubjectLink,
-} from "../types/browseTypes"
-import { buildSubjectLinks, getSubjectSearchURL } from "../utils/browseUtils"
+  TermLink,
+} from "../../types/browseTypes"
+import { buildTermLinks, getSubjectSearchURL } from "../../utils/browseUtils"
 
 /**
  * The PreferredSubject class represents an authorized subject heading,
@@ -14,9 +14,9 @@ export default class PreferredSubject {
   url: string
   termLabel: string
   count: string
-  seeAlso?: { label: string; terms: SubjectLink[] }
-  narrowerTerms?: { label: string; terms: SubjectLink[] }
-  broaderTerms?: { label: string; terms: SubjectLink[] }
+  seeAlso?: { label: string; terms: TermLink[] }
+  narrowerTerms?: { label: string; terms: TermLink[] }
+  broaderTerms?: { label: string; terms: TermLink[] }
 
   constructor(result?: DiscoveryPreferredSubjectResult) {
     this.url = getSubjectSearchURL(result.termLabel)
@@ -24,15 +24,15 @@ export default class PreferredSubject {
     this.count = result.count?.toLocaleString()
     this.seeAlso = result.seeAlso?.length && {
       label: "See also",
-      terms: buildSubjectLinks(result.seeAlso),
+      terms: buildTermLinks("subjects", result.seeAlso),
     }
     this.narrowerTerms = result.narrowerTerms?.length && {
       label: "Narrower term",
-      terms: buildSubjectLinks(result.narrowerTerms),
+      terms: buildTermLinks("subjects", result.narrowerTerms),
     }
     this.broaderTerms = result.broaderTerms?.length && {
       label: "Broader term",
-      terms: buildSubjectLinks(result.broaderTerms),
+      terms: buildTermLinks("subjects", result.broaderTerms),
     }
   }
 }

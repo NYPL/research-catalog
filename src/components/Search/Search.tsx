@@ -21,7 +21,7 @@ import AppliedFilters from "../AppliedFilters/AppliedFilters"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
 import SearchFilters from "../SearchFilters/SearchFilters"
-import ResultsSort from "../SearchResults/ResultsSort"
+import ResultsSort from "../SearchResults/Sort/ResultsSort"
 import SearchResult from "../SearchResults/SearchResult"
 import { useRef, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
@@ -34,6 +34,8 @@ import type {
 } from "../../types/searchTypes"
 import type { RCPage } from "../../types/pageTypes"
 import ParsedQuery from "../ParsedCQLQuery/ParsedQuery"
+import { getBrowseTypeFromPath } from "../../utils/appUtils"
+import { useRouter } from "next/router"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -47,6 +49,7 @@ interface SearchProps {
   handleSortChange: (selectedSortOption: string) => Promise<void>
   slug?: string
   errorMessage?: string
+  role?: string
 }
 
 const Search = ({
@@ -61,12 +64,17 @@ const Search = ({
   handlePageChange,
   handleSortChange,
   slug,
+  role,
 }: SearchProps) => {
   const isLoading = useLoading()
+  const router = useRouter()
 
   const searchResultsHeadingRef = useRef(null)
   // Ref for accessible announcement of loading state.
   const liveLoadingRegionRef = useRef<HTMLDivElement | null>(null)
+  const resultsType = getBrowseTypeFromPath(router.asPath)
+  // DS Menu component remounts, needs extra focus handling
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
 
   useEffect(() => {
     if (liveLoadingRegionRef.current) {
@@ -168,12 +176,14 @@ const Search = ({
                   slug
                     ? {
                         slug,
-                        browseType: "Subject Heading",
+                        browseType: resultsType,
+                        role,
                       }
                     : undefined
                 )}
               </Heading>
               <ResultsSort
+                ref={sortMenuRef}
                 sortOptions={sortOptions}
                 params={searchParams}
                 handleSortChange={handleSortChange}

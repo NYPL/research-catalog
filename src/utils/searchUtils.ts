@@ -25,7 +25,7 @@ import {
 export function getSearchResultsHeading(
   searchParams: SearchParams,
   totalResults: number,
-  browseOptions?: { slug: string; browseType: string }
+  browseOptions?: { slug: string; browseType: string; role?: string }
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
@@ -34,7 +34,13 @@ export function getSearchResultsHeading(
   )
 
   const queryDisplayString = browseOptions
-    ? ` for ${browseOptions.browseType} "${browseOptions.slug}"`
+    ? ` for ${
+        browseOptions.browseType === "subjects"
+          ? "Subject Heading"
+          : "Author/Contributor"
+      } "${browseOptions.slug}${
+        browseOptions.role ? `, ${browseOptions.role}` : ""
+      }"`
     : buildQueryDisplayString(searchParams)
 
   return `Displaying ${
@@ -72,12 +78,16 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     const displayParam = searchFields.find((field) => field.name === param)
     if (displayParam && searchParamsObject[param]) {
       let label = displayParam.label
-      const value = searchParamsObject[param]
+      let value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
-      // Special case for the author display string for both
+      // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
-      if (label === "author") {
-        label = "author/contributor"
+      if (label === "author/contributor" || label === "author") {
+        label = "Author/Contributor"
+        if (Array.isArray(value) && value.length > 1) {
+          value = value.join(", ")
+          label = "Authors/Contributors"
+        }
       }
 
       paramsStringCollection[param] = `${label}${plural} "${value}"`
@@ -101,17 +111,34 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
 /**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
+ * Handle defaults for relevance and call number.
  */
-function getSortQuery(sortBy = "", order = ""): string {
-  const reset = sortBy === "relevance"
-  let sortQuery = ""
-  const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
 
-  if (sortBy?.length && !reset) {
-    sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
+function getSortQuery(
+  sortBy: string | undefined,
+  order: string | undefined,
+  field: string | undefined,
+  populatedAdvancedFields: string[]
+): string {
+  const sortDirectionQuery = order ? `&sort_direction=${order}` : ""
+
+  const isOnlyCallNumberQuery =
+    field === "callnumber" ||
+    (populatedAdvancedFields.length === 1 &&
+      populatedAdvancedFields[0] === "callnumber")
+
+  // default call number if no user choice
+  if (!sortBy && isOnlyCallNumberQuery) {
+    return "&sort=callnumber"
   }
 
-  return sortQuery
+  // otherwise respect user choice
+  if (sortBy) {
+    return `&sort=${sortBy}${sortDirectionQuery}`
+  }
+
+  // otherwise default to relevance ("")
+  return ""
 }
 
 /**
@@ -133,6 +160,25 @@ function getIdentifierQuery(identifiers: Identifiers): string {
   return Object.entries(identifiers)
     .map(([key, value]) => (value ? `&${key}=${value as string}` : ""))
     .join("")
+}
+
+/**
+ * getRoleQuery
+ * Check conditions for appending a role and return query string.
+ */
+function getRoleQuery(filters, role): string {
+  let roleQuery = ""
+
+  const contributorLiteral = filters?.contributorLiteral
+
+  const hasSingleContributorLiteral =
+    Array.isArray(contributorLiteral) && contributorLiteral.length === 1
+
+  if (hasSingleContributorLiteral && role) {
+    roleQuery = `&role=${encodeURIComponentWithPeriods(role)}`
+  }
+
+  return roleQuery
 }
 
 /**
@@ -176,18 +222,19 @@ function getFilterQuery(filters: SearchFilters) {
  */
 export function getSearchQuery(params: SearchParams): string {
   const {
-    sortBy = "relevance",
+    sortBy,
     field = "all",
     order,
     filters = {},
     identifiers = {},
     q,
+    role,
     page = 1,
   } = params
   const searchKeywordsQuery = encodeURIComponentWithPeriods(q)
-  const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(filters)
+  const roleQuery = getRoleQuery(filters, role)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -211,7 +258,11 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
-  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+  const populatedAdvancedFields = advancedSearchFields
+    .map(({ name }) => name)
+    .filter((name) => params[name])
+  const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
+  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${identifierQuery}${roleQuery}${pageQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
@@ -278,6 +329,9 @@ export const sortOptions: Record<string, string> = {
   title_desc: "Title (Z - A)",
   date_asc: "Date (Old to New)",
   date_desc: "Date (New to Old)",
+  creator_asc: "Author (A - Z)",
+  creator_desc: "Author (Z - A)",
+  callnumber_asc: "Call number",
 }
 
 /**
@@ -300,6 +354,7 @@ export function mapQueryToSearchParams({
   isbn,
   oclc,
   lccn,
+  role,
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
@@ -328,6 +383,7 @@ export function mapQueryToSearchParams({
       oclc,
       lccn,
     },
+    role,
   }
 }
 

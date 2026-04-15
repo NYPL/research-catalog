@@ -1,5 +1,3 @@
-// import userEvent from "@testing-library/user-event"
-import userEvent from "@testing-library/user-event"
 import {
   bibWithSupplementaryContent,
   bibWithFindingAidAndTOC,
@@ -10,7 +8,6 @@ import BibDetailsModel from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
 
 import { render, screen } from "@testing-library/react"
-import mockRouter from "next-router-mock"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -109,24 +106,6 @@ describe("BibDetail component", () => {
     })
   })
   describe("linked details", () => {
-    it("renders internal links", async () => {
-      mockRouter.push("/bib/b12345678")
-      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
-        wrapper: MemoryRouterProvider,
-      })
-      // creatorLiteral should link to contributorLiteral
-      const creatorLiteralLink = screen.getByText("Cortanze, Gérard de.")
-      expect(creatorLiteralLink).toHaveAttribute(
-        "href",
-        expect.stringContaining(
-          "/search?filters[contributorLiteral][0]=Cortanze%2C%20G%C3%A9rard%20de%2E"
-        )
-      )
-      await userEvent.click(creatorLiteralLink)
-      expect(mockRouter.asPath).toBe(
-        "/search?filters%5BcontributorLiteral%5D%5B0%5D=Cortanze%2C+G%C3%A9rard+de."
-      )
-    })
     it("renders external links", async () => {
       render(<BibDetails details={supplementaryContentModel.topDetails} />, {
         wrapper: MemoryRouterProvider,
@@ -148,11 +127,49 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      const browseLink = screen.getAllByText("[Browse in index]")[0]
+      const browseLink = screen.getAllByText("[Browse in subject index]")[0]
       expect(browseLink).toHaveAttribute(
         "href",
         expect.stringContaining("/browse?q=")
       )
+    })
+    it("renders Author field with roles and index link", () => {
+      render(<BibDetails details={noParallelsBibModel.topDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const browseLink = screen.getAllByText("[Browse in author index]")[0]
+      expect(browseLink).toHaveAttribute(
+        "href",
+        expect.stringContaining("/browse/authors?q=")
+      )
+      const searchLink = screen.getByText(/Cortanze, Gérard de./)
+      expect(searchLink).toHaveAttribute(
+        "href",
+        expect.stringContaining(
+          "/browse/authors/Cortanze%2C%20G%C3%A9rard%20de%2E"
+        )
+      )
+      const authorTextWithRoles = screen.getByText(
+        /, arranger of music, composer, conductor/
+      )
+      expect(authorTextWithRoles).toBeInTheDocument()
+    })
+    it("renders Additional authors field with roles and index link", () => {
+      render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const browseLink = screen.getAllByText("[Browse in author index]")[0]
+      expect(browseLink).toHaveAttribute(
+        "href",
+        expect.stringContaining("/browse/authors?q=")
+      )
+      const searchLink = screen.getByText(/Smith, John/)
+      expect(searchLink).toHaveAttribute(
+        "href",
+        expect.stringContaining("/browse/authors/Smith")
+      )
+      const authorTextWithRoles = screen.getByText(/, ballet dancer./)
+      expect(authorTextWithRoles).toBeInTheDocument()
     })
     it("renders series field with search filter series link", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
