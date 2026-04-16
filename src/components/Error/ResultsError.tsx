@@ -98,11 +98,37 @@ export default function ResultsError({
         </>
       )
       break
-    case 400:
+    case 422:
       errorContent = (
         <>
-          <Text tabIndex={-1} id={headingID} mb="s">
-            IndexSearchError: {errorMessage}
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
+          <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
+            Invalid query
+          </Heading>
+          <Text marginBottom="0">
+            Your query contained an invalid search scope or Boolean operator.
+            Change your query and try again.
+          </Text>
+          <Text>
+            {" "}
+            Read our{" "}
+            <Link isExternal href="query-guide">
+              Query Guide
+            </Link>{" "}
+            to learn how to construct queries or{" "}
+            <Link
+              onClick={() => openFeedbackFormWithError(errorStatus)}
+              id="feedback-link"
+            >
+              contact us
+            </Link>{" "}
+            for assistance.
           </Text>
         </>
       )
