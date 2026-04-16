@@ -32,7 +32,6 @@ import type {
   SearchResultsResponse,
 } from "../../types/searchTypes"
 import type { RCPage } from "../../types/pageTypes"
-import ParsedQuery from "../ParsedCQLQuery/ParsedQuery"
 import { getBrowseTypeFromPath } from "../../utils/appUtils"
 import { useRouter } from "next/router"
 
@@ -146,9 +145,6 @@ const Search = ({
           ) : null}
 
           <Flex flexDir="column" width="100%" mb="xl">
-            {parsedQuery && searchParams.field === "cql" && (
-              <ParsedQuery parsed={parsedQuery} />
-            )}
             {displayAppliedFilters && <AppliedFilters aggregations={aggs} />}
             <Flex
               justifyContent="space-between"
@@ -172,13 +168,15 @@ const Search = ({
                 {getSearchResultsHeading(
                   searchParams,
                   totalResults,
+
                   slug
                     ? {
                         slug,
                         browseType: resultsType,
                         role,
                       }
-                    : undefined
+                    : undefined,
+                  parsedQuery
                 )}
               </Heading>
               <ResultsSort
