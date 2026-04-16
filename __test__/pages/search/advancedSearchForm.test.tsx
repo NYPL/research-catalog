@@ -31,13 +31,17 @@ describe("Advanced search form", () => {
       subjectInput,
       callNumberInput,
       uniqueIdentifierInput,
+      seriesInput,
+      genreInput,
     ] = [
       "Keyword",
-      "Title",
       "Author/Contributor",
+      "Title",
       "Subject",
       "Call number",
       "Unique identifier",
+      "Series",
+      "Genre",
     ].map((field) => screen.getByLabelText(field))
     fireEvent.change(subjectInput, { target: { value: "italian food" } })
     fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
@@ -45,6 +49,8 @@ describe("Advanced search form", () => {
     fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
     fireEvent.change(callNumberInput, { target: { value: "12345" } })
     fireEvent.change(uniqueIdentifierInput, { target: { value: "67890" } })
+    fireEvent.change(seriesInput, { target: { value: "pasta series" } })
+    fireEvent.change(genreInput, { target: { value: "cookbooks" } })
 
     // without this delay, the input is not updated until after submit is called.
     await delay(500)
@@ -55,6 +61,8 @@ describe("Advanced search form", () => {
       subjectInput,
       callNumberInput,
       uniqueIdentifierInput,
+      seriesInput,
+      genreInput,
     ]
   }
   afterEach(async () => {
