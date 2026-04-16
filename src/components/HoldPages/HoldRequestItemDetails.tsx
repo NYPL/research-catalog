@@ -25,7 +25,7 @@ const HoldRequestItemDetails = ({ item }: HoldRequestItemDetailsProps) => {
     >
       {LinkedDetailElement({
         label: "Title",
-        value: [{ url: `${PATHS.BIB}/${item.bibId}`, urlLabel: item.bibTitle }],
+        value: [{ url: `${PATHS.BIB}/${item.bibId}`, urlText: item.bibTitle }],
         link: "internal",
       })}
       <PlainTextElement label="Call number" value={[item.callNumber]} />
