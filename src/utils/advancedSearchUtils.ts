@@ -10,6 +10,8 @@ export const textInputFields: SearchFormInputField[] = [
   { name: "callnumber", label: "Call number" },
   { name: "standard_number", label: "Unique identifier" },
   { name: "subject", label: "Subject" },
+  { name: "genre", label: "Genre" },
+  { name: "series", label: "Series" },
 ]
 
 export const initialSearchFormState: SearchParams = {
@@ -19,6 +21,8 @@ export const initialSearchFormState: SearchParams = {
   subject: "",
   callnumber: "",
   standard_number: "",
+  genre: "",
+  series: "",
   filters: {
     language: [],
     dateTo: "",
