@@ -8,7 +8,6 @@ import {
   Heading,
   SimpleGrid,
   Pagination,
-  Text,
 } from "@nypl/design-system-react-components"
 import { RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"

@@ -98,10 +98,26 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
   cql: {
-    text: "CQL",
-    searchTip: <span>NYQL prototype, enter a CQL query.</span>,
+    text: (
+      <span>
+        {" "}
+        <span style={{ fontWeight: "bold", color: "green" }}>
+          New!
+        </span> Query{" "}
+      </span>
+    ),
+    searchTip: (
+      <span>
+        Read our{" "}
+        <Link isExternal href="/query-guide">
+          Query Guide
+        </Link>{" "}
+        to learn how to construct complex queries against a comprehensive set of
+        fields.{" "}
+      </span>
+    ),
     placeholder:
-      'Example: title any "ocean life" and contributor = "Jacques Cousteau"',
+      'Example: callnumber = "^*R-RMRR" AND author any "locke hobbes rousseau"',
   },
 }
 

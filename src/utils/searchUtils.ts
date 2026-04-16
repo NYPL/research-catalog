@@ -416,3 +416,12 @@ export function filtersObjectLength(obj) {
   }
   return total
 }
+
+export const formatParsed = (node: any): string => {
+  if (Array.isArray(node)) {
+    return node
+      .map((item) => (Array.isArray(item) ? `(${formatParsed(item)})` : item))
+      .join(" ")
+  }
+  return String(node)
+}
