@@ -66,6 +66,8 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       { name: "issn", label: "ISSN" },
       { name: "lccn", label: "LCCN" },
       { name: "callnumber", label: "call number" },
+      { name: "genre", label: "genre" },
+      { name: "series", label: "series" },
     ])
   const paramsStringCollection = {}
   const searchParamsObject = {
@@ -279,6 +281,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     language,
     format,
     dateFrom,
@@ -290,6 +296,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     filters: {
       format,
       language,
@@ -349,6 +359,8 @@ export function mapQueryToSearchParams({
   contributor,
   title,
   subject,
+  genre,
+  series,
   sort,
   issn,
   isbn,
@@ -369,6 +381,8 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    genre,
+    series,
     // TODO: this is a "catch-all" for journal title and standard number
     // fields but will also update other fields such as title, subject, and
     // contributor. This will override other fields if a value is present.

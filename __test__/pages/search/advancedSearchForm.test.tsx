@@ -66,12 +66,12 @@ describe("Advanced search form", () => {
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
   })
 
-  it("can set keyword, contributor, title, subject", async () => {
+  it("can set keyword, contributor, title, subject, genre, and series", async () => {
     await updateAllFields()
     submit()
 
     expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food&searched_from=advanced"
+      "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
     )
   })
   it("renders inputs for all text input fields", () => {
@@ -147,19 +147,34 @@ describe("Advanced search form", () => {
     })
     await userEvent.click(milsteinDivisionOption)
 
-    const [subjectInput, keywordInput, titleInput, contributorInput] =
-      await updateAllFields()
+    const [
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+      genreInput,
+      seriesInput,
+    ] = await updateAllFields()
 
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
       "Division multiselect, 1 item selected"
     )
     await userEvent.click(screen.getByText("Clear fields"))
-    ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
-      (input) => {
-        expect(input).toBeEmptyDOMElement()
-      }
-    )
+    ;[
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+      genreInput,
+      seriesInput,
+    ].forEach((input) => {
+      expect(input).toBeEmptyDOMElement()
+    })
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
       "Division multiselect, 0 items selected"
