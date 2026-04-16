@@ -81,44 +81,42 @@ export default class BibDetails {
     const mapDisplay = (arr?: DisplayPackedEntry[]): BibDetailURL[] =>
       Array.isArray(arr)
         ? arr.map(({ display, "@value": name }) => {
-            const [, roles] = display.split(name)
             return {
               url: getContributorSearchURL(name),
-              urlLabel: name,
-              text: roles?.trim() || undefined,
+              urlText: name,
+              text: display,
             }
           })
         : []
 
     const displayValues = mapDisplay(this.bib[displayField])
 
-    // Set of displayed names for deduping
-    const seen = new Set(displayValues.map((v) => v.urlLabel))
-
     // Literals (fallback)
     const literalValues: string[] = this.bib[literalField] || []
-    const literals: BibDetailURL[] = literalValues
-      .filter((name) => !seen.has(name))
-      .map((name) => ({
-        url: getContributorSearchURL(name),
-        urlLabel: name,
-      }))
+    const literals: BibDetailURL[] = literalValues.map((name) => ({
+      url: getContributorSearchURL(name),
+      urlText: name,
+    }))
 
-    const combinedValues = [...displayValues, ...literals]
-
-    return combinedValues?.length > 0
+    return displayValues?.length > 0
       ? {
           label,
           link: "internal",
-          value: combinedValues,
+          value: displayValues,
+        }
+      : literals?.length > 0
+      ? {
+          label,
+          link: "internal",
+          value: literals,
         }
       : null
   }
 
-  buildLinkedSeriesDetail(field): LinkedBibDetail | null {
+  buildLinkedSeriesDetail(literalField): LinkedBibDetail | null {
     let displayField = "seriesDisplay"
     let label = "Series"
-    switch (field) {
+    switch (literalField) {
       case "seriesAddedEntry":
         displayField = "seriesAddedEntryDisplay"
         label = "Series added entry"
@@ -135,33 +133,34 @@ export default class BibDetails {
     const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
       ({ display, "@value": name }) => {
-        const [, unlinkedText] = display.split(name)
         return {
           url: getSeriesSearchUrl(name),
-          urlLabel: name,
-          text: unlinkedText || undefined,
+          urlText: name,
+          text: display,
         }
       }
     )
 
-    // Set of field values for deduping
-    const seen = new Set(
-      displayData.map((v) =>
-        field === "seriesAddedEntry" ? v.display : v["@value"]
-      )
-    )
-
     // Literals (fallback)
-    const literals: BibDetailURL[] = (this.bib[field] || [])
-      .filter((name) => !seen.has(name))
-      .map((name) => ({
-        url: getSeriesSearchUrl(name),
-        urlLabel: name,
-      }))
+    const literalValues: string[] = this.bib[literalField] || []
+    const literals: BibDetailURL[] = literalValues.map((name) => ({
+      url: getSeriesSearchUrl(name),
+      urlText: name,
+    }))
 
-    const value = [...displayValues, ...literals]
-
-    return value.length ? { label, link: "internal", value } : null
+    return displayValues?.length > 0
+      ? {
+          label,
+          link: "internal",
+          value: displayValues,
+        }
+      : literals?.length > 0
+      ? {
+          label,
+          link: "internal",
+          value: literals,
+        }
+      : null
   }
 
   buildAnnotatedMarcDetails(
@@ -173,7 +172,7 @@ export default class BibDetails {
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
-          urlLabel: label,
+          urlText: label,
         }))
         const detail = this.buildExternalLinkedDetail(
           "Connect to:",
@@ -352,12 +351,12 @@ export default class BibDetails {
           .map((v) =>
             typeof v === "string"
               ? v.trim()
-              : v?.content?.trim() || v?.urlLabel?.trim()
+              : v?.content?.trim() || v?.urlText?.trim()
           )
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
-      return [val?.urlLabel?.trim()]
+      return [val?.urlText?.trim()]
     }
 
     const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
@@ -471,7 +470,7 @@ export default class BibDetails {
               v
             )}`
         }
-        return { url: internalUrl, urlLabel: v }
+        return { url: internalUrl, urlText: v }
       }),
     }
   }
@@ -603,7 +602,7 @@ export default class BibDetails {
       })
       .map((sc) => ({
         url: sc.url,
-        urlLabel: sc.label,
+        urlText: sc.label,
       }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }

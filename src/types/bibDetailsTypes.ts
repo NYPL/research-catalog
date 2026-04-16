@@ -38,8 +38,8 @@ export interface MarcLinkedDetail {
 
 export interface BibDetailURL {
   url: string
-  urlLabel?: string
-  // Unlinked text following the URL
+  urlText?: string
+  // Unlinked text surrounding (and including) the linked urlText
   text?: string
 }
 
