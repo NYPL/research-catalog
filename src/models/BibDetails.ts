@@ -310,8 +310,7 @@ export default class BibDetails {
     )
   }
 
-  // Series uniform title values should display under Series added entry,
-  // combine these details
+  // Series uniform title values display under Series added entry
   combineSeriesAddedEntries(resourceEndpointDetails: AnyBibDetail[]) {
     const addedEntry = resourceEndpointDetails.find(
       (d) => d.label === "Series added entry"
@@ -337,7 +336,7 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
-    // Merge series added entry and series uniform title fields
+    // Merge Series added entry and Series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
     )
