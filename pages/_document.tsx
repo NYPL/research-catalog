@@ -20,13 +20,12 @@ export default function Document() {
       </style>
       <Head>
         {/* New Relic SPA browser agent */}
-        <script
+        <Script
+          id="new-relic-config"
           dangerouslySetInnerHTML={{
-            __html: `
-            ;window.NREUM||(NREUM={});NREUM.init={distributed_tracing:{enabled:true},performance:{capture_measures:true},browser_consent_mode:{enabled:false},privacy:{cookies_enabled:true},ajax:{deny_list:["gov-bam.nr-data.net"],capture_payloads:'none'}};
-            ;NREUM.loader_config={accountID:"121334",trustKey:"121334",agentID:"1589215804",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804"};
-            ;NREUM.info={beacon:"gov-bam.nr-data.net",errorBeacon:"gov-bam.nr-data.net",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804",sa:1};`,
+            __html: appConfig.newRelicBrowserScript[appConfig.environment],
           }}
+          strategy="beforeInteractive"
         />
         <Script
           src="https://js-agent.newrelic.com/nr-loader-spa-current.min.js"
