@@ -37,9 +37,7 @@ export const appConfig: AppConfig = {
     },
   },
   newRelicBrowserScript: {
-    development: `;window.NREUM||(NREUM={});NREUM.init={distributed_tracing:{enabled:true},performance:{capture_measures:true},browser_consent_mode:{enabled:false},privacy:{cookies_enabled:true},ajax:{deny_list:["gov-bam.nr-data.net"],capture_payloads:'none'}};
-    ;NREUM.loader_config={accountID:"121334",trustKey:"121334",agentID:"1589215804",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804"};
-    ;NREUM.info={beacon:"gov-bam.nr-data.net",errorBeacon:"gov-bam.nr-data.net",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804",sa:1};`,
+    development: "",
     qa: `;window.NREUM||(NREUM={});NREUM.init={distributed_tracing:{enabled:true},performance:{capture_measures:true},browser_consent_mode:{enabled:false},privacy:{cookies_enabled:true},ajax:{deny_list:["gov-bam.nr-data.net"],capture_payloads:'none'}};
     ;NREUM.loader_config={accountID:"121334",trustKey:"121334",agentID:"1589215804",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804"};
     ;NREUM.info={beacon:"gov-bam.nr-data.net",errorBeacon:"gov-bam.nr-data.net",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215804",sa:1};`,
