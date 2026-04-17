@@ -1,6 +1,7 @@
 import { Html, Head, Main, NextScript } from "next/document"
 import { appConfig } from "../src/config/appConfig"
 import QABanner from "../src/components/QABanner/QABanner"
+import Script from "next/script"
 
 export default function Document() {
   return (
@@ -18,6 +19,11 @@ export default function Document() {
       `}
       </style>
       <Head>
+        {/* New Relic SPA browser agent */}
+        <Script
+          src="https://js-agent.newrelic.com/nr-loader-spa-current.min.js"
+          strategy="beforeInteractive"
+        />
         <meta name="description" content="Research Catalog | NYPL" />
       </Head>
       <body>
