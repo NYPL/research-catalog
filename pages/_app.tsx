@@ -13,7 +13,7 @@ import { useRouter } from "next/router"
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
-  useEffect(() => {
+  if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
 
     if (current !== router.asPath) {
@@ -26,7 +26,7 @@ function App({ Component, pageProps }) {
 
       sessionStorage.setItem("currentPath", router.asPath)
     }
-  }, [router.asPath])
+  }
 
   // Remove header and footer injections before print
   useEffect(() => {
