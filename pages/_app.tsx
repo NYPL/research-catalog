@@ -57,11 +57,6 @@ function App({ Component, pageProps }) {
 
   return (
     <>
-      {/* Load New Relic */}
-      <Script
-        src="https://js-agent.newrelic.com/nr-loader-spa-current.min.js"
-        strategy="afterInteractive"
-      />
       {/* Google tag manager */}
       <Script
         id="ga4-gtm"
