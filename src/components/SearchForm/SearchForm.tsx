@@ -22,6 +22,7 @@ import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import Link from "../Link/Link"
+import { QueryBanner } from "../Banners/QueryBanner"
 
 const SearchForm = ({
   aggregations,
@@ -97,30 +98,43 @@ const SearchForm = ({
           </Box>
         </Text>
 
-        <SearchBar
-          id="mainContent"
-          action={PATHS.SEARCH}
-          method="get"
-          onSubmit={handleSubmit}
-          labelText="Search Bar Label"
-          isDisabled={isLoading}
-          selectProps={{
-            value: searchScope,
-            labelText: "Select a category",
-            name: "field",
-            optionsData: formattedSelectOptions,
-            onChange: (e) => handleChange(e, setSearchScope),
-          }}
-          textInputProps={{
-            isClearable: true,
-            onChange: (e) => handleChange(e, setSearchTerm),
-            isClearableCallback: () => setSearchTerm(""),
-            value: searchTerm,
-            name: "q",
-            placeholder,
-            labelText: tipText,
-          }}
-        />
+        <Box position="relative">
+          <Box
+            sx={{
+              position: "absolute",
+              top: "100%",
+              left: { base: 0, xl: "-50px" },
+              zIndex: "100",
+            }}
+          >
+            <QueryBanner />
+          </Box>
+
+          <SearchBar
+            id="mainContent"
+            action={PATHS.SEARCH}
+            method="get"
+            onSubmit={handleSubmit}
+            labelText="Search Bar Label"
+            isDisabled={isLoading}
+            selectProps={{
+              value: searchScope,
+              labelText: "Select a category",
+              name: "field",
+              optionsData: formattedSelectOptions,
+              onChange: (e) => handleChange(e, setSearchScope),
+            }}
+            textInputProps={{
+              isClearable: true,
+              onChange: (e) => handleChange(e, setSearchTerm),
+              isClearableCallback: () => setSearchTerm(""),
+              value: searchTerm,
+              name: "q",
+              placeholder,
+              labelText: tipText,
+            }}
+          />
+        </Box>
         <Flex
           direction="column"
           justifyContent="space-between"
