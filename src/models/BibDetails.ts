@@ -13,7 +13,10 @@ import {
   convertToSentenceCase,
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
-import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import {
+  getFindingAidFromSupplementaryContent,
+  getSeriesSearchUrl,
+} from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
@@ -69,94 +72,67 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
-  buildLinkedContributorDetail(
-    literalField: "creatorLiteral" | "contributorLiteral",
-    label: string
+  buildLinkedDisplayFieldDetail(
+    literalField: string,
+    label?: string
   ): LinkedBibDetail | null {
-    const displayField =
-      literalField === "creatorLiteral"
-        ? "creatorsDisplay"
-        : "contributorsDisplay"
+    let displayField = ""
+    let displayLabel = label || ""
+    let getUrl: (name: string) => string
 
-    const mapDisplay = (arr?: DisplayPackedEntry[]): BibDetailURL[] =>
-      Array.isArray(arr)
-        ? arr.map(({ display, "@value": name }) => {
-            return {
-              url: getContributorSearchURL(name),
-              urlText: name,
-              text: display,
-            }
-          })
-        : []
-
-    const displayValues = mapDisplay(this.bib[displayField])
-
-    // Literals (fallback)
-    const literalValues: string[] = this.bib[literalField] || []
-    const literals: BibDetailURL[] = literalValues.map((name) => ({
-      url: getContributorSearchURL(name),
-      urlText: name,
-    }))
-
-    return displayValues?.length > 0
-      ? {
-          label,
-          link: "internal",
-          value: displayValues,
-        }
-      : literals?.length > 0
-      ? {
-          label,
-          link: "internal",
-          value: literals,
-        }
-      : null
-  }
-
-  buildLinkedSeriesDetail(literalField): LinkedBibDetail | null {
-    let displayField = "seriesDisplay"
-    let label = "Series"
     switch (literalField) {
+      case "creatorLiteral":
+        displayField = "creatorsDisplay"
+        getUrl = getContributorSearchURL
+        break
+      case "contributorLiteral":
+        displayField = "contributorsDisplay"
+        getUrl = getContributorSearchURL
+        break
+      case "series":
+        displayField = "seriesDisplay"
+        displayLabel = "Series"
+        getUrl = getSeriesSearchUrl
+        break
       case "seriesAddedEntry":
         displayField = "seriesAddedEntryDisplay"
-        label = "Series added entry"
+        displayLabel = "Series added entry"
+        getUrl = getSeriesSearchUrl
         break
       case "seriesUniformTitle":
         displayField = "seriesUniformTitleDisplay"
-        label = "Series uniform title"
+        displayLabel = "Series uniform title"
+        getUrl = getSeriesSearchUrl
         break
+      default:
+        return null
     }
-
-    const getSeriesSearchUrl = (name: string) =>
-      `/search?filters[series][0]=${encodeURIComponentWithPeriods(name)}`
 
     const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
-      ({ display, "@value": name }) => {
-        return {
-          url: getSeriesSearchUrl(name),
-          urlText: name,
-          text: display,
-        }
-      }
+      ({ display, "@value": name }) => ({
+        url: getUrl(name),
+        urlText: name,
+        text: display,
+      })
     )
 
     // Literals (fallback)
     const literalValues: string[] = this.bib[literalField] || []
     const literals: BibDetailURL[] = literalValues.map((name) => ({
-      url: getSeriesSearchUrl(name),
+      url: getUrl(name),
       urlText: name,
     }))
 
     return displayValues?.length > 0
       ? {
-          label,
+          label: displayLabel,
           link: "internal",
           value: displayValues,
         }
       : literals?.length > 0
       ? {
-          label,
+          label: displayLabel,
           link: "internal",
           value: literals,
         }
@@ -246,7 +222,10 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildLinkedContributorDetail("creatorLiteral", "Author")
+            return this.buildLinkedDisplayFieldDetail(
+              "creatorLiteral",
+              "Author"
+            )
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -438,7 +417,7 @@ export default class BibDetails {
     field: string
   }): LinkedBibDetail {
     if (fieldMapping.field === "contributorLiteral") {
-      return this.buildLinkedContributorDetail(
+      return this.buildLinkedDisplayFieldDetail(
         "contributorLiteral",
         "Additional authors"
       )
@@ -448,7 +427,7 @@ export default class BibDetails {
       fieldMapping.field === "series" ||
       fieldMapping.field === "seriesUniformTitle"
     ) {
-      return this.buildLinkedSeriesDetail(fieldMapping.field)
+      return this.buildLinkedDisplayFieldDetail(fieldMapping.field)
     }
 
     const value = this.bib[fieldMapping.field]
