@@ -1,8 +1,14 @@
 import { Text, Box, Link, Flex } from "@nypl/design-system-react-components"
-import { useState } from "react"
+import { useState, useEffect } from "react"
 
 export const QueryBanner = () => {
-  const [isVisible, setIsVisible] = useState(true)
+  const [isVisible, setIsVisible] = useState(false)
+
+  useEffect(() => {
+    if (!document.cookie.includes("seenQueryBanner=true")) {
+      setIsVisible(true)
+    }
+  }, [])
 
   if (!isVisible) return null
 
@@ -66,6 +72,10 @@ export const QueryBanner = () => {
           onClick={(e) => {
             e.preventDefault()
             setIsVisible(false)
+            const expirationDate = new Date(
+              new Date().setFullYear(new Date().getFullYear() + 1)
+            ).toUTCString()
+            document.cookie = `seenQueryBanner=true; expires=${expirationDate}; `
           }}
           sx={{
             textDecoration: "underline solid 1px",
