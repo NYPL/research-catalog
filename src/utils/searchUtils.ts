@@ -37,7 +37,7 @@ export function getSearchResultsHeading(
     ? ` for ${
         browseOptions.browseType === "subjects"
           ? "Subject Heading"
-          : "Author/Contributor"
+          : "author/contributor"
       } "${browseOptions.slug}${
         browseOptions.role ? `, ${browseOptions.role}` : ""
       }"`
