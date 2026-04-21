@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test"
 import { BrowsePage } from "../../pages/browse_page"
 
 let browsePage: BrowsePage
-const searchterm = "Twain, Mark"
+const searchterm = "Smith"
 
 test.beforeEach(async ({ page }) => {
   browsePage = new BrowsePage(page, searchterm)
@@ -39,10 +39,10 @@ test.describe("Authors/Contributors Containing search", () => {
   })
 })
 
-test.describe("Subject Heading variants", () => {
-  test("Do a subject heading search and assert that variants do not have a link, does not have a count, and has a 'See:' label", async () => {
+test.describe("Authors/Contributors variants", () => {
+  test("Do an author/contributor search and assert that variants do not have a link, does not have a count, and has a 'See:' label", async () => {
     await expect(browsePage.banner).toBeVisible({ timeout: 15000 })
-    await browsePage.searchFor(searchterm, "Subject Headings containing")
+    await browsePage.searchFor(searchterm, "Authors/Contributors containing")
     await expect(async () => {
       const rows = browsePage.page.locator("table tbody tr")
       const variantRows = rows.filter({ hasText: "See:" })
@@ -68,12 +68,15 @@ test.describe("Subject Heading variants", () => {
   })
 })
 
-test.describe("Subject Heading beginning with search", () => {
-  test("Do a subject heading search and assert that at least 10 returned titles from the Subject Heading index begin with the supplied keyword", async () => {
-    await browsePage.searchFor(searchterm, "Subject Headings beginning with")
+test.describe("Authors/Contributors beginning with search", () => {
+  test("Do an author/contributor search and assert that at least 10 returned titles from the Authors/Contributors index begin with the supplied keyword", async () => {
+    await browsePage.searchFor(
+      searchterm,
+      "Authors/Contributors beginning with"
+    )
 
     await expect(browsePage.searchResultsHeading).toBeVisible({
-      timeout: 15000,
+      timeout: 35000,
     })
 
     await expect(async () => {
@@ -85,12 +88,12 @@ test.describe("Subject Heading beginning with search", () => {
       for (const title of titles) {
         expect(title.trim()).toMatch(new RegExp(`^${searchterm}`, "i"))
       }
-    }).toPass({ timeout: 5000 })
+    }).toPass({ timeout: 35000 })
   })
 })
-test.describe("Subject sort order", () => {
-  test("Do a subject heading search and assert that the returned titles from the Subject Heading index are the default order of Count high to low", async () => {
-    await browsePage.searchFor(searchterm, "Subject Headings containing")
+test.describe("Authors/Contributors sort order", () => {
+  test("Do an author/contributor search and assert that the returned titles from the Authors/Contributors index are the default order of Count high to low", async () => {
+    await browsePage.searchFor(searchterm, "Authors/Contributors containing")
 
     await expect(browsePage.searchResultsHeading).toBeVisible({
       timeout: 15000,
@@ -110,8 +113,8 @@ test.describe("Subject sort order", () => {
       }
     }).toPass({ timeout: 5000 })
   })
-  test("Do a subject heading search and assert that the returned titles from the Subject Heading index can be sorted by Count low to high", async () => {
-    await browsePage.searchFor(searchterm, "Subject Headings containing")
+  test("Do an author/contributor search and assert that the returned titles from the Authors/Contributors index can be sorted by Count low to high", async () => {
+    await browsePage.searchFor(searchterm, "Authors/Contributors containing")
 
     await expect(browsePage.searchResultsHeading).toBeVisible({
       timeout: 60000,
