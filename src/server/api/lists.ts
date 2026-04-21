@@ -25,7 +25,7 @@ export async function fetchLists({
     if (response.error) {
       logServerError("fetchLists", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -61,7 +61,7 @@ export async function fetchList({
     if (response.error) {
       logServerError("fetchList", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -111,7 +111,7 @@ export async function createList({
     if (response.error) {
       logServerError("createList", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -158,7 +158,7 @@ export async function updateList({
     if (response.error) {
       logServerError("updateList", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -194,7 +194,7 @@ export async function deleteList({
     if (response.error) {
       logServerError("deleteList", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -239,7 +239,7 @@ export async function deleteRecordsFromList({
         `${response.error} Request: ${path}`
       )
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
@@ -281,7 +281,7 @@ export async function addRecordsToList({
     if (response.error) {
       logServerError("addRecordsToList", `${response.error} Request: ${path}`)
       return {
-        status: response.status,
+        status: response.statusCode,
         name: response.name,
         error: response.error,
       }
