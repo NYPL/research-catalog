@@ -98,14 +98,7 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
   cql: {
-    text: (
-      <span>
-        {" "}
-        <span style={{ fontWeight: "bold", color: "green" }}>
-          New!
-        </span> Query{" "}
-      </span>
-    ),
+    text: <span>Query</span>,
     searchTip: (
       <span>
         Read our{" "}
