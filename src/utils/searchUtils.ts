@@ -85,10 +85,10 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
       if (label === "author/contributor" || label === "author") {
-        label = "Author/Contributor"
+        label = "author/contributor"
         if (Array.isArray(value) && value.length > 1) {
           value = value.join(", ")
-          label = "Authors/Contributors"
+          label = "authors/contributors"
         }
       }
 
