@@ -26,6 +26,7 @@ import {
   getContributorSearchURL,
   getSubjectSearchURL,
 } from "../utils/browseUtils"
+import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -72,46 +73,19 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
-  buildLinkedDisplayFieldDetail(
-    literalField: string,
-    label?: string
-  ): LinkedBibDetail | null {
-    let displayField = ""
-    let displayLabel = label || ""
-    let getUrl: (name: string) => string
-
-    switch (literalField) {
-      case "creatorLiteral":
-        displayField = "creatorsDisplay"
-        getUrl = getContributorSearchURL
-        break
-      case "contributorLiteral":
-        displayField = "contributorsDisplay"
-        getUrl = getContributorSearchURL
-        break
-      case "series":
-        displayField = "seriesDisplay"
-        displayLabel = "Series"
-        getUrl = getSeriesSearchUrl
-        break
-      case "seriesAddedEntry":
-        displayField = "seriesAddedEntryDisplay"
-        displayLabel = "Series added entry"
-        getUrl = getSeriesSearchUrl
-        break
-      case "seriesUniformTitle":
-        displayField = "seriesUniformTitleDisplay"
-        displayLabel = "Series uniform title"
-        getUrl = getSeriesSearchUrl
-        break
-      default:
-        return null
-    }
+  // Build a linked series or author field with link and display text,
+  // defaulting to the literal field
+  buildLinkedDisplayFieldDetail(literalField: string): LinkedBibDetail | null {
+    const {
+      label: displayLabel,
+      displayField,
+      url: searchUrl,
+    } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
     const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
       ({ display, "@value": name }) => ({
-        url: getUrl(name),
+        url: searchUrl(name),
         urlText: name,
         text: display,
       })
@@ -120,7 +94,7 @@ export default class BibDetails {
     // Literals (fallback)
     const literalValues: string[] = this.bib[literalField] || []
     const literals: BibDetailURL[] = literalValues.map((name) => ({
-      url: getUrl(name),
+      url: searchUrl(name),
       urlText: name,
     }))
 
@@ -222,10 +196,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildLinkedDisplayFieldDetail(
-              "creatorLiteral",
-              "Author"
-            )
+            return this.buildLinkedDisplayFieldDetail("creatorLiteral")
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -416,16 +387,11 @@ export default class BibDetails {
     label: string
     field: string
   }): LinkedBibDetail {
-    if (fieldMapping.field === "contributorLiteral") {
-      return this.buildLinkedDisplayFieldDetail(
-        "contributorLiteral",
-        "Additional authors"
-      )
-    }
     if (
       fieldMapping.field === "seriesAddedEntry" ||
       fieldMapping.field === "series" ||
-      fieldMapping.field === "seriesUniformTitle"
+      fieldMapping.field === "seriesUniformTitle" ||
+      fieldMapping.field === "contributorLiteral"
     ) {
       return this.buildLinkedDisplayFieldDetail(fieldMapping.field)
     }
