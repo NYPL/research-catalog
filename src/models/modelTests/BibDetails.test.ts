@@ -9,6 +9,7 @@ import {
   princetonRecord,
   bibWithItems,
   physicalDescriptionBib,
+  bibWithSeries,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
 import BibDetailsModel from "../BibDetails"
@@ -45,6 +46,12 @@ describe("Bib Details model", () => {
     bibWithSubjectHeadings.resource,
     bibWithSubjectHeadings.annotatedMarc
   )
+
+  const bibWithSeriesModel = new BibDetailsModel(
+    bibWithSeries.resource,
+    bibWithSeries.annotatedMarc
+  )
+
   describe("owner", () => {
     it("populates owner when owner is present", () => {
       const partnerBib = new BibDetailsModel(princetonRecord)
@@ -157,7 +164,7 @@ describe("Bib Details model", () => {
         label: "Supplementary content",
         value: [
           {
-            urlLabel: "Image",
+            urlText: "Image",
             url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
           },
         ],
@@ -170,7 +177,7 @@ describe("Bib Details model", () => {
         label: "Supplementary content",
         value: [
           {
-            urlLabel: "Image",
+            urlText: "Image",
             url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
           },
         ],
@@ -203,7 +210,7 @@ describe("Bib Details model", () => {
           value: [
             {
               url: "/search?filters[placeOfPublication][0]=Mansfield%2C%20Ohio",
-              urlLabel: "Mansfield, Ohio",
+              urlText: "Mansfield, Ohio",
             },
           ],
         },
@@ -218,7 +225,7 @@ describe("Bib Details model", () => {
           value: [
             {
               url: "/search?filters[donor][0]=Gift%20of%20the%20DeWitt%20Wallace%20Endowment%20Fund%2C%20named%20in%20honor%20of%20the%20founder%20of%20Reader's%20Digest",
-              urlLabel:
+              urlText:
                 "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
             },
           ],
@@ -251,6 +258,22 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(subjects.link).toBe("internal")
       expect(subjects.value[0].url).toContain("/browse/subjects/")
+    })
+    it("creates series fields and merges series uniform title into series added entry", () => {
+      const series = bibWithSeriesModel.bottomDetails.find(
+        (d) => d.label === "Series"
+      ) as LinkedBibDetail
+      expect(series.link).toBe("internal")
+      expect(series.value[0].url).toContain("search?filters[series][0]")
+      expect(series.value[0].urlText).toEqual("Inediti e rarità rossiniane ;")
+      expect(series.value[0].text).toEqual("Inediti e rarità rossiniane ; 12")
+      const seriesAddedEntry = bibWithSeriesModel.bottomDetails.find(
+        (d) => d.label === "Series added entry"
+      ) as LinkedBibDetail
+      // Value is from seriesUniformTitle
+      expect(seriesAddedEntry.value[0].urlText).toEqual(
+        "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;"
+      )
     })
   })
 

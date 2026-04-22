@@ -9,14 +9,30 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+
+### Updated
+
+- Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
+
+## [1.9.0] 2026-04-14
+
+### Added
+
+- Added Playwright test for redirecting circ bib requests to Vega [SCC-5292](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5292)
 - Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
 - Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
 - Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
 - Added browse links, roles to author/additional author fields on bib page [SCC-4968](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4968)
+- Added more granular logging to support error alarm [SCC-5293](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5293)
 
 ### Updated
 
-- Display non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
+- Displayed non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
+
+## Hot fix 2026-04-13
+
+- Update bib/item ID parsing to correctly strip partner prefixes
 
 ## [1.8.2] 2026-04-09
 
@@ -37,11 +53,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Playwright tests for Browse Subjects [SCC-5232](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
+- Added Playwright tests for subject browse [SCC-5232](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
 - Added author ascending/descending sort options to search sort [SCC-5207](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5207)
 - Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
 - Add call number default sort and rework sort utilities [SCC-5279](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5279)
-- Added more granular logging to support error alarm [SCC-5293](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5293)
 
 ## Hot fix 2026-03-12
 
