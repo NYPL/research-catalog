@@ -105,13 +105,13 @@ export const BrowseLinkDetailElement = ({
               url: `/browse${
                 browseType === "subjects" ? "" : "/authors/"
               }?q=${encodeURIComponentWithPeriods(
-                urlInfo.urlLabel
+                urlInfo.urlText
               )}&search_scope=starts_with`,
-              urlLabel: `[${indexLinkLabel}]`,
+              urlText: `[${indexLinkLabel}]`,
             },
             "internal",
             true,
-            `${indexLinkLabel} for "${urlInfo.urlLabel}"`
+            `${indexLinkLabel} for "${urlInfo.urlText}"`
           )}
         </>
       </li>
@@ -125,10 +125,12 @@ const LinkElement = (
   isBold = false,
   ariaLabel?: string
 ) => {
-  return (
-    <>
+  const { text, urlText, url: href } = url
+
+  if (!text) {
+    return (
       <Link
-        dir={rtlOrLtr(url.urlLabel)}
+        dir={rtlOrLtr(url.urlText)}
         href={url.url}
         key={url.url}
         isExternal={linkType === "external"}
@@ -136,9 +138,32 @@ const LinkElement = (
         textDecoration="none"
         aria-label={ariaLabel}
       >
-        {url.urlLabel}
+        {url.urlText}
       </Link>
-      {url.text && <span>{url.text}</span>}
+    )
+  }
+
+  const parts = text.split(urlText)
+
+  return (
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {part}
+          {index < parts.length - 1 && (
+            <Link
+              dir={rtlOrLtr(urlText)}
+              href={href}
+              isExternal={linkType === "external"}
+              fontWeight={isBold ? "700" : "400"}
+              textDecoration="none"
+              aria-label={ariaLabel}
+            >
+              {urlText}
+            </Link>
+          )}
+        </span>
+      ))}
     </>
   )
 }
