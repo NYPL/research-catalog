@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+
+### Updated
+
+- Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
+
 ## [1.9.0] 2026-04-14
 
 ### Added
@@ -21,7 +29,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Displayed non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
-- Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
 
 ## Hot fix 2026-04-13
 

@@ -31,13 +31,17 @@ describe("Advanced search form", () => {
       subjectInput,
       callNumberInput,
       uniqueIdentifierInput,
+      seriesInput,
+      genreInput,
     ] = [
       "Keyword",
-      "Title",
       "Author/Contributor",
+      "Title",
       "Subject",
       "Call number",
       "Unique identifier",
+      "Series",
+      "Genre",
     ].map((field) => screen.getByLabelText(field))
     fireEvent.change(subjectInput, { target: { value: "italian food" } })
     fireEvent.change(keywordInput, { target: { value: "spaghetti" } })
@@ -45,6 +49,8 @@ describe("Advanced search form", () => {
     fireEvent.change(titleInput, { target: { value: "il amore di pasta" } })
     fireEvent.change(callNumberInput, { target: { value: "12345" } })
     fireEvent.change(uniqueIdentifierInput, { target: { value: "67890" } })
+    fireEvent.change(seriesInput, { target: { value: "pasta series" } })
+    fireEvent.change(genreInput, { target: { value: "cookbooks" } })
 
     // without this delay, the input is not updated until after submit is called.
     await delay(500)
@@ -55,6 +61,8 @@ describe("Advanced search form", () => {
       subjectInput,
       callNumberInput,
       uniqueIdentifierInput,
+      seriesInput,
+      genreInput,
     ]
   }
   afterEach(async () => {
@@ -66,12 +74,12 @@ describe("Advanced search form", () => {
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
   })
 
-  it("can set keyword, contributor, title, subject", async () => {
+  it("can set keyword, contributor, title, subject, genre, and series", async () => {
     await updateAllFields()
     submit()
 
     expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=strega+nonna&contributor=il+amore+di+pasta&callnumber=12345&standard_number=67890&subject=italian+food&searched_from=advanced"
+      "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
     )
   })
   it("renders inputs for all text input fields", () => {
@@ -147,19 +155,34 @@ describe("Advanced search form", () => {
     })
     await userEvent.click(milsteinDivisionOption)
 
-    const [subjectInput, keywordInput, titleInput, contributorInput] =
-      await updateAllFields()
+    const [
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+      genreInput,
+      seriesInput,
+    ] = await updateAllFields()
 
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
       "Division multiselect, 1 item selected"
     )
     await userEvent.click(screen.getByText("Clear fields"))
-    ;[subjectInput, keywordInput, titleInput, contributorInput].forEach(
-      (input) => {
-        expect(input).toBeEmptyDOMElement()
-      }
-    )
+    ;[
+      keywordInput,
+      contributorInput,
+      titleInput,
+      subjectInput,
+      callNumberInput,
+      uniqueIdentifierInput,
+      genreInput,
+      seriesInput,
+    ].forEach((input) => {
+      expect(input).toBeEmptyDOMElement()
+    })
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
       "Division multiselect, 0 items selected"
