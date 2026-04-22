@@ -4,7 +4,10 @@ import {
   SITE_NAME,
 } from "../config/constants"
 import type { BibQueryParams } from "../types/bibTypes"
-import { getPaginationOffsetStrings } from "./appUtils"
+import {
+  encodeURIComponentWithPeriods,
+  getPaginationOffsetStrings,
+} from "./appUtils"
 
 /**
  * standardizeBibId
@@ -124,6 +127,9 @@ export function getFindingAidFromSupplementaryContent(
 
   return findingAid?.url || null
 }
+
+export const getSeriesSearchUrl = (name: string) =>
+  `/search?filters[series][0]=${encodeURIComponentWithPeriods(name)}`
 
 export function buildBibMetadataTitle({
   bibTitle,
