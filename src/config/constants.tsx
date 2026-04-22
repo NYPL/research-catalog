@@ -102,7 +102,10 @@ export const SEARCH_FORM_OPTIONS = {
     searchTip: (
       <span>
         Read our{" "}
-        <Link isExternal href="/query-guide">
+        <Link
+          isExternal
+          href="https://libguides.nypl.org/researchcatalog/query"
+        >
           Query Guide
         </Link>{" "}
         to learn how to construct complex queries against a comprehensive set of

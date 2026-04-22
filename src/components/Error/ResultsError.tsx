@@ -118,7 +118,10 @@ export default function ResultsError({
           <Text>
             {" "}
             Read our{" "}
-            <Link isExternal href="query-guide">
+            <Link
+              isExternal
+              href="https://libguides.nypl.org/researchcatalog/query"
+            >
               Query Guide
             </Link>{" "}
             to learn how to construct queries or{" "}
