@@ -52,7 +52,7 @@ describe("lists", () => {
 
     it("forwards error from lists api", async () => {
       mockClient.get.mockResolvedValueOnce({
-        status: 400,
+        statusCode: 400,
         name: "error",
         error: "error message",
       })
@@ -105,7 +105,7 @@ describe("lists", () => {
 
     it("forwards lists api error", async () => {
       mockClient.post.mockResolvedValueOnce({
-        status: 422,
+        statusCode: 422,
         name: "DuplicateNameError",
         error: "List with this name already exists",
       })
@@ -171,7 +171,7 @@ describe("lists", () => {
 
     it("returns error info if response has error", async () => {
       mockClient.delete.mockResolvedValueOnce({
-        status: 404,
+        statusCode: 404,
         name: "ListNotFound",
         error: "List not found",
       })
@@ -190,14 +190,22 @@ describe("lists", () => {
 
   describe("deleteRecordsFromList", () => {
     it("returns success on successful deletion", async () => {
-      mockClient.delete.mockResolvedValueOnce({ success: true })
+      mockClient.delete.mockResolvedValueOnce({
+        id: "123",
+        patronId: "12345",
+        records: [],
+        createdDate: "2026-04-15T15:58:58.396947",
+        modifiedDate: "2026-04-22T10:11:20.584139",
+        listName: "list 1",
+        description: null,
+      })
       const result = await deleteRecordsFromList({
         patronId: "12345",
-        listId: "list1",
+        listId: "123",
         records: ["b123", "b345"],
       })
       expect(mockClient.delete).toHaveBeenCalledWith(
-        "/patrons/12345/list/list1/records",
+        "/patrons/12345/list/123/records",
         {
           records: ["b123", "b345"],
         }
@@ -208,14 +216,22 @@ describe("lists", () => {
 
   describe("addRecordsToList", () => {
     it("returns success on successful addition", async () => {
-      mockClient.post.mockResolvedValueOnce({ success: true })
+      mockClient.post.mockResolvedValueOnce({
+        id: "123",
+        patronId: "12345",
+        records: ["b123", "b345"],
+        createdDate: "2026-04-15T15:58:58.396947",
+        modifiedDate: "2026-04-22T10:11:20.584139",
+        listName: "second list",
+        description: null,
+      })
       const result = await addRecordsToList({
         patronId: "12345",
-        listId: "list1",
+        listId: "123",
         records: ["b123", "b345"],
       })
       expect(mockClient.post).toHaveBeenCalledWith(
-        "/patrons/12345/list/list1/records",
+        "/patrons/12345/list/123/records",
         {
           records: ["b123", "b345"],
         }
