@@ -22,7 +22,6 @@ interface SearchPageProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
-  errorMessage?: string
 }
 
 /**
@@ -33,7 +32,6 @@ export default function SearchPage({
   results,
   isAuthenticated,
   errorStatus = null,
-  errorMessage,
 }: SearchPageProps) {
   const { push, query } = useRouter()
   // TODO: Move this to global context
@@ -68,7 +66,6 @@ export default function SearchPage({
   return (
     <Search
       errorStatus={errorStatus}
-      errorMessage={errorMessage}
       results={results}
       metadataTitle={`Search | ${SITE_NAME}`}
       activePage="search"
@@ -91,7 +88,6 @@ export async function getServerSideProps({ req, query }) {
     return {
       props: {
         errorStatus: (results as APIError).status,
-        errorMessage: (results as APIError).error,
       },
     }
   }
