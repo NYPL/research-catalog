@@ -14,15 +14,10 @@ import Link from "../Link/Link"
 type ResultsErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
-  errorMessage?: string
 }
 
 /* Display error state that replaces browse/search results. */
-export default function ResultsError({
-  errorStatus,
-  errorMessage,
-  page,
-}: ResultsErrorProps) {
+export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent

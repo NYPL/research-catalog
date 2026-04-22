@@ -97,8 +97,8 @@ export async function fetchSearchResults(
       logServerWarn(
         "fetchSearchResults",
         `${
-          results.error && results.error
-        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: 422,
@@ -111,8 +111,8 @@ export async function fetchSearchResults(
       logServerError(
         "fetchSearchResults",
         `${
-          results.error && results.error
-        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,

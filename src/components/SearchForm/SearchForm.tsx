@@ -78,7 +78,9 @@ const SearchForm = ({
     }
     const queryString = getSearchQuery(params)
     setPersistentFocus(idConstants.searchResultsHeading)
-    await router.push(`${PATHS.SEARCH}${queryString}`)
+    await router.push(`${PATHS.SEARCH}${queryString}`, undefined, {
+      scroll: false,
+    })
   }
 
   return (

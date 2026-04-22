@@ -46,13 +46,11 @@ interface SearchProps {
   handlePageChange: (page: number) => Promise<void>
   handleSortChange: (selectedSortOption: string) => Promise<void>
   slug?: string
-  errorMessage?: string
   role?: string
 }
 
 const Search = ({
   errorStatus,
-  errorMessage,
   results,
   metadataTitle,
   activePage,
@@ -81,13 +79,7 @@ const Search = ({
   }, [isLoading])
 
   if (errorStatus) {
-    return (
-      <ResultsError
-        errorStatus={errorStatus}
-        page={activePage}
-        errorMessage={errorMessage}
-      />
-    )
+    return <ResultsError errorStatus={errorStatus} page="search" />
   }
 
   const { itemListElement: searchResultsElements, totalResults } =
