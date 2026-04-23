@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
+
 ## [1.9.0] 2026-04-14
 
 - Added Playwright test for redirecting circ bib requests to Vega [SCC-5292](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5292)
