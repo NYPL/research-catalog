@@ -9,7 +9,6 @@ export class BrowsePage {
   readonly search_dropdown: Locator
   readonly search_input: Locator
   readonly search_submit_button: Locator
-  readonly searchResultsAuthor: Locator
   readonly searchResultsTitle: Locator
   readonly searchResultsTitleLinks: Locator
   readonly sortResultsLowToHigh: Locator
