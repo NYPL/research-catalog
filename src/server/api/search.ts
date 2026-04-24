@@ -8,7 +8,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError } from "../../utils/logUtils"
+import { logServerError, logServerWarn } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
 
@@ -92,13 +92,27 @@ export async function fetchSearchResults(
       }
     }
 
+    // Handle malformed CQL query (returned as a 400 -> 422)
+    if (results.status === 400 && results.name === "IndexSearchError") {
+      logServerWarn(
+        "fetchSearchResults",
+        `${
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+      )
+      return {
+        status: 422,
+        error: results.error,
+      }
+    }
+
     // Handle general error
     if (results.status) {
       logServerError(
         "fetchSearchResults",
         `${
-          results.error && results.error
-        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,

@@ -99,6 +99,24 @@ export const SEARCH_FORM_OPTIONS = {
     ),
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
+  cql: {
+    text: <span>Query</span>,
+    searchTip: (
+      <span>
+        Read our{" "}
+        <Link
+          isExternal
+          href="https://libguides.nypl.org/researchcatalog/query"
+        >
+          Query Guide
+        </Link>{" "}
+        to learn how to construct complex queries against a comprehensive set of
+        fields.{" "}
+      </span>
+    ),
+    placeholder:
+      'Example: callnumber = "^*R-RMRR" AND author any "locke hobbes rousseau"',
+  },
 }
 
 export const BROWSE_FORM_OPTIONS = {

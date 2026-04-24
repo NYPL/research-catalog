@@ -68,6 +68,7 @@ export interface DiscoveryAggregationResults {
 export interface DiscoverySearchResults {
   totalResults: number
   itemListElement: DiscoverySearchResultsElement[]
+  debug?: { parsed?: string[] }
 }
 
 export interface DiscoverySearchResultsElement {

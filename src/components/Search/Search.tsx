@@ -79,11 +79,12 @@ const Search = ({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page={activePage} />
+    return <ResultsError errorStatus={errorStatus} page="search" />
   }
 
   const { itemListElement: searchResultsElements, totalResults } =
     results.results
+  const parsedQuery = results?.results?.debug?.parsed
 
   const aggs = results?.aggregations?.itemListElement
   // if there are no results, then applied filters correspond to aggregations
@@ -159,13 +160,15 @@ const Search = ({
                 {getSearchResultsHeading(
                   searchParams,
                   totalResults,
+
                   slug
                     ? {
                         slug,
                         browseType: resultsType,
                         role,
                       }
-                    : undefined
+                    : undefined,
+                  parsedQuery
                 )}
               </Heading>
               <ResultsSort

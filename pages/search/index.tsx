@@ -13,7 +13,7 @@ import type {
 import { SITE_NAME } from "../../src/config/constants"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
-import type { HTTPStatusCode } from "../../src/types/appTypes"
+import type { APIError, HTTPStatusCode } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
 
@@ -85,7 +85,11 @@ export async function getServerSideProps({ req, query }) {
 
   // Direct to error display according to status
   if (results.status !== 200) {
-    return { props: { errorStatus: results.status } }
+    return {
+      props: {
+        errorStatus: (results as APIError).status,
+      },
+    }
   }
 
   // Check for `redirectOnMatch` trigger:
