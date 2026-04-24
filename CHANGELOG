@@ -7,10 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+
+### Updated
+
+- Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
+
 ## [1.9.0] 2026-04-14
 
 ### Added
 
+- Added Playwright test for redirecting circ bib requests to Vega [SCC-5292](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5292)
 - Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
 - Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
 - Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
@@ -19,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Display non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
+- Displayed non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
 
 ## Hot fix 2026-04-13
 
