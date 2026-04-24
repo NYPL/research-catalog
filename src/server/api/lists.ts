@@ -1,6 +1,35 @@
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 
+async function callListsServiceAndHandleError({
+  methodName,
+  path,
+  apiCall,
+  onSuccess = () => ({ status: 200 }),
+}: {
+  methodName: string
+  path: string
+  apiCall: (client: any) => Promise<any>
+  onSuccess?: (response: any) => any
+}) {
+  try {
+    const client = await nyplApiClient()
+    const response = await apiCall(client)
+    if (response.error) {
+      logServerError(methodName, `${response.error} Request: ${path}`)
+      return {
+        status: response.statusCode,
+        name: response.name,
+        error: response.error,
+      }
+    }
+    return onSuccess(response)
+  } catch (error: any) {
+    logServerError(methodName, error.message)
+    return { status: 500 }
+  }
+}
+
 /**
  * Get all of a patron's lists.
  *
@@ -16,27 +45,15 @@ export async function fetchLists({
   patronId: string
   sort?: string
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = sort
-      ? `/patrons/${patronId}/lists?sort=${sort}`
-      : `/patrons/${patronId}/lists`
-    const response = await client.get(path)
-    if (response.error) {
-      logServerError("fetchLists", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200, lists: response }
-  } catch (error) {
-    logServerError("fetchLists", error.message)
-    return {
-      status: 500,
-    }
-  }
+  const path = sort
+    ? `/patrons/${patronId}/lists?sort=${sort}`
+    : `/patrons/${patronId}/lists`
+  return callListsServiceAndHandleError({
+    methodName: "fetchLists",
+    path,
+    apiCall: (client) => client.get(path),
+    onSuccess: (response) => ({ status: 200, lists: response }),
+  })
 }
 
 /**
@@ -54,25 +71,13 @@ export async function fetchList({
   patronId: string
   listId: string
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = `/patrons/${patronId}/list/${listId}`
-    const response = await client.get(path)
-    if (response.error) {
-      logServerError("fetchList", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200, list: response }
-  } catch (error) {
-    logServerError("fetchList", error.message)
-    return {
-      status: 500,
-    }
-  }
+  const path = `/patrons/${patronId}/list/${listId}`
+  return callListsServiceAndHandleError({
+    methodName: "fetchList",
+    path,
+    apiCall: (client) => client.get(path),
+    onSuccess: (response) => ({ status: 200, list: response }),
+  })
 }
 
 /**
@@ -96,33 +101,21 @@ export async function createList({
   records?: string[]
   description?: string
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = "/list"
-    // TO DO: Add handling for default first list
-    // (listName = "My workspace (default list)")
-    const body = {
-      listName,
-      description,
-      records,
-      patronId,
-    }
-    const response = await client.post(path, body)
-    if (response.error) {
-      logServerError("createList", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200, list: response }
-  } catch (error) {
-    logServerError("createList", error.message)
-    return {
-      status: 500,
-    }
+  const path = "/list"
+  // TO DO: Add handling for default first list
+  // (listName = "My workspace (default list)")
+  const body = {
+    listName,
+    description,
+    records,
+    patronId,
   }
+  return callListsServiceAndHandleError({
+    methodName: "createList",
+    path,
+    apiCall: (client) => client.post(path, body),
+    onSuccess: (response) => ({ status: 200, list: response }),
+  })
 }
 
 /**
@@ -146,30 +139,18 @@ export async function updateList({
   listName: string
   description?: string
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = `/patrons/${patronId}/list/${listId}`
-    const body = {
-      patronId,
-      listName,
-      description,
-    }
-    const response = await client.post(path, body)
-    if (response.error) {
-      logServerError("updateList", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200, list: response }
-  } catch (error) {
-    logServerError("updateList", error.message)
-    return {
-      status: 500,
-    }
+  const path = `/patrons/${patronId}/list/${listId}`
+  const body = {
+    patronId,
+    listName,
+    description,
   }
+  return callListsServiceAndHandleError({
+    methodName: "updateList",
+    path,
+    apiCall: (client) => client.post(path, body),
+    onSuccess: (response) => ({ status: 200, list: response }),
+  })
 }
 
 /**
@@ -187,25 +168,12 @@ export async function deleteList({
   patronId: string
   listId: string
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = `/patrons/${patronId}/list/${listId}`
-    const response = await client.delete(path)
-    if (response.error) {
-      logServerError("deleteList", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200 }
-  } catch (error) {
-    logServerError("deleteList", error.message)
-    return {
-      status: 500,
-    }
-  }
+  const path = `/patrons/${patronId}/list/${listId}`
+  return callListsServiceAndHandleError({
+    methodName: "deleteList",
+    path,
+    apiCall: (client) => client.delete(path),
+  })
 }
 
 /**
@@ -226,31 +194,15 @@ export async function deleteRecordsFromList({
   listId: string
   records: string[]
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = `/patrons/${patronId}/list/${listId}/records`
-    const body = {
-      records,
-    }
-    const response = await client.delete(path, body)
-    if (response.error) {
-      logServerError(
-        "deleteRecordsFromList",
-        `${response.error} Request: ${path}`
-      )
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200 }
-  } catch (error) {
-    logServerError("deleteRecordsFromList", error.message)
-    return {
-      status: 500,
-    }
+  const path = `/patrons/${patronId}/list/${listId}/records`
+  const body = {
+    records,
   }
+  return callListsServiceAndHandleError({
+    methodName: "deleteRecordsFromList",
+    path,
+    apiCall: (client) => client.delete(path, body),
+  })
 }
 
 /**
@@ -271,26 +223,13 @@ export async function addRecordsToList({
   listId: string
   records: string[]
 }) {
-  try {
-    const client = await nyplApiClient()
-    const path = `/patrons/${patronId}/list/${listId}/records`
-    const body = {
-      records,
-    }
-    const response = await client.post(path, body)
-    if (response.error) {
-      logServerError("addRecordsToList", `${response.error} Request: ${path}`)
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error,
-      }
-    }
-    return { status: 200 }
-  } catch (error) {
-    logServerError("addRecordsToList", error.message)
-    return {
-      status: 500,
-    }
+  const path = `/patrons/${patronId}/list/${listId}/records`
+  const body = {
+    records,
   }
+  return callListsServiceAndHandleError({
+    methodName: "addRecordsToList",
+    path,
+    apiCall: (client) => client.post(path, body),
+  })
 }
