@@ -61,7 +61,7 @@ export const QueryBanner = () => {
         color="ui.typography.inverse.heading"
       >
         You can now search with more precision and control using boolean
-        operators against a wide set of fields- check it out in the menu.
+        operators against a wide set of fields. Check it out in this menu.
       </Text>
       <Flex flexDir="row" justifyContent="flex-end">
         <Link
