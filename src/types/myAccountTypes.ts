@@ -7,7 +7,7 @@ export interface MyAccountPatronData {
   holds?: Hold[]
   fines?: Fine
   pickupLocations: SierraCodeName[]
-  lists: ListResult[]
+  lists?: ListResult[]
 }
 
 export interface PatronDataContextType {
