@@ -1,12 +1,13 @@
-import { Flex, Text } from "@nypl/design-system-react-components"
-import ItemsTab from "../ItemsTab"
-import { useContext, useState } from "react"
+import { useContext } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import Link from "../../Link/Link"
+import List from "../../../models/List"
 
-const ListsTab = (listsData) => {
-  console.dir(listsData, { depth: null })
-  return <>lists</>
+const ListsTab = () => {
+  const {
+    updatedAccountData: { lists: listResults },
+  } = useContext(PatronDataContext)
+  const lists = listResults.map((list: any) => new List(list))
+  return <>{JSON.stringify(lists)}</>
 }
 
 export default ListsTab

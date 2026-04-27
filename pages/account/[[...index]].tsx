@@ -18,7 +18,6 @@ interface MyAccountPropsType {
   isAuthenticated: boolean
   tabsPath?: string
   renderAuthServerError?: boolean
-  listsData?: any
 }
 
 export default function MyAccount({
@@ -26,7 +25,6 @@ export default function MyAccount({
   accountData,
   isAuthenticated,
   tabsPath,
-  listsData,
 }: MyAccountPropsType) {
   const errorRetrievingPatronData = !accountData.patron
 
@@ -101,8 +99,8 @@ export async function getServerSideProps({ req, res }) {
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
-    const listsData = await fetchLists({ patronId: id })
-
+    const listsResponse = await fetchLists({ patronId: id })
+    const lists = listsResponse.lists
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
     // Redirecting invalid paths and cleaning extra parts off valid paths.
@@ -141,10 +139,16 @@ export async function getServerSideProps({ req, res }) {
 
     return {
       props: {
-        accountData: { checkouts, holds, patron, fines, pickupLocations },
+        accountData: {
+          checkouts,
+          holds,
+          patron,
+          fines,
+          pickupLocations,
+          lists,
+        },
         tabsPath,
         isAuthenticated,
-        listsData: listsData.lists,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
     }

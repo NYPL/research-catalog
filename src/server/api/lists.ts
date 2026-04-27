@@ -230,6 +230,25 @@ export async function addRecordsToList({
   return callListsServiceAndHandleError({
     methodName: "addRecordsToList",
     path,
-    apiCall: (client) => client.post(path, body),
+    apiCall: (client) => client.put(path, body),
+  })
+}
+
+/**
+ * Fetch Discovery API bib data for a set of list records.
+ *
+ * @param {string[]} uris - An array of record URIs to fetch.
+ * @returns {Promise<object>} - DiscoverySearchResultsElement[] of requested bibs.
+ */
+export async function fetchBibRecords(uris: string[]) {
+  const path = `/discovery/resources?ids=${uris.join(",")}`
+  return callListsServiceAndHandleError({
+    methodName: "fetchBibRecords",
+    path,
+    apiCall: (client) => client.get(path),
+    onSuccess: (response) => ({
+      status: 200,
+      bibData: response.itemListElement,
+    }),
   })
 }

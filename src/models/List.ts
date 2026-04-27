@@ -15,17 +15,17 @@ export default class List {
   createdDate: string
   modifiedDate: string
 
-  constructor(result?: ListResult, bibDataMap: Record<string, any> = {}) {
+  constructor(result: ListResult, bibDataMap: Record<string, any> = {}) {
     this.id = result.id.toString()
     this.listName = result.listName
     this.description = result.description
     this.patronId = result.patronId
-    this.records = this.getRecordsFromListResult(result, bibDataMap)
+    this.records = this.buildRecordsFromListResult(result, bibDataMap)
     this.createdDate = formatMMDDYYYY(result.createdDate)
     this.modifiedDate = formatMMDDYYYY(result.modifiedDate)
   }
 
-  getRecordsFromListResult(
+  buildRecordsFromListResult(
     result: ListResult,
     bibDataMap: Record<string, any>
   ): ListRecord[] {
