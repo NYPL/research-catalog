@@ -38,7 +38,7 @@ export function getSearchResultsHeading(
     ? ` for ${
         browseOptions.browseType === "subjects"
           ? "Subject Heading"
-          : "Author/Contributor"
+          : "author/contributor"
       } "${browseOptions.slug}${
         browseOptions.role ? `, ${browseOptions.role}` : ""
       }"`
@@ -71,6 +71,8 @@ function buildQueryDisplayString(
       { name: "lccn", label: "LCCN" },
       { name: "callnumber", label: "call number" },
       { name: "cql", label: "query" },
+      { name: "genre", label: "genre" },
+      { name: "series", label: "series" },
     ])
   const paramsStringCollection = {}
   const searchParamsObject = {
@@ -88,10 +90,10 @@ function buildQueryDisplayString(
       // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
       if (label === "author/contributor" || label === "author") {
-        label = "Author/Contributor"
+        label = "author/contributor"
         if (Array.isArray(value) && value.length > 1) {
           value = value.join(", ")
-          label = "Authors/Contributors"
+          label = "authors/contributors"
         }
       }
       paramsStringCollection[param] = `${label}${plural} "${value}"`
@@ -288,6 +290,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     language,
     format,
     dateFrom,
@@ -299,6 +305,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     filters: {
       format,
       language,
@@ -358,6 +368,8 @@ export function mapQueryToSearchParams({
   contributor,
   title,
   subject,
+  genre,
+  series,
   sort,
   issn,
   isbn,
@@ -378,6 +390,8 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    genre,
+    series,
     // TODO: this is a "catch-all" for journal title and standard number
     // fields but will also update other fields such as title, subject, and
     // contributor. This will override other fields if a value is present.
