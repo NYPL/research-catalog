@@ -17,7 +17,7 @@ export default class ListRecord {
     this.uri = result.uri
     this.addedDate = formatMMDDYYYY(result.addedToListDate)
     this.title = bibData?.title || null
-    this.itemCount = bibData.items?.length || 0
+    this.itemCount = bibData?.items?.length || 0
     // If bib level info is available:
     this.callNumber = bibData?.callNumber || "Multiple"
     this.location = bibData?.location || "Multiple"
