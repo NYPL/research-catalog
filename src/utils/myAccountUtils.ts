@@ -33,7 +33,7 @@ export function formatPatronName(name = "") {
 }
 
 /**
- * getDueDate
+ * formatDate
  * Returns date in readable string ("Month day, year")
  */
 export function formatDate(date: string | number | Date) {
