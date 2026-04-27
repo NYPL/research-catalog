@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+- Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
 
 ### Updated
 
