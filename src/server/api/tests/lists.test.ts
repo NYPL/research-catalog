@@ -18,6 +18,7 @@ jest.mock("../../../utils/logUtils", () => ({
 const mockClient = {
   get: jest.fn(),
   post: jest.fn(),
+  put: jest.fn(),
   delete: jest.fn(),
 }
 
@@ -216,7 +217,7 @@ describe("lists", () => {
 
   describe("addRecordsToList", () => {
     it("returns success on successful addition", async () => {
-      mockClient.post.mockResolvedValueOnce({
+      mockClient.put.mockResolvedValueOnce({
         id: "123",
         patronId: "12345",
         records: ["b123", "b345"],
@@ -230,7 +231,7 @@ describe("lists", () => {
         listId: "123",
         records: ["b123", "b345"],
       })
-      expect(mockClient.post).toHaveBeenCalledWith(
+      expect(mockClient.put).toHaveBeenCalledWith(
         "/patrons/12345/list/123/records",
         {
           records: ["b123", "b345"],
