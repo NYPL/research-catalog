@@ -26,13 +26,23 @@ describe("myAccountUtils", () => {
       expect(formatDate("")).toBeNull()
     })
 
-    it("formats YYYY-MM-DD correctly without timezone shifting", () => {
+    it("formats YYYY-MM-DD date strings without shifting timezones", () => {
       expect(formatDate("2026-05-01")).toBe("May 1, 2026")
       expect(formatDate("2026-06-01")).toBe("June 1, 2026")
     })
 
-    it("formats full ISO strings correctly", () => {
-      expect(formatDate("2026-04-15T15:26:18.209Z")).toBe("April 15, 2026")
+    it("formats ISO strings with a time component using the local timezone", () => {
+      const isoString = "2026-04-15T15:26:18.209Z"
+      const localDate = new Date(isoString)
+      const expectedMonth = localDate.toLocaleString("default", {
+        month: "long",
+      })
+      const expectedDay = localDate.getDate()
+      const expectedYear = localDate.getFullYear()
+
+      expect(formatDate(isoString)).toBe(
+        `${expectedMonth} ${expectedDay}, ${expectedYear}`
+      )
     })
   })
 
