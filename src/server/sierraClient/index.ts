@@ -35,40 +35,43 @@ async function buildClient() {
     secret: !!SIERRA_SECRET,
   })
 
-  const get = wrapper.get.bind(wrapper)
-  wrapper.get = async function (path) {
-    logger.info("Sierra request", {
-      path,
-      method: "GET",
-    })
-    return await get(path)
-  }
-  const post = wrapper.post.bind(wrapper)
-  wrapper.post = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "POST",
-      body: JSON.stringify(body),
-    })
-    return await post(path, body)
-  }
-  const put = wrapper.put.bind(wrapper)
-  wrapper.put = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "PUT",
-      body: JSON.stringify(body),
-    })
-    return await put(path, body)
-  }
-  const deleteRequest = wrapper.deleteRequest.bind(wrapper)
-  wrapper.deleteRequest = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "DELETE",
-      body: JSON.stringify(body),
-    })
-    return await deleteRequest(path, body)
+  if (!(wrapper as any).__patched) {
+    const get = wrapper.get.bind(wrapper)
+    wrapper.get = async function (path) {
+      logger.info("Sierra request", {
+        path,
+        method: "GET",
+      })
+      return await get(path)
+    }
+    const post = wrapper.post.bind(wrapper)
+    wrapper.post = async function (path, body) {
+      logger.info("Sierra request", {
+        path,
+        method: "POST",
+        body: JSON.stringify(body),
+      })
+      return await post(path, body)
+    }
+    const put = wrapper.put.bind(wrapper)
+    wrapper.put = async function (path, body) {
+      logger.info("Sierra request", {
+        path,
+        method: "PUT",
+        body: JSON.stringify(body),
+      })
+      return await put(path, body)
+    }
+    const deleteRequest = wrapper.deleteRequest.bind(wrapper)
+    wrapper.deleteRequest = async function (path, body) {
+      logger.info("Sierra request", {
+        path,
+        method: "DELETE",
+        body: JSON.stringify(body),
+      })
+      return await deleteRequest(path, body)
+    }
+    ;(wrapper as any).__patched = true
   }
 
   return wrapper
