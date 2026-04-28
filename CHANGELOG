@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
 - Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
 - Added lists API handlers [SCC-5243](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5243)
 
@@ -17,8 +18,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
 
 ## [1.9.0] 2026-04-14
-
-### Added
 
 - Added Playwright test for redirecting circ bib requests to Vega [SCC-5292](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5292)
 - Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
