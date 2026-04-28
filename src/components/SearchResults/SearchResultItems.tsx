@@ -12,7 +12,7 @@ interface SearchResultItemsProps {
 const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
   const { tableHeadings, tableData, items } = itemTableData
   return (
-    <Box display="grid">
+    <Box>
       <table
         style={{
           width: "100%",
