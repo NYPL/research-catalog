@@ -66,6 +66,20 @@ const nyplApiClient = async ({
       return originalPost(path, body)
     }
 
+    client.put = async (path: string, body: unknown) => {
+      logger.info("Platform request", {
+        method: "PUT",
+        path: `${baseUrl}${path}`,
+        body,
+      })
+      return (client as any)._doRequest({
+        method: "PUT",
+        uri: `${baseUrl}${path}`,
+        body,
+        json: true,
+      })
+    }
+
     CACHE[clientCacheKey] = client
     return client
   } catch (error: any) {

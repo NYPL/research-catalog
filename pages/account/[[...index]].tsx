@@ -8,6 +8,7 @@ import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import { getPatronData } from "../api/account/[id]"
+import { fetchLists } from "../../src/server/api/lists"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { bootstrapConfig } from "../../lib/bootstrap"
@@ -98,11 +99,19 @@ export async function getServerSideProps({ req, res }) {
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
+    const listsResponse = await fetchLists({ patronId: id })
+    const lists = listsResponse.lists
     const { checkouts, holds, patron, fines, pickupLocations } =
       await getPatronData(id)
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
-      const allowedPaths = ["items", "requests", "overdues", "settings"]
+      const allowedPaths = [
+        "items",
+        "requests",
+        "overdues",
+        "settings",
+        "lists",
+      ]
       if (
         !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
         (tabsPath === "overdues" && fines?.total === 0)
@@ -130,7 +139,14 @@ export async function getServerSideProps({ req, res }) {
 
     return {
       props: {
-        accountData: { checkouts, holds, patron, fines, pickupLocations },
+        accountData: {
+          checkouts,
+          holds,
+          patron,
+          fines,
+          pickupLocations,
+          lists,
+        },
         tabsPath,
         isAuthenticated,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,

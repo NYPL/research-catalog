@@ -7,6 +7,7 @@ import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { useContext } from "react"
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
+import ListsTab from "./ListsTab/ListsTab"
 
 interface ProfileTabsPropsType {
   activePath: string
@@ -52,11 +53,16 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: <AccountSettingsTab />,
       urlPath: "settings",
     },
+    {
+      label: "Lists",
+      content: <ListsTab />,
+      urlPath: "lists",
+    },
   ]
   const tabsDict =
     fines?.total > 0
-      ? { items: 0, requests: 1, overdues: 2, settings: 3 }
-      : { items: 0, requests: 1, settings: 2 }
+      ? { items: 0, requests: 1, overdues: 2, settings: 3, lists: 4 }
+      : { items: 0, requests: 1, settings: 2, lists: 3 }
 
   const router = useRouter()
 
