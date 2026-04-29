@@ -5,15 +5,13 @@ import { appConfig } from "../../../src/config/appConfig"
 const username = appConfig.testUser.username[appConfig.environment]
 const password = process.env.QA_PASSWORD
 
-test.describe("Request flow", () => {
-  test.skip(!password, "QA_PASSWORD must be set to run request flow test")
-
+test.describe("Requesting an item for onsite use", () => {
   test("starts on bib detail, requests item, logs in, selects pickup location, submits, and expects success message", async ({
     page,
   }) => {
     const bibPage = new BibPage(page)
 
-    await bibPage.navigate("b10260769")
+    await bibPage.navigate("b14110191")
 
     await page
       .getByRole("link", { name: /^Request for onsite use/i })
@@ -37,6 +35,38 @@ test.describe("Request flow", () => {
 
     await page.getByRole("button", { name: /Submit request/i }).click()
 
-    await expect(page.getByText("Request successful")).toBeVisible()
+    await expect(page.getByText("Request successful")).toBeVisible({
+      timeout: 20000,
+    })
+
+    // visit account page and poll until the request appears (may take up to ~60s)
+    await page.getByRole("link", { name: "My account for NYPL.org" }).click()
+    await expect(
+      page.getByRole("heading", { name: /My Account/i })
+    ).toBeVisible()
+    await expect
+      .poll(
+        async () => {
+          await page.reload()
+          await page
+            .getByRole("tab", { name: /^Requests(?:\s*\(\d+\))?$/i })
+            .click()
+          return page.getByRole("button", { name: /Cancel request/i }).count()
+        },
+        { timeout: 90000, intervals: [5000, 10000, 15000, 15000] }
+      )
+      .toBeGreaterThan(0)
+    // click the button with the text Cancel request.
+    await page
+      .getByRole("button", { name: /Cancel request/i })
+      .first()
+      .click()
+    // click the button with the text Yes, cancel request.
+    await page.getByRole("button", { name: /Yes, cancel request/i }).click()
+    // assert a heading with the text Request canceled is visible.
+    await expect(
+      page.getByRole("heading", { name: /Request canceled/i })
+    ).toBeVisible()
+    await page.getByRole("button", { name: /Ok/i }).click()
   })
 })
