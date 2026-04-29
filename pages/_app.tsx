@@ -15,12 +15,15 @@ function App({ Component, pageProps }) {
   const router = useRouter()
   if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
+
     if (current !== router.asPath) {
       const currentBasePath = current?.split(/[?#]/)[0]
       const newBasePath = router.asPath.split(/[?#]/)[0]
+
       if (currentBasePath !== newBasePath) {
         sessionStorage.setItem("previousPath", current || "")
       }
+
       sessionStorage.setItem("currentPath", router.asPath)
     }
   }
@@ -78,12 +81,14 @@ function App({ Component, pageProps }) {
         src={`${
           appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/header.min.js?containerId=nypl-header`}
+        strategy="afterInteractive"
       />
       {/* NYPL Footer script */}
       <Script
         src={`${
           appConfig.apiEndpoints.nyplHeaderUrl[appConfig.environment]
         }/footer.min.js?containerId=nypl-footer`}
+        strategy="afterInteractive"
       />
       <Head>
         <meta charSet="utf-8" />

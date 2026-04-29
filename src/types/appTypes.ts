@@ -10,6 +10,7 @@ export interface AppConfig {
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string
+  newRelicBrowserScript: APIEndpoints
   testUser: {
     name: APIEndpoints
     cardNumber: APIEndpoints

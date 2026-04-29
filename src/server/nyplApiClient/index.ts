@@ -53,7 +53,7 @@ const nyplApiClient = async ({
         method: "GET",
         path: `${baseUrl}${path}`,
       })
-      return originalGet(path)
+      return await originalGet(path)
     }
 
     const originalPost = client.post.bind(client)
@@ -63,7 +63,7 @@ const nyplApiClient = async ({
         path: `${baseUrl}${path}`,
         body,
       })
-      return originalPost(path, body)
+      return await originalPost(path, body)
     }
 
     CACHE[clientCacheKey] = client
