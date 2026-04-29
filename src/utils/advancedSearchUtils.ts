@@ -103,3 +103,11 @@ export function mapCollectionToFilterTag(collectionValue, collectionName) {
   }
   return collectionName
 }
+
+/** Get filter string to display for language codes from searchVocabularies. **/
+export function mapLanguageToFilterTag(languageCode: string) {
+  const language = searchVocabularies.languages.find(
+    (l) => languageCode === l.value
+  )
+  return language?.label || languageCode
+}
