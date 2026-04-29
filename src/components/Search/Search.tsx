@@ -26,7 +26,7 @@ import { useRef, useEffect } from "react"
 import type { Aggregation } from "../../types/filterTypes"
 import ResultsError from "../Error/ResultsError"
 import useLoading from "../../hooks/useLoading"
-import type { HTTPStatusCode } from "../../types/appTypes"
+import type { APIErrorName, HTTPStatusCode } from "../../types/appTypes"
 import type {
   SearchParams,
   SearchResultsResponse,
@@ -37,6 +37,7 @@ import { useRouter } from "next/router"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
+  errorName?: APIErrorName | null
   results: SearchResultsResponse
   metadataTitle: string
   activePage: RCPage
@@ -51,6 +52,7 @@ interface SearchProps {
 
 const Search = ({
   errorStatus,
+  errorName,
   results,
   metadataTitle,
   activePage,
@@ -79,7 +81,13 @@ const Search = ({
   }, [isLoading])
 
   if (errorStatus) {
-    return <ResultsError errorStatus={errorStatus} page="search" />
+    return (
+      <ResultsError
+        errorStatus={errorStatus}
+        errorName={errorName}
+        page="search"
+      />
+    )
   }
 
   const { itemListElement: searchResultsElements, totalResults } =
