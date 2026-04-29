@@ -1,5 +1,5 @@
 import { useContext, useRef, useState, useEffect } from "react"
-import { Box, Button, Flex, Table } from "@nypl/design-system-react-components"
+import { Box, Flex, Table } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import List from "../../../models/List"
@@ -8,6 +8,7 @@ import ListsSort from "./ListsSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { listSortOptions } from "../../../utils/listUtils"
 import CreateListButton from "./CreateListButton"
+import ListOptionsModal from "./ListOptionsModal"
 
 const ListsTab = () => {
   const {
@@ -35,7 +36,7 @@ const ListsTab = () => {
     list.recordCount,
     list.createdDate,
     list.modifiedDate,
-    "Actions...",
+    <ListOptionsModal key={list.id} list={list} />,
   ])
 
   const { setPersistentFocus } = useFocusContext()
@@ -88,12 +89,12 @@ const ListsTab = () => {
           ]}
           columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
           columnStyles={[
+            { width: 320, minWidth: 240 },
             { width: "auto", minWidth: 240 },
-            { width: "auto", minWidth: 240 },
-            { width: "17%", minWidth: 120 },
-            { width: "17%", minWidth: 120 },
-            { width: "17%", minWidth: 120 },
-            { width: "18%", minWidth: 128 },
+            { width: 160, minWidth: 120 },
+            { width: 160, minWidth: 120 },
+            { width: 160, minWidth: 120 },
+            { width: 120, minWidth: 128 },
           ]}
           tableData={tableData}
           isScrollable

@@ -9,6 +9,4 @@ const CreateListButton = () => {
   )
 }
 
-CreateListButton.displayName = "CreateListButton"
-
 export default CreateListButton

@@ -140,7 +140,6 @@
   thead > tr > th,
   thead > tr > th:last-of-type {
     vertical-align: top;
-    text-transform: unset;
     font-weight: var(--nypl-fontWeights-bold);
     border-color: var(--nypl-colors-ui-gray-light-cool);
     font-size: 14px;
@@ -149,14 +148,18 @@
   tbody > tr > td,
   tbody > tr > td:last-of-type {
     border-color: var(--nypl-colors-ui-gray-light-cool);
-    width: var(--nypl-space-52);
   }
-  tbody > tr > td:first-of-type {
-    width: var(--nypl-space-96);
+  thead > tr > th:last-of-type,
+  tbody > tr > td:last-of-type {
+    text-align: right;
   }
   tbody > tr > td:last-of-type {
-    width: var(--nypl-sizes-40);
+    padding-top: 8px;
   }
+  thead > tr > th:last-of-type {
+    padding-right: 24px;
+  }
+
   @media only screen and (max-width: 600px) {
     tbody > tr > td:first-of-type,
     tbody > tr > td,
