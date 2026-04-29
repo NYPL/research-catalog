@@ -4,7 +4,10 @@ import type {
   CollapsedMultiValueAppliedFilters,
   Option,
 } from "../../types/filterTypes"
-import { mapCollectionToFilterTag } from "../../utils/advancedSearchUtils"
+import {
+  mapCollectionToFilterTag,
+  mapLanguageToFilterTag,
+} from "../../utils/advancedSearchUtils"
 
 export const buildAppliedFiltersValueArrayWithTagRemoved = (
   tag: TagSetFilterDataProps,
@@ -47,6 +50,10 @@ export const addLabelPropAndParseFilters = (
         label: filterValue,
       }
 
+      const matchingOption = matchingFieldAggregation?.values.find(
+        (option) => option.value === filterValue
+      )
+
       // Date: Add "From"/"To" to filter labels
       if (appliedFilterField.includes("date")) {
         const labelPrefix = appliedFilterField.split("date")[1]
@@ -71,9 +78,14 @@ export const addLabelPropAndParseFilters = (
         }
       }
 
-      const matchingOption = matchingFieldAggregation?.values.find(
-        (option) => option.value === filterValue
-      )
+      // Language: Map language code to label from aggregations first, then fall back to searchVocabularies
+      if (appliedFilterField === "language") {
+        return {
+          count: matchingOption?.count || null,
+          value: filterValue,
+          label: matchingOption?.label || mapLanguageToFilterTag(filterValue),
+        }
+      }
 
       // If there's no matching option in the aggregations,
       // or no matching aggregations for the field, fall back to value as label
