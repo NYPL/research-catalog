@@ -92,30 +92,17 @@ export async function fetchSearchResults(
       }
     }
 
-    // Handle malformed CQL query (returned as a 400 -> 422)
-    if (results.status === 400 && results.name === "IndexSearchError") {
-      logServerWarn(
-        "fetchSearchResults",
-        `${
-          results.error ? `${results.error} ` : ""
-        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
-      )
-      return {
-        status: 422,
-        error: results.error,
-      }
-    }
-
     // Handle general error
     if (results.status) {
       logServerError(
         "fetchSearchResults",
-        `${
+        `${results.name ? `${results.name} ` : ""}${
           results.error ? `${results.error} ` : ""
         }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,
+        name: results.name,
         error: results.error,
       }
     }

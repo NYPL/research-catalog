@@ -41,7 +41,14 @@ export type HTTPResponse = {
 
 export type APIError = {
   status: HTTPStatusCode
-  name?: string // Discovery API convention: IndexSearchError, etc.
+  name?: APIErrorName // Discovery API error classes
   error?: string // Error message
   redirectUrl?: string
 }
+
+export type APIErrorName =
+  | "InvalidParameterError"
+  | "NotFoundError"
+  | "IndexConnectionError"
+  | "IndexSearchError"
+  | "InvalidQuerySyntaxError"
