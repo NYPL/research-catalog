@@ -1,3 +1,4 @@
+import type { ListSort } from "../../types/listTypes"
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 
@@ -35,7 +36,7 @@ async function callListsServiceAndHandleError({
  *
  * @param {object} params
  * @param {string} params.patronId - The patron's ID.
- * @param {string} [params.sort] - Optional sort parameter.
+ * @param {ListSort} [params.sort] - Optional sort parameter.
  * @returns {Promise<object>} The patron's lists or an error object.
  */
 export async function fetchLists({
@@ -43,7 +44,7 @@ export async function fetchLists({
   sort,
 }: {
   patronId: string
-  sort?: string
+  sort?: ListSort
 }) {
   const path = sort
     ? `/patrons/${patronId}/lists?sort=${sort}`

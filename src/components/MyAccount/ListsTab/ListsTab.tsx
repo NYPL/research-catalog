@@ -1,60 +1,108 @@
-import { useContext } from "react"
-import { Box, Table } from "@nypl/design-system-react-components"
+import { useContext, useRef, useState, useEffect } from "react"
+import { Box, Button, Flex, Table } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import List from "../../../models/List"
 import Link from "../../Link/Link"
+import ListsSort from "./ListsSort"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
+import { listSortOptions } from "../../../utils/listUtils"
+import CreateListButton from "./CreateListButton"
 
 const ListsTab = () => {
   const {
-    updatedAccountData: { lists: listResults },
+    updatedAccountData: { lists: listResults, patron },
   } = useContext(PatronDataContext)
-  const lists = listResults.map((list: any) => new List(list))
+
+  const [lists, setLists] = useState(
+    listResults.map((list: any) => new List(list))
+  )
+
+  // Keep local lists in sync
+  useEffect(() => {
+    setLists(listResults.map((list: any) => new List(list)))
+  }, [listResults])
+
   const tableData = lists.map((list: List) => [
-    <Link href={`/account/lists/${list.id}`} key={list.id}>
+    <Link isUnderlined={false} href={`/account/lists/${list.id}`} key={list.id}>
       {list.listName}
     </Link>,
     list.description || (
-      <span style={{ color: "ui.gray.dark !important", fontStyle: "italic" }}>
+      <Box as="span" color="ui.gray.dark" fontStyle="italic">
         No description
-      </span>
+      </Box>
     ),
-    list.records?.length || 0,
-    list.createdDate ? new Date(list.createdDate).toLocaleDateString() : "",
-    list.modifiedDate ? new Date(list.modifiedDate).toLocaleDateString() : "",
+    list.recordCount,
+    list.createdDate,
+    list.modifiedDate,
     "Actions...",
   ])
 
+  const { setPersistentFocus } = useFocusContext()
+  const sortMenuRef = useRef<HTMLDivElement | null>(null)
+  const [activeSort, setActiveSort] = useState("modified_date_desc")
+
+  const handleSortChange = async (selectedSortOption: string) => {
+    try {
+      const response = await fetch(
+        `/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
+      )
+      if (response.ok) {
+        const data = await response.json()
+        setLists(data.lists.map((list: any) => new List(list)))
+      }
+    } catch (error) {
+      console.error("Error sorting lists:", error)
+    }
+    setActiveSort(selectedSortOption)
+    setPersistentFocus(idConstants.listsSort)
+  }
+
   return (
-    // Display as grid to prevent bug where the outer container stretches to the Table's width on mobile
-    <Box display="grid">
-      <Table
-        className={styles.listTable}
-        columnHeaders={[
-          "List name",
-          "List description",
-          "Records",
-          "Date created",
-          "Date modified",
-          "Action",
-        ]}
-        fontSize="body2"
-        columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
-        columnStyles={[
-          { width: "auto", minWidth: 250 },
-          { width: "auto", minWidth: 250 },
-          { width: "17%", minWidth: 100 },
-          { width: "17%", minWidth: 100 },
-          { width: "17%", minWidth: 100 },
-          { width: "17%", minWidth: 100 },
-        ]}
-        tableData={tableData}
-        isScrollable
-        showRowDividers
-        my={{ base: 0, md: "s" }}
-        data-testid="list-table"
-      />
-    </Box>
+    <Flex flexDir="column">
+      <Flex
+        flexDir={{ base: "column", sm: "row" }}
+        justifyContent="space-between"
+        mt="m"
+        mb="m"
+        gap="xs"
+      >
+        <CreateListButton />
+        <ListsSort
+          ref={sortMenuRef}
+          selectedValue={activeSort}
+          sortOptions={listSortOptions}
+          handleSortChange={handleSortChange}
+        />
+      </Flex>
+      <Box display="grid">
+        <Table
+          className={styles.listTable}
+          columnHeaders={[
+            "List name",
+            "List description",
+            "Records",
+            "Date created",
+            "Date modified",
+            "Action",
+          ]}
+          columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
+          columnStyles={[
+            { width: "auto", minWidth: 240 },
+            { width: "auto", minWidth: 240 },
+            { width: "17%", minWidth: 120 },
+            { width: "17%", minWidth: 120 },
+            { width: "17%", minWidth: 120 },
+            { width: "18%", minWidth: 128 },
+          ]}
+          tableData={tableData}
+          isScrollable
+          showRowDividers
+          my={{ base: 0, md: "s" }}
+          data-testid="list-table"
+        />
+      </Box>
+    </Flex>
   )
 }
 
