@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchLists } from "../../../src/server/api/lists"
+import type { ListSort } from "../../../src/types/listTypes"
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,7 +18,7 @@ export default async function handler(
 
   const response = await fetchLists({
     patronId,
-    sort: typeof sort === "string" ? sort : undefined,
+    sort: sort as ListSort,
   })
   res.status(200).json(response)
 }
