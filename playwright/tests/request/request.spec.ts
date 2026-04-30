@@ -11,7 +11,7 @@ test.describe("Requesting an item for onsite use", () => {
   }) => {
     const bibPage = new BibPage(page)
 
-    await bibPage.navigate("b14110191")
+    await bibPage.navigate("b13419219")
 
     await page
       .getByRole("link", { name: /^Request for onsite use/i })
@@ -39,7 +39,7 @@ test.describe("Requesting an item for onsite use", () => {
       timeout: 20000,
     })
 
-    // visit account page and poll until the request appears (may take up to ~60s)
+    // visit account page and poll until the request appears (may take up to greater than 60s)
     await page.getByRole("link", { name: "My account for NYPL.org" }).click()
     await expect(
       page.getByRole("heading", { name: /My Account/i })
@@ -48,6 +48,7 @@ test.describe("Requesting an item for onsite use", () => {
       .poll(
         async () => {
           await page.reload()
+          await page.waitForLoadState("networkidle")
           await page
             .getByRole("tab", { name: /^Requests(?:\s*\(\d+\))?$/i })
             .click()
