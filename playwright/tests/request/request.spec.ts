@@ -11,7 +11,7 @@ test.describe("Requesting an item for onsite use", () => {
   }) => {
     const bibPage = new BibPage(page)
 
-    await bibPage.navigate("b13419219")
+    await bibPage.navigate("b21715173")
 
     await page
       .getByRole("link", { name: /^Request for onsite use/i })
@@ -60,7 +60,7 @@ test.describe("Requesting an item for onsite use", () => {
     // click the button with the text Cancel request.
     await page
       .getByRole("button", { name: /Cancel request/i })
-      .first()
+      .last()
       .click()
     // click the button with the text Yes, cancel request.
     await page.getByRole("button", { name: /Yes, cancel request/i }).click()
