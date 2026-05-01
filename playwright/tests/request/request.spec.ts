@@ -62,10 +62,10 @@ test.describe("Requesting an item for onsite use", () => {
         { timeout: 90000, intervals: [5000, 10000, 15000, 15000] }
       )
       .toBeGreaterThan(0)
-    // click the button with the text Cancel request.
+    // click the button with the text Cancel request in the row containing the requested bibId.
     await page
+      .locator(`tr:has(a[href*="${bibId}"])`)
       .getByRole("button", { name: /Cancel request/i })
-      .last()
       .click()
     // click the button with the text Yes, cancel request.
     await page.getByRole("button", { name: /Yes, cancel request/i }).click()
