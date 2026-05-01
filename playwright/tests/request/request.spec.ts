@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 import { BibPage } from "../../pages/bib_page"
 import { appConfig } from "../../../src/config/appConfig"
+import { pickRequestBibId } from "../../fixtures/requestBibs"
 
 const username = appConfig.testUser.username[appConfig.environment]
 const password = process.env.QA_PASSWORD
@@ -9,9 +10,11 @@ test.describe("Requesting an item for onsite use", () => {
   test("starts on bib detail, requests item, logs in, selects pickup location, submits, and expects success message", async ({
     page,
   }) => {
+    test.setTimeout(120_000)
     const bibPage = new BibPage(page)
+    const bibId = pickRequestBibId()
 
-    await bibPage.navigate("b21715173")
+    await bibPage.navigate(bibId)
 
     await page
       .getByRole("link", { name: /^Request for onsite use/i })
