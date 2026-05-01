@@ -13,6 +13,8 @@ test.describe("Requesting an item for onsite use", () => {
     test.setTimeout(120_000)
     const bibPage = new BibPage(page)
     const bibId = pickRequestBibId()
+    // send bibId to console so we can verify it's from the pool of requestable bibs if the test fails.
+    console.log(`Testing with bibId: ${bibId}`)
 
     await bibPage.navigate(bibId)
 
