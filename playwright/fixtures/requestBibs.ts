@@ -1,5 +1,5 @@
 /**
- * Pool of bib IDs with requestable physical items on the QA server.
+ * Pool of bib IDs with requestable physical items on the QA server. Chris has a local playwright_experimental branch with a script for getting these bib ids.
  */
 export const REQUEST_BIB_POOL = [
   "b10000002",
