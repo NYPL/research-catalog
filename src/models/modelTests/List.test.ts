@@ -10,7 +10,7 @@ describe("List model", () => {
 
   describe("constructor", () => {
     it("initializes the id", () => {
-      expect(list.id).toBe("12345000")
+      expect(list.id).toBe("12345000-aabb-bb")
     })
 
     it("initializes the listName", () => {

@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
 - Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
 - Added lists API handlers [SCC-5243](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5243)
+- Added lists tab and all lists table [SCC-5245](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5245)
 
 ### Updated
 
