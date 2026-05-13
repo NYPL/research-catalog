@@ -1,6 +1,6 @@
 export const listsResponse = [
   {
-    id: 12345000,
+    id: "12345000-aabb-bb",
     patronId: "12345",
     records: [],
     createdDate: "2026-04-15T15:26:18.209896",
@@ -9,7 +9,7 @@ export const listsResponse = [
     description: null,
   },
   {
-    id: 123456000,
+    id: "1234-cc-vv",
     patronId: "12345",
     records: [
       {
@@ -21,7 +21,7 @@ export const listsResponse = [
     ],
     createdDate: "2026-04-21T16:23:22.326377",
     modifiedDate: "2026-04-21T16:23:22.326378",
-    listName: "Second list",
-    description: "Description",
+    listName: "Spaghetti westerns",
+    description: "all about spaghetti",
   },
 ]

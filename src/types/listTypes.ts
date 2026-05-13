@@ -7,7 +7,7 @@ export interface ListErrorResponse {
 }
 
 export interface ListResult {
-  id: number
+  id: string
   listName: string
   patronId: string
   records: ListRecordResult[]

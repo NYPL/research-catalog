@@ -17,11 +17,14 @@ async function callListsServiceAndHandleError({
     const client = await nyplApiClient()
     const response = await apiCall(client)
     if (response.error) {
-      logServerError(methodName, `${response.error?.message} Request: ${path}`)
+      logServerError(
+        methodName,
+        `${response.error || response.error.message} Request: ${path}`
+      )
       return {
         status: response.statusCode,
         name: response.name,
-        error: response.error?.message,
+        error: response.error || response.error.message,
       }
     }
     return onSuccess(response)
@@ -49,7 +52,6 @@ export async function fetchLists({
   const path = sort
     ? `/patrons/${patronId}/lists?sort=${sort}`
     : `/patrons/${patronId}/lists`
-  console.log(path)
   return callListsServiceAndHandleError({
     methodName: "fetchLists",
     path,

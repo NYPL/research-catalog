@@ -49,10 +49,8 @@ const ListsTab = () => {
       const response = await fetch(
         `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
       )
-      console.log(response)
       if (response.ok) {
         const data = await response.json()
-        console.log(data)
         setLists(data.lists.map((list: any) => new List(list)))
       }
     } catch (error) {
