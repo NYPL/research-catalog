@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright tests for requesting a scan of an item [SCC-5374](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5374)
+- Added Playwright tests for requesting an item for onsite [SCC-5323](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5323)
 - Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
 - Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
 
