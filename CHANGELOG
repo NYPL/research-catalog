@@ -15,11 +15,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
+- Remove linked author/series literals as fallback
 - Fixed timezone shift in date formatting [SCC-5340](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5340)
-
-## Hot fix 2026-04-14
-
-- Added 10s timeout to all Sierra requests so that 504s can be handled more gracefully
+- Updated to use `searchVocabularies` language labels for filters [SCC-5369](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5369)
 
 ## [1.9.0] 2026-04-14
 
