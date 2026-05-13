@@ -99,10 +99,13 @@ export async function getServerSideProps({ req, res }) {
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
-    const listsResponse = await fetchLists({ patronId: id })
+    const [listsResponse, patronData] = await Promise.all([
+      fetchLists({ patronId: id }),
+      getPatronData(id),
+    ])
     const lists = listsResponse.lists
-    const { checkouts, holds, patron, fines, pickupLocations } =
-      await getPatronData(id)
+    const { checkouts, holds, patron, fines, pickupLocations } = patronData
+
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
       const allowedPaths = [

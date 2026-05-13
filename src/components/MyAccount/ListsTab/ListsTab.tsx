@@ -9,6 +9,7 @@ import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { listSortOptions } from "../../../utils/listUtils"
 import CreateListButton from "./CreateListButton"
 import ListOptionsModal from "./ListOptionsModal"
+import { BASE_URL } from "../../../config/constants"
 
 const ListsTab = () => {
   const {
@@ -46,10 +47,12 @@ const ListsTab = () => {
   const handleSortChange = async (selectedSortOption: string) => {
     try {
       const response = await fetch(
-        `/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
+        `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
       )
+      console.log(response)
       if (response.ok) {
         const data = await response.json()
+        console.log(data)
         setLists(data.lists.map((list: any) => new List(list)))
       }
     } catch (error) {

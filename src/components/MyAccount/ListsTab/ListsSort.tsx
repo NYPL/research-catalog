@@ -34,7 +34,7 @@ const ListsSort = forwardRef<HTMLDivElement, ListsSortProps>(
         ref={ref}
         width={{ base: "100%", sm: "auto" }}
         sx={{
-          button: { width: { base: "100%", sm: "auto" } },
+          button: { width: "100%" },
         }}
       >
         <Menu
