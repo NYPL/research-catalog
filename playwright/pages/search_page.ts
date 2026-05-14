@@ -32,21 +32,11 @@ export class SearchPage {
   }
 
   get searchResultsHeading() {
-    // Escape special regex characters in searchterm
-    const escapedSearchterm = this.searchterm.replace(
-      /[.*+?^${}()|[\]\\]/g,
-      "\\$&"
-    )
-
-    // Query searches use different heading format: "for query: <syntax>"
-    // Standard searches use: "for <SearchType> "<searchterm>""
-    const headingPattern =
-      this.searchType.toLowerCase() === "query"
-        ? `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for query: ${escapedSearchterm}`
-        : `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${escapedSearchterm}"`
-
     return this.page.getByRole("heading", {
-      name: new RegExp(headingPattern, "i"),
+      name: new RegExp(
+        `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${this.searchterm}"`,
+        "i"
+      ),
     })
   }
 
