@@ -3,7 +3,7 @@ import { forwardRef, useEffect } from "react"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface ListSortProps {
-  handleSortChange: (string) => Promise<void>
+  handleSortChange: (string) => Promise<void> | void
   selectedValue: string
   sortOptions: Record<string, string>
 }

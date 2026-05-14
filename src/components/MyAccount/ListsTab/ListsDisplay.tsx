@@ -58,7 +58,16 @@ const ListsDisplay = () => {
         key={list.id}
         onClick={(e: any) => {
           e.preventDefault()
-          router.push(listUrl, undefined, { shallow: true })
+          const queryIndex = ["lists", list.id]
+          if (slug) queryIndex.push(slug)
+          router.push(
+            {
+              pathname: "/account/[[...index]]",
+              query: { index: queryIndex },
+            },
+            listUrl,
+            { shallow: true }
+          )
         }}
       >
         {list.listName}

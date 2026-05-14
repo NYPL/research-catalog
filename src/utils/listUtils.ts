@@ -7,8 +7,8 @@ export const LIST_RECORDS_PER_PAGE = 20
 export const listsSortOptions: Record<string, string> = {
   record_count_desc: "Number of records (high to low)",
   record_count_asc: "Number of records (low to high)",
-  list_name_asc: "List name (A-Z)",
-  list_name_desc: "List name (Z-A)",
+  list_name_asc: "List name (A - Z)",
+  list_name_desc: "List name (Z - A)",
   modified_date_desc: "Date modified (new to old)",
   modified_date_asc: "Date modified (old to new)",
   created_date_desc: "Date created (new to old)",
@@ -20,13 +20,13 @@ export const listsSortOptions: Record<string, string> = {
  * The allowed sort keys for the records in a list
  */
 export const listSortOptions: Record<string, string> = {
-  title_asc: "Title (A-Z)",
-  title_desc: "Title (Z-A)",
-  author_asc: "Author (A-Z)",
-  author_desc: "Author (Z-A)",
-  callnumber: "Call number",
-  added_date_desc: "Date added (new to old)",
-  added_date_asc: "Date added (old to new)",
+  title_asc: "Title (A - Z)",
+  title_desc: "Title (Z - A)",
+  creator_asc: "Author (A - Z)",
+  creator_desc: "Author (Z - A)",
+  callnumber_asc: "Call number",
+  added_date_asc: "Date added (new to old)",
+  added_date_desc: "Date added (old to new)",
 }
 
 export const generateListSlug = (name: string) => {
