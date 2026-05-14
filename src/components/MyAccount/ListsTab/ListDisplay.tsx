@@ -13,6 +13,8 @@ import ListOptions from "./ListOptions"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 
+/* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
+
 const ListDisplay = ({ list }: { list?: List }) => {
   const router = useRouter()
   const { setPersistentFocus } = useFocusContext()
@@ -32,7 +34,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
     </Icon>
   )
   const metadata = [
-    `${list.recordCount} record${list.records.length === 1 ? "" : "s"}`,
+    `${list.recordCount} record${list.recordCount === 1 ? "" : "s"}`,
     `Last modified on ${list.modifiedDate}`,
     `Created on ${list.createdDate}`,
   ].filter(Boolean)
@@ -99,11 +101,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
         )}
         <ListOptions />
       </Flex>
-      {list.records.length > 0 ? (
-        <ListRecordsTable list={list} />
-      ) : (
-        <EmptyList />
-      )}
+      {list.recordCount > 0 ? <ListRecordsTable list={list} /> : <EmptyList />}
     </Flex>
   )
 }

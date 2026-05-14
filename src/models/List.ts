@@ -11,7 +11,7 @@ export default class List {
   listName: string
   patronId: string
   records: ListRecord[]
-  recordCount: string
+  recordCount: number
   description: string | null
   createdDate: string
   modifiedDate: string
@@ -22,7 +22,7 @@ export default class List {
     this.description = result.description
     this.patronId = result.patronId
     this.records = this.buildRecordsFromListResult(result, bibDataMap)
-    this.recordCount = this.records.length.toString() || "0"
+    this.recordCount = this.records.length || 0
     this.createdDate = formatMMDDYYYY(result.createdDate)
     this.modifiedDate = formatMMDDYYYY(result.modifiedDate)
   }

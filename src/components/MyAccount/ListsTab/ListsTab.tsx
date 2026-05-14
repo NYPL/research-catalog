@@ -8,7 +8,7 @@ import List from "../../../models/List"
 
 const ListsTab = () => {
   const {
-    updatedAccountData: { lists: listResults, patron },
+    updatedAccountData: { lists: listResults },
   } = useContext(PatronDataContext)
 
   const router = useRouter()

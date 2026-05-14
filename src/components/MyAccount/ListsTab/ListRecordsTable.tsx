@@ -9,61 +9,20 @@ import {
 import { useRef, useState, useMemo, useEffect } from "react"
 import { BASE_URL } from "../../../config/constants"
 import { useFocusContext, idConstants } from "../../../context/FocusContext"
-import ListRecord from "../../../models/ListRecord"
+import type ListRecord from "../../../models/ListRecord"
 import {
   LIST_RECORDS_PER_PAGE,
   listResultsHeading,
   listSortOptions,
+  buildListRecords,
 } from "../../../utils/listUtils"
 import ListSort from "./ListSort"
 import type List from "../../../models/List"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
 
-// Merge list record data and sorted Discovery API bib data into sorted ListRecord array
-const buildListRecords = (
-  bibData: any[],
-  pageRecords: ListRecord[],
-  activeSort: string
-) => {
-  const pageRecordsMap = pageRecords.reduce((acc: any, record: any) => {
-    acc[record.uri] = record
-    return acc
-  }, {})
-
-  const updatedRecords = bibData.map((bib: any) => {
-    const bibResult = bib.result || bib
-    const uri =
-      bibResult.uri || (bibResult["@id"] ? bibResult["@id"].substring(4) : "")
-    const record = pageRecordsMap[uri] || { uri }
-    const updated = new ListRecord(
-      {
-        uri: record.uri,
-        addedToListDate: new Date().toISOString(),
-      } as any,
-      bibResult
-    )
-    updated.addedDate = record.addedDate
-    return updated
-  })
-
-  pageRecords.forEach((record) => {
-    if (!updatedRecords.find((r: any) => r.uri === record.uri)) {
-      updatedRecords.push(record)
-    }
-  })
-
-  // Sort by added date directly, not using Discovery API bib data
-  if (activeSort.includes("added_date")) {
-    updatedRecords.sort((a, b) => {
-      const indexA = pageRecords.findIndex((r) => r.uri === a.uri)
-      const indexB = pageRecords.findIndex((r) => r.uri === b.uri)
-      return indexA - indexB
-    })
-  }
-
-  return updatedRecords
-}
+/* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
+ * sorts and paginates, and renders the results heading, sort menu, and table of records. */
 
 const ListRecordsTable = ({ list }: { list: List }) => {
   const listRecordsHeadingRef = useRef(null)
@@ -216,7 +175,7 @@ const ListRecordsTable = ({ list }: { list: List }) => {
             my={{ base: 0, md: "s" }}
             data-testid="list-records-table"
           />
-          {list.records.length > LIST_RECORDS_PER_PAGE && (
+          {list.recordCount > LIST_RECORDS_PER_PAGE && (
             <Pagination
               id="list-records-pagination"
               mt="l"

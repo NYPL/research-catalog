@@ -12,6 +12,7 @@ import ListOptionsModal from "./ListOptionsModal"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
 
+/* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
   const {
     updatedAccountData: { lists: listResults, patron },
@@ -77,7 +78,7 @@ const ListsDisplay = () => {
           No description
         </Box>
       ),
-      list.recordCount,
+      list.recordCount.toString(),
       list.createdDate,
       list.modifiedDate,
       <ListOptionsModal key={list.id} list={list} />,
