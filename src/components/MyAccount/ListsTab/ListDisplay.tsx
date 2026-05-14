@@ -23,6 +23,8 @@ import {
 } from "../../../utils/listUtils"
 import ListRecord from "../../../models/ListRecord"
 import ListSort from "./ListSort"
+import ListOptions from "./ListOptions"
+import EmptyList from "./EmptyList"
 
 const ListDisplay = ({ list }: { list?: List }) => {
   // Maybe..
@@ -31,6 +33,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
   } = useContext(PatronDataContext)
 
   const router = useRouter()
+  const listRecordsHeadingRef = useRef(null)
 
   const [listRecords, setListRecords] = useState<ListRecord[]>(
     list?.records || []
@@ -128,6 +131,11 @@ const ListDisplay = ({ list }: { list?: List }) => {
     setPersistentFocus(idConstants.listsSort)
   }
 
+  const handlePageChange = async (page: number) => {
+    setCurrentPage(page)
+    setPersistentFocus(idConstants.listRecordsHeading)
+  }
+
   const tableData = listRecords.map((record: ListRecord) => {
     return [
       <>
@@ -162,6 +170,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
           href="/account/lists"
           onClick={(e: any) => {
             e.preventDefault()
+            setPersistentFocus(null)
             router.push("/account/lists", undefined, { shallow: true })
           }}
         >
@@ -172,42 +181,53 @@ const ListDisplay = ({ list }: { list?: List }) => {
             align="right"
             color="ui.link.primary"
           />
-          <Box as="span" ml="xs">
+          <Box as="span" ml="xs" fontSize="14px">
             Back to all lists
           </Box>
         </Link>
       </Box>
-      {list ? (
-        <>
-          <Heading level="h2" size="heading3">
-            {list.listName}
-          </Heading>
-          <Box
-            mt="xs"
-            sx={{
-              p: {
-                display: "inline-block",
-              },
-            }}
-          >
-            {joinedMetadata}
+      <Flex flexDir="column">
+        <Heading level="h2" size="heading3">
+          {list.listName}
+        </Heading>
+        <Box
+          mt="xs"
+          sx={{
+            p: {
+              display: "inline-block",
+            },
+          }}
+        >
+          {joinedMetadata}
+        </Box>
+        {list.description ? (
+          <Box as="span" mt="m">
+            {list.description}
           </Box>
-          {list.description ? (
-            <Box as="span" mt="m">
-              {list.description}
-            </Box>
-          ) : (
-            <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">
-              No description
-            </Box>
-          )}
+        ) : (
+          <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">
+            No description
+          </Box>
+        )}
+        <ListOptions />
+      </Flex>
+      {list.records.length > 0 ? (
+        <>
           <Flex
             mt="m"
             mb="xs"
             alignItems="center"
             justifyContent="space-between"
           >
-            <Heading level="h3" size="heading6">
+            <Heading
+              level="h3"
+              size="heading6"
+              id="list-records-heading"
+              tabIndex={-1}
+              ref={listRecordsHeadingRef}
+              aria-live="polite"
+              pr="m"
+            >
               {listResultsHeading(list, currentPage)}
             </Heading>
             <ListSort
@@ -253,14 +273,14 @@ const ListDisplay = ({ list }: { list?: List }) => {
                   pageCount={Math.ceil(
                     list.records.length / LIST_RECORDS_PER_PAGE
                   )}
-                  onPageChange={(page) => setCurrentPage(page)}
+                  onPageChange={handlePageChange}
                 />
               )}
             </Box>
           )}
         </>
       ) : (
-        <Box>There was an error accessing your list.</Box>
+        <EmptyList />
       )}
     </Flex>
   )
