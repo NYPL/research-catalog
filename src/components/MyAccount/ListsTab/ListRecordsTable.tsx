@@ -45,6 +45,7 @@ const ListRecordsTable = ({ list }: { list: List }) => {
     return records
   }, [list, activeSort])
 
+  // TO DO: caching...
   useEffect(() => {
     const fetchBibData = async () => {
       if (!list || sortedRecords.length === 0) return
@@ -176,14 +177,19 @@ const ListRecordsTable = ({ list }: { list: List }) => {
             data-testid="list-records-table"
           />
           {list.recordCount > LIST_RECORDS_PER_PAGE && (
-            <Pagination
-              id="list-records-pagination"
-              mt="l"
-              initialPage={currentPage}
-              currentPage={currentPage}
-              pageCount={Math.ceil(list.records.length / LIST_RECORDS_PER_PAGE)}
-              onPageChange={handlePageChange}
-            />
+            <Flex justifyContent={{ base: "center", md: "flex-start" }}>
+              <Pagination
+                id="list-records-pagination"
+                mt="l"
+                width="auto"
+                initialPage={currentPage}
+                currentPage={currentPage}
+                pageCount={Math.ceil(
+                  list.records.length / LIST_RECORDS_PER_PAGE
+                )}
+                onPageChange={handlePageChange}
+              />
+            </Flex>
           )}
         </Box>
       )}
