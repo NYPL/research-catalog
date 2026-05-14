@@ -2,16 +2,16 @@ import { Box, Menu } from "@nypl/design-system-react-components"
 import { forwardRef, useEffect } from "react"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
-interface ListsSortProps {
+interface ListSortProps {
   handleSortChange: (string) => Promise<void>
   selectedValue: string
   sortOptions: Record<string, string>
 }
 
 /**
- * The ListsSort component renders a Menu component used for sorting a user's lists.
+ * The ListSort component renders a Menu component used for sorting a user's lists OR sorting the records in a list.
  */
-const ListsSort = forwardRef<HTMLDivElement, ListsSortProps>(
+const ListSort = forwardRef<HTMLDivElement, ListSortProps>(
   ({ handleSortChange, sortOptions, selectedValue }, ref) => {
     const { activeElementId } = useFocusContext()
 
@@ -57,6 +57,6 @@ const ListsSort = forwardRef<HTMLDivElement, ListsSortProps>(
   }
 )
 
-export default ListsSort
+export default ListSort
 
-ListsSort.displayName = "ListsSort"
+ListSort.displayName = "ListSort"

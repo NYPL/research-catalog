@@ -16,10 +16,11 @@ export default class ListRecord {
   constructor(result?: ListRecordResult, bibData?: any) {
     this.uri = result.uri
     this.addedDate = formatMMDDYYYY(result.addedToListDate)
-    this.title = bibData?.title || null
-    this.itemCount = bibData?.items?.length || 0
+    this.title = bibData?.titleDisplay?.[0] || bibData?.title?.[0] || null
+    this.itemCount = bibData?.numItemsTotal || bibData?.items?.length || 0
     // If bib level info is available:
-    this.callNumber = bibData?.callNumber || "Multiple"
+    this.callNumber =
+      bibData?.shelfMark?.[0] || bibData?.callNumber || "Multiple"
     this.location = bibData?.location || "Multiple"
   }
 }

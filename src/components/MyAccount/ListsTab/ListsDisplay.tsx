@@ -4,9 +4,9 @@ import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import List from "../../../models/List"
 import Link from "../../Link/Link"
-import ListsSort from "./ListsSort"
+import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
-import { generateListSlug, listSortOptions } from "../../../utils/listUtils"
+import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
 import CreateListButton from "./CreateListButton"
 import ListOptionsModal from "./ListOptionsModal"
 import { BASE_URL } from "../../../config/constants"
@@ -85,10 +85,10 @@ const ListsDisplay = () => {
         gap="xs"
       >
         <CreateListButton />
-        <ListsSort
+        <ListSort
           ref={sortMenuRef}
           selectedValue={activeSort}
-          sortOptions={listSortOptions}
+          sortOptions={listsSortOptions}
           handleSortChange={handleSortChange}
         />
       </Flex>

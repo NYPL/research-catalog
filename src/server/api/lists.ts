@@ -241,11 +241,11 @@ export async function addRecordsToList({
 /**
  * Fetch Discovery API bib data for a set of list records.
  *
- * @param {string[]} uris - An array of record URIs to fetch.
+ * @param {string} uris - Comma separated string of URIs.
  * @returns {Promise<object>} - DiscoverySearchResultsElement[] of requested bibs.
  */
-export async function fetchBibRecords(uris: string[]) {
-  const path = `/discovery/resources?ids=${uris.join(",")}`
+export async function fetchBibRecords(uris: string) {
+  const path = `/discovery/resources?ids=${uris}`
   return callListsServiceAndHandleError({
     methodName: "fetchBibRecords",
     path,

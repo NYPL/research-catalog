@@ -1,6 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchLists } from "../../../src/server/api/lists"
-import type { ListSort } from "../../../src/types/listTypes"
+import { fetchLists } from "../../../../src/server/api/lists"
+import type { ListSort } from "../../../../src/types/listTypes"
 
 export default async function handler(
   req: NextApiRequest,
