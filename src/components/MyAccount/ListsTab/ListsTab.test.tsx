@@ -8,6 +8,7 @@ import { BASE_URL } from "../../../config/constants"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 import { listsResponse } from "../../../../__test__/fixtures/listFixtures"
 import type { ListResult } from "../../../types/listTypes"
+import mockRouter from "next-router-mock"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
@@ -31,6 +32,7 @@ describe("ListsTab", () => {
   beforeEach(() => {
     window.localStorage.clear()
     jest.clearAllMocks()
+    mockRouter.query = { index: ["lists"] }
   })
 
   it("renders the create button and sort menu", () => {
@@ -95,5 +97,23 @@ describe("ListsTab", () => {
     // Now Spaghetti westerns should be in the first row
     expect(within(rows[1]).getByText("Spaghetti westerns")).toBeInTheDocument()
     expect(within(rows[2]).getByText("First list")).toBeInTheDocument()
+  })
+
+  it("renders a single list display when the URL matches", () => {
+    mockRouter.query = { index: ["lists", "123", "my-special-list"] }
+    const listsWithId123 = [
+      {
+        ...listsResponse[0],
+        id: "123",
+        listName: "My special list",
+        description: "A special description",
+      } as unknown as ListResult,
+    ]
+    renderWithPatronDataContext(listsWithId123)
+
+    expect(screen.getByText("Back to all lists")).toBeInTheDocument()
+    expect(screen.getByText("My special list")).toBeInTheDocument()
+    expect(screen.getByText("A special description")).toBeInTheDocument()
+    expect(screen.queryByText("Create new list")).not.toBeInTheDocument()
   })
 })

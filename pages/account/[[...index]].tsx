@@ -12,6 +12,7 @@ import { fetchLists } from "../../src/server/api/lists"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { bootstrapConfig } from "../../lib/bootstrap"
+import { generateListSlug } from "../../src/utils/listUtils"
 
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
@@ -130,11 +131,40 @@ export async function getServerSideProps({ req, res }) {
           tabsPath.startsWith(path)
         )
         if (tabsPath != matchedPath) {
-          return {
-            redirect: {
-              destination: "/account/" + matchedPath,
-              permanent: false,
-            },
+          if (!tabsPath.startsWith("lists/")) {
+            return {
+              redirect: {
+                destination: "/account/" + matchedPath,
+                permanent: false,
+              },
+            }
+          } else {
+            // Handle list URLs (match on the list ID)
+            const pathWithoutQuery = tabsPath.split("?")[0]
+            const listId = pathWithoutQuery.split("/")[1]
+            const list = lists?.find((l: any) => l.id === listId)
+            if (list) {
+              const slug = generateListSlug(list.name || list.listName)
+              const canonicalPath = `lists/${listId}${slug ? `/${slug}` : ""}`
+              if (pathWithoutQuery !== canonicalPath) {
+                const queryString = tabsPath.includes("?")
+                  ? `?${tabsPath.split("?")[1]}`
+                  : ""
+                return {
+                  redirect: {
+                    destination: `/account/${canonicalPath}${queryString}`,
+                    permanent: false,
+                  },
+                }
+              }
+            } else {
+              return {
+                redirect: {
+                  destination: "/account/lists",
+                  permanent: false,
+                },
+              }
+            }
           }
         }
       }
@@ -150,7 +180,7 @@ export async function getServerSideProps({ req, res }) {
           pickupLocations,
           lists,
         },
-        tabsPath,
+        tabsPath: tabsPath ? tabsPath.split("?")[0].split("/")[0] : null,
         isAuthenticated,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
@@ -159,7 +189,7 @@ export async function getServerSideProps({ req, res }) {
     console.log(e.message)
     return {
       props: {
-        tabsPath,
+        tabsPath: tabsPath ? tabsPath.split("?")[0].split("/")[0] : null,
         isAuthenticated,
       },
     }

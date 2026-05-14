@@ -12,3 +12,11 @@ export const listSortOptions: Record<string, string> = {
   created_date_desc: "Date created (new to old)",
   created_date_asc: "Date created (old to new)",
 }
+
+export const generateListSlug = (name: string) => {
+  if (!name) return ""
+  return name
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/(^-|-$)/g, "")
+}
