@@ -131,7 +131,12 @@ const ListRecordsTable = ({ list }: { list: List }) => {
   )
   return (
     <>
-      <Flex mt="m" mb="xs" alignItems="center" justifyContent="space-between">
+      <Flex
+        mt="m"
+        mb={{ base: "s", md: "xs" }}
+        alignItems="center"
+        justifyContent="space-between"
+      >
         <Heading
           level="h3"
           size="heading6"
@@ -143,12 +148,14 @@ const ListRecordsTable = ({ list }: { list: List }) => {
         >
           {listResultsHeading(list, currentPage)}
         </Heading>
-        <ListSort
-          ref={sortMenuRef}
-          selectedValue={activeSort}
-          sortOptions={listSortOptions}
-          handleSortChange={handleSortChange}
-        />
+        <Box display={{ base: "none", sm: "flex" }}>
+          <ListSort
+            ref={sortMenuRef}
+            selectedValue={activeSort}
+            sortOptions={listSortOptions}
+            handleSortChange={handleSortChange}
+          />
+        </Box>
       </Flex>
       {isLoading ? (
         loader
