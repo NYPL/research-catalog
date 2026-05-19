@@ -59,28 +59,36 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
       id: "edit",
       label: "Edit",
       media: { type: "icon", name: "editorMode" },
-      onClick: () => {},
+      onClick: () => {
+        console.log("hello")
+      },
     },
     {
       type: "action",
       id: "duplicate",
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
-      onClick: () => {},
+      onClick: () => {
+        console.log("hello")
+      },
     },
     {
       type: "action",
       id: "download",
       label: "Download",
       media: { type: "icon", name: "download" },
-      onClick: () => {},
+      onClick: () => {
+        console.log("hello")
+      },
     },
     {
       type: "action",
       id: "delete",
       label: "Delete",
       media: { type: "icon", name: "actionDelete" },
-      onClick: () => {},
+      onClick: () => {
+        console.log("hello")
+      },
     },
   ]
 
