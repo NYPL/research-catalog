@@ -8,7 +8,7 @@ import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
 import CreateListButton from "./CreateListButton"
-import ListOptionsModal from "./ListOptionsModal"
+import ListOptionsMenu from "./ListOptionsMenu"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
 
@@ -81,7 +81,7 @@ const ListsDisplay = () => {
       list.recordCount.toString(),
       list.createdDate,
       list.modifiedDate,
-      <ListOptionsModal key={list.id} list={list} />,
+      <ListOptionsMenu key={list.id} list={list} />,
     ]
   })
 

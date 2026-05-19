@@ -9,7 +9,7 @@ import Link from "../../Link/Link"
 import type List from "../../../models/List"
 import { useRouter } from "next/router"
 import { useFocusContext } from "../../../context/FocusContext"
-import ListOptions from "./ListOptions"
+import ListOptionsButtons from "./ListOptionsButtons"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 
@@ -99,7 +99,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
             No description
           </Box>
         )}
-        <ListOptions />
+        <ListOptionsButtons />
       </Flex>
       {list.recordCount > 0 ? <ListRecordsTable list={list} /> : <EmptyList />}
     </Flex>

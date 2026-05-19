@@ -156,6 +156,7 @@
   }
   tbody > tr > td:last-of-type {
     padding-top: 8px;
+    padding-right: 32px;
   }
   thead > tr > th:last-of-type {
     padding-right: 24px;
@@ -203,6 +204,15 @@
     tbody > tr > td,
     tbody > tr > td:last-of-type {
       width: auto;
+    }
+  }
+}
+
+.listOptionsMenu {
+  [role="menuitem"]:last-of-type {
+    color: var(--nypl-colors-ui-error-primary);
+    svg {
+      fill: var(--nypl-colors-ui-error-primary);
     }
   }
 }

@@ -1,9 +1,9 @@
 import { Button, ButtonGroup, Icon } from "@nypl/design-system-react-components"
 
 /**
- * The ListOptions component renders the four list operation buttons displayed at the top of the single list view.
+ * The ListOptionsButtons component renders the four list operation buttons displayed at the top of the single list view.
  */
-const ListOptions = () => {
+const ListOptionsButtons = () => {
   return (
     <ButtonGroup mt="m">
       <Button variant="secondary">
@@ -50,4 +50,4 @@ const ListOptions = () => {
   )
 }
 
-export default ListOptions
+export default ListOptionsButtons
