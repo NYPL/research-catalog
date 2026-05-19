@@ -20,6 +20,7 @@ import ListSort from "./ListSort"
 import type List from "../../../models/List"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
+import ManageListRecord from "../../List/ManageListRecord"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
@@ -114,7 +115,7 @@ const ListRecordsTable = ({ list }: { list: List }) => {
       record.callNumber,
       record.location,
       record.addedDate,
-      "Manage",
+      <ManageListRecord key={record.uri} />,
     ]
   })
 
@@ -167,7 +168,7 @@ const ListRecordsTable = ({ list }: { list: List }) => {
               { width: 608, minWidth: 240 },
               { width: 192, minWidth: 120 },
               { width: 192, minWidth: 120 },
-              { width: "auto", minWidth: 120 },
+              { width: "auto", minWidth: 128 },
               { width: 128, minWidth: 128 },
             ]}
             tableData={tableData}

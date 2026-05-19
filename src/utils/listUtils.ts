@@ -43,11 +43,9 @@ export const listResultsHeading = (list, currentPage) => {
   const totalResults = list?.recordCount
   const resultsStart = (currentPage - 1) * LIST_RECORDS_PER_PAGE + 1
   const resultsEnd = Math.min(currentPage * LIST_RECORDS_PER_PAGE, totalResults)
-  return `Displaying ${
-    totalResults > LIST_RECORDS_PER_PAGE
-      ? `${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()}`
-      : totalResults.toLocaleString()
-  } item${totalResults === 1 ? "" : "s"}`
+  return `Displaying ${`${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()}`} record${
+    totalResults === 1 ? "" : "s"
+  }`
 }
 
 export const buildListRecords = (

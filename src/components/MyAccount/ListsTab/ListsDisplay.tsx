@@ -104,7 +104,7 @@ const ListsDisplay = () => {
       </Flex>
       <Box display="grid">
         <Table
-          className={styles.listTable}
+          className={styles.listsTable}
           columnHeaders={[
             "List name",
             "List description",
