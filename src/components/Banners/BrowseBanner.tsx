@@ -30,7 +30,7 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
           browseType === "subjects" ? (
             <>
               Browsing by subject is an effective strategy for getting an
-              overview of NYPL's holdings on a given topic. The{" "}
+              overview of NYPL&apos;s holdings on a given topic. The{" "}
               <span style={{ fontWeight: "bold" }}>Subject Headings index</span>{" "}
               draws from the Library of Congress Subject Headings (
               <Link
@@ -54,8 +54,8 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
           ) : (
             <>
               Browsing by Author/Contributor is an effective strategy for
-              getting an overview of NYPL's holdings by a given individual or
-              entity. The{" "}
+              getting an overview of NYPL&apos;s holdings by a given individual
+              or entity. The{" "}
               <span style={{ fontWeight: "bold" }}>
                 Author/Contributor index
               </span>{" "}
