@@ -217,8 +217,8 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "long-list"] }
     const records = Array.from({ length: 25 }, (_, i) => ({
       uri: `b${i}`,
-      addedDate: `01/01/2023`,
-      addedToListDate: `2023-01-01T12:00:00Z`,
+      addedDate: "01/01/2023",
+      addedToListDate: "2023-01-01T12:00:00Z",
     }))
 
     const longList = [
