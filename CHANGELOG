@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [1.9.1] 2026-05-20
+
+- Updated copy about legacy deprecation on homepage [SCC-5397](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5397)
+- Updated 404 page to remove legacy catalog link [SCC-50139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
+- Updated bib page to indicate legacy catalog link is onsite only [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007)
+
 ## Hot fix 2026-04-14
 
 - Added 10s timeout to all RC requests so that 504s can be handled more gracefully
