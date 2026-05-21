@@ -144,7 +144,7 @@ describe("ListsTab", () => {
           {
             uri: "b123",
             title: "Record 1",
-            addedDate: "2023-01-01T12:00:00Z",
+            addedDate: "01/01/2023",
           },
           {
             uri: "b456",
@@ -199,12 +199,12 @@ describe("ListsTab", () => {
     expect(within(rows[1]).getByText("(2 items)")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Call Number 2")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Location 2")).toBeInTheDocument()
-    expect(within(rows[1]).getByText("1/2/2023")).toBeInTheDocument()
+    expect(within(rows[1]).getByText("01/02/2023")).toBeInTheDocument()
 
     expect(within(rows[2]).getByText("First Book")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Call Number 1")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Location 1")).toBeInTheDocument()
-    expect(within(rows[2]).getByText("1/1/2023")).toBeInTheDocument()
+    expect(within(rows[2]).getByText("01/01/2023")).toBeInTheDocument()
 
     expect(global.fetch).toHaveBeenCalledWith(
       `${BASE_URL}/api/account/lists/records?uris=b456,b123`

@@ -13,7 +13,7 @@ import type {
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { BASE_URL } from "../../../config/constants"
 import { useState } from "react"
-import { List } from "../../../types/listTypes"
+import type { List } from "../../../types/listTypes"
 
 /**
  * The ListOptionsModal component renders the "Options" button and modal (with list operations)

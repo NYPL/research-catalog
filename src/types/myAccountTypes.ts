@@ -1,5 +1,5 @@
 import type { Dispatch, SetStateAction } from "react"
-import { List } from "./listTypes"
+import type { List } from "./listTypes"
 export interface MyAccountPatronData {
   patron?: Patron
   checkouts?: Checkout[]

@@ -17,7 +17,7 @@ import { logger } from "@nypl/node-utils"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
-import { List, ListRecord, ListResult } from "../types/listTypes"
+import type { List, ListRecord, ListResult } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists } from "../server/api/lists"
 

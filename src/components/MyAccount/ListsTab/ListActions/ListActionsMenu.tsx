@@ -14,7 +14,7 @@ import styles from "../../../../../styles/components/MyAccount.module.scss"
 import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
-import { List } from "../../../../types/listTypes"
+import type { List } from "../../../../types/listTypes"
 
 /**
  * The ListActionsMenu component renders the "Options" button and modal (with list operations)

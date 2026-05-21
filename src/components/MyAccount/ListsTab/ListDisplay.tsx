@@ -11,7 +11,7 @@ import ListOptionsButtons from "./ListActions/ListActionsButtons"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
-import { List } from "../../../types/listTypes"
+import type { List } from "../../../types/listTypes"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
 

@@ -1,4 +1,4 @@
-import { List } from "../../src/types/listTypes"
+import type { List } from "../../src/types/listTypes"
 
 export const listsResponse = [
   {
@@ -34,8 +34,8 @@ export const processedLists: List[] = [
     patronId: "12345",
     records: [],
     recordCount: 0,
-    createdDate: "04/15/2026",
-    modifiedDate: "04/15/2026",
+    createdDate: "4/15/2026",
+    modifiedDate: "4/15/2026",
     listName: "First list",
     description: null,
   },
@@ -46,12 +46,15 @@ export const processedLists: List[] = [
     records: [
       {
         uri: "b12404033",
-        addedDate: "04/16/2026",
-        title: "Record",
+        addedDate: "4/21/2026",
+        title: null,
+        itemCount: 0,
+        callNumber: "Multiple",
+        location: "Multiple",
       },
     ],
-    createdDate: "04/21/2026",
-    modifiedDate: "04/21/2026",
+    createdDate: "4/21/2026",
+    modifiedDate: "4/21/2026",
     listName: "Spaghetti westerns",
     description: "all about spaghetti",
   },

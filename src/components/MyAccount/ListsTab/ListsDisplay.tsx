@@ -10,7 +10,7 @@ import CreateListButton from "./ListActions/CreateListButton"
 import ListOptionsMenu from "./ListActions/ListActionsMenu"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
-import { List } from "../../../types/listTypes"
+import type { List } from "../../../types/listTypes"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
