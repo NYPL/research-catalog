@@ -1,13 +1,23 @@
 import { Banner, Text, Link } from "@nypl/design-system-react-components"
 
-export type StatusType = "" | "failure" | "usernameFailure" | "success"
+export type StatusType =
+  | ""
+  | "failure"
+  | "usernameFailure"
+  | "success"
+  | "duplicateFailure"
+  | "deleteFailure"
+  | "deleteSuccess"
+  | "duplicateSuccess"
+  | "createSuccess"
+  | "createFailure"
 
 type StatusBannerProps = {
   status: StatusType
   statusMessage: string
 }
 
-const successContent = <Text>Your changes were saved.</Text>
+const generalSuccessContent = <Text>Your changes were saved.</Text>
 
 const generalFailureContent = <Text>Your changes were not saved.</Text>
 
@@ -21,9 +31,15 @@ const specificFailureContent = (statusMessage: string) => {
   )
 }
 
+const specificSuccessContent = (statusMessage: string) => {
+  return <Text marginBottom={0}>{statusMessage}</Text>
+}
+
 const statusContent = (status, statusMessage) => {
-  if (status === "success") {
-    return successContent
+  if (status === "success" && statusMessage !== "") {
+    return specificSuccessContent(statusMessage)
+  } else {
+    return generalSuccessContent
   }
   if (status === "failure" && statusMessage !== "") {
     return specificFailureContent(statusMessage)

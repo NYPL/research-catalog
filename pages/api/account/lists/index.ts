@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import { fetchLists } from "../../../../src/server/api/lists"
 import type { ListSort } from "../../../../src/types/listTypes"
+import MyAccount from "../../../../src/models/MyAccount"
 
 export default async function handler(
   req: NextApiRequest,
@@ -20,5 +21,11 @@ export default async function handler(
     patronId,
     sort: sort as ListSort,
   })
-  res.status(200).json(response)
+
+  if (response.lists) {
+    const accountModel = new MyAccount(null, patronId)
+    response.lists = accountModel.buildLists(response.lists)
+  }
+
+  res.status(response.status || 200).json(response)
 }

@@ -10,6 +10,7 @@ import { useRef, useState, useMemo, useEffect } from "react"
 import { BASE_URL } from "../../../config/constants"
 import { useFocusContext, idConstants } from "../../../context/FocusContext"
 import type ListRecord from "../../../models/ListRecord"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 import {
   LIST_RECORDS_PER_PAGE,
   listResultsHeading,
@@ -18,7 +19,6 @@ import {
 } from "../../../utils/listUtils"
 import ListSort from "./ListSort"
 import type List from "../../../models/List"
-import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
 

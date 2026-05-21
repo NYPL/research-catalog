@@ -80,6 +80,16 @@ const nyplApiClient = async ({
       })
     }
 
+    const originalDelete = client.dangerouslyCallDelete.bind(client)
+    client.delete = async (path: string, body: unknown) => {
+      logger.info("Platform request", {
+        method: "DELETE",
+        path: `${baseUrl}${path}`,
+        body,
+      })
+      return originalDelete(path)
+    }
+
     CACHE[clientCacheKey] = client
     return client
   } catch (error: any) {

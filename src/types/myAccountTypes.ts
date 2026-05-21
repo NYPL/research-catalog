@@ -1,13 +1,12 @@
 import type { Dispatch, SetStateAction } from "react"
-import type { ListResult } from "./listTypes"
-
+import { List } from "./listTypes"
 export interface MyAccountPatronData {
   patron?: Patron
   checkouts?: Checkout[]
   holds?: Hold[]
   fines?: Fine
   pickupLocations: SierraCodeName[]
-  lists?: ListResult[]
+  lists?: List[]
 }
 
 export interface PatronDataContextType {

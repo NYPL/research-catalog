@@ -2,32 +2,23 @@ import { useContext, useRef, useState, useEffect } from "react"
 import { Box, Flex, Table } from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import List from "../../../models/List"
 import Link from "../../Link/Link"
 import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
-import CreateListButton from "./CreateListButton"
-import ListOptionsMenu from "./ListOptionsMenu"
+import CreateListButton from "./ListActions/CreateListButton"
+import ListOptionsMenu from "./ListActions/ListActionsMenu"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
+import { List } from "../../../types/listTypes"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
-  const {
-    updatedAccountData: { lists: listResults, patron },
-  } = useContext(PatronDataContext)
+  const { setUpdatedAccountData, updatedAccountData } =
+    useContext(PatronDataContext)
 
+  const { lists, patron } = updatedAccountData
   const router = useRouter()
-
-  const [lists, setLists] = useState(
-    listResults.map((list: any) => new List(list))
-  )
-
-  // Keep local lists in sync
-  useEffect(() => {
-    setLists(listResults.map((list: any) => new List(list)))
-  }, [listResults])
 
   const { setPersistentFocus } = useFocusContext()
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
@@ -40,12 +31,15 @@ const ListsDisplay = () => {
       )
       if (response.ok) {
         const data = await response.json()
-        setLists(data.lists.map((list: any) => new List(list)))
+        setUpdatedAccountData({
+          ...updatedAccountData,
+          lists: data.lists || [],
+        })
+        setActiveSort(selectedSortOption)
       }
     } catch (error) {
       console.error("Error sorting lists:", error)
     }
-    setActiveSort(selectedSortOption)
     setPersistentFocus(idConstants.listsSort)
   }
 

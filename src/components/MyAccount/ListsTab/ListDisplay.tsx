@@ -6,12 +6,12 @@ import {
   Text,
 } from "@nypl/design-system-react-components"
 import Link from "../../Link/Link"
-import type List from "../../../models/List"
-import { useRouter } from "next/router"
 import { useFocusContext } from "../../../context/FocusContext"
-import ListOptionsButtons from "./ListOptionsButtons"
+import ListOptionsButtons from "./ListActions/ListActionsButtons"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
+import { useRouter } from "next/router"
+import { List } from "../../../types/listTypes"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
 
@@ -21,7 +21,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
 
   const separatingDot = (i) => (
     // @ts-ignore
-    <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
+    <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs" L>
       <svg
         xmlns="http://www.w3.org/2000/svg"
         width="4"

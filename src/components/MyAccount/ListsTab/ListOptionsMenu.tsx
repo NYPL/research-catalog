@@ -1,13 +1,10 @@
 import {
-  Button,
   Flex,
-  Icon,
   Text,
   Box,
   useModal,
   Menu,
 } from "@nypl/design-system-react-components"
-import type List from "../../../models/List"
 import type {
   BaseModalProps,
   ConfirmationModalProps,
@@ -16,6 +13,7 @@ import type {
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { BASE_URL } from "../../../config/constants"
 import { useState } from "react"
+import { List } from "../../../types/listTypes"
 
 /**
  * The ListOptionsModal component renders the "Options" button and modal (with list operations)
@@ -50,6 +48,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
   const [modalProps, setModalProps] = useState<BaseModalProps>(
     deleteListModalProps as ConfirmationModalProps
   )
+  const [menuKey, setMenuKey] = useState(0)
 
   // <Icon name="navigationMoreVert" align="left" size="large" />
 
@@ -61,6 +60,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
       media: { type: "icon", name: "editorMode" },
       onClick: () => {
         console.log("hello")
+        setMenuKey((prev) => prev + 1)
       },
     },
     {
@@ -70,6 +70,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
       media: { type: "icon", name: "contentCopy" },
       onClick: () => {
         console.log("hello")
+        setMenuKey((prev) => prev + 1)
       },
     },
     {
@@ -79,6 +80,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
       media: { type: "icon", name: "download" },
       onClick: () => {
         console.log("hello")
+        setMenuKey((prev) => prev + 1)
       },
     },
     {
@@ -88,6 +90,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
       media: { type: "icon", name: "actionDelete" },
       onClick: () => {
         console.log("hello")
+        setMenuKey((prev) => prev + 1)
       },
     },
   ]
@@ -95,6 +98,7 @@ const ListOptionsMenu = ({ list }: { list: List }) => {
   return (
     <Flex justifyContent="flex-end" width="100%">
       <Menu
+        key={menuKey}
         id="list-options-menu"
         className={`${styles.listOptionsMenu} no-print`}
         showLabel={false}
