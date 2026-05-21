@@ -15,14 +15,24 @@ import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
+import { idConstants, useFocusContext } from "../../../../context/FocusContext"
 
 /**
  * The ListActionsMenu component renders the "Options" button and modal (with list operations)
  *  displayed for each list in the user's lists table.
  */
-const ListActionsMenu = ({ list }: { list: List }) => {
+const ListActionsMenu = ({
+  list,
+  setStatus,
+  setStatusMessage,
+}: {
+  list: List
+  setStatus
+  setStatusMessage
+}) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
+  const { setPersistentFocus } = useFocusContext()
   const { patron, lists } = updatedAccountData
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -50,31 +60,22 @@ const ListActionsMenu = ({ list }: { list: List }) => {
           body: JSON.stringify({ patronId: patron.id.toString() }),
         }
       )
-      if (response.ok) {
+      if (response.status === 200) {
         const updatedLists = lists.filter((l: any) => l.id !== list.id)
         setUpdatedAccountData({
           ...updatedAccountData,
           lists: updatedLists,
         })
+        setStatus("success")
+        setStatusMessage("Your list has been deleted.")
+      } else {
+        setStatus("failure")
+        setStatusMessage("Your list could not be deleted.")
       }
+      setPersistentFocus(idConstants.accountStatusBanner)
       closeModal()
     },
     onCancel: closeModal,
-  }
-
-  const [error, setError] = useState(false)
-
-  const validateListField = (value: string) => {
-    return value.length < 100
-  }
-
-  const handleInputChange = (e) => {
-    const { value } = e.target
-    if (!validateListField(value)) {
-      setError(true)
-    } else {
-      setError(false)
-    }
   }
 
   const [modalProps, setModalProps] = useState<BaseModalProps>()

@@ -79,7 +79,7 @@ export default async function handler(
       patronId,
       listId,
     })
-    res.status(200).json(response)
+    res.status(response.status).json(response)
   } else {
     return res.status(405).json({ error: "Method not allowed" })
   }

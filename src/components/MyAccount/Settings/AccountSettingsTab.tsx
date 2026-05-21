@@ -37,7 +37,7 @@ const AccountSettingsTab = () => {
   return (
     <>
       {status !== "" && (
-        <div ref={bannerRef} tabIndex={-1}>
+        <div ref={bannerRef} tabIndex={-1} style={{ marginTop: "32px" }}>
           <StatusBanner status={status} statusMessage={statusMessage} />
         </div>
       )}

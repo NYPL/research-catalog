@@ -18,9 +18,9 @@ import {
   buildListRecords,
 } from "../../../utils/listUtils"
 import ListSort from "./ListSort"
-import type List from "../../../models/List"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
+import { List } from "../../../types/listTypes"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */

@@ -7,10 +7,11 @@ import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
 import CreateListButton from "./ListActions/CreateListButton"
-import ListOptionsMenu from "./ListActions/ListActionsMenu"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
 import type { List } from "../../../types/listTypes"
+import { StatusBanner, StatusType } from "../Settings/StatusBanner"
+import ListActionsMenu from "./ListActions/ListActionsMenu"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
@@ -23,6 +24,8 @@ const ListsDisplay = () => {
   const { setPersistentFocus } = useFocusContext()
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [activeSort, setActiveSort] = useState("modified_date_desc")
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
 
   const handleSortChange = async (selectedSortOption: string) => {
     try {
@@ -75,7 +78,12 @@ const ListsDisplay = () => {
       list.recordCount.toString(),
       list.createdDate,
       list.modifiedDate,
-      <ListOptionsMenu key={list.id} list={list} />,
+      <ListActionsMenu
+        key={list.id}
+        list={list}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+      />,
     ]
   })
 
@@ -96,6 +104,15 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
+      {status !== "" && (
+        <div
+          id="account-status-banner"
+          tabIndex={-1}
+          style={{ marginTop: "32px" }}
+        >
+          <StatusBanner status={status} statusMessage={statusMessage} />
+        </div>
+      )}
       <Box display="grid">
         <Table
           className={styles.listsTable}

@@ -78,7 +78,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         <div
           ref={usernameBannerRef}
           tabIndex={-1}
-          style={{ marginBottom: "32px" }}
+          style={{ marginTop: "32px", marginBottom: "32px" }}
         >
           <StatusBanner
             status={usernameStatus}
