@@ -10,7 +10,8 @@ import CreateListButton from "./ListActions/CreateListButton"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
 import type { List } from "../../../types/listTypes"
-import { StatusBanner, StatusType } from "../Settings/StatusBanner"
+import type { StatusType } from "../Settings/StatusBanner"
+import { StatusBanner } from "../Settings/StatusBanner"
 import ListActionsMenu from "./ListActions/ListActionsMenu"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
@@ -104,15 +105,11 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
-      {status !== "" && (
-        <div
-          id="account-status-banner"
-          tabIndex={-1}
-          style={{ marginTop: "32px" }}
-        >
+      <div id="account-status-banner" style={{ marginTop: "32px" }}>
+        {status !== "" && (
           <StatusBanner status={status} statusMessage={statusMessage} />
-        </div>
-      )}
+        )}
+      </div>
       <Box display="grid">
         <Table
           className={styles.listsTable}

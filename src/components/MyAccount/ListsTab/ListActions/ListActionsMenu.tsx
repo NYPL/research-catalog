@@ -32,7 +32,7 @@ const ListActionsMenu = ({
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus } = useFocusContext()
+  const { setPersistentFocus, activeElementId } = useFocusContext()
   const { patron, lists } = updatedAccountData
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -73,6 +73,7 @@ const ListActionsMenu = ({
         setStatusMessage("Your list could not be deleted.")
       }
       setPersistentFocus(idConstants.accountStatusBanner)
+      console.log(activeElementId)
       closeModal()
     },
     onCancel: closeModal,

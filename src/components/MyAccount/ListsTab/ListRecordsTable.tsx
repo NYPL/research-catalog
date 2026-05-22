@@ -20,7 +20,7 @@ import {
 import ListSort from "./ListSort"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
-import { List } from "../../../types/listTypes"
+import type { List } from "../../../types/listTypes"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
