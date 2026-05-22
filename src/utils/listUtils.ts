@@ -48,6 +48,12 @@ export const listResultsHeading = (list, currentPage) => {
   }`
 }
 
+/**
+ * Merges ListRecords from the user's account with their corresponding
+ * bib data from the Discovery API. It preserves the sort order
+ * returned by the Discovery API, handles missing bib data by appending
+ * those records to the end, and re-applies local sorting if sorting by "Date added".
+ */
 export const buildListRecords = (
   bibData: any[],
   pageRecords: ListRecord[],
