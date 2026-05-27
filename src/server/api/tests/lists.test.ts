@@ -33,10 +33,10 @@ describe("lists", () => {
       mockClient.get.mockResolvedValueOnce([{ id: "list1" }, { id: "list2" }])
       const result = await fetchLists({
         patronId: "12345",
-        sort: "modifiedDate",
+        sort: "modified_date_desc",
       })
       expect(mockClient.get).toHaveBeenCalledWith(
-        "/patrons/12345/lists?sort=modifiedDate"
+        "/patrons/12345/lists?sort=modified_date_desc"
       )
       expect(result).toEqual({
         status: 200,

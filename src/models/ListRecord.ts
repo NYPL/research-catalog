@@ -9,9 +9,9 @@ export default class ListRecord {
   uri: string
   addedDate: string
   title: string
-  itemCount: number
-  callNumber: string
-  location: string
+  itemCount?: number
+  callNumber?: string
+  location?: string
 
   constructor(result?: ListRecordResult, bibData?: any) {
     this.uri = result.uri

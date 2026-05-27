@@ -15,7 +15,7 @@ interface ProfileTabsPropsType {
 
 const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
   const {
-    updatedAccountData: { checkouts, holds, fines },
+    updatedAccountData: { checkouts, holds, fines, lists },
   } = useContext(PatronDataContext)
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
@@ -24,7 +24,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: checkouts ? (
         <CheckoutsTab />
       ) : (
-        <Text sx={{ mt: "s" }}>
+        <Text sx={{ mt: "m" }}>
           There was an error accessing your checkouts.
         </Text>
       ),
@@ -35,7 +35,9 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: holds ? (
         <RequestsTab />
       ) : (
-        <Text sx={{ mt: "s" }}>There was an error accessing your requests</Text>
+        <Text sx={{ mt: "m" }}>
+          There was an error accessing your requests.
+        </Text>
       ),
       urlPath: "requests",
     },
@@ -54,8 +56,12 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       urlPath: "settings",
     },
     {
-      label: "Lists",
-      content: <ListsTab />,
+      label: "Lists" + (lists ? ` (${lists.length})` : ""),
+      content: lists ? (
+        <ListsTab />
+      ) : (
+        <Text sx={{ mt: "m" }}>There was an error accessing your lists.</Text>
+      ),
       urlPath: "lists",
     },
   ]

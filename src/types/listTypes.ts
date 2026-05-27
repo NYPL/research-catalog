@@ -7,7 +7,7 @@ export interface ListErrorResponse {
 }
 
 export interface ListResult {
-  id: number
+  id: string
   listName: string
   patronId: string
   records: ListRecordResult[]
@@ -21,3 +21,13 @@ export interface ListRecordResult {
   addedToListDate: string
   description: string
 }
+
+export type ListSort =
+  | "modified_date_desc"
+  | "modified_date_asc"
+  | "list_name_asc"
+  | "list_name_desc"
+  | "created_date_asc"
+  | "created_date_desc"
+  | "record_count_asc"
+  | "record_count_desc"

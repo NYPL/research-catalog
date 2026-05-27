@@ -26,6 +26,7 @@ export const idConstants = {
   browseResultsHeading: "browse-results-heading",
   searchResultsSort: "search-results-sort",
   browseResultsSort: "browse-results-sort",
+  listsSort: "lists-sort",
   filterResultsHeading: "filter-results-heading",
   activeFiltersHeading: "active-filters-heading",
   searchFiltersModal: "search-filters-modal",
