@@ -15,7 +15,7 @@ import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
-import { buildListRecords } from "../../../../utils/listUtils"
+import { downloadList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
 
@@ -102,6 +102,8 @@ const ListActionsMenu = ({
       label: "Edit",
       media: { type: "icon", name: "editorMode" },
       onClick: () => {
+        setStatus("")
+        setStatusMessage("")
         openEdit()
       },
     },
@@ -111,6 +113,8 @@ const ListActionsMenu = ({
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
       onClick: async () => {
+        setStatus("")
+        setStatusMessage("")
         try {
           const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
             method: "POST",
@@ -151,65 +155,7 @@ const ListActionsMenu = ({
       label: "Download",
       media: { type: "icon", name: "download" },
       onClick: async () => {
-        try {
-          if (list.recordCount === 0) {
-            setStatus("failure")
-            setStatusMessage("Your list has no records to download.")
-            return
-          }
-
-          const chunkSize = 50
-          let allUpdatedRecords: any[] = []
-
-          for (let i = 0; i < list.records.length; i += chunkSize) {
-            const chunk = list.records.slice(i, i + chunkSize)
-            const uris = chunk.map((r) => r.uri).join(",")
-            const response = await fetch(
-              `${BASE_URL}/api/account/lists/records?uris=${uris}`
-            )
-            if (response.ok) {
-              const data = await response.json()
-              if (data.bibData) {
-                const updatedRecords = buildListRecords(
-                  data.bibData,
-                  chunk,
-                  "added_date_asc"
-                )
-                allUpdatedRecords = [...allUpdatedRecords, ...updatedRecords]
-              }
-            }
-          }
-
-          const tsvRows = [
-            ["Title", "Call number", "Location", "Date added to list"],
-            ...allUpdatedRecords.map((r) => [
-              `"${r.title ? r.title.replace(/"/g, '""') : ""}"`,
-              `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
-              `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
-              `"${r.addedDate || ""}"`,
-            ]),
-          ]
-
-          const tsvContent = tsvRows.map((e) => e.join("\t")).join("\n")
-          const blob = new Blob([tsvContent], {
-            type: "text/tab-separated-values;charset=utf-8;",
-          })
-          const url = URL.createObjectURL(blob)
-          const link = document.createElement("a")
-          link.setAttribute("href", url)
-          link.setAttribute("download", `${list.listName || "list"}.tsv`)
-          document.body.appendChild(link)
-          link.click()
-          document.body.removeChild(link)
-          URL.revokeObjectURL(url)
-
-          setStatus("success")
-          setStatusMessage("Your list has been downloaded.")
-        } catch (error) {
-          console.error("Error downloading list:", error)
-          setStatus("failure")
-          setStatusMessage("Your list could not be downloaded.")
-        }
+        downloadList(list, setStatus, setStatusMessage)
       },
     },
     {
@@ -218,6 +164,8 @@ const ListActionsMenu = ({
       label: "Delete",
       media: { type: "icon", name: "actionDelete" },
       onClick: () => {
+        setStatus("")
+        setStatusMessage("")
         setModalProps(deleteListModalProps as ConfirmationModalProps)
         openModal()
       },

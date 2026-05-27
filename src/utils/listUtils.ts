@@ -1,4 +1,6 @@
+import { BASE_URL } from "../config/constants"
 import ListRecord from "../models/ListRecord"
+import type { List } from "../types/listTypes"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -95,4 +97,72 @@ export const buildListRecords = (
   }
 
   return updatedRecords
+}
+
+export const downloadList = async (
+  list: List,
+  setStatus: any,
+  setStatusMessage: any
+) => {
+  setStatus("")
+  setStatusMessage("")
+  try {
+    if (list.recordCount === 0 || !list.records) {
+      setStatus("failure")
+      setStatusMessage("Your list has no records to download.")
+      return
+    }
+
+    const chunkSize = 50
+    let allUpdatedRecords: any[] = []
+
+    for (let i = 0; i < list.records.length; i += chunkSize) {
+      const chunk = list.records.slice(i, i + chunkSize)
+      const uris = chunk.map((r) => r.uri).join(",")
+      const response = await fetch(
+        `${BASE_URL}/api/account/lists/records?uris=${uris}`
+      )
+      if (response.ok) {
+        const data = await response.json()
+        if (data.bibData) {
+          const updatedRecords = buildListRecords(
+            data.bibData,
+            chunk,
+            "added_date_asc"
+          )
+          allUpdatedRecords = [...allUpdatedRecords, ...updatedRecords]
+        }
+      }
+    }
+
+    const tsvRows = [
+      ["Title", "Call number", "Location", "Date added to list"],
+      ...allUpdatedRecords.map((r) => [
+        `"${r.title ? r.title.replace(/"/g, '""') : ""}"`,
+        `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
+        `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
+        `"${r.addedDate || ""}"`,
+      ]),
+    ]
+
+    const tsvContent = tsvRows.map((e) => e.join("\t")).join("\n")
+    const blob = new Blob([tsvContent], {
+      type: "text/tab-separated-values;charset=utf-8;",
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.setAttribute("href", url)
+    link.setAttribute("download", `${list.listName || "list"}.tsv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    setStatus("success")
+    setStatusMessage("Your list has been downloaded.")
+  } catch (error) {
+    console.error("Error downloading list:", error)
+    setStatus("failure")
+    setStatusMessage("Your list could not be downloaded.")
+  }
 }

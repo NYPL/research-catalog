@@ -21,6 +21,8 @@ export interface ListRecord {
   uri: string
   addedDate: string
   title: string
+  publicationStatement?: string
+  creatorLiteral?: string
   itemCount?: number
   callNumber?: string
   location?: string

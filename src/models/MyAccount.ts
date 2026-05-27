@@ -99,7 +99,7 @@ export default class MyAccount {
 
   async getLists(patronId) {
     const listsResult = await fetchLists({ patronId })
-    return this.buildLists(listsResult.lists)
+    return this.buildLists(listsResult?.lists)
   }
 
   async fetchBibItemData(
@@ -406,6 +406,8 @@ export default class MyAccount {
             uri: record.uri,
             addedDate: formatMMDDYYYY(record.addedToListDate),
             title: bibData?.titleDisplay?.[0] || bibData?.title?.[0] || null,
+            //publicationStatement: bibData?.publicationStatement,
+            //creatorLiteral: bibData?.creatorLiteral[0],
             itemCount: bibData?.numItemsTotal || bibData?.items?.length || 0,
             // If bib level info is available:
             callNumber:

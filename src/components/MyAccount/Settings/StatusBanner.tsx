@@ -13,7 +13,7 @@ const generalFailureContent = <Text>Your changes were not saved.</Text>
 
 const specificFailureContent = (statusMessage: string) => {
   return (
-    <Text marginBottom={0} color="unset !important">
+    <Text marginBottom={0}>
       {statusMessage} Please try again or{" "}
       <Link
         color="ui.link.primary !important"

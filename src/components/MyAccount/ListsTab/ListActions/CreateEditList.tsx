@@ -105,16 +105,16 @@ export const CreateEditListModal = ({
             : "Your list has been created."
         )
       } else {
+        if (isEdit) {
+          setListName(list?.listName || "")
+          setListDescription(list?.description || "")
+        }
         setStatus("failure")
         setStatusMessage(
           isEdit
             ? "Your changes were not saved."
             : "Your list could not be created."
         )
-        if (isEdit) {
-          setListName(list?.listName || "")
-          setListDescription(list?.description || "")
-        }
       }
     } catch (error) {
       console.error(`Error ${mode}ing list:`, error)
@@ -253,7 +253,6 @@ export const EditListButton = ({
   bannerRef,
 }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
-
   return (
     <>
       <Button variant="secondary" onClick={onOpen}>
