@@ -113,7 +113,7 @@ export default function ResultsError({
               Invalid query
             </Heading>
             <Text marginBottom="0">
-              Your query contained an invalid search scope or Boolean operator.
+              Your query contained an invalid search scope or syntax error.
               Change your query and try again.
             </Text>
             <Text>
