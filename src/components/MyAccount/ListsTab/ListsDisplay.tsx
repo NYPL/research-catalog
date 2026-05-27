@@ -23,10 +23,19 @@ const ListsDisplay = () => {
   const router = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
+  const bannerRef = useRef<HTMLDivElement>(null)
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [activeSort, setActiveSort] = useState("modified_date_desc")
+
+  // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusType>("")
   const [statusMessage, setStatusMessage] = useState<string>("")
+
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      bannerRef.current.focus()
+    }
+  }, [status])
 
   const handleSortChange = async (selectedSortOption: string) => {
     try {
@@ -84,6 +93,7 @@ const ListsDisplay = () => {
         list={list}
         setStatus={setStatus}
         setStatusMessage={setStatusMessage}
+        bannerRef={bannerRef}
       />,
     ]
   })
@@ -97,7 +107,11 @@ const ListsDisplay = () => {
         mb="m"
         gap="xs"
       >
-        <CreateListButton />
+        <CreateListButton
+          setStatus={setStatus}
+          setStatusMessage={setStatusMessage}
+          bannerRef={bannerRef}
+        />
         <ListSort
           ref={sortMenuRef}
           selectedValue={activeSort}
@@ -105,12 +119,12 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
-      <div id="account-status-banner" style={{ marginTop: "32px" }}>
+      <div tabIndex={-1} ref={bannerRef}>
         {status !== "" && (
           <StatusBanner status={status} statusMessage={statusMessage} />
         )}
       </div>
-      <Box display="grid">
+      <Box display="grid" mt="xs">
         <Table
           className={styles.listsTable}
           columnHeaders={[

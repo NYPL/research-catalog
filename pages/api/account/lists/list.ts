@@ -6,7 +6,6 @@ import {
   updateList,
 } from "../../../../src/server/api/lists"
 import MyAccount from "../../../../src/models/MyAccount"
-import type { ListSort } from "../../../../src/types/listTypes"
 
 export default async function handler(
   req: NextApiRequest,
@@ -55,7 +54,7 @@ export default async function handler(
       if (response.list) {
         response.list = accountModel.buildLists([response.list])[0]
       }
-      res.status(200).json(response)
+      res.status(response.status).json(response)
     } else {
       if (typeof listId !== "string") {
         return res.status(400).json({ error: "Invalid listId" })
@@ -69,7 +68,7 @@ export default async function handler(
       if (response.list) {
         response.list = accountModel.buildLists([response.list])[0]
       }
-      res.status(200).json(response)
+      res.status(response.status).json(response)
     }
   } else if (req.method == "DELETE") {
     if (!listId || typeof listId !== "string") {

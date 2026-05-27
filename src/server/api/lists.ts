@@ -177,6 +177,7 @@ export async function deleteList({
     methodName: "deleteList",
     path,
     apiCall: (client) => client.delete(path),
+    onSuccess: () => ({ status: 200 }),
   })
 }
 

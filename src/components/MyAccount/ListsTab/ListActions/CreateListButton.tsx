@@ -20,9 +20,16 @@ import styles from "../../../../../styles/components/MyAccount.module.scss"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import { BASE_URL } from "../../../../config/constants"
-import type { BaseModalProps } from "@nypl/design-system-react-components"
 
-const CreateListForm = ({ closeModal }: { closeModal: () => void }) => {
+const CreateListForm = ({
+  closeModal,
+  setStatus,
+  setStatusMessage,
+}: {
+  closeModal: () => void
+  setStatus
+  setStatusMessage
+}) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
@@ -50,7 +57,7 @@ const CreateListForm = ({ closeModal }: { closeModal: () => void }) => {
           records: [],
         }),
       })
-      if (response.ok) {
+      if (response.status === 200) {
         const data = await response.json()
         if (data && data.list) {
           setUpdatedAccountData({
@@ -58,12 +65,17 @@ const CreateListForm = ({ closeModal }: { closeModal: () => void }) => {
             lists: [data.list, ...lists],
           })
         }
-        closeModal()
+        setStatus("success")
+        setStatusMessage("Your list has been created.")
+      } else {
+        setStatus("failure")
+        setStatusMessage("Your list could not be created.")
       }
     } catch (error) {
       console.error("Error creating list:", error)
     } finally {
       setIsSubmitting(false)
+      closeModal()
     }
   }
 
@@ -124,7 +136,7 @@ const CreateListForm = ({ closeModal }: { closeModal: () => void }) => {
   )
 }
 
-const CreateListButton = () => {
+const CreateListButton = ({ setStatus, setStatusMessage, bannerRef }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -140,6 +152,7 @@ const CreateListButton = () => {
         isOpen={isOpen}
         onClose={onClose}
         aria-labelledby="Create list"
+        finalFocusRef={bannerRef}
       >
         <ModalOverlay />
         <ModalContent>
@@ -161,7 +174,11 @@ const CreateListButton = () => {
           </ModalHeader>
           <ModalCloseButton />
           <Box paddingLeft="l" paddingRight="l" paddingBottom="l">
-            <CreateListForm closeModal={onClose} />
+            <CreateListForm
+              closeModal={onClose}
+              setStatus={setStatus}
+              setStatusMessage={setStatusMessage}
+            />
           </Box>
         </ModalContent>
       </ChakraModal>

@@ -15,7 +15,7 @@ import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
-import { idConstants, useFocusContext } from "../../../../context/FocusContext"
+import { buildListRecords } from "../../../../utils/listUtils"
 
 /**
  * The ListActionsMenu component renders the "Options" button and modal (with list operations)
@@ -25,19 +25,21 @@ const ListActionsMenu = ({
   list,
   setStatus,
   setStatusMessage,
+  bannerRef,
 }: {
   list: List
   setStatus
   setStatusMessage
+  bannerRef?: any
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus, activeElementId } = useFocusContext()
   const { patron, lists } = updatedAccountData
 
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const deleteListModalProps = {
     variant: "confirmation",
+    finalFocusRef: bannerRef,
     bodyContent: (
       <Box className={styles.noIconBody}>
         <Text>
@@ -50,31 +52,34 @@ const ListActionsMenu = ({
     confirmButtonLabel: "Yes, delete list",
     headingText: <h5 className={styles["noIconHeading"]}>Delete list</h5>,
     onConfirm: async () => {
-      const response = await fetch(
-        `${BASE_URL}/api/account/lists/list?listId=${list.id}`,
-        {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ patronId: patron.id.toString() }),
+      try {
+        const response = await fetch(
+          `${BASE_URL}/api/account/lists/list?listId=${list.id}`,
+          {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ patronId: patron.id.toString() }),
+          }
+        )
+        if (response.status === 200) {
+          const updatedLists = lists.filter((l: any) => l.id !== list.id)
+          setUpdatedAccountData({
+            ...updatedAccountData,
+            lists: updatedLists,
+          })
+          setStatus("success")
+          setStatusMessage("Your list has been deleted.")
+        } else {
+          setStatus("failure")
+          setStatusMessage("Your list could not be deleted.")
         }
-      )
-      if (response.status === 200) {
-        const updatedLists = lists.filter((l: any) => l.id !== list.id)
-        setUpdatedAccountData({
-          ...updatedAccountData,
-          lists: updatedLists,
-        })
-        setStatus("success")
-        setStatusMessage("Your list has been deleted.")
-      } else {
-        setStatus("failure")
-        setStatusMessage("Your list could not be deleted.")
+      } catch (error) {
+        console.error("Error deleting list:", error)
+      } finally {
+        closeModal()
       }
-      setPersistentFocus(idConstants.accountStatusBanner)
-      console.log(activeElementId)
-      closeModal()
     },
     onCancel: closeModal,
   }
@@ -96,8 +101,39 @@ const ListActionsMenu = ({
       id: "duplicate",
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
-      onClick: () => {
-        console.log("hello")
+      onClick: async () => {
+        try {
+          const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              patronId: patron.id.toString(),
+              listName: `${list.listName.substring(0, 90)} (copy)`,
+              description: list.description,
+              records: list.records ? list.records.map((r) => r.uri) : [],
+            }),
+          })
+          if (response.ok) {
+            const data = await response.json()
+            if (data && data.list) {
+              setUpdatedAccountData({
+                ...updatedAccountData,
+                lists: [data.list, ...lists],
+              })
+            }
+            setStatus("success")
+            setStatusMessage("Your list has been duplicated.")
+          } else {
+            setStatus("failure")
+            setStatusMessage("Your list could not be duplicated.")
+          }
+        } catch (error) {
+          console.error("Error duplicating list:", error)
+          setStatus("failure")
+          setStatusMessage("Your list could not be duplicated.")
+        }
       },
     },
     {
@@ -105,8 +141,66 @@ const ListActionsMenu = ({
       id: "download",
       label: "Download",
       media: { type: "icon", name: "download" },
-      onClick: () => {
-        console.log("hello")
+      onClick: async () => {
+        try {
+          if (list.recordCount === 0) {
+            setStatus("failure")
+            setStatusMessage("Your list has no records to download.")
+            return
+          }
+
+          const chunkSize = 50
+          let allUpdatedRecords: any[] = []
+
+          for (let i = 0; i < list.records.length; i += chunkSize) {
+            const chunk = list.records.slice(i, i + chunkSize)
+            const uris = chunk.map((r) => r.uri).join(",")
+            const response = await fetch(
+              `${BASE_URL}/api/account/lists/records?uris=${uris}`
+            )
+            if (response.ok) {
+              const data = await response.json()
+              if (data.bibData) {
+                const updatedRecords = buildListRecords(
+                  data.bibData,
+                  chunk,
+                  "added_date_asc"
+                )
+                allUpdatedRecords = [...allUpdatedRecords, ...updatedRecords]
+              }
+            }
+          }
+
+          const tsvRows = [
+            ["Title", "Call number", "Location", "Date added to list"],
+            ...allUpdatedRecords.map((r) => [
+              `"${r.title ? r.title.replace(/"/g, '""') : ""}"`,
+              `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
+              `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
+              `"${r.addedDate || ""}"`,
+            ]),
+          ]
+
+          const tsvContent = tsvRows.map((e) => e.join("\t")).join("\n")
+          const blob = new Blob([tsvContent], {
+            type: "text/tab-separated-values;charset=utf-8;",
+          })
+          const url = URL.createObjectURL(blob)
+          const link = document.createElement("a")
+          link.setAttribute("href", url)
+          link.setAttribute("download", `${list.listName || "list"}.tsv`)
+          document.body.appendChild(link)
+          link.click()
+          document.body.removeChild(link)
+          URL.revokeObjectURL(url)
+
+          setStatus("success")
+          setStatusMessage("Your list has been downloaded.")
+        } catch (error) {
+          console.error("Error downloading list:", error)
+          setStatus("failure")
+          setStatusMessage("Your list could not be downloaded.")
+        }
       },
     },
     {
