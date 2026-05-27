@@ -18,7 +18,7 @@ jest.mock("../../../utils/logUtils", () => ({
 const mockClient = {
   get: jest.fn(),
   post: jest.fn(),
-  put: jest.fn(),
+  patch: jest.fn(),
   delete: jest.fn(),
 }
 
@@ -138,14 +138,14 @@ describe("lists", () => {
 
   describe("updateList", () => {
     it("returns updated list on success", async () => {
-      mockClient.post.mockResolvedValueOnce({ id: "list1" })
+      mockClient.patch.mockResolvedValueOnce({ id: "list1" })
       const result = await updateList({
         patronId: "12345",
         listId: "list1",
         listName: "New Name",
         description: "new desc",
       })
-      expect(mockClient.post).toHaveBeenCalledWith(
+      expect(mockClient.patch).toHaveBeenCalledWith(
         "/patrons/12345/list/list1",
         {
           patronId: "12345",
@@ -217,7 +217,7 @@ describe("lists", () => {
 
   describe("addRecordsToList", () => {
     it("returns success on successful addition", async () => {
-      mockClient.put.mockResolvedValueOnce({
+      mockClient.patch.mockResolvedValueOnce({
         id: "123",
         patronId: "12345",
         records: ["b123", "b345"],
@@ -231,7 +231,7 @@ describe("lists", () => {
         listId: "123",
         records: ["b123", "b345"],
       })
-      expect(mockClient.put).toHaveBeenCalledWith(
+      expect(mockClient.patch).toHaveBeenCalledWith(
         "/patrons/12345/list/123/records",
         {
           records: ["b123", "b345"],

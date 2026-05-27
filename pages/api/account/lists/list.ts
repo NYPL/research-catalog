@@ -55,21 +55,21 @@ export default async function handler(
         response.list = accountModel.buildLists([response.list])[0]
       }
       res.status(response.status).json(response)
-    } else {
-      if (typeof listId !== "string") {
-        return res.status(400).json({ error: "Invalid listId" })
-      }
-      const response = await updateList({
-        patronId,
-        listId,
-        listName,
-        description,
-      })
-      if (response.list) {
-        response.list = accountModel.buildLists([response.list])[0]
-      }
-      res.status(response.status).json(response)
     }
+  } else if (req.method == "PATCH") {
+    if (typeof listId !== "string") {
+      return res.status(400).json({ error: "Invalid listId" })
+    }
+    const response = await updateList({
+      patronId,
+      listId,
+      listName,
+      description,
+    })
+    if (response.list) {
+      response.list = accountModel.buildLists([response.list])[0]
+    }
+    res.status(response.status).json(response)
   } else if (req.method == "DELETE") {
     if (!listId || typeof listId !== "string") {
       return res.status(400).json({ error: "Missing or invalid listId" })

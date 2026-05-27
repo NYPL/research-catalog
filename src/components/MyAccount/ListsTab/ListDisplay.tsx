@@ -7,11 +7,11 @@ import {
 } from "@nypl/design-system-react-components"
 import Link from "../../Link/Link"
 import { useFocusContext } from "../../../context/FocusContext"
-import ListOptionsButtons from "./ListActions/ListActionsButtons"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List } from "../../../types/listTypes"
+import ListActionsButtons from "./ListActions/ListActionsButtons"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
 
@@ -99,7 +99,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
             No description
           </Box>
         )}
-        <ListOptionsButtons />
+        <ListActionsButtons list={list} />
       </Flex>
       {list.recordCount > 0 ? <ListRecordsTable list={list} /> : <EmptyList />}
     </Flex>

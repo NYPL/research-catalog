@@ -1,15 +1,14 @@
 import { Button, ButtonGroup, Icon } from "@nypl/design-system-react-components"
+import { EditListButton } from "./CreateEditList"
+import type { List } from "../../../../types/listTypes"
 
 /**
  * The ListOptionsButtons component renders the four list operation buttons displayed at the top of the single list view.
  */
-const ListOptionsButtons = () => {
+const ListOptionsButtons = ({ list }: { list: List }) => {
   return (
     <ButtonGroup mt="m">
-      <Button variant="secondary">
-        <Icon name="editorMode" align="left" size="medium" />
-        Edit
-      </Button>
+      <EditListButton list={list} />
       <Button variant="secondary">
         <Icon name="contentCopy" align="left" size="medium" />
         Duplicate

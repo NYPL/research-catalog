@@ -16,10 +16,10 @@ async function callListsServiceAndHandleError({
   try {
     const client = await nyplApiClient()
     const response = await apiCall(client)
-    if (response.error) {
+    if (response.error || response.message) {
       logServerError(
         methodName,
-        `${response.error || response.error.message} Request: ${path}`
+        `${response?.error || response?.error?.message} Request: ${path}`
       )
       return {
         status: response.statusCode,
@@ -145,14 +145,13 @@ export async function updateList({
 }) {
   const path = `/patrons/${patronId}/list/${listId}`
   const body = {
-    patronId,
     listName,
     description,
   }
   return callListsServiceAndHandleError({
     methodName: "updateList",
     path,
-    apiCall: (client) => client.post(path, body),
+    apiCall: (client) => client.patch(path, body),
     onSuccess: (response) => ({ status: 200, list: response }),
   })
 }
@@ -235,7 +234,7 @@ export async function addRecordsToList({
   return callListsServiceAndHandleError({
     methodName: "addRecordsToList",
     path,
-    apiCall: (client) => client.put(path, body),
+    apiCall: (client) => client.patch(path, body),
   })
 }
 

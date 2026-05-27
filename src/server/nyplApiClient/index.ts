@@ -66,18 +66,14 @@ const nyplApiClient = async ({
       return originalPost(path, body)
     }
 
-    client.put = async (path: string, body: unknown) => {
+    const originalPatch = client.patch.bind(client)
+    client.patch = async (path: string, body: unknown) => {
       logger.info("Platform request", {
-        method: "PUT",
+        method: "PATCH",
         path: `${baseUrl}${path}`,
         body,
       })
-      return (client as any)._doRequest({
-        method: "PUT",
-        uri: `${baseUrl}${path}`,
-        body,
-        json: true,
-      })
+      return originalPatch(path, body)
     }
 
     const originalDelete = client.dangerouslyCallDelete.bind(client)

@@ -16,9 +16,11 @@ import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
 import { buildListRecords } from "../../../../utils/listUtils"
+import { useDisclosure } from "@chakra-ui/react"
+import { CreateEditListModal } from "./CreateEditList"
 
 /**
- * The ListActionsMenu component renders the "Options" button and modal (with list operations)
+ * The ListActionsMenu component renders the actions button and menu (with list operations)
  *  displayed for each list in the user's lists table.
  */
 const ListActionsMenu = ({
@@ -36,7 +38,9 @@ const ListActionsMenu = ({
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
 
+  // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
+  const [modalProps, setModalProps] = useState<BaseModalProps>()
   const deleteListModalProps = {
     variant: "confirmation",
     finalFocusRef: bannerRef,
@@ -84,7 +88,12 @@ const ListActionsMenu = ({
     onCancel: closeModal,
   }
 
-  const [modalProps, setModalProps] = useState<BaseModalProps>()
+  // Chakra modal controls used for Create/edit list modal
+  const {
+    isOpen: isEditOpen,
+    onOpen: openEdit,
+    onClose: closeEdit,
+  } = useDisclosure()
 
   const listOptions: ListItemsData[] = [
     {
@@ -93,7 +102,7 @@ const ListActionsMenu = ({
       label: "Edit",
       media: { type: "icon", name: "editorMode" },
       onClick: () => {
-        console.log("hello")
+        openEdit()
       },
     },
     {
@@ -228,6 +237,15 @@ const ListActionsMenu = ({
         />
       </Flex>
       <Modal {...modalProps} />
+      <CreateEditListModal
+        isOpen={isEditOpen}
+        onClose={closeEdit}
+        mode="edit"
+        list={list}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+        bannerRef={bannerRef}
+      />
     </>
   )
 }
