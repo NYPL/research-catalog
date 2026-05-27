@@ -338,7 +338,7 @@ export default function BibPage({
                 width="max-content"
                 mt="s"
               >
-                View in legacy catalog
+                View in Legacy Catalog (available onsite only)
               </Link>
             ) : null}
             <Link

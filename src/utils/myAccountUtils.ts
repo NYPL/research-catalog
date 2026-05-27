@@ -33,18 +33,23 @@ export function formatPatronName(name = "") {
 }
 
 /**
- * getDueDate
+ * formatDate
  * Returns date in readable string ("Month day, year")
  */
 export function formatDate(date: string | number | Date) {
   if (!date) return null
-  // pickup location returns an iso string, but expiration date is YYYY-MM-DD.
-  // we need to specify timezone to avoid off by one error.
-  // perhaps this method needs to be two methods for the specific cases.
+  // Pickup location returns an ISO string, but expiration date is YYYY-MM-DD.
+  // If the date is a string without a time component (e.g., "YYYY-MM-DD"),
+  // treat it as UTC to avoid timezone shifting.
   const d = new Date(date)
-  const year = d.getFullYear()
-  const day = d.getUTCDate()
-  const month = d.toLocaleString("default", { month: "long" })
+  const isDateOnly = typeof date === "string" && !date.includes("T")
+  const year = isDateOnly ? d.getUTCFullYear() : d.getFullYear()
+  const day = isDateOnly ? d.getUTCDate() : d.getDate()
+  const month = d.toLocaleString("default", {
+    month: "long",
+    timeZone: isDateOnly ? "UTC" : undefined,
+  })
+
   return `${month} ${day}, ${year}`
 }
 
