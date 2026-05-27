@@ -52,10 +52,6 @@ export default function ResultsError({
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            or{" "}
-            <Link isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
-            </Link>{" "}
             for more materials, or{" "}
             <Link
               onClick={() => openFeedbackFormWithError(errorStatus)}
@@ -113,7 +109,7 @@ export default function ResultsError({
               Invalid query
             </Heading>
             <Text marginBottom="0">
-              Your query contained an invalid search scope or Boolean operator.
+              Your query contained an invalid search scope or syntax error.
               Change your query and try again.
             </Text>
             <Text>

@@ -98,6 +98,19 @@ describe("Applied Filter utils", () => {
         dateTo: [{ value: "2010", count: null, label: "To 2010" }],
       })
     })
+
+    it("takes applied language filter values and adds the appropriate label", () => {
+      const appliedFilterValues = {
+        language: ["lang:alb"],
+      }
+      const parsed = addLabelPropAndParseFilters(
+        aggregationsResults.itemListElement,
+        appliedFilterValues
+      )
+      expect(parsed).toStrictEqual({
+        language: [{ value: "lang:alb", count: null, label: "Albanian" }],
+      })
+    })
   })
   describe("buildAppliedFiltersValueArrayWithTagRemoved", () => {
     it("removes the provided tag", () => {
