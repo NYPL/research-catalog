@@ -97,6 +97,8 @@ export interface AdvancedSearchQueryParams {
   contributor?: string
   title?: string
   subject?: string
+  genre?: string
+  series?: string
 }
 
 export interface SearchQueryParams

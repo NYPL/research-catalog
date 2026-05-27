@@ -1,4 +1,4 @@
-const TIMEOUT_MS = 12000
+const TIMEOUT_MS = 15000
 
 export async function withTimeout<T>(
   promise,

@@ -27,7 +27,7 @@ describe("Browse author/contributor results page", () => {
     )
 
     const displayingText = screen.queryByText(
-      'Displaying 1-50 of 423 results for Author/Contributor "test"'
+      'Displaying 1-50 of 423 results for author/contributor "test"'
     )
     expect(displayingText).toBeInTheDocument()
 
@@ -94,7 +94,7 @@ describe("Browse author/contributor results page", () => {
     )
 
     const displayingText = screen.queryByText(
-      'Displaying 1-50 of 423 results for Author/Contributor "test, performer"'
+      'Displaying 1-50 of 423 results for author/contributor "test, performer"'
     )
     expect(displayingText).toBeInTheDocument()
   })

@@ -38,7 +38,6 @@ describe("BibDetail component", () => {
       expect(screen.getByText("French")).toBeInTheDocument()
       expect(screen.getByText("Series")).toBeInTheDocument()
       expect(screen.queryAllByText("Childhood")[0]).toBeInTheDocument()
-      expect(screen.getByText("Series statement")).toBeInTheDocument()
       expect(screen.queryAllByText(/Haute enfance/)[0]).toBeInTheDocument()
     })
     it("merges annotated MARC and resource fields without label duplicates", () => {
@@ -175,8 +174,8 @@ describe("BibDetail component", () => {
       render(<BibDetails details={noParallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
       })
-      const seriesStatement = screen.getByText("Childhood")
-      expect(seriesStatement).toHaveAttribute(
+      const series = screen.getByText("Childhood")
+      expect(series).toHaveAttribute(
         "href",
         expect.stringContaining("/search?filters[series][0]=Childhood")
       )

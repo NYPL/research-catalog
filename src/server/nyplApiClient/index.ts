@@ -2,7 +2,6 @@ import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
-import { withTimeout } from "../../utils/serverUtils"
 
 const CACHE: Record<string, NyplApiClient> = {}
 
@@ -54,7 +53,7 @@ const nyplApiClient = async ({
         method: "GET",
         path: `${baseUrl}${path}`,
       })
-      return await withTimeout(originalGet(path))
+      return await originalGet(path)
     }
 
     const originalPost = client.post.bind(client)
@@ -64,7 +63,7 @@ const nyplApiClient = async ({
         path: `${baseUrl}${path}`,
         body,
       })
-      return await withTimeout(originalPost(path, body))
+      return await originalPost(path, body)
     }
 
     CACHE[clientCacheKey] = client
