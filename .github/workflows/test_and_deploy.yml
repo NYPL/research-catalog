@@ -58,7 +58,7 @@ jobs:
           if [[ "${GITHUB_REF_NAME}" == "lists" || "${GITHUB_REF_NAME}" == "train" ]]; then
             echo "DEPLOY_ENV=train" >> $GITHUB_ENV
             echo "ECR_REF_NAME=train" >> $GITHUB_ENV
-            echo "APP_ENV=qa" >> $GITHUB_ENV  # Use qa env for train and NYQL branch
+            echo "APP_ENV=qa" >> $GITHUB_ENV  # Use qa env for train and lists branch
           else
             echo "DEPLOY_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
             echo "ECR_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
