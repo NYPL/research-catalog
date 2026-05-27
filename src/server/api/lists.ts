@@ -1,4 +1,4 @@
-import type { ListSort } from "../../types/listTypes"
+import type { ListSort, ListRecordsSort } from "../../types/listTypes"
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 
@@ -241,11 +241,20 @@ export async function addRecordsToList({
 /**
  * Fetch Discovery API bib data for a set of list records.
  *
- * @param {string[]} uris - An array of record URIs to fetch.
+ * @param {string} uris - Comma separated string of URIs.
+ * @param {ListRecordsSort} [params.sort] - Optional sort parameter.
  * @returns {Promise<object>} - DiscoverySearchResultsElement[] of requested bibs.
  */
-export async function fetchBibRecords(uris: string[]) {
-  const path = `/discovery/resources?ids=${uris.join(",")}`
+export async function fetchBibRecords(uris: string, sort?: ListRecordsSort) {
+  let path = `/discovery/resources?ids=${uris}`
+
+  if (sort) {
+    const parts = sort.split("_")
+    const order = parts.pop()
+    const sortBy = parts.join("_")
+    path += `&sort=${sortBy}&sort_direction=${order}`
+  }
+
   return callListsServiceAndHandleError({
     methodName: "fetchBibRecords",
     path,

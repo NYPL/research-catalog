@@ -31,3 +31,12 @@ export type ListSort =
   | "created_date_desc"
   | "record_count_asc"
   | "record_count_desc"
+
+export type ListRecordsSort =
+  | "modified_date_desc"
+  | "modified_date_asc"
+  | "title_asc"
+  | "title_desc"
+  | "callnumber_asc"
+  | "creator_desc"
+  | "creator_asc"

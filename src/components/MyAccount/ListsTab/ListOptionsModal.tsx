@@ -1,6 +1,10 @@
 import { Button, Flex, Icon } from "@nypl/design-system-react-components"
 import type List from "../../../models/List"
 
+/**
+ * The ListOptionsModal component renders the "Options" button and modal (with list operations)
+ *  displayed for each list in the user's lists table.
+ */
 const ListOptionsModal = ({ list }: { list: List }) => {
   return (
     <Flex justifyContent="flex-end" width="100%">
