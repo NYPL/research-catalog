@@ -8,7 +8,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError } from "../../utils/logUtils"
+import { logServerError, logServerWarn } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
 
@@ -96,12 +96,13 @@ export async function fetchSearchResults(
     if (results.status) {
       logServerError(
         "fetchSearchResults",
-        `${
-          results.error && results.error
-        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+        `${results.name ? `${results.name} ` : ""}${
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,
+        name: results.name,
         error: results.error,
       }
     }
