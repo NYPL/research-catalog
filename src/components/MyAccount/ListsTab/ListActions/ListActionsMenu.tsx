@@ -155,7 +155,7 @@ const ListActionsMenu = ({
       label: "Download",
       media: { type: "icon", name: "download" },
       onClick: async () => {
-        downloadList(list, setStatus, setStatusMessage)
+        downloadList(list, "modified_date_asc", setStatus, setStatusMessage)
       },
     },
     {

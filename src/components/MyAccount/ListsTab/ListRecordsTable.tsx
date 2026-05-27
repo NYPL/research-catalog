@@ -25,11 +25,18 @@ import type { List } from "../../../types/listTypes"
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
 
-const ListRecordsTable = ({ list }: { list: List }) => {
+const ListRecordsTable = ({
+  list,
+  activeSort,
+  setActiveSort,
+}: {
+  list: List
+  activeSort
+  setActiveSort
+}) => {
   const listRecordsHeadingRef = useRef(null)
   const { setPersistentFocus } = useFocusContext()
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
-  const [activeSort, setActiveSort] = useState("added_date_asc")
 
   const [listRecords, setListRecords] = useState<ListRecord[]>(
     list?.records || []

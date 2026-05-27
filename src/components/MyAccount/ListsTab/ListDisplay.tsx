@@ -18,7 +18,7 @@ import { useFocusContext } from "../../../context/FocusContext"
 import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
-import type { List } from "../../../types/listTypes"
+import type { List, ListRecordsSort } from "../../../types/listTypes"
 import { useContext, useEffect, useRef, useState } from "react"
 import { StatusBanner, type StatusType } from "../Settings/StatusBanner"
 import { PatronDataContext } from "../../../context/PatronDataContext"
@@ -35,6 +35,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
 
   const router = useRouter()
   const { setPersistentFocus } = useFocusContext()
+
+  // Sort state for list records.
+  const [activeSort, setActiveSort] = useState("added_date_asc")
 
   const bannerRef = useRef<HTMLDivElement>(null)
 
@@ -247,7 +250,12 @@ const ListDisplay = ({ list }: { list?: List }) => {
           <Button
             variant="secondary"
             onClick={() => {
-              downloadList(list, setStatus, setStatusMessage)
+              downloadList(
+                list,
+                activeSort as ListRecordsSort,
+                setStatus,
+                setStatusMessage
+              )
             }}
           >
             <Icon align="left" size="medium">
@@ -295,7 +303,15 @@ const ListDisplay = ({ list }: { list?: List }) => {
           )}
         </div>
       </Flex>
-      {list.recordCount > 0 ? <ListRecordsTable list={list} /> : <EmptyList />}
+      {list.recordCount > 0 ? (
+        <ListRecordsTable
+          list={list}
+          activeSort={activeSort}
+          setActiveSort={setActiveSort}
+        />
+      ) : (
+        <EmptyList />
+      )}
     </Flex>
   )
 }

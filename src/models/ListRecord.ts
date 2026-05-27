@@ -10,6 +10,8 @@ export default class ListRecord {
   addedDate: string
   title: string
   itemCount?: number
+  publicationStatement?: string
+  creatorLiteral?: string
   callNumber?: string
   location?: string
 
@@ -18,7 +20,8 @@ export default class ListRecord {
     this.addedDate = formatMMDDYYYY(result.addedToListDate)
     this.title = bibData?.titleDisplay?.[0] || bibData?.title?.[0] || null
     this.itemCount = bibData?.numItemsTotal || bibData?.items?.length || 0
-    // If bib level info is available:
+    this.publicationStatement = bibData?.publicationStatement?.[0] || null
+    this.creatorLiteral = bibData?.creatorLiteral?.[0] || null
     this.callNumber =
       bibData?.shelfMark?.[0] || bibData?.callNumber || "Multiple"
     this.location = bibData?.location || "Multiple"

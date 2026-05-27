@@ -1,6 +1,6 @@
 import { BASE_URL } from "../config/constants"
 import ListRecord from "../models/ListRecord"
-import type { List } from "../types/listTypes"
+import type { List, ListRecordsSort } from "../types/listTypes"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -101,6 +101,7 @@ export const buildListRecords = (
 
 export const downloadList = async (
   list: List,
+  sort: ListRecordsSort,
   setStatus: any,
   setStatusMessage: any
 ) => {
@@ -128,7 +129,7 @@ export const downloadList = async (
           const updatedRecords = buildListRecords(
             data.bibData,
             chunk,
-            "added_date_asc"
+            sort ? sort : "added_date_asc"
           )
           allUpdatedRecords = [...allUpdatedRecords, ...updatedRecords]
         }
@@ -136,9 +137,26 @@ export const downloadList = async (
     }
 
     const tsvRows = [
-      ["Title", "Call number", "Location", "Date added to list"],
-      ...allUpdatedRecords.map((r) => [
+      [
+        "",
+        "Record number",
+        "Title",
+        "Author",
+        "Publication information",
+        "Call number",
+        "Location",
+        "Date added",
+      ],
+      ...allUpdatedRecords.map((r: ListRecord, index: number) => [
+        `"${index + 1}"`,
+        `"${r.uri ? r.uri.replace(/"/g, '""') : ""}"`,
         `"${r.title ? r.title.replace(/"/g, '""') : ""}"`,
+        `"${r.creatorLiteral ? r.creatorLiteral.replace(/"/g, '""') : ""}"`,
+        `"${
+          r.publicationStatement
+            ? r.publicationStatement.replace(/"/g, '""')
+            : ""
+        }"`,
         `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
         `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
         `"${r.addedDate || ""}"`,

@@ -406,8 +406,8 @@ export default class MyAccount {
             uri: record.uri,
             addedDate: formatMMDDYYYY(record.addedToListDate),
             title: bibData?.titleDisplay?.[0] || bibData?.title?.[0] || null,
-            //publicationStatement: bibData?.publicationStatement,
-            //creatorLiteral: bibData?.creatorLiteral[0],
+            publicationStatement: bibData?.publicationStatement?.[0] || null,
+            creatorLiteral: bibData?.creatorLiteral?.[0] || null,
             itemCount: bibData?.numItemsTotal || bibData?.items?.length || 0,
             // If bib level info is available:
             callNumber:
