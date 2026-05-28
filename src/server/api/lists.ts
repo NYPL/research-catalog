@@ -246,7 +246,8 @@ export async function addRecordsToList({
  * @returns {Promise<object>} - DiscoverySearchResultsElement[] of requested bibs.
  */
 export async function fetchBibRecords(uris: string, sort?: ListRecordsSort) {
-  let path = `/discovery/resources?ids=${uris}`
+  const limit = uris.split(",").length
+  let path = `/discovery/resources?ids=${uris}&per_page=${limit}`
 
   if (sort) {
     const parts = sort.split("_")

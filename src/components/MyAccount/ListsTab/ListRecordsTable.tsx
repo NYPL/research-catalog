@@ -53,7 +53,7 @@ const ListRecordsTable = ({
     return records
   }, [list, activeSort])
 
-  // TO DO: caching...
+  // TO DO: caching??
   useEffect(() => {
     const fetchBibData = async () => {
       if (!list || sortedRecords.length === 0) return
@@ -69,17 +69,29 @@ const ListRecordsTable = ({
         ? sortedRecords.slice(startIndex, endIndex)
         : sortedRecords
 
-      const uris = recordsToFetch.map((r) => r.uri).join(",")
+      const chunkSize = 50
+      let allBibData: any[] = []
+
+      for (let i = 0; i < recordsToFetch.length; i += chunkSize) {
+        const chunk = recordsToFetch.slice(i, i + chunkSize)
+        const uris = chunk.map((r) => r.uri).join(",")
+        try {
+          const response = await fetch(
+            `${BASE_URL}/api/account/lists/records?uris=${uris}`
+          )
+          if (response.ok) {
+            const data = await response.json()
+            allBibData = allBibData.concat(data.bibData || [])
+          }
+        } catch (error) {
+          console.error("Error fetching bib data chunk:", error)
+        }
+      }
 
       try {
-        const sortParam = isLocalSort ? "" : `&sort=${activeSort}`
-        const response = await fetch(
-          `${BASE_URL}/api/account/lists/records?uris=${uris}${sortParam}`
-        )
-        const data = await response.json()
-        if (data.bibData) {
+        if (allBibData.length > 0) {
           let updatedRecords = buildListRecords(
-            data.bibData,
+            allBibData,
             recordsToFetch,
             activeSort
           )

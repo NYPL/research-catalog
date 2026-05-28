@@ -94,6 +94,24 @@ export const buildListRecords = (
       const indexB = pageRecords.findIndex((r) => r.uri === b.uri)
       return indexA - indexB
     })
+  } else {
+    updatedRecords.sort((a: any, b: any) => {
+      let valA = ""
+      let valB = ""
+      if (activeSort.includes("title")) {
+        valA = a.title || ""
+        valB = b.title || ""
+      } else if (activeSort.includes("creator")) {
+        valA = a.creatorLiteral || ""
+        valB = b.creatorLiteral || ""
+      } else if (activeSort.includes("callnumber")) {
+        valA = a.callNumber || ""
+        valB = b.callNumber || ""
+      }
+
+      const comparison = valA.localeCompare(valB)
+      return activeSort.includes("desc") ? -comparison : comparison
+    })
   }
 
   return updatedRecords
@@ -115,26 +133,30 @@ export const downloadList = async (
     }
 
     const chunkSize = 50
-    let allUpdatedRecords: any[] = []
+    let allBibData: any[] = []
 
     for (let i = 0; i < list.records.length; i += chunkSize) {
       const chunk = list.records.slice(i, i + chunkSize)
       const uris = chunk.map((r) => r.uri).join(",")
-      const response = await fetch(
-        `${BASE_URL}/api/account/lists/records?uris=${uris}`
-      )
-      if (response.ok) {
-        const data = await response.json()
-        if (data.bibData) {
-          const updatedRecords = buildListRecords(
-            data.bibData,
-            chunk,
-            sort ? sort : "added_date_asc"
-          )
-          allUpdatedRecords = [...allUpdatedRecords, ...updatedRecords]
+      try {
+        // Rather than Promise.all, to prevent 429 error
+        const response = await fetch(
+          `${BASE_URL}/api/account/lists/records?uris=${uris}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          allBibData = allBibData.concat(data.bibData || [])
         }
+      } catch (error) {
+        console.error("Error fetching bib data chunk:", error)
       }
     }
+
+    const allUpdatedRecords = buildListRecords(
+      allBibData,
+      list.records,
+      sort || "added_date_asc"
+    )
 
     const tsvRows = [
       [
