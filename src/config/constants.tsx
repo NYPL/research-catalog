@@ -110,8 +110,9 @@ export const SEARCH_FORM_OPTIONS = {
         >
           Query Guide
         </Link>{" "}
-        to learn how to construct complex queries against a comprehensive set of
-        fields.{" "}
+        to learn how to construct queries or{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
+        for assistance.
       </span>
     ),
     placeholder:
