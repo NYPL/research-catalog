@@ -7,7 +7,6 @@ import type {
 } from "../types/listTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
-import { logServerWarn } from "./logUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -125,9 +124,10 @@ export const buildListRecords = (
   })
 
   if (missingRecords.length > 0) {
-    logServerWarn(
-      "buildListRecords",
-      `Missing bib data for list records: ${missingRecords.join(", ")}`
+    console.log(
+      `buildListRecords: Missing bib data for list records: ${missingRecords.join(
+        ", "
+      )}`
     )
   }
 
