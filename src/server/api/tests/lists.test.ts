@@ -148,7 +148,6 @@ describe("lists", () => {
       expect(mockClient.patch).toHaveBeenCalledWith(
         "/patrons/12345/list/list1",
         {
-          patronId: "12345",
           listName: "New Name",
           description: "new desc",
         }
