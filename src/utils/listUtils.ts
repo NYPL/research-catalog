@@ -1,6 +1,6 @@
 import { BASE_URL } from "../config/constants"
-import ListRecord from "../models/ListRecord"
-import type { List, ListRecordsSort } from "../types/listTypes"
+import type { List, ListRecord, ListRecordsSort } from "../types/listTypes"
+import { formatMMDDYYYY } from "./dateUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -61,37 +61,40 @@ export const buildListRecords = (
     return acc
   }, {})
 
-  // Map over the fetched bib data to instantiate ListRecords (preserve Discovery API sort order)
+  // Map over the fetched bib data to build whole ListRecords
   const updatedRecords = bibData.map((bib: any) => {
     const bibResult = bib.result || bib
     const uri =
       bibResult.uri || (bibResult["@id"] ? bibResult["@id"].substring(4) : "")
-    const record = pageRecordsMap[uri] || { uri }
-    // Temp ListRecord
-    const updated = new ListRecord(
-      {
-        uri: record.uri,
-        addedToListDate: new Date().toISOString(),
-      } as any,
-      bibResult
-    )
-    // restore the addedDate
-    updated.addedDate = record.addedDate
-    return updated
+    const listRecord = pageRecordsMap[uri] || { uri }
+    const updatedRecord = {
+      uri: listRecord.uri,
+      addedDate: formatMMDDYYYY(listRecord.addedDate),
+      title: bibResult.titleDisplay?.[0] || bibResult?.title?.[0] || null,
+      publicationStatement: bibResult?.publicationStatement?.[0] || null,
+      creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
+      itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
+      callNumber:
+        bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
+      location: bibResult?.location || "Multiple",
+    } as ListRecord
+    return updatedRecord
   })
 
-  // Append any records that Discovery API didn't return
+  // Append any list records that didn't have corresponding bib data
   pageRecords.forEach((record) => {
     if (!updatedRecords.find((r: any) => r.uri === record.uri)) {
       updatedRecords.push(record)
     }
   })
 
-  // Sort directly if added sort, don't use Discovery API bib sort
+  // Use the given sort from ListsService for date added
   if (activeSort.includes("added_date")) {
+    // O(1) lookup to prevent slow sort on large lists
+    const indexMap = new Map(pageRecords.map((r, i) => [r.uri, i]))
     updatedRecords.sort((a, b) => {
-      const indexA = pageRecords.findIndex((r) => r.uri === a.uri)
-      const indexB = pageRecords.findIndex((r) => r.uri === b.uri)
+      const indexA = indexMap.get(a.uri) ?? Infinity
+      const indexB = indexMap.get(b.uri) ?? Infinity
       return indexA - indexB
     })
   } else {
