@@ -12,7 +12,7 @@
 
 ## Accessibility updates?
 
-<!--- If your PR changes a user's ability to interact with the app or introduces a new feature, describe how and confirm the below criteria. -->
+<!--- If your PR changes a user's ability to access/interact with the app or introduces a new feature, briefly describe the change and check the below criteria. -->
 
 ### Accessibility checklist
 
