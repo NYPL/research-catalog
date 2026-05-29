@@ -28,15 +28,16 @@ const ListsDisplay = () => {
   const router = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
-  const bannerRef = useRef<HTMLDivElement>(null)
+
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [activeSort, setActiveSort] = useState("modified_date_desc")
+
   const [isLoading, setIsLoading] = useState(false)
 
   // Manage status banner display for list actions
+  const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusType>("")
   const [statusMessage, setStatusMessage] = useState<string>("")
-
   useEffect(() => {
     if (status !== "" && bannerRef.current) {
       setTimeout(() => {

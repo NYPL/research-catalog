@@ -9,7 +9,6 @@ import {
 import { useRef, useState, useMemo, useEffect } from "react"
 import { BASE_URL } from "../../../config/constants"
 import { useFocusContext, idConstants } from "../../../context/FocusContext"
-import type ListRecord from "../../../models/ListRecord"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import {
   LIST_RECORDS_PER_PAGE,
@@ -20,7 +19,7 @@ import {
 import ListSort from "./ListSort"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
-import type { List } from "../../../types/listTypes"
+import type { List, ListRecord } from "../../../types/listTypes"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */

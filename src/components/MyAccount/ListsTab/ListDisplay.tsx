@@ -76,7 +76,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
     `${list.recordCount} record${list.recordCount === 1 ? "" : "s"}`,
     `Last modified on ${list.modifiedDate}`,
     `Created on ${list.createdDate}`,
-  ].filter(Boolean)
+  ]
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
