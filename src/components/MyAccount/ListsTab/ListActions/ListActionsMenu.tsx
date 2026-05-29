@@ -43,7 +43,6 @@ const ListActionsMenu = ({
   const [modalProps, setModalProps] = useState<BaseModalProps>()
   const deleteListModalProps = {
     variant: "confirmation",
-    finalFocusRef: bannerRef,
     bodyContent: (
       <Box className={styles.noIconBody}>
         <Text>
@@ -85,7 +84,10 @@ const ListActionsMenu = ({
         closeModal()
       }
     },
-    onCancel: closeModal,
+    onCancel: () => {
+      setStatus("")
+      closeModal()
+    },
   }
 
   // Chakra modal controls used for Create/edit list modal

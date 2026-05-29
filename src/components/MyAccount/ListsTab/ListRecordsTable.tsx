@@ -59,13 +59,13 @@ const ListRecordsTable = ({
       if (!list || sortedRecords.length === 0) return
       setIsLoading(true)
 
-      const isLocalSort = activeSort.includes("added_date")
+      const canSortWithoutBibData = activeSort.includes("added_date")
       const startIndex = (currentPage - 1) * LIST_RECORDS_PER_PAGE
       const endIndex = startIndex + LIST_RECORDS_PER_PAGE
 
-      // If sorting by title/author, fetch ALL records so the Discovery API can sort globally
-      // otherwise: sorting by date added, only need to fetch the 20 records for the current page
-      const recordsToFetch = isLocalSort
+      // If sorting by title/author/call number, need to fetch bib data for all records
+      // otherwise: sorting by date added, only need to fetch bib data for the current page
+      const recordsToFetch = canSortWithoutBibData
         ? sortedRecords.slice(startIndex, endIndex)
         : sortedRecords
 
@@ -96,8 +96,8 @@ const ListRecordsTable = ({
             activeSort
           )
 
-          // slice out the current page to display if global fetch
-          if (!isLocalSort) {
+          // slice out the current page to display if fetching all
+          if (!canSortWithoutBibData) {
             updatedRecords = updatedRecords.slice(startIndex, endIndex)
           }
 

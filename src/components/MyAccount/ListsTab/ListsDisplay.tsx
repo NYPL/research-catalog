@@ -1,5 +1,10 @@
 import { useContext, useRef, useState, useEffect } from "react"
-import { Box, Flex, Table } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Flex,
+  SkeletonLoader,
+  Table,
+} from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
@@ -26,6 +31,7 @@ const ListsDisplay = () => {
   const bannerRef = useRef<HTMLDivElement>(null)
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [activeSort, setActiveSort] = useState("modified_date_desc")
+  const [isLoading, setIsLoading] = useState(false)
 
   // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusType>("")
@@ -33,11 +39,25 @@ const ListsDisplay = () => {
 
   useEffect(() => {
     if (status !== "" && bannerRef.current) {
-      bannerRef.current.focus()
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
     }
   }, [status])
 
+  const loader = (
+    <SkeletonLoader
+      showImage={false}
+      mb="m"
+      ml="0"
+      maxWidth="1200px"
+      contentSize={5}
+      showHeading={false}
+    />
+  )
+
   const handleSortChange = async (selectedSortOption: string) => {
+    setIsLoading(true)
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
@@ -53,6 +73,7 @@ const ListsDisplay = () => {
     } catch (error) {
       console.error("Error sorting lists:", error)
     }
+    setIsLoading(false)
     setPersistentFocus(idConstants.listsSort)
   }
 
@@ -66,6 +87,7 @@ const ListsDisplay = () => {
         key={list.id}
         onClick={(e: any) => {
           e.preventDefault()
+          setPersistentFocus(null)
           const queryIndex = ["lists", list.id]
           if (slug) queryIndex.push(slug)
           router.push(
@@ -125,31 +147,35 @@ const ListsDisplay = () => {
         )}
       </div>
       <Box display="grid" mt="xs">
-        <Table
-          className={styles.listsTable}
-          columnHeaders={[
-            "List name",
-            "List description",
-            "Records",
-            "Date created",
-            "Date modified",
-            "Action",
-          ]}
-          columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
-          columnStyles={[
-            { width: 320, minWidth: 240 },
-            { width: "auto", minWidth: 240 },
-            { width: 160, minWidth: 120 },
-            { width: 160, minWidth: 120 },
-            { width: 160, minWidth: 120 },
-            { width: 120, minWidth: 128 },
-          ]}
-          tableData={tableData}
-          isScrollable
-          showRowDividers
-          my={{ base: 0, md: "s" }}
-          data-testid="list-table"
-        />
+        {isLoading ? (
+          loader
+        ) : (
+          <Table
+            className={styles.listsTable}
+            columnHeaders={[
+              "List name",
+              "List description",
+              "Records",
+              "Date created",
+              "Date modified",
+              "Action",
+            ]}
+            columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
+            columnStyles={[
+              { width: 320, minWidth: 240 },
+              { width: "auto", minWidth: 240 },
+              { width: 160, minWidth: 120 },
+              { width: 160, minWidth: 120 },
+              { width: 160, minWidth: 120 },
+              { width: 120, minWidth: 128 },
+            ]}
+            tableData={tableData}
+            isScrollable
+            showRowDividers
+            my={{ base: 0, md: "s" }}
+            data-testid="list-table"
+          />
+        )}
       </Box>
     </Flex>
   )

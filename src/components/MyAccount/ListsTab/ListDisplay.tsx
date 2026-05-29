@@ -46,7 +46,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
   const [statusMessage, setStatusMessage] = useState<string>("")
   useEffect(() => {
     if (status !== "" && bannerRef.current) {
-      bannerRef.current.focus()
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
     }
   }, [status])
 
@@ -84,7 +86,6 @@ const ListDisplay = ({ list }: { list?: List }) => {
 
   const deleteListModalProps = {
     variant: "confirmation",
-    finalFocusRef: status !== "" ? bannerRef : undefined,
     bodyContent: (
       <Box className={styles.noIconBody}>
         <Text>
@@ -132,7 +133,10 @@ const ListDisplay = ({ list }: { list?: List }) => {
         console.error("Error deleting list:", error)
       }
     },
-    onCancel: closeModal,
+    onCancel: () => {
+      setStatus("")
+      closeModal()
+    },
   }
 
   return (
