@@ -20,6 +20,7 @@ import { getPickupLocations } from "../utils/pickupLocationsUtils"
 import type { List, ListRecord, ListResult } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists } from "../server/api/lists"
+import { buildListRecordWithBibData } from "../utils/listUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -402,18 +403,8 @@ export default class MyAccount {
   ): ListRecord[] {
     return result?.records?.length
       ? result.records.map((record) => {
-          return {
-            uri: record.uri,
-            addedDate: formatMMDDYYYY(record.addedToListDate),
-            title: bibData?.titleDisplay?.[0] || bibData?.title?.[0] || null,
-            publicationStatement: bibData?.publicationStatement?.[0] || null,
-            creatorLiteral: bibData?.creatorLiteral?.[0] || null,
-            itemCount: bibData?.numItemsTotal || bibData?.items?.length || 0,
-            // If bib level info is available:
-            callNumber:
-              bibData?.shelfMark?.[0] || bibData?.callNumber || "Multiple",
-            location: bibData?.location || "Multiple",
-          }
+          const bib = bibData?.[record.uri] || {}
+          return buildListRecordWithBibData(record, bib)
         })
       : []
   }

@@ -20,6 +20,7 @@ import ListSort from "./ListSort"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
 import type { List, ListRecord } from "../../../types/listTypes"
+import type { DiscoverySearchResultsElement } from "../../../types/searchTypes"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
@@ -69,7 +70,7 @@ const ListRecordsTable = ({
         : sortedRecords
 
       const chunkSize = 50
-      let allBibData: any[] = []
+      let allBibData: DiscoverySearchResultsElement[] = []
 
       for (let i = 0; i < recordsToFetch.length; i += chunkSize) {
         const chunk = recordsToFetch.slice(i, i + chunkSize)

@@ -1,5 +1,11 @@
 import { BASE_URL } from "../config/constants"
-import type { List, ListRecord, ListRecordsSort } from "../types/listTypes"
+import type {
+  List,
+  ListRecord,
+  ListRecordResult,
+  ListRecordsSort,
+} from "../types/listTypes"
+import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
@@ -50,10 +56,46 @@ export const listResultsHeading = (list, currentPage) => {
   }`
 }
 
+export const buildListRecordWithBibData = (
+  listRecord: ListRecord | ListRecordResult,
+  bibData?: any
+): ListRecord => {
+  const bibResult = bibData?.result || bibData || {}
+
+  const addedDate =
+    "addedDate" in listRecord && listRecord.addedDate
+      ? listRecord.addedDate
+      : "addedToListDate" in listRecord && listRecord.addedToListDate
+      ? formatMMDDYYYY(listRecord.addedToListDate)
+      : ""
+
+  return {
+    uri: listRecord.uri,
+    addedDate,
+    title: bibResult.titleDisplay?.[0] || bibResult?.title?.[0] || null,
+    publicationStatement: bibResult?.publicationStatement?.[0] || null,
+    creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
+    itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
+    callNumber:
+      bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
+    location: bibResult?.location || "Multiple",
+  }
+}
+
+/**
+ * buildListRecords
+ * Builds, merges, and sorts a complete array of list records using raw backend list data
+ * and metadata fetched from the Discovery API.
+ *
+ * @param {DiscoveryBibResult[]} bibData - An array of bibs from Discovery API
+ * @param {ListRecordResult[] | ListRecord[]} pageRecords - The raw list records from ListsService or already built ListRecords
+ * @param {ListRecordsSort} activeSort - The currently active sort
+ * @returns {ListRecord[]} A populated and sorted array of ListRecords for display or download
+ */
 export const buildListRecords = (
-  bibData: any[],
-  pageRecords: ListRecord[],
-  activeSort: string
+  bibData: DiscoverySearchResultsElement[],
+  pageRecords: ListRecordResult[] | ListRecord[],
+  activeSort: ListRecordsSort
 ): ListRecord[] => {
   // Map of the page's list records keyed by their URI
   const pageRecordsMap = pageRecords.reduce((acc: any, record: any) => {
@@ -66,19 +108,8 @@ export const buildListRecords = (
     const bibResult = bib.result || bib
     const uri =
       bibResult.uri || (bibResult["@id"] ? bibResult["@id"].substring(4) : "")
-    const listRecord = pageRecordsMap[uri] || { uri }
-    const updatedRecord = {
-      uri: listRecord.uri,
-      addedDate: formatMMDDYYYY(listRecord.addedDate),
-      title: bibResult.titleDisplay?.[0] || bibResult?.title?.[0] || null,
-      publicationStatement: bibResult?.publicationStatement?.[0] || null,
-      creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
-      itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
-      callNumber:
-        bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
-      location: bibResult?.location || "Multiple",
-    } as ListRecord
-    return updatedRecord
+    const listRecord = pageRecordsMap[uri] || ({ uri } as ListRecord)
+    return buildListRecordWithBibData(listRecord, bibResult)
   })
 
   // Append any list records that didn't have corresponding bib data
@@ -91,7 +122,9 @@ export const buildListRecords = (
   // Use the given sort from ListsService for date added
   if (activeSort.includes("added_date")) {
     // O(1) lookup to prevent slow sort on large lists
-    const indexMap = new Map(pageRecords.map((r, i) => [r.uri, i]))
+    const indexMap = new Map(
+      pageRecords.map((r, i) => [r.uri, i] as [string, number])
+    )
     updatedRecords.sort((a, b) => {
       const indexA = indexMap.get(a.uri) ?? Infinity
       const indexB = indexMap.get(b.uri) ?? Infinity
@@ -158,7 +191,7 @@ export const downloadList = async (
     const allUpdatedRecords = buildListRecords(
       allBibData,
       list.records,
-      sort || "added_date_asc"
+      sort || ("added_date_asc" as ListRecordsSort)
     )
 
     const tsvRows = [

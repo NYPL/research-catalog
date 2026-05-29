@@ -7,7 +7,7 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { BASE_URL } from "../../../config/constants"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 import { processedLists } from "../../../../__test__/fixtures/listFixtures"
-import type { List, ListResult } from "../../../types/listTypes"
+import type { List } from "../../../types/listTypes"
 import mockRouter from "next-router-mock"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
@@ -199,12 +199,12 @@ describe("ListsTab", () => {
     expect(within(rows[1]).getByText("(2 items)")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Call Number 2")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Location 2")).toBeInTheDocument()
-    expect(within(rows[1]).getByText("1/2/2023")).toBeInTheDocument()
+    expect(within(rows[1]).getByText("01/02/2023")).toBeInTheDocument()
 
     expect(within(rows[2]).getByText("First Book")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Call Number 1")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Location 1")).toBeInTheDocument()
-    expect(within(rows[2]).getByText("1/1/2023")).toBeInTheDocument()
+    expect(within(rows[2]).getByText("01/01/2023")).toBeInTheDocument()
 
     expect(global.fetch).toHaveBeenCalledWith(
       `${BASE_URL}/api/account/lists/records?uris=b456,b123`
