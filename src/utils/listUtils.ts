@@ -7,6 +7,7 @@ import type {
 } from "../types/listTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
+import { logServerWarn } from "./logUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -88,13 +89,13 @@ export const buildListRecordWithBibData = (
  * and metadata fetched from the Discovery API.
  *
  * @param {DiscoveryBibResult[]} bibData - An array of bibs from Discovery API
- * @param {ListRecordResult[] | ListRecord[]} pageRecords - The raw list records from ListsService or already built ListRecords
+ * @param {(ListRecordResult | ListRecord)[]} pageRecords - The raw list records from ListsService or already built ListRecords
  * @param {ListRecordsSort} activeSort - The currently active sort
  * @returns {ListRecord[]} A populated and sorted array of ListRecords for display or download
  */
 export const buildListRecords = (
   bibData: DiscoverySearchResultsElement[],
-  pageRecords: ListRecordResult[] | ListRecord[],
+  pageRecords: (ListRecordResult | ListRecord)[],
   activeSort: ListRecordsSort
 ): ListRecord[] => {
   // Map of the page's list records keyed by their URI
@@ -112,12 +113,23 @@ export const buildListRecords = (
     return buildListRecordWithBibData(listRecord, bibResult)
   })
 
-  // Append any list records that didn't have corresponding bib data
+  const fetchedUris = new Set(updatedRecords.map((r) => r.uri))
+  const missingRecords: string[] = []
+
+  // Append and log any list records that didn't have corresponding bib data
   pageRecords.forEach((record) => {
-    if (!updatedRecords.find((r: any) => r.uri === record.uri)) {
-      updatedRecords.push(record)
+    if (!fetchedUris.has(record.uri)) {
+      missingRecords.push(record.uri)
+      updatedRecords.push(buildListRecordWithBibData(record))
     }
   })
+
+  if (missingRecords.length > 0) {
+    logServerWarn(
+      "buildListRecords",
+      `Missing bib data for list records: ${missingRecords.join(", ")}`
+    )
+  }
 
   // Use the given sort from ListsService for date added
   if (activeSort.includes("added_date")) {
