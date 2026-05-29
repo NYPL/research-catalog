@@ -6,18 +6,24 @@
 
 <!--- Brief, bulleted list of changes. -->
 
-## How should this be tested?
+## How has this been tested? How should a reviewer test this?
 
-<!--- Describe how you tested your changes and/or how the reviewer can test the changes made in this PR. -->
+<!--- Describe how you tested your changes and how the reviewer can test the changes made in this PR. -->
 
-## Accessibility concerns or updates
+## Accessibility updates?
 
-<!--- Describe any accessibility concerns or updates that were made that should be known. -->
+<!--- If your PR changes a user's ability to interact with the app or introduces a new feature, describe how and confirm the below criteria. -->
 
-### Checklist:
+### Accessibility checklist
 
-<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
+- [ ] The feature works with keyboard inputs (tabbing, arrows, space, enter, esc).
+- [ ] Tested with a screen reader if the feature involves hidden text or `aria-live`.
+- [ ] Confirmed focus management is correct for UI updates and DOM `ref`s.
+- [ ] Verified the feature works when zoomed in to 200% and 400%.
 
-- [ ] I updated the CHANGELOG with the appropriate information and JIRA ticket number (if applicable).
-- [ ] I have added relevant accessibility documentation for this pull request.
-- [ ] All new and existing tests passed.
+### Developer checklist
+
+<!--- Check all the boxes that apply. -->
+
+- [ ] I have updated the changelog and any relevant documentation.
+- [ ] All new and existing unit tests passed.
