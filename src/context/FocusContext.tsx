@@ -37,7 +37,6 @@ export const idConstants = {
   dateTo: "date-to",
   advancedSearchError: "advanced-search-error",
   listRecordsHeading: "list-records-heading",
-  accountStatusBanner: "account-status-banner",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
