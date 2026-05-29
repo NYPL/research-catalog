@@ -140,6 +140,7 @@ export async function getServerSideProps({ req, res }) {
             const listId = pathWithoutQuery.split("/")[1]
             const list = lists?.find((l: any) => l.id === listId)
             if (list) {
+              // Get a human-readable slug from the list's name and construct the id + slug URL
               const slug = generateListSlug(list.listName)
               const canonicalPath = `lists/${listId}${slug ? `/${slug}` : ""}`
               if (pathWithoutQuery !== canonicalPath) {
@@ -154,6 +155,7 @@ export async function getServerSideProps({ req, res }) {
                 }
               }
             } else {
+              // If the requested list ID does not exist in the user's account, fallback to all lists
               return {
                 redirect: {
                   destination: "/account/lists",
