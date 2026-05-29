@@ -13,7 +13,11 @@ import type {
 import { SITE_NAME } from "../../src/config/constants"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
-import type { HTTPStatusCode } from "../../src/types/appTypes"
+import type {
+  APIError,
+  APIErrorName,
+  HTTPStatusCode,
+} from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
 
@@ -22,6 +26,7 @@ interface SearchPageProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
+  errorName?: APIErrorName | null
 }
 
 /**
@@ -32,6 +37,7 @@ export default function SearchPage({
   results,
   isAuthenticated,
   errorStatus = null,
+  errorName = null,
 }: SearchPageProps) {
   const { push, query } = useRouter()
   // TODO: Move this to global context
@@ -66,6 +72,7 @@ export default function SearchPage({
   return (
     <Search
       errorStatus={errorStatus}
+      errorName={errorName}
       results={results}
       metadataTitle={`Search | ${SITE_NAME}`}
       activePage="search"
@@ -85,7 +92,12 @@ export async function getServerSideProps({ req, query }) {
 
   // Direct to error display according to status
   if (results.status !== 200) {
-    return { props: { errorStatus: results.status } }
+    return {
+      props: {
+        errorStatus: (results as APIError).status,
+        errorName: (results as APIError).name,
+      },
+    }
   }
 
   // Check for `redirectOnMatch` trigger:

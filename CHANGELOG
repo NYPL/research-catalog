@@ -13,12 +13,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added Playwright tests for requesting an item for onsite [SCC-5323](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5323)
 - Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
 - Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
+- Added CQL search scope, error page, and query highlight banner [SCC-5307](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5307) \*\*EMMA: DO NOT RELEASE WITHOUT QUERY GUIDE LINK
+
+## [1.9.2] 2026-05-27
 
 ### Updated
 
 - Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
-- Remove linked author/series literals as fallback
+- Removed linked author/series literals as fallback
 - Fixed timezone shift in date formatting [SCC-5340](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5340)
+- Updated to use `searchVocabularies` language labels for filters [SCC-5369](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5369)
+
+### Added
+
+- Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+- Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
+
+## [1.9.1] 2026-05-20
+
+- Updated copy about legacy deprecation on homepage [SCC-5397](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5397)
+- Updated 404 page to remove legacy catalog link [SCC-50139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
+- Updated bib page to indicate legacy catalog link is onsite only [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007)
+- Updated browse tips copy [SCC-5398](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5398)
+
+## Hot fix 2026-04-14
+
+- Added 10s timeout to all RC requests so that 504s can be handled more gracefully
 
 ## [1.9.0] 2026-04-14
 

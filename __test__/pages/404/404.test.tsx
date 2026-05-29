@@ -27,7 +27,7 @@ describe("redirect 404", () => {
     const heading = within(container).getByRole("heading")
     expect(heading).toHaveTextContent("We couldn't find that page")
   })
-  it("should have links to circulating and legacy catalogs", () => {
+  it("should have link to circulating catalog", () => {
     render(<Redirect404 />)
     const container = screen.getByRole("main")
 
