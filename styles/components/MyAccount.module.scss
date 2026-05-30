@@ -223,6 +223,14 @@
   }
 }
 
+.defaultListOptionsMenu {
+  [role="menuitem"] {
+    svg {
+      fill: var(--nypl-colors-ui-gray-dark);
+    }
+  }
+}
+
 .changeLocation {
   margin-bottom: 0;
   width: max-content;

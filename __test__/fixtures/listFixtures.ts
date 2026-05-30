@@ -38,11 +38,13 @@ export const processedLists: List[] = [
     modifiedDate: "4/15/2026",
     listName: "First list",
     description: null,
+    isDefaultList: true,
   },
   {
     id: "1234-cc-vv",
     patronId: "12345",
     recordCount: 1,
+    isDefaultList: false,
     records: [
       {
         uri: "b12404033",

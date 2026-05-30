@@ -278,27 +278,29 @@ const ListDisplay = ({ list }: { list?: List }) => {
             </Icon>
             Download
           </Button>
-          <Button
-            variant="secondary"
-            sx={{
-              color: "ui.error.primary",
-              borderColor: "ui.error.primary",
-              _hover: {
+          {!list.isDefaultList && (
+            <Button
+              variant="secondary"
+              sx={{
                 color: "ui.error.primary",
                 borderColor: "ui.error.primary",
-                background: "ui.error.primary-05",
-              },
-            }}
-            onClick={() => {
-              setStatus("")
-              setStatusMessage("")
-              setModalProps(deleteListModalProps as ConfirmationModalProps)
-              openModal()
-            }}
-          >
-            <Icon name="actionDelete" align="left" size="medium" />
-            Delete
-          </Button>
+                _hover: {
+                  color: "ui.error.primary",
+                  borderColor: "ui.error.primary",
+                  background: "ui.error.primary-05",
+                },
+              }}
+              onClick={() => {
+                setStatus("")
+                setStatusMessage("")
+                setModalProps(deleteListModalProps as ConfirmationModalProps)
+                openModal()
+              }}
+            >
+              <Icon name="actionDelete" align="left" size="medium" />
+              Delete
+            </Button>
+          )}
         </ButtonGroup>
         <Modal {...modalProps} />
         <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
