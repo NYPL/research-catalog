@@ -3,9 +3,10 @@ import { Button, Icon } from "@nypl/design-system-react-components"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
+import type Bib from "../../models/Bib"
 
 interface ManageBibInListProps {
-  bib: SearchResultsBib
+  bib: SearchResultsBib | Bib
   isAuthenticated: boolean
 }
 

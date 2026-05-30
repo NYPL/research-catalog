@@ -50,6 +50,7 @@ import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
 import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
+import { ManageBibInList } from "../../../src/components/SearchResults/ManageBibInList"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -236,9 +237,12 @@ export default function BibPage({
             Finding aid available
           </StatusBadge>
         )}
-        <Heading level="h2" size="heading3" mb="-m">
-          {bib.title}
-        </Heading>
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <Heading level="h2" size="heading3" mb="-m">
+            {bib.title}
+          </Heading>
+          <ManageBibInList bib={bib} isAuthenticated={isAuthenticated} />
+        </Flex>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
           {findingAid && (
