@@ -100,17 +100,6 @@ const ListActionsMenu = ({
   const listOptions: ListItemsData[] = [
     {
       type: "action",
-      id: "edit",
-      label: "Edit",
-      media: { type: "icon", name: "editorMode" },
-      onClick: () => {
-        setStatus("")
-        setStatusMessage("")
-        openEdit()
-      },
-    },
-    {
-      type: "action",
       id: "duplicate",
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
@@ -175,6 +164,17 @@ const ListActionsMenu = ({
         setStatusMessage("")
         setModalProps(deleteListModalProps as ConfirmationModalProps)
         openModal()
+      },
+    })
+    listOptions.unshift({
+      type: "action",
+      id: "edit",
+      label: "Edit",
+      media: { type: "icon", name: "editorMode" },
+      onClick: () => {
+        setStatus("")
+        setStatusMessage("")
+        openEdit()
       },
     })
   }
