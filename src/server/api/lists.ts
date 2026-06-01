@@ -225,11 +225,11 @@ export async function addRecordsToList({
 }: {
   patronId: string
   listId: string
-  records: string[]
+  records: string
 }) {
   const path = `/patrons/${patronId}/list/${listId}/records`
   const body = {
-    records,
+    records: records.split(","),
   }
   return callListsServiceAndHandleError({
     methodName: "addRecordsToList",

@@ -51,6 +51,8 @@ import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
 import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 import { ManageBibInList } from "../../../src/components/SearchResults/ManageBibInList"
+import { PatronDataProvider } from "../../../src/context/PatronDataContext"
+import MyAccount from "../../../src/models/MyAccount"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -59,6 +61,7 @@ interface BibPropsType {
   itemPage?: number
   viewAllItems?: boolean
   errorStatus?: HTTPStatusCode | null
+  accountData?: any
 }
 
 /**
@@ -71,6 +74,7 @@ export default function BibPage({
   itemPage = 1,
   viewAllItems = false,
   errorStatus = null,
+  accountData,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
@@ -226,7 +230,7 @@ export default function BibPage({
   }
 
   return (
-    <>
+    <PatronDataProvider value={accountData || null}>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Box mb="l">
@@ -342,7 +346,7 @@ export default function BibPage({
                 width="max-content"
                 mt="s"
               >
-                View in legacy catalog
+                View in legacy catalog{" "}
               </Link>
             ) : null}
             <Link
@@ -357,7 +361,7 @@ export default function BibPage({
           </Flex>
         </Box>
       </Layout>
-    </>
+    </PatronDataProvider>
   )
 }
 
@@ -384,12 +388,22 @@ export async function getServerSideProps({ params, query, req }) {
       }
   }
 
+  let accountData = null
+  if (isAuthenticated) {
+    const patronId = patronTokenResponse.decodedPatron.sub
+    const accountModel = new MyAccount(null, patronId)
+    const lists = await accountModel.getLists(patronId)
+
+    accountData = { patron: { id: patronId }, lists }
+  }
+
   return {
     props: {
       discoveryBibResult: results.discoveryBibResult,
       annotatedMarc: results.annotatedMarc,
       isAuthenticated,
       itemPage: query.item_page ? parseInt(query.item_page) : 1,
+      accountData,
     },
   }
 }

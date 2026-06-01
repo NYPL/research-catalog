@@ -1,10 +1,11 @@
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Button, Icon } from "@nypl/design-system-react-components"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import type Bib from "../../models/Bib"
 import { PatronDataContext } from "../../context/PatronDataContext"
+import { BASE_URL } from "../../config/constants"
 
 interface ManageBibInListProps {
   bib: SearchResultsBib | Bib
@@ -16,10 +17,9 @@ export const ManageBibInList = ({
   isAuthenticated,
 }: ManageBibInListProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const { setUpdatedAccountData, updatedAccountData } =
-    useContext(PatronDataContext)
+  const { updatedAccountData } = useContext(PatronDataContext)
 
-  const onlyDefaultList = updatedAccountData.lists?.length === 1
+  const onlyHasDefaultList = updatedAccountData?.lists?.length === 1
 
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
@@ -40,8 +40,9 @@ export const ManageBibInList = ({
     }
   }, [bib.id])
 
-  const handleSaveClick = (e: React.MouseEvent) => {
-    // Intercept if not logged in
+  const handleSaveClick = async (e: React.MouseEvent) => {
+    console.log("here")
+    // Intercept if not logged in:
     if (!isAuthenticated) {
       e.preventDefault()
 
@@ -59,41 +60,47 @@ export const ManageBibInList = ({
       return
     }
     // If user has only the default list:
-    if (onlyDefaultList) {
+    if (onlyHasDefaultList) {
+      const defaultList = updatedAccountData.lists?.find(
+        (list) => list.isDefaultList
+      )
+      const defaultListId = defaultList?.id
+
       try {
-        const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            patronId: patron.id.toString(),
-            listName: `${list.listName.substring(0, 90)} (copy)`,
-            description: list.description,
-            records: list.records ? list.records.map((r) => r.uri) : [],
-          }),
-        })
+        const response = await fetch(
+          `${BASE_URL}/api/account/lists/records?uris=${bib.id}`,
+          {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              patronId: updatedAccountData.patron.id.toString(),
+              listId: defaultListId,
+            }),
+          }
+        )
         if (response.ok) {
           const data = await response.json()
-          if (data && data.list) {
-            setUpdatedAccountData({
-              ...updatedAccountData,
-              lists: [data.list, ...lists],
-            })
-          }
-          setStatus("success")
-          setStatusMessage("Your list has been duplicated.")
+
+          // setStatus("success")
+          // setStatusMessage("Your list has been duplicated.")
         } else {
-          setStatus("failure")
-          setStatusMessage("Your list could not be duplicated.")
+          // setStatus("failure")
+          // setStatusMessage("Your list could not be duplicated.")
         }
       } catch (error) {
-        console.error("Error duplicating list:", error)
-        setStatus("failure")
-        setStatusMessage("Your list could not be duplicated.")
+        console.error(
+          `Error adding record ${bib.id} to list ${defaultListId}:`,
+          error
+        )
+        // setStatus("failure")
+        // setStatusMessage("Your list could not be duplicated.")
       }
     }
   }
+
+  const [buttonText, setButtonText] = useState("Save")
 
   return (
     <Button
@@ -106,14 +113,14 @@ export const ManageBibInList = ({
       <Icon>
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
           <path
-            fill-rule="evenodd"
-            clip-rule="evenodd"
+            fillRule="evenodd"
+            clipRule="evenodd"
             fill="#0069BF"
             d="M17 3C18.1 3 19 3.9 19 5V21L12 18L5 21V5C5 3.9 5.9 3 7 3H17ZM7 5V18L12 15.8203L17 18V5H7Z"
           />
         </svg>
       </Icon>
-      Save
+      {buttonText}
     </Button>
   )
 }
