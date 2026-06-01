@@ -48,8 +48,7 @@ export const appConfig: AppConfig = {
   searchNotification: {
     development: "",
     qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
-    production:
-      "We are currently experiencing delays with offsite requests and Scan and Deliver requests for some Harvard material.",
+    production: "",
   },
   urls: {
     circulatingCatalog: "https://borrow.nypl.org",
