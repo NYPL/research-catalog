@@ -1,9 +1,10 @@
-import { useEffect, useRef } from "react"
+import { useContext, useEffect, useRef } from "react"
 import { Button, Icon } from "@nypl/design-system-react-components"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import type Bib from "../../models/Bib"
+import { PatronDataContext } from "../../context/PatronDataContext"
 
 interface ManageBibInListProps {
   bib: SearchResultsBib | Bib
@@ -15,6 +16,10 @@ export const ManageBibInList = ({
   isAuthenticated,
 }: ManageBibInListProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const { setUpdatedAccountData, updatedAccountData } =
+    useContext(PatronDataContext)
+
+  const onlyDefaultList = updatedAccountData.lists?.length === 1
 
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
@@ -52,6 +57,41 @@ export const ManageBibInList = ({
 
       window.location.assign(`${loginEndpoint}?redirect_uri=${encodedRedirect}`)
       return
+    }
+    // If user has only the default list:
+    if (onlyDefaultList) {
+      try {
+        const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            patronId: patron.id.toString(),
+            listName: `${list.listName.substring(0, 90)} (copy)`,
+            description: list.description,
+            records: list.records ? list.records.map((r) => r.uri) : [],
+          }),
+        })
+        if (response.ok) {
+          const data = await response.json()
+          if (data && data.list) {
+            setUpdatedAccountData({
+              ...updatedAccountData,
+              lists: [data.list, ...lists],
+            })
+          }
+          setStatus("success")
+          setStatusMessage("Your list has been duplicated.")
+        } else {
+          setStatus("failure")
+          setStatusMessage("Your list could not be duplicated.")
+        }
+      } catch (error) {
+        console.error("Error duplicating list:", error)
+        setStatus("failure")
+        setStatusMessage("Your list could not be duplicated.")
+      }
     }
   }
 
