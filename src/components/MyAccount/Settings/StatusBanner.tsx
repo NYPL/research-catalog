@@ -27,7 +27,11 @@ const specificFailureContent = (statusMessage: string) => {
 }
 
 const specificSuccessContent = (statusMessage: string) => {
-  return <Text marginBottom={0}>{statusMessage}</Text>
+  if (typeof statusMessage === "string") {
+    return <Text marginBottom={0}>{statusMessage}</Text>
+  } else {
+    return statusMessage
+  }
 }
 
 const statusContent = (status, statusMessage) => {

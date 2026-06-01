@@ -27,5 +27,14 @@ export default async function handler(
       patronId,
     })
     res.status(response.status || 200).json(response)
+  } else if (req.method === "DELETE") {
+    const response = await addRecordsToList({
+      records: uris,
+      listId,
+      patronId,
+    })
+    res.status(response.status || 200).json(response)
+  } else {
+    return res.status(405).json({ error: "Method not allowed" })
   }
 }

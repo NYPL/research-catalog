@@ -17,6 +17,9 @@ import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 import SearchResultItems from "./SearchResultItems"
 import { ManageBibInList } from "./ManageBibInList"
+import type { StatusType } from "../MyAccount/Settings/StatusBanner"
+import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
+import { useEffect, useRef, useState } from "react"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -53,6 +56,18 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
     return acc
   }, [])
 
+  // Manage status banner display for list actions
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
+    }
+  }, [status])
+
   return (
     <Card
       key={bib.id}
@@ -82,7 +97,12 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
             )}
             <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
           </Box>
-          <ManageBibInList bib={bib} isAuthenticated={isAuthenticated} />
+          <ManageBibInList
+            bib={bib}
+            isAuthenticated={isAuthenticated}
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+          />
         </Flex>
       </CardHeading>
       <CardContent data-testid="card-content">
@@ -95,6 +115,11 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
         >
           {joinedMetadata}
         </Box>
+        <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
+          {status !== "" && (
+            <StatusBanner status={status} statusMessage={statusMessage} />
+          )}
+        </div>
         {(bib.findingAid || bib.hasElectronicResources) && (
           <Box width="100%" mt="s">
             {bib.findingAid ? (

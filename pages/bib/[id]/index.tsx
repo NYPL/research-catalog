@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -53,6 +53,8 @@ import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 import { ManageBibInList } from "../../../src/components/SearchResults/ManageBibInList"
 import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
+import type { StatusType } from "../../../src/components/MyAccount/Settings/StatusBanner"
+import { StatusBanner } from "../../../src/components/MyAccount/Settings/StatusBanner"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -99,6 +101,18 @@ export default function BibPage({
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
+
+  // Manage status banner display for list actions
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
+    }
+  }, [status])
 
   if (errorStatus) {
     return (
@@ -236,6 +250,15 @@ export default function BibPage({
         <Box mb="l">
           <UserGuideBanner />
         </Box>
+        <div
+          tabIndex={-1}
+          ref={bannerRef}
+          style={{ marginTop: "-16px", marginBottom: "32px" }}
+        >
+          {status !== "" && (
+            <StatusBanner status={status} statusMessage={statusMessage} />
+          )}
+        </div>
         {findingAid && (
           <StatusBadge mb="s" variant="informative">
             Finding aid available
@@ -245,7 +268,12 @@ export default function BibPage({
           <Heading level="h2" size="heading3" mb="-m">
             {bib.title}
           </Heading>
-          <ManageBibInList bib={bib} isAuthenticated={isAuthenticated} />
+          <ManageBibInList
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+            bib={bib}
+            isAuthenticated={isAuthenticated}
+          />
         </Flex>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
@@ -388,6 +416,7 @@ export async function getServerSideProps({ params, query, req }) {
       }
   }
 
+  // Get just patron and lists data
   let accountData = null
   if (isAuthenticated) {
     const patronId = patronTokenResponse.decodedPatron.sub
