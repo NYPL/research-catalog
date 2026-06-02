@@ -308,6 +308,6 @@ describe("ListsTab", () => {
     expect(screen.getByText("My workspace")).toBeInTheDocument()
     expect(screen.getByText("Duplicate")).toBeInTheDocument()
     expect(screen.queryByText("Delete")).not.toBeInTheDocument()
-    expect(screen.getByText("Edit")).not.toBeInTheDocument()
+    expect(screen.queryByText("Edit")).not.toBeInTheDocument()
   })
 })
