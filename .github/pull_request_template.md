@@ -1,26 +1,29 @@
 ## Ticket:
 
-- JIRA ticket [xxx](https://newyorkpubliclibrary.atlassian.net/browse/SCC-{fill in the ticket number})
+- JIRA ticket [xxx](https://newyorkpubliclibrary.atlassian.net/browse/{ticket number here})
 
 ## This PR does the following:
 
--
+<!--- Brief, bulleted list of changes. -->
 
-## How has this been tested?
+## How has this been tested? How should a reviewer test this?
 
-<!--- Please describe in detail how you tested your changes. -->
+<!--- Describe how you tested your changes and how the reviewer can test the changes made in this PR. -->
 
-## Accessibility concerns or updates
+## Accessibility updates?
 
-<!--- Describe any accessibility concerns or updates that were made that should be known. -->
+<!--- If your PR changes a user's ability to access/interact with the app or introduces a new feature, briefly describe the change and check the below criteria. -->
 
--
+### Accessibility checklist
 
-### Checklist:
+- [ ] The feature works with keyboard inputs (tabbing, arrows, space, enter, esc).
+- [ ] Tested with a screen reader if the feature involves hidden text or `aria-live`.
+- [ ] Confirmed focus management is correct for UI updates and DOM `ref`s.
+- [ ] Verified the feature works when zoomed in to 200% and 400%.
 
-<!--- Go over all the following points, and put an `x` in all the boxes that apply. -->
-<!--- If you're unsure about any of these, don't hesitate to ask. We're here to help! -->
+### Developer checklist
 
-- [ ] I updated the CHANGELOG with the appropriate information and JIRA ticket number (if applicable).
-- [ ] I have added relevant accessibility documentation for this pull request.
-- [ ] All new and existing tests passed.
+<!--- Check all the boxes that apply. -->
+
+- [ ] I have updated the changelog and any relevant documentation.
+- [ ] All new and existing unit tests passed.
