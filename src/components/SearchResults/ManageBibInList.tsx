@@ -1,4 +1,4 @@
-import { useContext, useEffect, useRef } from "react"
+import { useContext, useEffect, useRef, useState } from "react"
 import { Button, Icon, Text } from "@nypl/design-system-react-components"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import { appConfig } from "../../config/appConfig"
@@ -23,6 +23,7 @@ export const ManageBibInList = ({
   setStatusMessage,
 }: ManageBibInListProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
+  const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
 
@@ -55,7 +56,7 @@ export const ManageBibInList = ({
     </Text>
   )
 
-  const successAddDefault = (defaultListId) => (
+  const successSaveDefault = (defaultListId) => (
     <Text marginBottom={0}>
       This record has been saved to{" "}
       <Link
@@ -115,6 +116,9 @@ export const ManageBibInList = ({
         (list) => list.isDefaultList
       )
       const defaultListId = defaultList?.id
+      setStatus("")
+      setStatusMessage("")
+      setIsLoading(true)
 
       try {
         const response = await fetch(
@@ -130,37 +134,28 @@ export const ManageBibInList = ({
             }),
           }
         )
-        if (response.status === 200) {
-          if (setUpdatedAccountData && updatedAccountData) {
-            const updatedLists = updatedAccountData.lists.map((list) => {
-              if (list.id === defaultListId) {
-                if (isSaved) {
-                  return {
-                    ...list,
-                    records:
-                      list.records?.filter((r) => r.uri !== bib.id) || [],
-                    recordCount: Math.max(0, (list.recordCount || 0) - 1),
-                  }
-                } else {
-                  return {
-                    ...list,
-                    records: [{ uri: bib.id }, ...(list.records || [])],
-                    recordCount: (list.recordCount || 0) + 1,
-                  }
+        if (response.ok) {
+          const responseData = await response.json()
+          const updatedList = responseData.list || responseData
+
+          if (setUpdatedAccountData) {
+            setUpdatedAccountData((prevData: any) => {
+              const data = prevData || updatedAccountData
+              if (!data || !data.lists) return data
+              const updatedLists = data.lists.map((list: List) => {
+                if (list.id === defaultListId) {
+                  return { ...list, ...updatedList }
                 }
-              }
-              return list
-            })
-            setUpdatedAccountData({
-              ...updatedAccountData,
-              lists: updatedLists as List[],
+                return list
+              })
+              return { ...data, lists: updatedLists as List[] }
             })
           }
           setStatus("success")
           setStatusMessage(
             isSaved
               ? successRemoveDefault(defaultListId)
-              : successAddDefault(defaultListId)
+              : successSaveDefault(defaultListId)
           )
         } else {
           setStatus("failure")
@@ -179,6 +174,8 @@ export const ManageBibInList = ({
         setStatusMessage(
           `This record could not be ${isSaved ? "removed" : "saved"}.`
         )
+      } finally {
+        setIsLoading(false)
       }
     }
   }
@@ -189,6 +186,7 @@ export const ManageBibInList = ({
       id={`manage-bib-${bib.id}`}
       onClick={handleSaveClick}
       variant="text"
+      isDisabled={isLoading}
     >
       {/* TODO: Update to bookmark/bookmark outlined DS icon */}
       <Icon size="large">
