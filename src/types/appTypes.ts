@@ -43,7 +43,7 @@ export type HTTPResponse = {
 export type APIError = {
   status: HTTPStatusCode
   name?: APIErrorName // Discovery API error classes
-  error?: string // Error message
+  error?: string | null // Error message
   redirectUrl?: string
 }
 

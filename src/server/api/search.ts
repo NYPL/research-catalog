@@ -8,7 +8,7 @@ import {
   DISCOVERY_API_SEARCH_ROUTE,
   RESULTS_PER_PAGE,
 } from "../../config/constants"
-import { logServerError, logServerWarn } from "../../utils/logUtils"
+import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
 
@@ -62,6 +62,7 @@ export async function fetchSearchResults(
       logServerError("fetchSearchResults", resultsResponse.reason)
       return {
         status: 500,
+        name: null,
         error:
           resultsResponse.reason instanceof Error
             ? resultsResponse.reason.message
@@ -72,6 +73,7 @@ export async function fetchSearchResults(
       logServerError("fetchSearchResults", aggregationsResponse.reason)
       return {
         status: 500,
+        name: null,
         error:
           aggregationsResponse.reason instanceof Error
             ? aggregationsResponse.reason.message
@@ -102,8 +104,8 @@ export async function fetchSearchResults(
       )
       return {
         status: results.status,
-        name: results.name,
-        error: results.error,
+        ...(results.name && { name: results.name }),
+        ...(results.error && { error: results.error }),
       }
     }
 
@@ -115,6 +117,9 @@ export async function fetchSearchResults(
     }
   } catch (error: any) {
     logServerError("fetchSearchResults", error)
-    return { status: 500, error }
+    return {
+      status: 500,
+      error: error?.message || error || null,
+    }
   }
 }

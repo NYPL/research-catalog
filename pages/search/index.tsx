@@ -95,7 +95,9 @@ export async function getServerSideProps({ req, query }) {
     return {
       props: {
         errorStatus: (results as APIError).status,
-        errorName: (results as APIError).name,
+        ...((results as APIError).name && {
+          errorName: (results as APIError).name,
+        }),
       },
     }
   }
