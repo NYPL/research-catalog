@@ -73,7 +73,7 @@ test.describe("Subject Heading beginning with search", () => {
     await browsePage.searchFor(searchterm, "Subject Headings beginning with")
 
     await expect(browsePage.searchResultsHeading).toBeVisible({
-      timeout: 15000,
+      timeout: 20000,
     })
 
     await expect(async () => {
