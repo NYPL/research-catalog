@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import {
   addRecordsToList,
+  deleteRecordFromList,
   fetchBibRecords,
 } from "../../../../src/server/api/lists"
 import type { ListRecordsSort } from "../../../../src/types/listTypes"
@@ -28,8 +29,8 @@ export default async function handler(
     })
     res.status(response.status || 200).json(response)
   } else if (req.method === "DELETE") {
-    const response = await addRecordsToList({
-      records: uris,
+    const response = await deleteRecordFromList({
+      record: uris,
       listId,
       patronId,
     })
