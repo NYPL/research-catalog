@@ -194,12 +194,14 @@ const ListDisplay = ({ list }: { list?: List }) => {
           </Box>
         )}
         <ButtonGroup mt="m">
-          <EditListButton
-            list={list}
-            bannerRef={bannerRef}
-            setStatus={setStatus}
-            setStatusMessage={setStatusMessage}
-          />
+          {!list.isDefaultList && (
+            <EditListButton
+              list={list}
+              bannerRef={bannerRef}
+              setStatus={setStatus}
+              setStatusMessage={setStatusMessage}
+            />
+          )}
           <Button
             variant="secondary"
             onClick={async () => {

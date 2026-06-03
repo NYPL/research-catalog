@@ -275,4 +275,39 @@ describe("ListsTab", () => {
       { shallow: true }
     )
   })
+
+  it("does not render the Delete or Edit options for the default list in the all lists view", async () => {
+    const defaultList = {
+      ...processedLists[0],
+      id: "999",
+      listName: "My workspace",
+      isDefaultList: true,
+    } as unknown as List
+
+    renderWithPatronDataContext([defaultList])
+
+    const optionsMenuButton = screen.getByLabelText("Options")
+    await userEvent.click(optionsMenuButton)
+
+    expect(screen.getByText("Duplicate")).toBeInTheDocument()
+    expect(screen.queryByText("Delete")).not.toBeInTheDocument()
+    expect(screen.queryByText("Edit")).not.toBeInTheDocument()
+  })
+
+  it("does not render the Delete or Edit buttons for the default list in the single list view", () => {
+    mockRouter.query = { index: ["lists", "999", "my-workspace"] }
+    const defaultList = {
+      ...processedLists[0],
+      id: "999",
+      listName: "My workspace",
+      isDefaultList: true,
+    } as unknown as List
+
+    renderWithPatronDataContext([defaultList])
+
+    expect(screen.getByText("My workspace")).toBeInTheDocument()
+    expect(screen.getByText("Duplicate")).toBeInTheDocument()
+    expect(screen.queryByText("Delete")).not.toBeInTheDocument()
+    expect(screen.queryByText("Edit")).not.toBeInTheDocument()
+  })
 })
