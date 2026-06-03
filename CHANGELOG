@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added CQL search scope, error page, and query highlight banner [SCC-5307](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5307) \*\*EMMA: DO NOT RELEASE WITHOUT QUERY GUIDE LINK
+- Added CQL search scope, error page, and query highlight banner [SCC-5307](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5307)
 
 ## [1.9.2] 2026-05-27
 
