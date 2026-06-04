@@ -28,7 +28,7 @@ import { downloadList } from "../../../utils/listUtils"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
 
-const ListDisplay = ({ list }: { list?: List }) => {
+const ListDisplay = ({ list }: { list: List }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
@@ -55,8 +55,6 @@ const ListDisplay = ({ list }: { list?: List }) => {
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const [modalProps, setModalProps] = useState<BaseModalProps>()
-
-  if (!list) return null
 
   const separatingDot = (i) => (
     // @ts-ignore
