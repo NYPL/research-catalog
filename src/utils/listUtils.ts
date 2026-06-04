@@ -5,7 +5,7 @@ import type {
   ListRecordResult,
   ListRecordsSort,
 } from "../types/listTypes"
-import { Patron } from "../types/myAccountTypes"
+import type { Patron } from "../types/myAccountTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
 
