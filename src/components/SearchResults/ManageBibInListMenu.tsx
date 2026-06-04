@@ -47,9 +47,11 @@ export const ManageBibInListMenu = ({
   const { patron, lists } = updatedAccountData
 
   const internalBannerRef = useRef<HTMLDivElement>(null)
+  const createListButtonRef = useRef<HTMLButtonElement>(null)
   const [listName, setListName] = useState(list?.listName || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedLists, setSelectedLists] = useState<string[]>(
     lists
       ?.filter((l: any) =>
@@ -62,6 +64,7 @@ export const ManageBibInListMenu = ({
     if (isOpen) {
       setListName(list?.listName || "")
       setIsSubmitted(false)
+      setShowCreateForm(false)
     }
   }, [isOpen, list])
 
@@ -96,6 +99,8 @@ export const ManageBibInListMenu = ({
         }
         setStatus("success")
         setStatusMessage("List created.")
+        setShowCreateForm(false)
+        setListName("")
       } else {
         setStatus("failure")
         setStatusMessage("List creation failed. Try again.")
@@ -104,7 +109,6 @@ export const ManageBibInListMenu = ({
       console.error("Error creating list:", error)
     } finally {
       setIsSubmitting(false)
-      onClose()
     }
   }
 
@@ -142,50 +146,68 @@ export const ManageBibInListMenu = ({
         </Heading>
       </PopoverHeader>
       <PopoverBody sx={{ margin: "xs" }}>
-        <Form
-          id="create-list-form"
-          sx={{
-            padding: "s",
-            borderRadius: "2px",
-            background: "var(--ui-bg-default, #F5F5F5)",
-          }}
-        >
-          <FormField>
-            <TextInput
-              id="list-name"
-              value={listName}
-              labelText="List name (required)"
-              showLabel={true}
-              placeholder="Enter list name"
-              helperText={`${100 - listName.length} characters remaining`}
-              isInvalid={listName.length > 100}
-              invalidText="List name must be 100 characters or less"
-              onChange={(e: any) => setListName(e.target.value)}
-              isClearable
-              isClearableCallback={() => setListName("")}
-            />
-          </FormField>
+        {showCreateForm ? (
+          <Form
+            id="create-list-form"
+            sx={{
+              padding: "s",
+              borderRadius: "2px",
+              background: "var(--ui-bg-default, #F5F5F5)",
+              marginBottom: "s",
+            }}
+          >
+            <FormField>
+              <TextInput
+                id="list-name"
+                value={listName}
+                labelText="List name (required)"
+                showLabel={true}
+                placeholder="Enter list name"
+                helperText={`${100 - listName.length} characters remaining`}
+                isInvalid={listName.length > 100}
+                invalidText="List name must be 100 characters or less"
+                onChange={(e: any) => setListName(e.target.value)}
+                isClearable
+                isClearableCallback={() => setListName("")}
+              />
+            </FormField>
 
-          <FormField>
-            <Flex width="100%" justifyContent="flex-start" gap="xs">
-              <Button
-                id="submit"
-                isDisabled={!listName || listName.length > 100 || isSubmitting}
-                onClick={handleCreateSubmit}
-              >
-                Create list
-              </Button>
-              <Button
-                id="cancel"
-                variant="secondary"
-                onClick={onClose}
-                sx={{ background: "white" }}
-              >
-                Cancel
-              </Button>
-            </Flex>
-          </FormField>
-        </Form>
+            <FormField>
+              <Flex width="100%" justifyContent="flex-start" gap="xs">
+                <Button
+                  id="submit"
+                  isDisabled={
+                    !listName || listName.length > 100 || isSubmitting
+                  }
+                  onClick={handleCreateSubmit}
+                >
+                  Create list
+                </Button>
+                <Button
+                  id="cancel"
+                  variant="secondary"
+                  onClick={() => {
+                    setShowCreateForm(false)
+                    setTimeout(() => createListButtonRef.current?.focus(), 100)
+                  }}
+                  sx={{ background: "white" }}
+                >
+                  Cancel
+                </Button>
+              </Flex>
+            </FormField>
+          </Form>
+        ) : (
+          <Button
+            ref={createListButtonRef}
+            variant="text"
+            paddingLeft="xs"
+            onClick={() => setShowCreateForm(true)}
+          >
+            <Icon name="plus" size="medium" align="left" />
+            Create new list
+          </Button>
+        )}
         <Heading pt="s" pb="s" size="heading8" fontWeight="500">
           Recent lists
         </Heading>
