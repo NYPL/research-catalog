@@ -8,6 +8,8 @@ import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
+import { ManageBibInListMenu } from "./ManageBibInListMenu"
+import { Popover, PopoverTrigger, useDisclosure } from "@chakra-ui/react"
 
 interface ManageBibInListProps {
   bib: SearchResultsBib | Bib
@@ -73,6 +75,9 @@ export const ManageBibInList = ({
       .
     </Text>
   )
+
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -89,8 +94,11 @@ export const ManageBibInList = ({
 
       window.history.replaceState({}, "", newUrl)
       //And open menu...
+      if (!onlyHasDefaultList) {
+        onOpen()
+      }
     }
-  }, [bib.id])
+  }, [bib.id, onOpen, onlyHasDefaultList])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:
@@ -177,36 +185,48 @@ export const ManageBibInList = ({
       } finally {
         setIsLoading(false)
       }
+    } else {
+      onOpen()
     }
   }
 
   return (
-    <Button
-      ref={buttonRef}
-      id={`manage-bib-${bib.id}`}
-      onClick={handleSaveClick}
-      variant="text"
-      isDisabled={isLoading}
-    >
-      {/* TODO: Update to bookmark/bookmark outlined DS icon */}
-      <Icon size="large">
-        {isSaved ? (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              fill="#0069BF"
-              d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
-            />
-          </svg>
-        ) : (
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-            <path
-              fill="#0069BF"
-              d="M17 3C18.1 3 19 3.9 19 5V21L12 18L5 21V5C5 3.9 5.9 3 7 3H17ZM7 5V18L12 15.8203L17 18V5H7Z"
-            />
-          </svg>
-        )}
-      </Icon>
-      {buttonText}
-    </Button>
+    <Popover isOpen={isOpen} onClose={onClose} placement="bottom-start" isLazy>
+      <PopoverTrigger>
+        <Button
+          ref={buttonRef}
+          id={`manage-bib-${bib.id}`}
+          onClick={handleSaveClick}
+          variant="text"
+          isDisabled={isLoading}
+        >
+          {/* TODO: Update to bookmark/bookmark outlined DS icon */}
+          <Icon size="large">
+            {isSaved ? (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="#0069BF"
+                  d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
+                />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path
+                  fill="#0069BF"
+                  d="M17 3C18.1 3 19 3.9 19 5V21L12 18L5 21V5C5 3.9 5.9 3 7 3H17ZM7 5V18L12 15.8203L17 18V5H7Z"
+                />
+              </svg>
+            )}
+          </Icon>
+          {buttonText}
+        </Button>
+      </PopoverTrigger>
+      <ManageBibInListMenu
+        isOpen={isOpen}
+        onClose={onClose}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+      />
+    </Popover>
   )
 }
