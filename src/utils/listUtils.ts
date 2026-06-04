@@ -5,6 +5,7 @@ import type {
   ListRecordResult,
   ListRecordsSort,
 } from "../types/listTypes"
+import { Patron } from "../types/myAccountTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
 
@@ -252,5 +253,63 @@ export const downloadList = async (
     console.error("Error downloading list:", error)
     setStatus("failure")
     setStatusMessage("Your list could not be downloaded.")
+  }
+}
+
+export const duplicateList = async ({
+  list,
+  patron,
+  lists,
+  updatedAccountData,
+  setUpdatedAccountData,
+  setStatus,
+  setStatusMessage,
+  openListInNewTab = false,
+}: {
+  list: List
+  patron: Patron
+  lists: List[]
+  updatedAccountData: any
+  setUpdatedAccountData: any
+  setStatus: any
+  setStatusMessage: any
+  openListInNewTab?: boolean
+}) => {
+  setStatus("")
+  setStatusMessage("")
+  try {
+    const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        patronId: patron.id.toString(),
+        listName: `${list.listName.substring(0, 90)} (copy)`,
+        description: list.description,
+        records: list.records ? list.records.map((r) => r.uri) : [],
+      }),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      if (data && data.list) {
+        setUpdatedAccountData({
+          ...updatedAccountData,
+          lists: [data.list, ...lists],
+        })
+        if (openListInNewTab) {
+          window.open(`${BASE_URL}/account/lists/${data.list.id}`, "_blank")
+        }
+      }
+      setStatus("success")
+      setStatusMessage("Your list has been duplicated.")
+    } else {
+      setStatus("failure")
+      setStatusMessage("Your list could not be duplicated.")
+    }
+  } catch (error) {
+    console.error("Error duplicating list:", error)
+    setStatus("failure")
+    setStatusMessage("Your list could not be duplicated.")
   }
 }
