@@ -22,8 +22,8 @@ import {
 import { useContext, useState, useEffect, useRef } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
-import SearchResultsBib from "../../models/SearchResultsBib"
-import Bib from "../../models/Bib"
+import type SearchResultsBib from "../../models/SearchResultsBib"
+import type Bib from "../../models/Bib"
 
 export const ManageBibInListMenu = ({
   isOpen,
