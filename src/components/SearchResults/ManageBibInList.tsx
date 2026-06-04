@@ -76,6 +76,7 @@ export const ManageBibInList = ({
     </Text>
   )
 
+  // Manage bib menu state
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   // Focus the Save button upon returning from the login redirect
@@ -93,7 +94,7 @@ export const ManageBibInList = ({
         window.location.hash
 
       window.history.replaceState({}, "", newUrl)
-      //And open menu...
+      // And open menu
       if (!onlyHasDefaultList) {
         onOpen()
       }
@@ -226,6 +227,7 @@ export const ManageBibInList = ({
         onClose={onClose}
         setStatus={setStatus}
         setStatusMessage={setStatusMessage}
+        bib={bib}
       />
     </Popover>
   )

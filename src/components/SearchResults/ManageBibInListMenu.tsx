@@ -7,6 +7,9 @@ import {
   FormField,
   TextInput,
   Heading,
+  Text,
+  CheckboxGroup,
+  Checkbox,
 } from "@nypl/design-system-react-components"
 import {
   PopoverContent,
@@ -14,11 +17,13 @@ import {
   PopoverBody,
   PopoverArrow,
   PopoverCloseButton,
+  PopoverFooter,
 } from "@chakra-ui/react"
-import styles from "../../../../../styles/components/MyAccount.module.scss"
 import { useContext, useState, useEffect, useRef } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
+import SearchResultsBib from "../../models/SearchResultsBib"
+import Bib from "../../models/Bib"
 
 export const ManageBibInListMenu = ({
   isOpen,
@@ -27,6 +32,7 @@ export const ManageBibInListMenu = ({
   setStatus,
   setStatusMessage,
   bannerRef,
+  bib,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -34,6 +40,7 @@ export const ManageBibInListMenu = ({
   setStatus: any
   setStatusMessage: any
   bannerRef?: any
+  bib: SearchResultsBib | Bib
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -43,6 +50,13 @@ export const ManageBibInListMenu = ({
   const [listName, setListName] = useState(list?.listName || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [selectedLists, setSelectedLists] = useState<string[]>(
+    lists
+      ?.filter((l: any) =>
+        l.records?.some((record: any) => record.uri === bib.id)
+      )
+      .map((l: any) => l.id) || []
+  )
 
   useEffect(() => {
     if (isOpen) {
@@ -51,7 +65,7 @@ export const ManageBibInListMenu = ({
     }
   }, [isOpen, list])
 
-  const handleSubmit = async (e: React.MouseEvent) => {
+  const handleCreateSubmit = async (e: React.MouseEvent) => {
     e.preventDefault()
     if (!listName || listName.length > 100) return
 
@@ -87,20 +101,31 @@ export const ManageBibInListMenu = ({
         setStatusMessage("List creation failed. Try again.")
       }
     } catch (error) {
-      console.error(`Error creating list:`, error)
+      console.error("Error creating list:", error)
     } finally {
       setIsSubmitting(false)
       onClose()
     }
   }
 
+  const isChecked = (listId: string): boolean => {
+    return !!selectedLists?.includes(listId)
+  }
+
+  function listCheckBoxChange(event): void {
+    //
+  }
+
+  function handleSubmit(event): void {
+    //
+  }
+
   return (
     <PopoverContent
       boxShadow="lg"
       _focus={{ outline: "none" }}
-      width={{ base: "320px", md: "400px" }}
+      width={{ base: "320px", md: "320px" }}
     >
-      <PopoverArrow />
       <PopoverHeader
         sx={{
           color: "ui.typography.heading",
@@ -108,18 +133,23 @@ export const ManageBibInListMenu = ({
           _dark: {
             color: "dark.ui.typography.heading",
           },
-          paddingTop: "l",
-          paddingLeft: "l",
-          paddingRight: "l",
-          paddingBottom: "s",
-          borderBottom: "none",
+          padding: "s",
+          borderBottom: "1px solid var(--ui-border-default, #BDBDBD)",
         }}
       >
-        <Heading size="heading6">Select lists</Heading>
+        <Heading size="heading6" fontWeight="bold">
+          Select lists
+        </Heading>
       </PopoverHeader>
-      <PopoverCloseButton mt="s" />
-      <PopoverBody paddingLeft="l" paddingRight="l" paddingBottom="l">
-        <Form id="create-list-form" className={styles.modalBody}>
+      <PopoverBody sx={{ margin: "xs" }}>
+        <Form
+          id="create-list-form"
+          sx={{
+            padding: "s",
+            borderRadius: "2px",
+            background: "var(--ui-bg-default, #F5F5F5)",
+          }}
+        >
           <FormField>
             <TextInput
               id="list-name"
@@ -137,26 +167,84 @@ export const ManageBibInListMenu = ({
           </FormField>
 
           <FormField>
-            <Flex
-              width="100%"
-              justifyContent="flex-end"
-              gap="xs"
-              paddingTop="s"
-            >
+            <Flex width="100%" justifyContent="flex-start" gap="xs">
               <Button
                 id="submit"
                 isDisabled={!listName || listName.length > 100 || isSubmitting}
-                onClick={handleSubmit}
+                onClick={handleCreateSubmit}
               >
                 Create list
               </Button>
-              <Button id="cancel" variant="secondary" onClick={onClose}>
+              <Button
+                id="cancel"
+                variant="secondary"
+                onClick={onClose}
+                sx={{ background: "white" }}
+              >
                 Cancel
               </Button>
             </Flex>
           </FormField>
         </Form>
+        <Heading pt="s" pb="s" size="heading8" fontWeight="500">
+          Recent lists
+        </Heading>
+        <CheckboxGroup
+          id="lists-checkboxGroup"
+          layout="column"
+          isFullWidth
+          showLabel={false}
+          mb="0"
+          labelText={""}
+          name={""}
+        >
+          {lists.map((list) => (
+            <Flex key={list.id} justifyContent="space-between">
+              <Checkbox
+                id={list.id}
+                labelText={list.listName}
+                name={list.listName}
+                isChecked={isChecked(list.id)}
+                onChange={listCheckBoxChange}
+              />
+              {list.records?.some((record: any) => record.uri === bib.id) && (
+                <Icon size="medium">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                    <path
+                      fill="#616161"
+                      d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
+                    />
+                  </svg>
+                </Icon>
+              )}
+            </Flex>
+          ))}
+        </CheckboxGroup>
       </PopoverBody>
+      <PopoverFooter>
+        <Form
+          id="save-list-management"
+          sx={{
+            padding: "xs",
+          }}
+        >
+          <FormField>
+            <Flex width="100%" justifyContent="flex-end" gap="xs">
+              <Button
+                id="cancel"
+                variant="secondary"
+                onClick={onClose}
+                sx={{ background: "white" }}
+              >
+                Cancel
+              </Button>
+              <Button id="submit" isDisabled={false} onClick={handleSubmit}>
+                Save changes
+              </Button>
+            </Flex>
+          </FormField>
+        </Form>
+      </PopoverFooter>
     </PopoverContent>
   )
 }
