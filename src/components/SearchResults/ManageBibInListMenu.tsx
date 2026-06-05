@@ -10,6 +10,7 @@ import {
   Text,
   CheckboxGroup,
   Checkbox,
+  SkeletonLoader,
 } from "@nypl/design-system-react-components"
 import {
   PopoverContent,
@@ -65,8 +66,16 @@ export const ManageBibInListMenu = ({
       setListName(list?.listName || "")
       setIsSubmitted(false)
       setShowCreateForm(false)
+      setStatus("")
+      setSelectedLists(
+        lists
+          ?.filter((l: any) =>
+            l.records?.some((record: any) => record.uri === bib.id)
+          )
+          .map((l: any) => l.id) || []
+      )
     }
-  }, [isOpen, list])
+  }, [isOpen, list, bib.id])
 
   const handleCreateSubmit = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -96,6 +105,7 @@ export const ManageBibInListMenu = ({
             ...updatedAccountData,
             lists: [data.list, ...lists],
           })
+          setSelectedLists((prev) => [...prev, data.list.id])
         }
         setStatus("success")
         setStatusMessage("List created.")
@@ -116,12 +126,123 @@ export const ManageBibInListMenu = ({
     return !!selectedLists?.includes(listId)
   }
 
-  function listCheckBoxChange(event): void {
-    //
+  const listCheckBoxChange = (
+    event: React.ChangeEvent<HTMLInputElement>
+  ): void => {
+    const listId = event.target.id
+    if (event.target.checked) {
+      setSelectedLists((prev) => [...prev, listId])
+    } else {
+      setSelectedLists((prev) => prev.filter((id) => id !== listId))
+    }
   }
 
-  function handleSubmit(event): void {
-    //
+  const loader = (
+    <SkeletonLoader
+      showImage={false}
+      mb="m"
+      ml="0"
+      maxWidth="300px"
+      contentSize={1}
+      showHeading={false}
+    />
+  )
+
+  const handleSubmit = async (e: React.MouseEvent) => {
+    e.preventDefault()
+
+    const initialSelectedLists =
+      lists
+        ?.filter((l: any) =>
+          l.records?.some((record: any) => record.uri === bib.id)
+        )
+        .map((l: any) => l.id) || []
+
+    const listsToAdd = selectedLists.filter(
+      (id) => !initialSelectedLists.includes(id)
+    )
+    const listsToRemove = initialSelectedLists.filter(
+      (id) => !selectedLists.includes(id)
+    )
+
+    if (listsToAdd.length === 0 && listsToRemove.length === 0) {
+      onClose()
+      return
+    }
+
+    setIsSubmitting(true)
+    try {
+      const promises: Promise<any>[] = []
+
+      for (const listId of listsToAdd) {
+        promises.push(
+          fetch(`${BASE_URL}/api/account/lists/records?uris=${bib.id}`, {
+            method: "PATCH",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              patronId: patron.id.toString(),
+              listId,
+            }),
+          }).then((res) => {
+            if (!res.ok) throw new Error("Failed to add to list")
+            return res.json()
+          })
+        )
+      }
+
+      for (const listId of listsToRemove) {
+        promises.push(
+          fetch(`${BASE_URL}/api/account/lists/records?uris=${bib.id}`, {
+            method: "DELETE",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              patronId: patron.id.toString(),
+              listId,
+            }),
+          }).then((res) => {
+            if (!res.ok) throw new Error("Failed to remove from list")
+            return res.json()
+          })
+        )
+      }
+
+      const results = await Promise.all(promises)
+
+      if (results.length > 0 && setUpdatedAccountData) {
+        setUpdatedAccountData((prevData: any) => {
+          const data = prevData || updatedAccountData
+          if (!data || !data.lists) return data
+
+          let updatedLists = [...data.lists]
+          results.forEach((resData: any) => {
+            const updatedList = resData.list || resData
+            updatedLists = updatedLists.map((l: any) =>
+              l.id === updatedList.id ? { ...l, ...updatedList } : l
+            )
+          })
+
+          return { ...data, lists: updatedLists }
+        })
+      }
+
+      setStatus("success")
+      setStatusMessage(
+        "Your list changes have been saved. Lists can be managed from your patron account."
+      )
+    } catch (error) {
+      console.error("Error updating bib in lists:", error)
+      setStatus("failure")
+      setStatusMessage(
+        "Your list changes could not be saved. Try again or contact us for assistance. Lists can be managed from your patron account."
+      )
+    } finally {
+      setIsSubmitting(false)
+      onClose()
+    }
   }
 
   return (
@@ -169,6 +290,7 @@ export const ManageBibInListMenu = ({
                 onChange={(e: any) => setListName(e.target.value)}
                 isClearable
                 isClearableCallback={() => setListName("")}
+                sx={{ fontWeight: "normal" }}
               />
             </FormField>
 
@@ -252,17 +374,27 @@ export const ManageBibInListMenu = ({
         >
           <FormField>
             <Flex width="100%" justifyContent="flex-end" gap="xs">
-              <Button
-                id="cancel"
-                variant="secondary"
-                onClick={onClose}
-                sx={{ background: "white" }}
-              >
-                Cancel
-              </Button>
-              <Button id="submit" isDisabled={false} onClick={handleSubmit}>
-                Save changes
-              </Button>
+              {isSubmitting ? (
+                loader
+              ) : (
+                <>
+                  <Button
+                    id="cancel"
+                    variant="secondary"
+                    onClick={onClose}
+                    sx={{ background: "white" }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    id="submit"
+                    isDisabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Save changes
+                  </Button>
+                </>
+              )}
             </Flex>
           </FormField>
         </Form>
