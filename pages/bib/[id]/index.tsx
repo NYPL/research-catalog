@@ -265,7 +265,7 @@ export default function BibPage({
           </StatusBadge>
         )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Heading level="h2" size="heading3" mb="-m">
+          <Heading level="h2" size="heading3">
             {bib.title}
           </Heading>
           <ManageBibInList

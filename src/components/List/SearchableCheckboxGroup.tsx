@@ -35,7 +35,7 @@ export const SearchableCheckboxGroup = ({
   isSearchable = true,
 }: SearchableCheckboxGroupProps) => {
   const styles = useMultiStyleConfig("MultiSelect", {
-    isBlockElement: false,
+    isBlockElement: true,
     width: "full",
   })
   const [searchTerm, setSearchTerm] = useState("")
@@ -82,7 +82,7 @@ export const SearchableCheckboxGroup = ({
           </Flex>
         ))}
         {filteredItems?.length === 0 && (
-          <Text mb="0" mt="s" color="ui.gray.dark">
+          <Text size="body2" mb="0" mt="xs" color="ui.gray.dark">
             No lists found
           </Text>
         )}

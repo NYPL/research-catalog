@@ -190,7 +190,14 @@ export const ManageBibInList = ({
   }
 
   return (
-    <Popover isOpen={isOpen} onClose={onClose} placement="bottom-start" isLazy>
+    <Popover
+      isOpen={isOpen}
+      onClose={onClose}
+      placement="bottom-end"
+      flip={false}
+      isLazy
+      strategy="fixed"
+    >
       <PopoverTrigger>
         <Button
           ref={buttonRef}
