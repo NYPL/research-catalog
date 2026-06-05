@@ -252,7 +252,6 @@ export const ManageBibInListMenu = ({
 
   return (
     <PopoverContent
-      boxShadow="lg"
       _focus={{ outline: "none" }}
       width={{ base: "320px", md: "320px" }}
       textAlign="left"
@@ -275,7 +274,7 @@ export const ManageBibInListMenu = ({
       <PopoverBody
         sx={{
           margin: "xs",
-          maxHeight: "375px",
+          maxHeight: "360px",
           overflowY: "auto",
           fontWeight: "normal",
         }}
@@ -411,7 +410,7 @@ export const ManageBibInListMenu = ({
                 </Button>
                 <Button
                   id="submit"
-                  isDisabled={isSubmitting}
+                  isDisabled={isSubmitting || showCreateForm}
                   onClick={handleSubmit}
                 >
                   Save changes

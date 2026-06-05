@@ -1,5 +1,5 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { Button, Icon, Text } from "@nypl/design-system-react-components"
+import { Button, Icon, Text, Box } from "@nypl/design-system-react-components"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import { PatronDataContext } from "../../context/PatronDataContext"
@@ -198,6 +198,14 @@ export const ManageBibInList = ({
           onClick={handleSaveClick}
           variant="text"
           isDisabled={isLoading}
+          sx={{
+            ...(isOpen && {
+              bg: "ui.link.primary-05",
+              _dark: {
+                bg: "dark.ui.bg.hover",
+              },
+            }),
+          }}
         >
           {/* TODO: Update to bookmark/bookmark outlined DS icon */}
           <Icon size="large">
@@ -217,7 +225,9 @@ export const ManageBibInList = ({
               </svg>
             )}
           </Icon>
-          {buttonText}
+          <Box as="span" display={{ base: "none", md: "inline-block" }}>
+            {buttonText}
+          </Box>
         </Button>
       </PopoverTrigger>
       <ManageBibInListMenu
