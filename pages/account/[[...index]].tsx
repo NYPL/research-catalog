@@ -26,7 +26,7 @@ export default function MyAccount({
   isAuthenticated,
   tabsPath,
 }: MyAccountPropsType) {
-  const errorRetrievingPatronData = !accountData.patron
+  const errorRetrievingPatronData = !accountData?.patron
 
   const serverError = (
     <Text>

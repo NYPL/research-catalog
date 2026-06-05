@@ -18,9 +18,9 @@ import {
 } from "../../../utils/listUtils"
 import ListSort from "./ListSort"
 import Link from "../../Link/Link"
-import ManageListRecord from "../../List/ManageListRecord"
 import type { List, ListRecord } from "../../../types/listTypes"
 import type { DiscoverySearchResultsElement } from "../../../types/searchTypes"
+import { ManageBibInList } from "../../List/ManageBibInList"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
@@ -29,10 +29,14 @@ const ListRecordsTable = ({
   list,
   activeSort,
   setActiveSort,
+  setStatus,
+  setStatusMessage,
 }: {
   list: List
   activeSort
   setActiveSort
+  setStatus
+  setStatusMessage
 }) => {
   const listRecordsHeadingRef = useRef(null)
   const { setPersistentFocus } = useFocusContext()
@@ -43,6 +47,17 @@ const ListRecordsTable = ({
   )
   const [isLoading, setIsLoading] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
+
+  // If the only record on a page is deleted, go back to previous page
+  useEffect(() => {
+    const maxPage = Math.max(
+      1,
+      Math.ceil((list?.records?.length || 0) / LIST_RECORDS_PER_PAGE)
+    )
+    if (currentPage > maxPage) {
+      setCurrentPage(maxPage)
+    }
+  }, [list?.records?.length, currentPage])
 
   const sortedRecords = useMemo(() => {
     if (!list?.records) return []
@@ -74,7 +89,11 @@ const ListRecordsTable = ({
 
       for (let i = 0; i < recordsToFetch.length; i += chunkSize) {
         const chunk = recordsToFetch.slice(i, i + chunkSize)
-        const uris = chunk.map((r) => r.uri).join(",")
+        const uris = chunk
+          .map((r) => r.uri)
+          .filter(Boolean)
+          .join(",")
+        if (!uris) continue
         try {
           const response = await fetch(
             `${BASE_URL}/api/account/lists/records?uris=${uris}`
@@ -134,7 +153,13 @@ const ListRecordsTable = ({
       record.callNumber,
       record.location,
       record.addedDate,
-      <ManageListRecord key={record.uri} />,
+      <ManageBibInList
+        key={record.uri}
+        recordId={record.uri}
+        isAuthenticated={true}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+      />,
     ]
   })
 

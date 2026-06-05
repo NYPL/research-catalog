@@ -16,7 +16,7 @@ import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 import SearchResultItems from "./SearchResultItems"
-import { ManageBibInList } from "./ManageBibInList"
+import { ManageBibInList } from "../List/ManageBibInList"
 import type { StatusType } from "../MyAccount/Settings/StatusBanner"
 import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import { useEffect, useRef, useState } from "react"
@@ -98,7 +98,7 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
             <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
           </Box>
           <ManageBibInList
-            bib={bib}
+            recordId={bib.id}
             isAuthenticated={isAuthenticated}
             setStatus={setStatus}
             setStatusMessage={setStatusMessage}

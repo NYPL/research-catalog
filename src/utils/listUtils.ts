@@ -69,6 +69,14 @@ export const buildListRecordWithBibData = (
       ? formatMMDDYYYY(listRecord.addedToListDate)
       : ""
 
+  // TO DO: Reassess location checking
+  const location =
+    bibResult?.location ||
+    bibResult?.collection?.[0]?.buildingLocationLabel ||
+    (bibResult?.items?.length > 1 || bibResult?.numItemsTotal > 1
+      ? "Multiple"
+      : "")
+
   return {
     uri: listRecord.uri,
     addedDate,
@@ -78,7 +86,7 @@ export const buildListRecordWithBibData = (
     itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
     callNumber:
       bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
-    location: bibResult?.location || "Multiple",
+    location: location,
   }
 }
 
@@ -185,7 +193,11 @@ export const downloadList = async (
 
     for (let i = 0; i < list.records.length; i += chunkSize) {
       const chunk = list.records.slice(i, i + chunkSize)
-      const uris = chunk.map((r) => r.uri).join(",")
+      const uris = chunk
+        .map((r) => r.uri)
+        .filter(Boolean)
+        .join(",")
+      if (!uris) continue
       try {
         // Rather than Promise.all, to prevent 429 error
         const response = await fetch(

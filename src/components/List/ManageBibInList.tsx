@@ -1,25 +1,23 @@
 import { useContext, useEffect, useRef, useState } from "react"
 import { Button, Icon, Text } from "@nypl/design-system-react-components"
-import type SearchResultsBib from "../../models/SearchResultsBib"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
-import type Bib from "../../models/Bib"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
-import { ManageBibInListMenu } from "./ManageBibInListMenu"
 import { Popover, PopoverTrigger, useDisclosure } from "@chakra-ui/react"
+import { ManageBibInListMenu } from "./ManageBibInListMenu"
 
 interface ManageBibInListProps {
-  bib: SearchResultsBib | Bib
+  recordId: string
   isAuthenticated: boolean
   setStatus
   setStatusMessage
 }
 
 export const ManageBibInList = ({
-  bib,
+  recordId,
   isAuthenticated,
   setStatus,
   setStatusMessage,
@@ -32,7 +30,7 @@ export const ManageBibInList = ({
   const onlyHasDefaultList = updatedAccountData?.lists?.length === 1
 
   const isSaved = updatedAccountData?.lists?.some((list) =>
-    list.records?.some((record) => record.uri === bib.id)
+    list.records?.some((record) => record.uri === recordId)
   )
   const buttonText = isSaved
     ? onlyHasDefaultList
@@ -84,7 +82,7 @@ export const ManageBibInList = ({
     const params = new URLSearchParams(window.location.search)
     const focusTarget = params.get("focus")
 
-    if (focusTarget === `manage-bib-${bib.id}`) {
+    if (focusTarget === `manage-bib-${recordId}`) {
       buttonRef.current?.focus()
       // Clean up the URL
       params.delete("focus")
@@ -99,7 +97,7 @@ export const ManageBibInList = ({
         onOpen()
       }
     }
-  }, [bib.id, onOpen, onlyHasDefaultList])
+  }, [recordId, onOpen, onlyHasDefaultList])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:
@@ -107,7 +105,7 @@ export const ManageBibInList = ({
       e.preventDefault()
 
       const currentUrl = new URL(window.location.href)
-      currentUrl.searchParams.set("focus", `manage-bib-${bib.id}`)
+      currentUrl.searchParams.set("focus", `manage-bib-${recordId}`)
 
       const loginEndpoint =
         appConfig.urls?.loginUrl?.[appConfig.environment] ||
@@ -131,7 +129,7 @@ export const ManageBibInList = ({
 
       try {
         const response = await fetch(
-          `${BASE_URL}/api/account/lists/records?uris=${bib.id}`,
+          `${BASE_URL}/api/account/lists/records?uris=${recordId}`,
           {
             method: isSaved ? "DELETE" : "PATCH",
             headers: {
@@ -174,7 +172,7 @@ export const ManageBibInList = ({
         }
       } catch (error) {
         console.error(
-          `Error ${isSaved ? "removing" : "adding"} record ${bib.id} ${
+          `Error ${isSaved ? "removing" : "adding"} record ${recordId} ${
             isSaved ? "from" : "to"
           } list ${defaultListId}:`,
           error
@@ -196,7 +194,7 @@ export const ManageBibInList = ({
       <PopoverTrigger>
         <Button
           ref={buttonRef}
-          id={`manage-bib-${bib.id}`}
+          id={`manage-bib-${recordId}`}
           onClick={handleSaveClick}
           variant="text"
           isDisabled={isLoading}
@@ -227,7 +225,7 @@ export const ManageBibInList = ({
         onClose={onClose}
         setStatus={setStatus}
         setStatusMessage={setStatusMessage}
-        bib={bib}
+        recordId={recordId}
       />
     </Popover>
   )

@@ -27,7 +27,6 @@ import { EditListButton } from "./ListActions/CreateEditList"
 import { downloadList } from "../../../utils/listUtils"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
-
 const ListDisplay = ({ list }: { list?: List }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -316,6 +315,8 @@ const ListDisplay = ({ list }: { list?: List }) => {
           list={list}
           activeSort={activeSort}
           setActiveSort={setActiveSort}
+          setStatus={setStatus}
+          setStatusMessage={setStatusMessage}
         />
       ) : (
         <EmptyList />

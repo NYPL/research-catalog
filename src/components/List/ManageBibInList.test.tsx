@@ -58,7 +58,7 @@ describe("ManageBibInList", () => {
         }
       >
         <ManageBibInList
-          bib={mockBib}
+          recordId={mockBib.id}
           isAuthenticated={isAuthenticated}
           setStatus={mockSetStatus}
           setStatusMessage={mockSetStatusMessage}
