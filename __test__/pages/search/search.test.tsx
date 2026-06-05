@@ -15,6 +15,24 @@ const mockReq = {
   },
 }
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    info: jest.fn(),
+    warn: jest.fn(),
+    error: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
+const mockReqWithReferer = {
+  ...mockReq,
+  headers: {
+    host: "local.nypl.org:8080",
+    referer:
+      "http://local.nypl.org:8080/research/research-catalog/bib/b16767329",
+  },
+}
+
 describe("Search page", () => {
   beforeEach(() => {
     ;(initializePatronTokenAuth as jest.Mock).mockResolvedValue({
@@ -102,6 +120,20 @@ describe("Search page", () => {
       expect(response).toEqual({
         props: { errorStatus: 404 },
       })
+    })
+    it("logs a warning with the correct referer when no results are found, and there is a single filter with no keyword", async () => {
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue({
+        status: 404,
+        message: "No results found",
+      })
+
+      await getServerSideProps({
+        req: mockReqWithReferer,
+        query: { "filters[language][0]": "lang:fre" },
+      })
+      expect(logger.warn).toHaveBeenCalledWith(
+        "Warning in fetchSearchResults: Possible bad incoming link; referer: http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
+      )
     })
     it("handles general server errors", async () => {
       ;(fetchSearchResults as jest.Mock).mockResolvedValue({

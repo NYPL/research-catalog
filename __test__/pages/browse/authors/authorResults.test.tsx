@@ -12,6 +12,13 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../../src/server/auth")
 jest.mock("../../../../src/server/api/search")
 
+jest.mock("@nypl/node-utils", () => ({
+  logger: {
+    warn: jest.fn(),
+  },
+}))
+import { logger } from "@nypl/node-utils"
+
 describe("Browse author/contributor results page", () => {
   it("displays bibs and contributor heading", async () => {
     await mockRouter.push({
@@ -142,6 +149,26 @@ describe("getServerSideProps", () => {
         page: 2,
         role: "performer",
       })
+    )
+  })
+
+  it("logs a warning with the correct referer when no results are found, and there is a single filter with no keyword", async () => {
+    ;(fetchSearchResults as jest.Mock).mockResolvedValue({
+      status: 404,
+      message: "No results found",
+    })
+
+    const params = { slug: "test" }
+    const query = { page: "2" }
+    const req = {
+      headers: {
+        referer: "a cat",
+      },
+    }
+
+    await getServerSideProps({ req, query, params })
+    expect(logger.warn).toHaveBeenCalledWith(
+      "Warning in fetchSearchResults: Possible bad incoming link; referer: a cat"
     )
   })
 })
