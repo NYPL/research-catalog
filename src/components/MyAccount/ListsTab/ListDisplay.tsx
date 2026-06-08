@@ -15,7 +15,6 @@ import type {
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
 import { useFocusContext } from "../../../context/FocusContext"
-import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List, ListRecordsSort } from "../../../types/listTypes"
@@ -54,8 +53,6 @@ const ListDisplay = ({ list }: { list?: List }) => {
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const [modalProps, setModalProps] = useState<BaseModalProps>()
-
-  if (!list) return null
 
   const separatingDot = (i) => (
     // @ts-ignore
@@ -310,17 +307,13 @@ const ListDisplay = ({ list }: { list?: List }) => {
           )}
         </div>
       </Flex>
-      {list.recordCount > 0 ? (
-        <ListRecordsTable
-          list={list}
-          activeSort={activeSort}
-          setActiveSort={setActiveSort}
-          setStatus={setStatus}
-          setStatusMessage={setStatusMessage}
-        />
-      ) : (
-        <EmptyList />
-      )}
+      <ListRecordsTable
+        list={list}
+        activeSort={activeSort}
+        setActiveSort={setActiveSort}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+      />
     </Flex>
   )
 }

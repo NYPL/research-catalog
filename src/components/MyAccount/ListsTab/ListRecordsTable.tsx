@@ -21,9 +21,11 @@ import Link from "../../Link/Link"
 import type { List, ListRecord } from "../../../types/listTypes"
 import type { DiscoverySearchResultsElement } from "../../../types/searchTypes"
 import { ManageBibInList } from "../../List/ManageBibInList"
+import EmptyList from "./EmptyList"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
- * sorts and paginates, and renders the results heading, sort menu, and table of records. */
+ * sorts and paginates, and renders the results heading, sort menu, and table of records.
+ * If there are no list records, it displays the Empty list view. */
 
 const ListRecordsTable = ({
   list,
@@ -68,7 +70,6 @@ const ListRecordsTable = ({
     return records
   }, [list, activeSort])
 
-  // TO DO: caching??
   useEffect(() => {
     const fetchBibData = async () => {
       if (!list || sortedRecords.length === 0) return
@@ -140,6 +141,10 @@ const ListRecordsTable = ({
   const handlePageChange = async (page: number) => {
     setCurrentPage(page)
     setPersistentFocus(idConstants.listRecordsHeading)
+  }
+
+  if (!list || list.recordCount === 0) {
+    return <EmptyList />
   }
 
   const tableData = listRecords.map((record: ListRecord) => {
