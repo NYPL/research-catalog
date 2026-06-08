@@ -4,7 +4,6 @@ import {
   mapQueryToSearchParams,
   getSearchQuery,
   checkForRedirectOnMatch,
-  filtersObjectLength,
 } from "../../src/utils/searchUtils"
 import type {
   SearchResultsResponse,
@@ -21,7 +20,7 @@ import type {
 } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
-import { logServerWarn } from "../../src/utils/logUtils"
+import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -89,22 +88,17 @@ export default function SearchPage({
 
 export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const referer = req.headers?.referer
 
   const searchParams = mapQueryToSearchParams(query)
 
   const results = await fetchSearchResults(searchParams)
 
-  // Check for possible bad incoming link (no results with one filter and no keyword)
-  if (
-    results.status === 404 &&
-    filtersObjectLength(searchParams.filters) === 1 &&
-    !searchParams.q
+  logSingleFilterNoResults(
+    "search page",
+    results,
+    searchParams,
+    req.headers?.referer
   )
-    logServerWarn(
-      "fetchSearchResults",
-      `Possible bad incoming link; referer: ${referer}`
-    )
 
   // Direct to error display according to status
   if (results.status !== 200) {

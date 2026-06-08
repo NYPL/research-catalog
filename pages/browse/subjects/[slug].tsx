@@ -4,7 +4,6 @@ import initializePatronTokenAuth from "../../../src/server/auth"
 import {
   mapQueryToSearchParams,
   checkForRedirectOnMatch,
-  filtersObjectLength,
 } from "../../../src/utils/searchUtils"
 import type { SearchResultsResponse } from "../../../src/types/searchTypes"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
@@ -12,7 +11,7 @@ import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
-import { logServerWarn } from "../../../src/utils/logUtils"
+import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 
 interface SubjectHeadingResultsProps {
   bannerNotification?: string
@@ -87,7 +86,6 @@ export default function SubjectHeadingResults({
 export async function getServerSideProps({ req, query, params }) {
   const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const referer = req.headers?.referer
   const slug: string = params.slug as string
 
   const baseQuery = buildLockedBrowseQuery({
@@ -100,16 +98,12 @@ export async function getServerSideProps({ req, query, params }) {
 
   const results = await fetchSearchResults(searchParams)
 
-  // Check for possible bad incoming link (no results with one filter and no keyword)
-  if (
-    results.status === 404 &&
-    filtersObjectLength(searchParams.filters) === 1 &&
-    !searchParams.q
+  logSingleFilterNoResults(
+    "browse subjects",
+    results,
+    searchParams,
+    req.headers?.referer
   )
-    logServerWarn(
-      "fetchSearchResults",
-      `Possible bad incoming link; referer: ${referer}`
-    )
 
   if (results.status !== 200) {
     return { props: { errorStatus: results.status } }
