@@ -103,7 +103,7 @@ export async function getServerSideProps({ req, query, params }) {
   const results = await fetchSearchResults(searchParams)
 
   logSingleFilterNoResults(
-    "browse authors",
+    "browse authors gSSP",
     results,
     searchParams,
     req.headers?.referer

@@ -126,7 +126,7 @@ describe("Search page", () => {
         query,
       })
       expect(logSingleFilterNoResults).toHaveBeenCalledWith(
-        "search page",
+        "search page gSSP",
         response404,
         mapQueryToSearchParams(query),
         "http://local.nypl.org:8080/research/research-catalog/bib/b16767329"

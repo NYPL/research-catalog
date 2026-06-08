@@ -30,7 +30,7 @@ export const logSingleFilterNoResults = (
     !searchParams.q
   )
     logServerWarn(
-      "Search results gSSP",
-      `Link to single filter, no results at ${location}; referer: ${referer}`
+      location,
+      `Link to single filter, no results; referer: ${referer}`
     )
 }

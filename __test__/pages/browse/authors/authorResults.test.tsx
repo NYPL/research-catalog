@@ -161,7 +161,7 @@ describe("getServerSideProps", () => {
 
     await getServerSideProps({ req, query, params })
     expect(logSingleFilterNoResults).toHaveBeenCalledWith(
-      "browse authors",
+      "browse authors gSSP",
       response404,
       expect.any(Object),
       "a cat"

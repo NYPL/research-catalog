@@ -133,7 +133,7 @@ describe("getServerSideProps", () => {
 
     await getServerSideProps({ req, query, params })
     expect(logSingleFilterNoResults).toHaveBeenCalledWith(
-      "browse subjects",
+      "browse subjects gSSP",
       response404,
       expect.any(Object),
       "a cat"

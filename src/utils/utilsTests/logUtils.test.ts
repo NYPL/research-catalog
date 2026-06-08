@@ -26,13 +26,13 @@ describe("logUtils", () => {
     })
     it("logs the correct warning if conditions apply", () => {
       logSingleFilterNoResults(
-        "search page",
+        "search page gSSP",
         mock404Result,
         mockSearchParamSingleFilter,
         "http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
       )
       expect(logger.warn).toHaveBeenCalledWith(
-        "Warning in Search results gSSP: Link to single filter, no results at search page; referer: http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
+        "Warning in search page gSSP: Link to single filter, no results; referer: http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
       )
     })
     it("doesn't log when referer is undefined", () => {
