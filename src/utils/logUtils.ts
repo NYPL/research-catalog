@@ -17,7 +17,6 @@ export const logServerWarn = (location: string, message: string): void => {
  * (indicated by a 404 response with one filter applied and no keyword, and a referer present).
  * If this is the case, logs a server warning
  */
-// Check for possible bad incoming link (no results with one filter and no keyword)
 export const logSingleFilterNoResults = (
   location: string,
   results: SearchResultsResponse,
