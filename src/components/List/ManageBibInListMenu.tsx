@@ -25,6 +25,7 @@ import type { StatusType } from "../MyAccount/Settings/StatusBanner"
 import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import { SearchableCheckboxGroup } from "./SearchableCheckboxGroup"
 
+/** Render list management menu (inside Chakra Popover, Drawer on mobile) */
 export const ManageBibInListMenu = ({
   isOpen,
   onClose,
@@ -63,7 +64,6 @@ export const ManageBibInListMenu = ({
 
   const [listName, setListName] = useState(list?.listName || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
   const [showCreateForm, setShowCreateForm] = useState(false)
   const [selectedLists, setSelectedLists] = useState<string[]>(
     lists
@@ -86,7 +86,6 @@ export const ManageBibInListMenu = ({
   useEffect(() => {
     if (isOpen) {
       setListName(list?.listName || "")
-      setIsSubmitted(false)
       setShowCreateForm(false)
       setStatus("")
       setListCreationStatus("")
@@ -104,8 +103,6 @@ export const ManageBibInListMenu = ({
     e.preventDefault()
     if (!listName || listName.length > 100) return
     if (!patron?.id) return
-
-    setIsSubmitted(true)
     try {
       const url = `${BASE_URL}/api/account/lists/list`
 
@@ -240,9 +237,7 @@ export const ManageBibInListMenu = ({
       }
 
       setStatus("success")
-      setStatusMessage(
-        "Your list changes have been saved. Lists can be managed from your patron account."
-      )
+      setStatusMessage("Your list changes have been saved.")
     } catch (error) {
       console.error("Error updating bib in lists:", error)
       setStatus("failure")
@@ -395,6 +390,7 @@ export const ManageBibInListMenu = ({
           onChange={listCheckBoxChange}
           renderRightLabel={(item) =>
             item.records?.some((record: any) => record.uri === recordId) && (
+              // TODO: Replace with DS icon
               <Icon size="medium">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path

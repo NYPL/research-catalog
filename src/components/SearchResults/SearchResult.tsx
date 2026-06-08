@@ -97,12 +97,14 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
             )}
             <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
           </Box>
-          <ManageBibInList
-            recordId={bib.id}
-            isAuthenticated={isAuthenticated}
-            setStatus={setStatus}
-            setStatusMessage={setStatusMessage}
-          />
+          <Box>
+            <ManageBibInList
+              recordId={bib.id}
+              isAuthenticated={isAuthenticated}
+              setStatus={setStatus}
+              setStatusMessage={setStatusMessage}
+            />
+          </Box>
         </Flex>
       </CardHeading>
       <CardContent data-testid="card-content">

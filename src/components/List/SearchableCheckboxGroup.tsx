@@ -26,6 +26,8 @@ export interface SearchableCheckboxGroupProps {
   label?: string
 }
 
+/* Reservoir Multiselect modified to accept JSX elements but search by labels.
+ ** Used to display user's lists in ManageBibInListMenu. */
 export const SearchableCheckboxGroup = ({
   id,
   items,

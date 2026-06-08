@@ -28,6 +28,8 @@ interface ManageBibInListProps {
   setStatusMessage
 }
 
+/* Render button to indicate saved state of bib and open list management menu.
+ * Redirects to login if necessary. */
 export const ManageBibInList = ({
   recordId,
   isAuthenticated,
@@ -211,8 +213,9 @@ export const ManageBibInList = ({
       variant="text"
       isDisabled={isLoading}
       sx={{
-        justifyContent: { base: "center", md: "flex-start" },
-        px: { base: 0, md: "s" },
+        width: "fit-content",
+        padding: "8px",
+        marginLeft: "auto",
         ...(isOpen && {
           bg: "ui.link.primary-05",
           _dark: {
@@ -239,7 +242,11 @@ export const ManageBibInList = ({
           </svg>
         )}
       </Icon>
-      <Box as="span" display={{ base: "none", md: "inline-block" }}>
+      <Box
+        as="span"
+        display={{ base: "none", md: "inline-block" }}
+        textAlign="left"
+      >
         {buttonText}
       </Box>
     </Button>
