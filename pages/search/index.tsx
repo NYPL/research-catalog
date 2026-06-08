@@ -20,6 +20,7 @@ import type {
 } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
+import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -88,7 +89,16 @@ export default function SearchPage({
 export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
-  const results = await fetchSearchResults(mapQueryToSearchParams(query))
+  const searchParams = mapQueryToSearchParams(query)
+
+  const results = await fetchSearchResults(searchParams)
+
+  logSingleFilterNoResults(
+    "search page gSSP",
+    results,
+    searchParams,
+    req.headers?.referer
+  )
 
   // Direct to error display according to status
   if (results.status !== 200) {

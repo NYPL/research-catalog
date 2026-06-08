@@ -1,9 +1,13 @@
 import { getServerSideProps } from "../../../pages/search/index"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import { fetchSearchResults } from "../../../src/server/api/search"
+import { mapQueryToSearchParams } from "../../../src/utils/searchUtils"
+import type { SearchQueryParams } from "../../../src/types/searchTypes"
+import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/search")
+jest.mock("../../../src/utils/logUtils")
 
 const mockReq = {
   headers: {
@@ -12,6 +16,15 @@ const mockReq = {
   url: "/account",
   cookies: {
     nyplIdentityPatron: '{"access_token":123}',
+  },
+}
+
+const mockReqWithReferer = {
+  ...mockReq,
+  headers: {
+    host: "local.nypl.org:8080",
+    referer:
+      "http://local.nypl.org:8080/research/research-catalog/bib/b16767329",
   },
 }
 
@@ -102,6 +115,22 @@ describe("Search page", () => {
       expect(response).toEqual({
         props: { errorStatus: 404 },
       })
+    })
+    it("makes the correct call to logSingleFilterNoResults", async () => {
+      const response404 = { status: 404, message: "No results found" }
+      const query = { "filters[language][0]": "lang:fre" } as SearchQueryParams
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue(response404)
+
+      await getServerSideProps({
+        req: mockReqWithReferer,
+        query,
+      })
+      expect(logSingleFilterNoResults).toHaveBeenCalledWith(
+        "search page gSSP",
+        response404,
+        mapQueryToSearchParams(query),
+        "http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
+      )
     })
     it("handles general server errors", async () => {
       ;(fetchSearchResults as jest.Mock).mockResolvedValue({
