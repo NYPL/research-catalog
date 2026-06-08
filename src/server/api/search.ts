@@ -11,7 +11,6 @@ import {
 import { logServerError } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
 import type { APIError } from "../../types/appTypes"
-import { bootstrapConfig } from "../../../lib/bootstrap"
 
 export async function fetchSearchResults(
   searchParams: SearchParams
@@ -63,6 +62,7 @@ export async function fetchSearchResults(
       logServerError("fetchSearchResults", resultsResponse.reason)
       return {
         status: 500,
+        name: null,
         error:
           resultsResponse.reason instanceof Error
             ? resultsResponse.reason.message
@@ -73,6 +73,7 @@ export async function fetchSearchResults(
       logServerError("fetchSearchResults", aggregationsResponse.reason)
       return {
         status: 500,
+        name: null,
         error:
           aggregationsResponse.reason instanceof Error
             ? aggregationsResponse.reason.message
@@ -97,13 +98,14 @@ export async function fetchSearchResults(
     if (results.status) {
       logServerError(
         "fetchSearchResults",
-        `${
-          results.error && results.error
-        } Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+        `${results.name ? `${results.name} ` : ""}${
+          results.error ? `${results.error} ` : ""
+        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
       )
       return {
         status: results.status,
-        error: results.error,
+        ...(results.name && { name: results.name }),
+        ...(results.error && { error: results.error }),
       }
     }
 
@@ -115,6 +117,9 @@ export async function fetchSearchResults(
     }
   } catch (error: any) {
     logServerError("fetchSearchResults", error)
-    return { status: 500, error }
+    return {
+      status: 500,
+      error: error?.message || error || null,
+    }
   }
 }

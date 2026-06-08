@@ -1,4 +1,4 @@
-import PreferredSubject from "../PreferredSubject"
+import PreferredSubject from "../browse/PreferredSubject"
 import type { DiscoveryPreferredSubjectResult } from "../../types/browseTypes"
 
 describe("PreferredSubject model", () => {

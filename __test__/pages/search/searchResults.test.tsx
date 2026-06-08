@@ -44,10 +44,14 @@ describe("Search Results page", () => {
       const sortBy = screen.getAllByLabelText("Sort by", { exact: false })[0]
       userEvent.click(sortBy)
       await userEvent.click(screen.getByText("Title (A - Z)"))
-      expect(sortBy).toHaveTextContent("Sort by: Title (A - Z)")
+
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=asc"
       )
+      const sortByPost = screen.getAllByLabelText("Sort by", {
+        exact: false,
+      })[0]
+      expect(sortByPost).toHaveTextContent("Sort by: Title (A - Z)")
     })
     it("returns the user to the first page on sorting changes", async () => {
       await mockRouter.push(`/search?q=${query}&page=2`)
@@ -61,6 +65,10 @@ describe("Search Results page", () => {
       expect(mockRouter.asPath).toBe(
         "/?q=spaghetti&sort=title&sort_direction=desc"
       )
+      const sortByPost = screen.getAllByLabelText("Sort by", {
+        exact: false,
+      })[0]
+      expect(sortByPost).toHaveTextContent("Sort by: Title (Z - A)")
     })
   })
   describe("errors", () => {

@@ -151,7 +151,7 @@ Each version entry in the changelog includes:
 
 All API calls should include error logs with relevant metadata.
 
-Use the `logServerError` function in `logUtils` instead of calling the logger directly to enforce error logging standards.
+Use the `logServerError` or `logServerWarn` functions in `logUtils` instead of calling the logger directly to enforce logging standards.
 
 Example:
 

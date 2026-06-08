@@ -10,6 +10,7 @@ export interface AppConfig {
   features: Record<string, Features>
   sourceEmail: string
   libAnswersEmail: string
+  newRelicBrowserScript: APIEndpoints
   testUser: {
     name: APIEndpoints
     cardNumber: APIEndpoints
@@ -41,7 +42,14 @@ export type HTTPResponse = {
 
 export type APIError = {
   status: HTTPStatusCode
-  name?: string // Discovery API convention: IndexSearchError, etc.
-  error?: string // Error message
+  name?: APIErrorName // Discovery API error classes
+  error?: string | null // Error message
   redirectUrl?: string
 }
+
+export type APIErrorName =
+  | "InvalidParameterError"
+  | "NotFoundError"
+  | "IndexConnectionError"
+  | "IndexSearchError"
+  | "InvalidQuerySyntaxError"

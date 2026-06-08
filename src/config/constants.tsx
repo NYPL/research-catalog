@@ -1,4 +1,7 @@
 import Link from "../components/Link/Link"
+import type { BrowseType } from "../types/browseTypes"
+import { getSeriesSearchUrl } from "../utils/bibUtils"
+import { getContributorSearchURL } from "../utils/browseUtils"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -65,9 +68,9 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: `${example} Middlemarch or “A Chorus Line”`,
   },
   contributor: {
-    text: "Author/contributor",
+    text: "Author/Contributor",
     searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results.",
+      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results. To browse a list of authors instead, go to Browse the Catalog.",
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
@@ -96,20 +99,62 @@ export const SEARCH_FORM_OPTIONS = {
     ),
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
+  cql: {
+    text: <span>Query</span>,
+    searchTip: (
+      <span>
+        Read our{" "}
+        <Link
+          isExternal
+          href="https://libguides.nypl.org/researchcatalog/query"
+        >
+          Query Guide
+        </Link>{" "}
+        to learn how to construct queries or{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
+        for assistance.
+      </span>
+    ),
+    placeholder:
+      'Example: callnumber = "^*R-RMRR" AND author any "locke hobbes rousseau"',
+  },
 }
 
 export const BROWSE_FORM_OPTIONS = {
-  has: {
+  subject_has: {
+    browseType: "subjects" as BrowseType,
+    scope: "has",
     text: "Subject Headings containing",
     searchTip:
       "Enter one or more keywords in any order to browse the Subject Headings index.",
     placeholder: "Example: Ornithology or Vietnam War",
   },
-  starts_with: {
+
+  subject_starts_with: {
+    browseType: "subjects" as BrowseType,
+    scope: "starts_with",
     text: "Subject Headings beginning with",
     searchTip:
       "Enter one or more keywords in exact order to browse the Subject Headings index.",
     placeholder: "Example: Ornithology or Vietnam War",
+  },
+
+  contributor_has: {
+    browseType: "contributors" as BrowseType,
+    scope: "has",
+    text: "Authors/Contributors containing",
+    searchTip:
+      "Enter the name of an author, contributor, or organization in any order to browse the Author/Contributor index.",
+    placeholder: "Example: Charles Dickens or United Nations",
+  },
+
+  contributor_starts_with: {
+    browseType: "contributors" as BrowseType,
+    scope: "starts_with",
+    text: "Authors/Contributors beginning with",
+    searchTip:
+      "Enter the name of an author, contributor, or organization in exact order (use Last Name, First Name for authors) to browse the Author/Contributor index. ",
+    placeholder: "Example: Dickens, Charles or United Nations",
   },
 }
 
@@ -125,6 +170,41 @@ export const NYPL_LOCATIONS = {
   schwarzman: {
     shortName: "Schwarzman Building",
     address: "476 Fifth Avenue (42nd St and Fifth Ave)",
+  },
+}
+
+export const DISPLAY_LINKED_FIELD_MAPPING: Record<
+  string,
+  {
+    label: string
+    displayField: string
+    url: (name: string) => string
+  }
+> = {
+  creatorLiteral: {
+    label: "Author",
+    displayField: "creatorsDisplay",
+    url: (name) => getContributorSearchURL(name),
+  },
+  contributorLiteral: {
+    label: "Additional authors",
+    displayField: "contributorsDisplay",
+    url: (name) => getContributorSearchURL(name),
+  },
+  seriesAddedEntry: {
+    label: "Series added entry",
+    displayField: "seriesAddedEntryDisplay",
+    url: (name) => getSeriesSearchUrl(name),
+  },
+  series: {
+    label: "Series",
+    displayField: "seriesDisplay",
+    url: (name) => getSeriesSearchUrl(name),
+  },
+  seriesUniformTitle: {
+    label: "Series uniform title",
+    displayField: "seriesUniformTitleDisplay",
+    url: (name) => getSeriesSearchUrl(name),
   },
 }
 

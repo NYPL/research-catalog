@@ -25,7 +25,8 @@ import {
 export function getSearchResultsHeading(
   searchParams: SearchParams,
   totalResults: number,
-  browseOptions?: { slug: string; browseType: string }
+  browseOptions?: { slug: string; browseType: string; role?: string },
+  parsedQuery?: string[]
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
@@ -34,8 +35,14 @@ export function getSearchResultsHeading(
   )
 
   const queryDisplayString = browseOptions
-    ? ` for ${browseOptions.browseType} "${browseOptions.slug}"`
-    : buildQueryDisplayString(searchParams)
+    ? ` for ${
+        browseOptions.browseType === "subjects"
+          ? "Subject Heading"
+          : "author/contributor"
+      } "${browseOptions.slug}${
+        browseOptions.role ? `, ${browseOptions.role}` : ""
+      }"`
+    : buildQueryDisplayString(searchParams, parsedQuery)
 
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
@@ -47,7 +54,10 @@ export function getSearchResultsHeading(
 }
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
-function buildQueryDisplayString(searchParams: SearchParams): string {
+function buildQueryDisplayString(
+  searchParams: SearchParams,
+  parsedQuery?: string[]
+): string {
   const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
     .map((field) => ({ ...field, label: field.label.toLowerCase() }))
@@ -60,6 +70,9 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       { name: "issn", label: "ISSN" },
       { name: "lccn", label: "LCCN" },
       { name: "callnumber", label: "call number" },
+      { name: "cql", label: "query" },
+      { name: "genre", label: "genre" },
+      { name: "series", label: "series" },
     ])
   const paramsStringCollection = {}
   const searchParamsObject = {
@@ -72,15 +85,23 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
     const displayParam = searchFields.find((field) => field.name === param)
     if (displayParam && searchParamsObject[param]) {
       let label = displayParam.label
-      const value = searchParamsObject[param]
+      let value = searchParamsObject[param]
       const plural = label === "keyword" && value.indexOf(" ") > -1 ? "s" : ""
-      // Special case for the author display string for both
+      // Special cases for the author display string for both
       // the "contributor" search scope and the "contributorLiteral" filter.
-      if (label === "author") {
+      if (label === "author/contributor" || label === "author") {
         label = "author/contributor"
+        if (Array.isArray(value) && value.length > 1) {
+          value = value.join(", ")
+          label = "authors/contributors"
+        }
       }
-
       paramsStringCollection[param] = `${label}${plural} "${value}"`
+      // Special case for CQL (query) formatting
+      if (label === "query") {
+        value = parsedQuery ? formatParsedQuery(parsedQuery) : value
+        paramsStringCollection[param] = `${label}: ${value}`
+      }
     }
   })
 
@@ -101,17 +122,34 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
 /**
  * getSortQuery
  * Get the sort type and order and format into query param snippet.
+ * Handle defaults for relevance and call number.
  */
-function getSortQuery(sortBy = "", order = ""): string {
-  const reset = sortBy === "relevance"
-  let sortQuery = ""
-  const sortDirectionQuery = order === "" ? "" : `&sort_direction=${order}`
 
-  if (sortBy?.length && !reset) {
-    sortQuery = `&sort=${sortBy}${sortDirectionQuery}`
+function getSortQuery(
+  sortBy: string | undefined,
+  order: string | undefined,
+  field: string | undefined,
+  populatedAdvancedFields: string[]
+): string {
+  const sortDirectionQuery = order ? `&sort_direction=${order}` : ""
+
+  const isOnlyCallNumberQuery =
+    field === "callnumber" ||
+    (populatedAdvancedFields.length === 1 &&
+      populatedAdvancedFields[0] === "callnumber")
+
+  // default call number if no user choice
+  if (!sortBy && isOnlyCallNumberQuery) {
+    return "&sort=callnumber"
   }
 
-  return sortQuery
+  // otherwise respect user choice
+  if (sortBy) {
+    return `&sort=${sortBy}${sortDirectionQuery}`
+  }
+
+  // otherwise default to relevance ("")
+  return ""
 }
 
 /**
@@ -133,6 +171,25 @@ function getIdentifierQuery(identifiers: Identifiers): string {
   return Object.entries(identifiers)
     .map(([key, value]) => (value ? `&${key}=${value as string}` : ""))
     .join("")
+}
+
+/**
+ * getRoleQuery
+ * Check conditions for appending a role and return query string.
+ */
+function getRoleQuery(filters, role): string {
+  let roleQuery = ""
+
+  const contributorLiteral = filters?.contributorLiteral
+
+  const hasSingleContributorLiteral =
+    Array.isArray(contributorLiteral) && contributorLiteral.length === 1
+
+  if (hasSingleContributorLiteral && role) {
+    roleQuery = `&role=${encodeURIComponentWithPeriods(role)}`
+  }
+
+  return roleQuery
 }
 
 /**
@@ -176,18 +233,19 @@ function getFilterQuery(filters: SearchFilters) {
  */
 export function getSearchQuery(params: SearchParams): string {
   const {
-    sortBy = "relevance",
+    sortBy,
     field = "all",
     order,
     filters = {},
     identifiers = {},
     q,
+    role,
     page = 1,
   } = params
   const searchKeywordsQuery = encodeURIComponentWithPeriods(q)
-  const sortQuery = getSortQuery(sortBy, order)
 
   const filterQuery = getFilterQuery(filters)
+  const roleQuery = getRoleQuery(filters, role)
   const fieldQuery = getFieldQuery(field)
   const identifierQuery = getIdentifierQuery(identifiers)
   const pageQuery = page !== 1 ? `&page=${page}` : ""
@@ -211,7 +269,11 @@ export function getSearchQuery(params: SearchParams): string {
     ? advancedSearchQueryParams
     : ""
 
-  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${pageQuery}${identifierQuery}`
+  const populatedAdvancedFields = advancedSearchFields
+    .map(({ name }) => name)
+    .filter((name) => params[name])
+  const sortQuery = getSortQuery(sortBy, order, field, populatedAdvancedFields)
+  const completeQuery = `${searchKeywordsQuery}${advancedQuery}${filterQuery}${sortQuery}${fieldQuery}${identifierQuery}${roleQuery}${pageQuery}`
   return completeQuery?.length ? `?q=${completeQuery}` : ""
 }
 
@@ -228,6 +290,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     language,
     format,
     dateFrom,
@@ -239,6 +305,10 @@ export function mapRequestBodyToSearchParams(
     contributor,
     title,
     subject,
+    genre,
+    series,
+    callnumber,
+    standard_number,
     filters: {
       format,
       language,
@@ -280,6 +350,7 @@ export const sortOptions: Record<string, string> = {
   date_desc: "Date (New to Old)",
   creator_asc: "Author (A - Z)",
   creator_desc: "Author (Z - A)",
+  callnumber_asc: "Call number",
 }
 
 /**
@@ -297,11 +368,14 @@ export function mapQueryToSearchParams({
   contributor,
   title,
   subject,
+  genre,
+  series,
   sort,
   issn,
   isbn,
   oclc,
   lccn,
+  role,
   ...queryFilters
 }: SearchQueryParams): SearchParams {
   const hasIdentifiers = issn || isbn || oclc || lccn
@@ -316,6 +390,8 @@ export function mapQueryToSearchParams({
     contributor,
     title,
     subject,
+    genre,
+    series,
     // TODO: this is a "catch-all" for journal title and standard number
     // fields but will also update other fields such as title, subject, and
     // contributor. This will override other fields if a value is present.
@@ -330,6 +406,7 @@ export function mapQueryToSearchParams({
       oclc,
       lccn,
     },
+    role,
   }
 }
 
@@ -361,4 +438,15 @@ export function filtersObjectLength(obj) {
     }
   }
   return total
+}
+
+export const formatParsedQuery = (node: any): string => {
+  if (Array.isArray(node)) {
+    return node
+      .map((item) =>
+        Array.isArray(item) ? `(${formatParsedQuery(item)})` : item
+      )
+      .join(" ")
+  }
+  return String(node)
 }

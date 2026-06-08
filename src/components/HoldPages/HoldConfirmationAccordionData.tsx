@@ -104,7 +104,7 @@ export const holdConfirmationFAQData: AccordionDataProps[] = [
 
 export const eddConfirmationFAQData: AccordionDataProps[] = [
   {
-    label: "What’s next?",
+    label: "What's next?",
     panel: (
       <>
         <Text>

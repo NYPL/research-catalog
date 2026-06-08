@@ -38,10 +38,17 @@ export interface MarcLinkedDetail {
 
 export interface BibDetailURL {
   url: string
-  urlLabel?: string
+  urlText?: string
+  // Unlinked text surrounding (and including) the linked urlText
+  text?: string
 }
 
 export interface FieldMapping {
   label: string
   field: string
+}
+
+export interface DisplayPackedEntry {
+  display: string
+  "@value": string
 }

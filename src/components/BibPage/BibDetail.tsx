@@ -10,6 +10,8 @@ import type {
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
+import type { BrowseType } from "../../types/browseTypes"
+import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 
 interface BibDetailsProps {
   details: AnyBibDetail[]
@@ -34,10 +36,17 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
       {details.map((detail: BibDetail | LinkedBibDetail) => {
         if (!detail) return
         if ("link" in detail)
-          return LinkedDetailElement(
-            detail as LinkedBibDetail,
-            detail.label === "Subject"
+          if (
+            detail.label === "Subject" ||
+            detail.label === "Additional authors" ||
+            detail.label === "Author"
           )
+            return BrowseLinkDetailElement({
+              field: detail as LinkedBibDetail,
+              browseType:
+                detail.label === "Subject" ? "subjects" : "contributors",
+            })
+          else return LinkedDetailElement(detail as LinkedBibDetail)
         return PlainTextElement(detail as BibDetail)
       })}
     </List>
@@ -64,32 +73,51 @@ export const PlainTextElement = ({ label, value }: BibDetail) =>
     ))
   )
 
-export const LinkedDetailElement = (
-  field: LinkedBibDetail,
-  withIndexLink = false
-) =>
+export const LinkedDetailElement = (field: LinkedBibDetail) =>
   DetailElement(
     field.label,
     field.value.map((urlInfo, i) => (
       <li key={`${kebabCase(field.label)}-${i}`}>
         {LinkElement(urlInfo, field.link)}
-        {withIndexLink && (
-          <>
-            {" - "}
-            {LinkElement(
-              {
-                url: `/browse?q=${urlInfo.urlLabel}&search_scope=starts_with`,
-                urlLabel: "[Browse in index]",
-              },
-              "internal",
-              true,
-              `Browse in index for "${urlInfo.urlLabel}"`
-            )}
-          </>
-        )}
       </li>
     ))
   )
+
+export const BrowseLinkDetailElement = ({
+  field,
+  browseType,
+}: {
+  field: LinkedBibDetail
+  browseType: BrowseType
+}) => {
+  const indexLinkLabel = `Browse in ${
+    browseType === "subjects" ? "subject" : "author"
+  } index`
+  return DetailElement(
+    field.label,
+    field.value.map((urlInfo, i) => (
+      <li key={`${kebabCase(field.label)}-${i}`}>
+        {LinkElement(urlInfo, field.link)}
+        <>
+          {" - "}
+          {LinkElement(
+            {
+              url: `/browse${
+                browseType === "subjects" ? "" : "/authors/"
+              }?q=${encodeURIComponentWithPeriods(
+                urlInfo.urlText
+              )}&search_scope=starts_with`,
+              urlText: `[${indexLinkLabel}]`,
+            },
+            "internal",
+            true,
+            `${indexLinkLabel} for "${urlInfo.urlText}"`
+          )}
+        </>
+      </li>
+    ))
+  )
+}
 
 const LinkElement = (
   url: BibDetailURL,
@@ -97,18 +125,46 @@ const LinkElement = (
   isBold = false,
   ariaLabel?: string
 ) => {
+  const { text, urlText, url: href } = url
+
+  if (!text) {
+    return (
+      <Link
+        dir={rtlOrLtr(url.urlText)}
+        href={url.url}
+        key={url.url}
+        isExternal={linkType === "external"}
+        fontWeight={isBold ? "700" : "400"}
+        textDecoration="none"
+        aria-label={ariaLabel}
+      >
+        {url.urlText}
+      </Link>
+    )
+  }
+
+  const parts = text.split(urlText)
+
   return (
-    <Link
-      dir={rtlOrLtr(url.urlLabel)}
-      href={url.url}
-      key={url.url}
-      isExternal={linkType === "external"}
-      fontWeight={isBold ? "700" : "400"}
-      textDecoration="none"
-      aria-label={ariaLabel}
-    >
-      {url.urlLabel}
-    </Link>
+    <>
+      {parts.map((part, index) => (
+        <span key={index}>
+          {part}
+          {index < parts.length - 1 && (
+            <Link
+              dir={rtlOrLtr(urlText)}
+              href={href}
+              isExternal={linkType === "external"}
+              fontWeight={isBold ? "700" : "400"}
+              textDecoration="none"
+              aria-label={ariaLabel}
+            >
+              {urlText}
+            </Link>
+          )}
+        </span>
+      ))}
+    </>
   )
 }
 

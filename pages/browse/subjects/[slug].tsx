@@ -12,7 +12,7 @@ import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 
-interface SubjectSearchProps {
+interface SubjectHeadingResultsProps {
   bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
@@ -33,7 +33,7 @@ export default function SubjectHeadingResults({
   errorStatus = null,
   metadataTitle,
   slug,
-}: SubjectSearchProps) {
+}: SubjectHeadingResultsProps) {
   const { pathname, push, query } = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
@@ -73,7 +73,7 @@ export default function SubjectHeadingResults({
       isAuthenticated={isAuthenticated}
       errorStatus={errorStatus}
       metadataTitle={metadataTitle}
-      activePage="sh-results"
+      activePage="browse-results"
       searchParams={searchParams}
       handlePageChange={handlePageChange}
       handleSortChange={handleSortChange}
@@ -108,7 +108,7 @@ export async function getServerSideProps({ req, query, params }) {
       results,
       isAuthenticated: patronTokenResponse.isTokenValid,
       metadataTitle: `Search | ${SITE_NAME}`,
-      activePage: "sh-results",
+      activePage: "browse-results",
       slug,
     },
   }

@@ -45,7 +45,11 @@ describe("fetchSearchResults", () => {
 
   it("returns 500 if search results API call fails", async () => {
     mockClient.get
-      .mockResolvedValueOnce({ status: 500, error: "No connection" })
+      .mockResolvedValueOnce({
+        status: 500,
+        name: "IndexConnectionError",
+        error: "No connection",
+      })
       .mockResolvedValueOnce({
         itemListElement: [],
         totalResults: 0,
@@ -54,10 +58,34 @@ describe("fetchSearchResults", () => {
     const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({
       status: 500,
+      name: "IndexConnectionError",
       error: expect.stringContaining("No connection"),
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: No connection Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+      "Error in fetchSearchResults: IndexConnectionError No connection Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+    )
+  })
+
+  it("returns 422 query syntax error", async () => {
+    mockClient.get
+      .mockResolvedValueOnce({
+        status: 422,
+        name: "InvalidQuerySyntaxError",
+        error: "Unknown parsing or whatever",
+      })
+      .mockResolvedValueOnce({
+        itemListElement: [],
+        totalResults: 0,
+      })
+
+    const response = await fetchSearchResults({ q: "cat" })
+    expect(response).toEqual({
+      status: 422,
+      name: "InvalidQuerySyntaxError",
+      error: "Unknown parsing or whatever",
+    })
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchSearchResults: InvalidQuerySyntaxError Unknown parsing or whatever Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
     )
   })
 

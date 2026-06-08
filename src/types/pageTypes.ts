@@ -2,7 +2,7 @@ export type RCPage =
   | "search"
   | "advanced"
   | "browse"
-  | "sh-results"
+  | "browse-results"
   | "account"
   | "bib"
   | "marc"

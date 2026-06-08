@@ -7,6 +7,64 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.0.0] 2026-06-04
+
+### Added
+
+- Added CQL search scope, error page, and query highlight banner [SCC-5307](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5307)
+
+## [1.9.2] 2026-05-27
+
+### Updated
+
+- Updated series links in bib details [SCC-5195](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5195)
+- Removed linked author/series literals as fallback
+- Fixed timezone shift in date formatting [SCC-5340](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5340)
+- Updated to use `searchVocabularies` language labels for filters [SCC-5369](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5369)
+
+### Added
+
+- Added series and genre to advanced search fields [SCC-5179](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5179)
+- Added Playwright tests for Author Browse [SCC-5338](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5338)
+
+## [1.9.1] 2026-05-20
+
+- Updated copy about legacy deprecation on homepage [SCC-5397](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5397)
+- Updated 404 page to remove legacy catalog link [SCC-50139](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5139)
+- Updated bib page to indicate legacy catalog link is onsite only [SCC-5007](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5007)
+- Updated browse tips copy [SCC-5398](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5398)
+
+## Hot fix 2026-04-14
+
+- Added 10s timeout to all RC requests so that 504s can be handled more gracefully
+
+## [1.9.0] 2026-04-14
+
+### Added
+
+- Added Playwright test for redirecting circ bib requests to Vega [SCC-5292](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5292)
+- Added author/contributor mode to browse landing [SCC-4966](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4966)
+- Added author/contributor models and table [SCC-4969](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4969)
+- Added author/contributor index and search results pages, with role handling [SCC-4967](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4967)
+- Added browse links, roles to author/additional author fields on bib page [SCC-4968](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4968)
+- Added more granular logging to support error alarm [SCC-5293](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5293)
+
+### Updated
+
+- Displayed non-aggregated filter values [SCC-5125](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5125)
+
+## Hot fix 2026-04-13
+
+- Update bib/item ID parsing to correctly strip partner prefixes
+
+## [1.8.2] 2026-04-09
+
+### Updated
+
+- Updated homepage copy to reflect legacy deprecation dates May/June [SCC-5316](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5316)
+
+## [1.8.1] 2026-04-01
+
 ### Updated
 
 - Updated item table whitespace for ease of copying [SCC-5068](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5068)
@@ -18,9 +76,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Playwright tests for Browse Subjects [SCC-5232] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
+- Added Playwright tests for subject browse [SCC-5232](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5232)
 - Added author ascending/descending sort options to search sort [SCC-5207](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5207)
 - Added rollback workflow for production deployments [SCC-5066](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5066)
+- Add call number default sort and rework sort utilities [SCC-5279](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5279)
 
 ## Hot fix 2026-03-12
 
@@ -32,9 +91,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added dependabot.yml [SCC-5146](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5146)
 - Added Playwright tests for bib and MARC pages
+- Add User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
 - Added `node-utils` package to reconfigure environment, documentation updated accordingly [SCC-5104](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5104)
 - Added Playwright tests for My Account functionality [SCC-5000](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5000)
-- Added User Guide banner to account page [SCC-5185](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5185)
 
 ### Updated
 

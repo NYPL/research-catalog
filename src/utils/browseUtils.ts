@@ -1,11 +1,18 @@
-import { BROWSE_RESULTS_PER_PAGE } from "../config/constants"
+import {
+  BROWSE_FORM_OPTIONS,
+  BROWSE_RESULTS_PER_PAGE,
+} from "../config/constants"
 import type {
   BrowseParams,
   BrowseQueryParams,
+  BrowseType,
+  DiscoveryContributorResult,
+  DiscoveryPreferredContributorResult,
   DiscoveryPreferredSubjectResult,
   DiscoveryPreferredTermResult,
   DiscoverySubjectResult,
-  SubjectLink,
+  DiscoverySubjectsResponse,
+  TermLink,
 } from "../types/browseTypes"
 import {
   encodeURIComponentWithPeriods,
@@ -33,6 +40,22 @@ const getValidParam = (
   return validParams.includes(param as string)
     ? (param as string)
     : defaultParam
+}
+
+/**
+ * getBrowseFormKey
+ * Get the selectOption key from a browseType and scope
+ * Returns "subject_has" (default) if not found.
+ */
+export const getBrowseFormKey = (
+  browseType: BrowseType,
+  scope: string
+): string => {
+  const key = Object.keys(BROWSE_FORM_OPTIONS).find((k) => {
+    const option = BROWSE_FORM_OPTIONS[k]
+    return option.browseType === browseType && option.scope === scope
+  })
+  return key || "subject_has"
 }
 
 /**
@@ -99,10 +122,18 @@ export function getBrowseQuery(params: BrowseParams): string {
   return completeQuery ? `?q=${completeQuery}` : ""
 }
 
-export function isPreferredSubject(
-  subject: DiscoverySubjectResult
-): subject is DiscoveryPreferredSubjectResult {
-  return subject["@type"] === "preferredTerm"
+export function isPreferredTerm(
+  term: DiscoverySubjectResult | DiscoveryContributorResult
+): term is
+  | DiscoveryPreferredSubjectResult
+  | DiscoveryPreferredContributorResult {
+  return term["@type"] === "preferredTerm"
+}
+
+export function isSubjectResponse(
+  results: any
+): results is DiscoverySubjectsResponse {
+  return "subjects" in results
 }
 
 export function getSubjectSearchURL(term: string) {
@@ -110,8 +141,22 @@ export function getSubjectSearchURL(term: string) {
   return `/browse/subjects/${subject}`
 }
 
-export function getSubjectBrowseURL(term: string) {
-  return `/browse?q=${term}&search_scope=starts_with`
+export function getBrowseUrl(term: string, browseType: BrowseType): string {
+  return `/browse${
+    browseType === "contributors" ? "/authors" : ""
+  }?q=${term}&search_scope=starts_with`
+}
+
+export function getContributorSearchURL(term: string) {
+  const contributor = encodeURIComponentWithPeriods(term)
+  return `/browse/authors/${contributor}`
+}
+
+export function getContributorRoleSearchURL(contributor: string, role: string) {
+  const contributorWithRole = `${encodeURIComponentWithPeriods(
+    contributor
+  )}?role=${encodeURIComponentWithPeriods(role)}`
+  return `/browse/authors/${contributorWithRole}`
 }
 
 /**
@@ -119,6 +164,7 @@ export function getSubjectBrowseURL(term: string) {
  * Used to generate the browse index heading text (Displaying 1-30 of 300 Subject Headings containing "cats")
  */
 export function getBrowseIndexHeading(
+  browseType: BrowseType,
   browseParams: BrowseParams,
   totalResults: number
 ): string {
@@ -133,7 +179,9 @@ export function getBrowseIndexHeading(
       : totalResults?.toLocaleString()
   } of${
     totalResults === 10000 ? " over" : ""
-  } ${totalResults?.toLocaleString()} Subject Headings ${
+  } ${totalResults?.toLocaleString()} ${
+    browseType === "subjects" ? "Subject Headings" : "Authors/Contributors"
+  } ${
     browseParams.q.length
       ? `${
           browseParams.searchScope === "has" ? "containing" : "beginning with"
@@ -143,25 +191,37 @@ export function getBrowseIndexHeading(
 }
 
 /**
- * browseSortOptions
+ * browseSubjectSortOptions
  * The allowed keys for the sort field and their respective labels
  */
-export const browseSortOptions: Record<string, string> = {
+export const browseSubjectSortOptions: Record<string, string> = {
   termLabel_asc: "Subject Heading (A - Z)",
   termLabel_desc: "Subject Heading (Z - A)",
-  count_desc: "Count (High - Low)",
-  count_asc: "Count (Low - High)",
+  count_desc: "Results (High - Low)",
+  count_asc: "Results (Low - High)",
 }
 
-export function buildSubjectLinks(
+/**
+ * browseContributorSortOptions
+ * The allowed keys for the sort field and their respective labels
+ */
+export const browseContributorSortOptions: Record<string, string> = {
+  termLabel_asc: "Author/Contributor (A - Z)",
+  termLabel_desc: "Author/Contributor (Z - A)",
+  count_desc: "Results (High - Low)",
+  count_asc: "Results (Low - High)",
+}
+
+export function buildTermLinks(
+  browseType: BrowseType,
   terms: DiscoveryPreferredTermResult[]
-): SubjectLink[] {
-  const termLinks: SubjectLink[] = []
+): TermLink[] {
+  const termLinks: TermLink[] = []
 
   for (const termObj of terms) {
     termLinks.push({
       termLabel: termObj.termLabel,
-      url: getSubjectBrowseURL(termObj.termLabel),
+      url: getBrowseUrl(termObj.termLabel, browseType),
       count: termObj.count?.toLocaleString() || "",
     })
   }

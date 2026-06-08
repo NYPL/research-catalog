@@ -81,7 +81,7 @@ describe("fetchBib", () => {
     const bibResponse = (await fetchBib("b17418167")) as BibResponse
 
     expect(logger.warn).toHaveBeenCalledWith(
-      "Missing discoveryBibResult for id b17418167, or id does not match uri on returned result"
+      "Warning in fetchBib: Missing discoveryBibResult for id b17418167, or id does not match uri on returned result"
     )
     expect(bibResponse.status).toBe(307)
     expect(bibResponse.redirectUrl).toBe(

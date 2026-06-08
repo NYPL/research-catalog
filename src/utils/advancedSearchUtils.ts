@@ -6,10 +6,12 @@ import type { MultiSelectItem } from "@nypl/design-system-react-components"
 export const textInputFields: SearchFormInputField[] = [
   { name: "q", label: "Keyword" },
   { name: "title", label: "Title" },
-  { name: "contributor", label: "Author/contributor" },
+  { name: "contributor", label: "Author/Contributor" },
   { name: "callnumber", label: "Call number" },
   { name: "standard_number", label: "Unique identifier" },
   { name: "subject", label: "Subject" },
+  { name: "genre", label: "Genre" },
+  { name: "series", label: "Series" },
 ]
 
 export const initialSearchFormState: SearchParams = {
@@ -19,6 +21,8 @@ export const initialSearchFormState: SearchParams = {
   subject: "",
   callnumber: "",
   standard_number: "",
+  genre: "",
+  series: "",
   filters: {
     language: [],
     dateTo: "",
@@ -98,4 +102,12 @@ export function mapCollectionToFilterTag(collectionValue, collectionName) {
     return `${building.nickname} - ${collectionName}`
   }
   return collectionName
+}
+
+/** Get filter string to display for language codes from searchVocabularies. **/
+export function mapLanguageToFilterTag(languageCode: string) {
+  const language = searchVocabularies.languages.find(
+    (l) => languageCode === l.value
+  )
+  return language?.label || languageCode
 }

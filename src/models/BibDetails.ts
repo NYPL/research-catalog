@@ -7,17 +7,26 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
+  DisplayPackedEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
-import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import {
+  getFindingAidFromSupplementaryContent,
+  getSeriesSearchUrl,
+} from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
+import {
+  getContributorSearchURL,
+  getSubjectSearchURL,
+} from "../utils/browseUtils"
+import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
@@ -64,6 +73,32 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
+  // Build a linked series or author field with link and display text
+  buildLinkedDisplayFieldDetail(literalField: string): LinkedBibDetail | null {
+    const {
+      label: displayLabel,
+      displayField,
+      url: searchUrl,
+    } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
+
+    const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
+    const displayValues: BibDetailURL[] = displayData.map(
+      ({ display, "@value": name }) => ({
+        url: searchUrl(name),
+        urlText: name,
+        text: display,
+      })
+    )
+
+    return displayValues?.length > 0
+      ? {
+          label: displayLabel,
+          link: "internal",
+          value: displayValues,
+        }
+      : null
+  }
+
   buildAnnotatedMarcDetails(
     annotatedMarc: AnnotatedMarcField[]
   ): AnyMarcDetail[] {
@@ -73,7 +108,7 @@ export default class BibDetails {
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
-          urlLabel: label,
+          urlText: label,
         }))
         const detail = this.buildExternalLinkedDetail(
           "Connect to:",
@@ -147,7 +182,7 @@ export default class BibDetails {
           case "supplementaryContent":
             return this.supplementaryContent
           case "creatorLiteral":
-            return this.buildSearchFilterUrl(fieldMapping)
+            return this.buildLinkedDisplayFieldDetail("creatorLiteral")
           default:
             return this.buildStandardDetail(fieldMapping)
         }
@@ -161,6 +196,8 @@ export default class BibDetails {
       "addedAuthorTitle",
       "placeOfPublication",
       "series",
+      "seriesAddedEntry",
+      "seriesUniformTitle",
       "uniformTitle",
       "subjectLiteral",
       "titleAlt",
@@ -177,7 +214,8 @@ export default class BibDetails {
       { field: "summary", label: "Summary" },
       { field: "donor", label: "Donor/sponsor" },
       { field: "series", label: "Series" },
-      { field: "seriesStatement", label: "Series statement" },
+      { field: "seriesAddedEntry", label: "Series added entry" },
+      { field: "seriesUniformTitle", label: "Series uniform title" },
       { field: "uniformTitle", label: "Uniform title" },
       { field: "titleAlt", label: "Alternative title" },
       { field: "formerTitle", label: "Former title" },
@@ -208,10 +246,38 @@ export default class BibDetails {
     )
   }
 
+  // Series uniform title values display under Series added entry
+  combineSeriesAddedEntries(resourceEndpointDetails: AnyBibDetail[]) {
+    const addedEntry = resourceEndpointDetails.find(
+      (d) => d.label === "Series added entry"
+    ) as LinkedBibDetail
+    const uniformTitle = resourceEndpointDetails.find(
+      (d) => d.label === "Series uniform title"
+    ) as LinkedBibDetail
+
+    if (uniformTitle) {
+      if (addedEntry) {
+        addedEntry.value = [...addedEntry.value, ...uniformTitle.value]
+        return resourceEndpointDetails.filter(
+          (d) => d.label !== "Series uniform title"
+        )
+      }
+      uniformTitle.label = "Series added entry"
+    }
+
+    return resourceEndpointDetails
+  }
+
   combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
+    // Merge Series added entry and Series uniform title fields
+    resourceEndpointDetails = this.combineSeriesAddedEntries(
+      resourceEndpointDetails
+    )
+
+    // Normalize and merge bib and annotated marc fields
     const normalizeValues = (val: any) => {
       if (!val) return []
       if (Array.isArray(val)) {
@@ -220,12 +286,12 @@ export default class BibDetails {
           .map((v) =>
             typeof v === "string"
               ? v.trim()
-              : v?.content?.trim() || v?.urlLabel?.trim()
+              : v?.content?.trim() || v?.urlText?.trim()
           )
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
-      return [val?.urlLabel?.trim()]
+      return [val?.urlText?.trim()]
     }
 
     const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
@@ -307,6 +373,15 @@ export default class BibDetails {
     label: string
     field: string
   }): LinkedBibDetail {
+    if (
+      fieldMapping.field === "seriesAddedEntry" ||
+      fieldMapping.field === "series" ||
+      fieldMapping.field === "seriesUniformTitle" ||
+      fieldMapping.field === "contributorLiteral"
+    ) {
+      return this.buildLinkedDisplayFieldDetail(fieldMapping.field)
+    }
+
     const value = this.bib[fieldMapping.field]
     if (!value?.length) return null
 
@@ -318,19 +393,14 @@ export default class BibDetails {
         let internalUrl: string
         switch (field) {
           case "subjectLiteral":
-            internalUrl = `/browse/subjects/${encodeURIComponentWithPeriods(v)}`
-            break
-          case "creatorLiteral":
-            internalUrl = `/search?filters[contributorLiteral][0]=${encodeURIComponentWithPeriods(
-              v
-            )}`
+            internalUrl = getSubjectSearchURL(v)
             break
           default:
             internalUrl = `/search?filters[${field}][0]=${encodeURIComponentWithPeriods(
               v
             )}`
         }
-        return { url: internalUrl, urlLabel: v }
+        return { url: internalUrl, urlText: v }
       }),
     }
   }
@@ -462,7 +532,7 @@ export default class BibDetails {
       })
       .map((sc) => ({
         url: sc.url,
-        urlLabel: sc.label,
+        urlText: sc.label,
       }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }

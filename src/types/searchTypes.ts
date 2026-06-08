@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
+import type { ReactNode } from "react"
 import type { HTTPStatusCode } from "./appTypes"
 import type { DiscoveryBibResult } from "./bibTypes"
 import type { Aggregation } from "./filterTypes"
@@ -35,12 +36,19 @@ export interface Identifiers {
 export interface SearchParams extends AdvancedSearchQueryParams {
   q?: string
   field?: string
+  role?: string
   sortBy?: SortKey
   order?: SortOrder
   filters?: SearchFilters
   journalTitle?: string
   page?: number
   identifiers?: Identifiers
+}
+
+export type SearchFormOption = {
+  text: string
+  searchTip: string | ReactNode
+  placeholder: string
 }
 
 export type SortKey = "relevance" | "title" | "date"
@@ -60,6 +68,7 @@ export interface DiscoveryAggregationResults {
 export interface DiscoverySearchResults {
   totalResults: number
   itemListElement: DiscoverySearchResultsElement[]
+  debug?: { parsed?: string[] }
 }
 
 export interface DiscoverySearchResultsElement {
@@ -89,6 +98,8 @@ export interface AdvancedSearchQueryParams {
   contributor?: string
   title?: string
   subject?: string
+  genre?: string
+  series?: string
 }
 
 export interface SearchQueryParams
@@ -99,4 +110,5 @@ export interface SearchQueryParams
   sort_direction?: SortOrder
   search_scope?: string
   page?: string
+  role?: string
 }
