@@ -2,7 +2,7 @@ import { getServerSideProps } from "../../../pages/search/index"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import { fetchSearchResults } from "../../../src/server/api/search"
 import { mapQueryToSearchParams } from "../../../src/utils/searchUtils"
-import { SearchQueryParams } from "../../../src/types/searchTypes"
+import type { SearchQueryParams } from "../../../src/types/searchTypes"
 import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 
 jest.mock("../../../src/server/auth")
