@@ -13,6 +13,10 @@ import {
   PopoverHeader,
   PopoverBody,
   PopoverFooter,
+  DrawerContent,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
 } from "@chakra-ui/react"
 import { useContext, useState, useEffect, useRef } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
@@ -28,6 +32,7 @@ export const ManageBibInListMenu = ({
   setStatus,
   setStatusMessage,
   recordId,
+  isMobile,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -35,6 +40,7 @@ export const ManageBibInListMenu = ({
   setStatus: any
   setStatusMessage: any
   recordId: string
+  isMobile?: boolean
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -67,6 +73,16 @@ export const ManageBibInListMenu = ({
       .map((l: any) => l.id) || []
   )
 
+  // Keeping focus within the create list form
+  useEffect(() => {
+    if (showCreateForm) {
+      setTimeout(() => {
+        document.getElementById("list-name")?.focus()
+      }, 50)
+    }
+  }, [showCreateForm])
+
+  // Reset whole menu state on open
   useEffect(() => {
     if (isOpen) {
       setListName(list?.listName || "")
@@ -230,9 +246,7 @@ export const ManageBibInListMenu = ({
     } catch (error) {
       console.error("Error updating bib in lists:", error)
       setStatus("failure")
-      setStatusMessage(
-        "Your list changes could not be saved. Try again or contact us for assistance. Lists can be managed from your patron account."
-      )
+      setStatusMessage("Your list changes could not be saved.")
     } finally {
       setIsSubmitting(false)
       onClose()
@@ -250,13 +264,23 @@ export const ManageBibInListMenu = ({
     />
   )
 
+  const ContentWrapper: any = isMobile ? DrawerContent : PopoverContent
+  const HeaderWrapper: any = isMobile ? DrawerHeader : PopoverHeader
+  const BodyWrapper: any = isMobile ? DrawerBody : PopoverBody
+  const FooterWrapper: any = isMobile ? DrawerFooter : PopoverFooter
+
   return (
-    <PopoverContent
+    <ContentWrapper
       _focus={{ outline: "none" }}
-      width={{ base: "320px", md: "320px" }}
       textAlign="left"
+      {...(isMobile
+        ? { borderTopRadius: "16px" }
+        : {
+            boxShadow: "lg",
+            width: "320px",
+          })}
     >
-      <PopoverHeader
+      <HeaderWrapper
         sx={{
           color: "ui.typography.heading",
           fontWeight: "medium",
@@ -270,13 +294,18 @@ export const ManageBibInListMenu = ({
         <Heading size="heading6" fontWeight="bold">
           Select lists
         </Heading>
-      </PopoverHeader>
-      <PopoverBody
+      </HeaderWrapper>
+      <BodyWrapper
         sx={{
-          margin: "xs",
           maxHeight: "360px",
           overflowY: "auto",
-          fontWeight: "normal",
+          ...(isMobile
+            ? {
+                borderTopRadius: "4px !important",
+                paddingLeft: "s",
+                paddingRight: "s",
+              }
+            : { margin: "xs" }),
         }}
       >
         {showCreateForm ? (
@@ -343,11 +372,7 @@ export const ManageBibInListMenu = ({
           </Button>
         )}
 
-        <div
-          tabIndex={-1}
-          ref={internalBannerRef}
-          style={{ marginTop: "8px", marginBottom: "8px" }}
-        >
+        <div tabIndex={-1} ref={internalBannerRef} style={{ marginTop: "8px" }}>
           {listCreationStatus !== "" && (
             <StatusBanner
               status={listCreationStatus}
@@ -355,27 +380,21 @@ export const ManageBibInListMenu = ({
             />
           )}
         </div>
-
-        <Heading pt="xs" pb="xs" size="heading8" fontWeight="500">
-          Recent lists
-        </Heading>
         <SearchableCheckboxGroup
-          id="lists"
+          id="search-lists"
           searchPlaceholder="Search for a list"
+          label="Recent lists"
           items={
-            lists?.map((list) => ({
+            lists?.map((list: any) => ({
               id: list.id,
               label: list.listName,
-              list,
+              ...list,
             })) || []
           }
-          isSearchable={lists.length > 5}
           selectedItems={selectedLists}
           onChange={listCheckBoxChange}
           renderRightLabel={(item) =>
-            item.list.records?.some(
-              (record: any) => record.uri === recordId
-            ) ? (
+            item.records?.some((record: any) => record.uri === recordId) && (
               <Icon size="medium">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
                   <path
@@ -384,42 +403,43 @@ export const ManageBibInListMenu = ({
                   />
                 </svg>
               </Icon>
-            ) : null
+            )
           }
         />
-      </PopoverBody>
-      <PopoverFooter>
-        {isSubmitting ? (
-          loader
-        ) : (
-          <Form
-            id="save-list-management"
-            sx={{
-              padding: "xs",
-            }}
-          >
-            <FormField>
-              <Flex width="100%" justifyContent="flex-end" gap="xs">
-                <Button
-                  id="cancel"
-                  variant="secondary"
-                  onClick={onClose}
-                  sx={{ background: "white" }}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  id="submit"
-                  isDisabled={isSubmitting || showCreateForm}
-                  onClick={handleSubmit}
-                >
-                  Save changes
-                </Button>
-              </Flex>
-            </FormField>
-          </Form>
-        )}
-      </PopoverFooter>
-    </PopoverContent>
+      </BodyWrapper>
+      <FooterWrapper
+        sx={{ borderTop: "1px solid var(--ui-gray-light-cool, #E9E9E9)" }}
+      >
+        <Form id="save-list-management">
+          <FormField>
+            <Flex width="100%" justifyContent="flex-end" gap="xs">
+              {isSubmitting ? (
+                loader
+              ) : (
+                <>
+                  <Button
+                    id="cancel"
+                    variant="secondary"
+                    onClick={onClose}
+                    sx={{ background: "white" }}
+                  >
+                    Cancel
+                  </Button>
+                  <Button
+                    id="submit"
+                    isDisabled={isSubmitting}
+                    onClick={handleSubmit}
+                  >
+                    Save changes
+                  </Button>
+                </>
+              )}
+            </Flex>
+          </FormField>
+        </Form>
+      </FooterWrapper>
+    </ContentWrapper>
   )
 }
+
+export default ManageBibInListMenu

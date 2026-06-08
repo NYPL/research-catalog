@@ -1,12 +1,24 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { Button, Icon, Text, Box } from "@nypl/design-system-react-components"
+import {
+  Button,
+  Icon,
+  Text,
+  Box,
+  useNYPLBreakpoints,
+} from "@nypl/design-system-react-components"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
-import { Popover, PopoverTrigger, useDisclosure } from "@chakra-ui/react"
+import {
+  Popover,
+  PopoverTrigger,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+} from "@chakra-ui/react"
 import { ManageBibInListMenu } from "./ManageBibInListMenu"
 
 interface ManageBibInListProps {
@@ -27,6 +39,8 @@ export const ManageBibInList = ({
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
 
+  const { isLargerThanLargeMobile } = useNYPLBreakpoints()
+  const isMobile = !isLargerThanLargeMobile
   const onlyHasDefaultList = updatedAccountData?.lists?.length === 1
 
   const isSaved = updatedAccountData?.lists?.some((list) =>
@@ -189,6 +203,67 @@ export const ManageBibInList = ({
     }
   }
 
+  const triggerButton = (
+    <Button
+      ref={buttonRef}
+      id={`manage-bib-${recordId}`}
+      onClick={handleSaveClick}
+      variant="text"
+      isDisabled={isLoading}
+      sx={{
+        justifyContent: { base: "center", md: "flex-start" },
+        px: { base: 0, md: "s" },
+        ...(isOpen && {
+          bg: "ui.link.primary-05",
+          _dark: {
+            bg: "dark.ui.bg.hover",
+          },
+        }),
+      }}
+    >
+      {/* TODO: Update to bookmark/bookmark outlined DS icon */}
+      <Icon size="large">
+        {isSaved ? (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+              fill="#0069BF"
+              d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
+            />
+          </svg>
+        ) : (
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path
+              fill="#0069BF"
+              d="M17 3C18.1 3 19 3.9 19 5V21L12 18L5 21V5C5 3.9 5.9 3 7 3H17ZM7 5V18L12 15.8203L17 18V5H7Z"
+            />
+          </svg>
+        )}
+      </Icon>
+      <Box as="span" display={{ base: "none", md: "inline-block" }}>
+        {buttonText}
+      </Box>
+    </Button>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        {triggerButton}
+        <Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
+          <DrawerOverlay />
+          <ManageBibInListMenu
+            isOpen={isOpen}
+            onClose={onClose}
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+            recordId={recordId}
+            isMobile={isMobile}
+          />
+        </Drawer>
+      </>
+    )
+  }
+
   return (
     <Popover
       isOpen={isOpen}
@@ -198,51 +273,14 @@ export const ManageBibInList = ({
       isLazy
       strategy="fixed"
     >
-      <PopoverTrigger>
-        <Button
-          ref={buttonRef}
-          id={`manage-bib-${recordId}`}
-          onClick={handleSaveClick}
-          variant="text"
-          isDisabled={isLoading}
-          sx={{
-            ...(isOpen && {
-              bg: "ui.link.primary-05",
-              _dark: {
-                bg: "dark.ui.bg.hover",
-              },
-            }),
-          }}
-        >
-          {/* TODO: Update to bookmark/bookmark outlined DS icon */}
-          <Icon size="large">
-            {isSaved ? (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  fill="#0069BF"
-                  d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
-                />
-              </svg>
-            ) : (
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                <path
-                  fill="#0069BF"
-                  d="M17 3C18.1 3 19 3.9 19 5V21L12 18L5 21V5C5 3.9 5.9 3 7 3H17ZM7 5V18L12 15.8203L17 18V5H7Z"
-                />
-              </svg>
-            )}
-          </Icon>
-          <Box as="span" display={{ base: "none", md: "inline-block" }}>
-            {buttonText}
-          </Box>
-        </Button>
-      </PopoverTrigger>
+      <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu
         isOpen={isOpen}
         onClose={onClose}
         setStatus={setStatus}
         setStatusMessage={setStatusMessage}
         recordId={recordId}
+        isMobile={isMobile}
       />
     </Popover>
   )

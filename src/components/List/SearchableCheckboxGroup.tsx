@@ -23,6 +23,7 @@ export interface SearchableCheckboxGroupProps {
   renderRightLabel?: (item: SearchableCheckboxItem) => React.ReactNode
   searchPlaceholder?: string
   isSearchable?: boolean
+  label?: string
 }
 
 export const SearchableCheckboxGroup = ({
@@ -33,6 +34,7 @@ export const SearchableCheckboxGroup = ({
   renderRightLabel,
   searchPlaceholder = "Search",
   isSearchable = true,
+  label = "",
 }: SearchableCheckboxGroupProps) => {
   const styles = useMultiStyleConfig("MultiSelect", {
     isBlockElement: true,
@@ -63,10 +65,10 @@ export const SearchableCheckboxGroup = ({
         id={`${id}-checkboxGroup`}
         layout="column"
         isFullWidth
-        showLabel={false}
+        showLabel={true}
         mt="s"
         mb="0"
-        labelText={""}
+        labelText={label}
         name={""}
       >
         {filteredItems?.map((item) => (
