@@ -7,17 +7,12 @@ import { fetchSearchResults } from "../../../../src/server/api/search"
 import { results } from "../../../fixtures/searchResultsManyBibs"
 import userEvent from "@testing-library/user-event"
 import initializePatronTokenAuth from "../../../../src/server/auth"
+import { logSingleFilterNoResults } from "../../../../src/utils/logUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../../src/server/auth")
 jest.mock("../../../../src/server/api/search")
-
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    warn: jest.fn(),
-  },
-}))
-import { logger } from "@nypl/node-utils"
+jest.mock("../../../../src/utils/logUtils")
 
 describe("Browse author/contributor results page", () => {
   it("displays bibs and contributor heading", async () => {
@@ -152,11 +147,9 @@ describe("getServerSideProps", () => {
     )
   })
 
-  it("logs a warning with the correct referer when no results are found, and there is a single filter with no keyword", async () => {
-    ;(fetchSearchResults as jest.Mock).mockResolvedValue({
-      status: 404,
-      message: "No results found",
-    })
+  it("makes the correct call to logSingleFilterNoResults", async () => {
+    const response404 = { status: 404, message: "No results found" }
+    ;(fetchSearchResults as jest.Mock).mockResolvedValue(response404)
 
     const params = { slug: "test" }
     const query = { page: "2" }
@@ -167,8 +160,11 @@ describe("getServerSideProps", () => {
     }
 
     await getServerSideProps({ req, query, params })
-    expect(logger.warn).toHaveBeenCalledWith(
-      "Warning in fetchSearchResults: Possible bad incoming link; referer: a cat"
+    expect(logSingleFilterNoResults).toHaveBeenCalledWith(
+      "browse authors",
+      response404,
+      expect.any(Object),
+      "a cat"
     )
   })
 })

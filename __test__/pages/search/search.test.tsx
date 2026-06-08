@@ -1,9 +1,13 @@
 import { getServerSideProps } from "../../../pages/search/index"
 import initializePatronTokenAuth from "../../../src/server/auth"
 import { fetchSearchResults } from "../../../src/server/api/search"
+import { mapQueryToSearchParams } from "../../../src/utils/searchUtils"
+import { SearchQueryParams } from "../../../src/types/searchTypes"
+import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/server/api/search")
+jest.mock("../../../src/utils/logUtils")
 
 const mockReq = {
   headers: {
@@ -14,15 +18,6 @@ const mockReq = {
     nyplIdentityPatron: '{"access_token":123}',
   },
 }
-
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
-import { logger } from "@nypl/node-utils"
 
 const mockReqWithReferer = {
   ...mockReq,
@@ -121,18 +116,20 @@ describe("Search page", () => {
         props: { errorStatus: 404 },
       })
     })
-    it("logs a warning with the correct referer when no results are found, and there is a single filter with no keyword", async () => {
-      ;(fetchSearchResults as jest.Mock).mockResolvedValue({
-        status: 404,
-        message: "No results found",
-      })
+    it("makes the correct call to logSingleFilterNoResults", async () => {
+      const response404 = { status: 404, message: "No results found" }
+      const query = { "filters[language][0]": "lang:fre" } as SearchQueryParams
+      ;(fetchSearchResults as jest.Mock).mockResolvedValue(response404)
 
       await getServerSideProps({
         req: mockReqWithReferer,
-        query: { "filters[language][0]": "lang:fre" },
+        query,
       })
-      expect(logger.warn).toHaveBeenCalledWith(
-        "Warning in fetchSearchResults: Possible bad incoming link; referer: http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
+      expect(logSingleFilterNoResults).toHaveBeenCalledWith(
+        "search page",
+        response404,
+        mapQueryToSearchParams(query),
+        "http://local.nypl.org:8080/research/research-catalog/bib/b16767329"
       )
     })
     it("handles general server errors", async () => {
