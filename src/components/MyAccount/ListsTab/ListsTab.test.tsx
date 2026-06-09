@@ -6,15 +6,13 @@ import ListsTab from "./ListsTab"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { BASE_URL } from "../../../config/constants"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import { listsResponse } from "../../../../__test__/fixtures/listFixtures"
-import type { ListResult } from "../../../types/listTypes"
+import { processedLists } from "../../../../__test__/fixtures/listFixtures"
+import type { List } from "../../../types/listTypes"
 import mockRouter from "next-router-mock"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
-const renderWithPatronDataContext = (
-  lists: ListResult[] = listsResponse as ListResult[]
-) => {
+const renderWithPatronDataContext = (lists: List[] = processedLists) => {
   return render(
     <PatronDataProvider
       value={{
@@ -59,11 +57,11 @@ describe("ListsTab", () => {
   })
 
   it("renders a placeholder when a list has no description", () => {
-    const listsWithoutDescription: ListResult[] = [
+    const listsWithoutDescription: List[] = [
       {
-        ...listsResponse[1],
+        ...processedLists[1],
         description: null,
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
     renderWithPatronDataContext(listsWithoutDescription)
     expect(screen.getByText("No description")).toBeInTheDocument()
@@ -71,9 +69,9 @@ describe("ListsTab", () => {
 
   it("calls sort endpoint when a sort option is selected and updates lists", async () => {
     const sortedListsResponse = [
-      listsResponse[1],
-      listsResponse[0],
-    ] as unknown as ListResult[]
+      processedLists[1],
+      processedLists[0],
+    ] as unknown as List[]
 
     global.fetch = jest.fn().mockResolvedValueOnce({
       ok: true,
@@ -103,11 +101,11 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "my-special-list"] }
     const listsWithId123 = [
       {
-        ...listsResponse[0],
+        ...processedLists[0],
         id: "123",
         listName: "My special list",
         description: "A special description",
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
     renderWithPatronDataContext(listsWithId123)
 
@@ -121,12 +119,12 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "empty-list"] }
     const emptyList = [
       {
-        ...listsResponse[0],
+        ...processedLists[0],
         id: "123",
         listName: "Empty list",
         recordCount: 0,
         records: [],
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
     renderWithPatronDataContext(emptyList)
 
@@ -138,23 +136,23 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "my-list"] }
     const listWithRecords = [
       {
-        ...listsResponse[0],
+        ...processedLists[0],
         id: "123",
         listName: "My list",
         recordCount: 2,
         records: [
           {
             uri: "b123",
-            addedDate: "01/01/2023",
-            addedToListDate: "2023-01-01T12:00:00Z",
+            title: "Record 1",
+            addedFormattedDate: "01/01/2023",
           },
           {
             uri: "b456",
-            addedDate: "01/02/2023",
-            addedToListDate: "2023-01-02T12:00:00Z",
+            addedFormattedDate: "01/02/2023",
+            title: "Record 2",
           },
         ],
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
 
     const mockBibData = {
@@ -201,12 +199,12 @@ describe("ListsTab", () => {
     expect(within(rows[1]).getByText("(2 items)")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Call Number 2")).toBeInTheDocument()
     expect(within(rows[1]).getByText("Location 2")).toBeInTheDocument()
-    expect(within(rows[1]).getByText("1/2/2023")).toBeInTheDocument()
+    expect(within(rows[1]).getByText("01/02/2023")).toBeInTheDocument()
 
     expect(within(rows[2]).getByText("First Book")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Call Number 1")).toBeInTheDocument()
     expect(within(rows[2]).getByText("Location 1")).toBeInTheDocument()
-    expect(within(rows[2]).getByText("1/1/2023")).toBeInTheDocument()
+    expect(within(rows[2]).getByText("01/01/2023")).toBeInTheDocument()
 
     expect(global.fetch).toHaveBeenCalledWith(
       `${BASE_URL}/api/account/lists/records?uris=b456,b123`
@@ -217,18 +215,18 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "long-list"] }
     const records = Array.from({ length: 25 }, (_, i) => ({
       uri: `b${i}`,
-      addedDate: "01/01/2023",
+      addedFormattedDate: "01/01/2023",
       addedToListDate: "2023-01-01T12:00:00Z",
     }))
 
     const longList = [
       {
-        ...listsResponse[0],
+        ...processedLists[0],
         id: "123",
         listName: "Long list",
         recordCount: 25,
         records,
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
 
     const mockBibData = {
@@ -261,10 +259,10 @@ describe("ListsTab", () => {
     const pushSpy = jest.spyOn(mockRouter, "push")
     const listsWithId123 = [
       {
-        ...listsResponse[0],
+        ...processedLists[0],
         id: "123",
         listName: "My special list",
-      } as unknown as ListResult,
+      } as unknown as List,
     ]
     renderWithPatronDataContext(listsWithId123)
 

@@ -8,7 +8,6 @@ import ProfileContainer from "../../src/components/MyAccount/ProfileContainer"
 import type { MyAccountPatronData } from "../../src/types/myAccountTypes"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import { getPatronData } from "../api/account/[id]"
-import { fetchLists } from "../../src/server/api/lists"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { bootstrapConfig } from "../../lib/bootstrap"
@@ -100,12 +99,9 @@ export async function getServerSideProps({ req, res }) {
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
-    const [listsResponse, patronData] = await Promise.all([
-      fetchLists({ patronId: id }),
-      getPatronData(id),
-    ])
-    const lists = listsResponse.lists
-    const { checkouts, holds, patron, fines, pickupLocations } = patronData
+    const patronData = await getPatronData(id)
+    const { checkouts, holds, patron, fines, pickupLocations, lists } =
+      patronData
 
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {

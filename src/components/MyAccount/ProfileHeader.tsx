@@ -78,7 +78,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         <div
           ref={usernameBannerRef}
           tabIndex={-1}
-          style={{ marginBottom: "32px" }}
+          style={{ marginTop: "32px", marginBottom: "32px" }}
         >
           <StatusBanner
             status={usernameStatus}
@@ -89,11 +89,11 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
       <List
         className={styles.myAccountList}
         id="my-account-profile-header"
-        title="My Account"
+        title="My account"
         variant="dl"
         sx={{
           border: "none",
-          h2: { border: "none", paddingTop: 0 },
+          h2: { border: "none", paddingTop: 0, marginBottom: "m" },
           marginBottom: "l",
         }}
       >

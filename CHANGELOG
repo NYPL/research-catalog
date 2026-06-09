@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added lists API handlers [SCC-5243](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5243)
 - Added lists tab and all lists table [SCC-5245](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5245)
 - Added single list display [SCC-5246](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5246)
+- Added CRUD operations for lists [SCC-5247](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5247)
 
 ### Updated
 

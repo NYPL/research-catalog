@@ -1,4 +1,13 @@
-import ListRecord from "../models/ListRecord"
+import { BASE_URL } from "../config/constants"
+import type {
+  List,
+  ListRecord,
+  ListRecordResult,
+  ListRecordsSort,
+} from "../types/listTypes"
+import type { Patron } from "../types/myAccountTypes"
+import type { DiscoverySearchResultsElement } from "../types/searchTypes"
+import { formatMMDDYYYY } from "./dateUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -48,16 +57,47 @@ export const listResultsHeading = (list, currentPage) => {
   }`
 }
 
+export const buildListRecordWithBibData = (
+  listRecord: ListRecord | ListRecordResult,
+  bibData?: any
+): ListRecord => {
+  const bibResult = bibData?.result || bibData || {}
+
+  // Returned in UTC on the raw list record, needs to be formatted for display
+  const addedFormattedDate =
+    "addedFormattedDate" in listRecord && listRecord.addedFormattedDate
+      ? listRecord.addedFormattedDate
+      : "addedToListDate" in listRecord && listRecord.addedToListDate
+      ? formatMMDDYYYY(listRecord.addedToListDate)
+      : ""
+
+  return {
+    uri: listRecord.uri,
+    addedFormattedDate,
+    title: bibResult.titleDisplay?.[0] || bibResult?.title?.[0] || null,
+    publicationStatement: bibResult?.publicationStatement?.[0] || null,
+    creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
+    itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
+    callNumber:
+      bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
+    location: bibResult?.location || "Multiple",
+  }
+}
+
 /**
- * Merges ListRecords from the user's account with their corresponding
- * bib data from the Discovery API. It preserves the sort order
- * returned by the Discovery API, handles missing bib data by appending
- * those records to the end, and re-applies local sorting if sorting by "Date added".
+ * buildListRecords
+ * Builds, merges, and sorts a complete array of list records using raw backend list data
+ * and metadata fetched from the Discovery API.
+ *
+ * @param {DiscoveryBibResult[]} bibData - An array of bibs from Discovery API
+ * @param {(ListRecordResult | ListRecord)[]} pageRecords - The raw list records from ListsService or already built ListRecords
+ * @param {ListRecordsSort} activeSort - The currently active sort
+ * @returns {ListRecord[]} A populated and sorted array of ListRecords for display or download
  */
 export const buildListRecords = (
-  bibData: any[],
-  pageRecords: ListRecord[],
-  activeSort: string
+  bibData: DiscoverySearchResultsElement[],
+  pageRecords: (ListRecordResult | ListRecord)[],
+  activeSort: ListRecordsSort
 ): ListRecord[] => {
   // Map of the page's list records keyed by their URI
   const pageRecordsMap = pageRecords.reduce((acc: any, record: any) => {
@@ -65,40 +105,195 @@ export const buildListRecords = (
     return acc
   }, {})
 
-  // Map over the fetched bib data to instantiate ListRecords (preserve Discovery API sort order)
+  // Map over the fetched bib data to build whole ListRecords
+  // OR just sort already built ListRecords
   const updatedRecords = bibData.map((bib: any) => {
     const bibResult = bib.result || bib
     const uri =
       bibResult.uri || (bibResult["@id"] ? bibResult["@id"].substring(4) : "")
-    const record = pageRecordsMap[uri] || { uri }
-    // Temp ListRecord
-    const updated = new ListRecord(
-      {
-        uri: record.uri,
-        addedToListDate: new Date().toISOString(),
-      } as any,
-      bibResult
-    )
-    // restore the addedDate
-    updated.addedDate = record.addedDate
-    return updated
+    const listRecord = pageRecordsMap[uri] || ({ uri } as ListRecord)
+    return buildListRecordWithBibData(listRecord, bibResult)
   })
 
-  // Append any records that Discovery API didn't return
+  const fetchedUris = new Set(updatedRecords.map((r) => r.uri))
+  const missingRecords: string[] = []
+
+  // Append and log any list records that didn't have corresponding bib data
   pageRecords.forEach((record) => {
-    if (!updatedRecords.find((r: any) => r.uri === record.uri)) {
-      updatedRecords.push(record)
+    if (!fetchedUris.has(record.uri)) {
+      missingRecords.push(record.uri)
+      updatedRecords.push(buildListRecordWithBibData(record))
     }
   })
 
-  // Sort directly if added sort, don't use Discovery API bib sort
+  if (missingRecords.length > 0) {
+    console.log(
+      `buildListRecords: Missing bib data for list records: ${missingRecords.join(
+        ", "
+      )}`
+    )
+  }
+
+  // Use the given sort from ListsService for date added
   if (activeSort.includes("added_date")) {
+    // O(1) lookup to prevent slow sort on large lists
+    const indexMap = new Map(
+      pageRecords.map((r, i) => [r.uri, i] as [string, number])
+    )
     updatedRecords.sort((a, b) => {
-      const indexA = pageRecords.findIndex((r) => r.uri === a.uri)
-      const indexB = pageRecords.findIndex((r) => r.uri === b.uri)
+      const indexA = indexMap.get(a.uri) ?? Infinity
+      const indexB = indexMap.get(b.uri) ?? Infinity
       return indexA - indexB
     })
   }
 
   return updatedRecords
+}
+
+export const downloadList = async (
+  list: List,
+  sort: ListRecordsSort,
+  setStatus: any,
+  setStatusMessage: any
+) => {
+  setStatus("")
+  setStatusMessage("")
+  try {
+    if (list.recordCount === 0 || !list.records) {
+      setStatus("failure")
+      setStatusMessage("Your list has no records to download.")
+      return
+    }
+
+    const chunkSize = 50
+    let allBibData: any[] = []
+
+    for (let i = 0; i < list.records.length; i += chunkSize) {
+      const chunk = list.records.slice(i, i + chunkSize)
+      const uris = chunk.map((r) => r.uri).join(",")
+      try {
+        // Rather than Promise.all, to prevent 429 error
+        const response = await fetch(
+          `${BASE_URL}/api/account/lists/records?uris=${uris}`
+        )
+        if (response.ok) {
+          const data = await response.json()
+          allBibData = allBibData.concat(data.bibData || [])
+        }
+      } catch (error) {
+        console.error("Error fetching bib data chunk:", error)
+      }
+    }
+
+    const allUpdatedRecords = buildListRecords(
+      allBibData,
+      list.records,
+      sort || ("added_date_asc" as ListRecordsSort)
+    )
+
+    const tsvRows = [
+      [
+        "",
+        "Record number",
+        "Title",
+        "Author",
+        "Publication information",
+        "Call number",
+        "Location",
+        "Date added",
+      ],
+      ...allUpdatedRecords.map((r: ListRecord, index: number) => [
+        `"${index + 1}"`,
+        `"${r.uri ? r.uri.replace(/"/g, '""') : ""}"`,
+        `"${r.title ? r.title.replace(/"/g, '""') : ""}"`,
+        `"${r.creatorLiteral ? r.creatorLiteral.replace(/"/g, '""') : ""}"`,
+        `"${
+          r.publicationStatement
+            ? r.publicationStatement.replace(/"/g, '""')
+            : ""
+        }"`,
+        `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
+        `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
+        `"${r.addedFormattedDate || ""}"`,
+      ]),
+    ]
+
+    const tsvContent = tsvRows.map((e) => e.join("\t")).join("\n")
+    const blob = new Blob([tsvContent], {
+      type: "text/tab-separated-values;charset=utf-8;",
+    })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement("a")
+    link.setAttribute("href", url)
+    link.setAttribute("download", `${list.listName || "list"}.tsv`)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+    URL.revokeObjectURL(url)
+
+    setStatus("success")
+    setStatusMessage("Your list has been downloaded.")
+  } catch (error) {
+    console.error("Error downloading list:", error)
+    setStatus("failure")
+    setStatusMessage("Your list could not be downloaded.")
+  }
+}
+
+export const duplicateList = async ({
+  list,
+  patron,
+  lists,
+  updatedAccountData,
+  setUpdatedAccountData,
+  setStatus,
+  setStatusMessage,
+  openListInNewTab = false,
+}: {
+  list: List
+  patron: Patron
+  lists: List[]
+  updatedAccountData: any
+  setUpdatedAccountData: any
+  setStatus: any
+  setStatusMessage: any
+  openListInNewTab?: boolean
+}) => {
+  setStatus("")
+  setStatusMessage("")
+  try {
+    const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        patronId: patron.id.toString(),
+        listName: `${list.listName.substring(0, 90)} (copy)`,
+        description: list.description,
+        records: list.records ? list.records.map((r) => r.uri) : [],
+      }),
+    })
+    if (response.ok) {
+      const data = await response.json()
+      if (data && data.list) {
+        setUpdatedAccountData({
+          ...updatedAccountData,
+          lists: [data.list, ...lists],
+        })
+        if (openListInNewTab) {
+          window.open(`${BASE_URL}/account/lists/${data.list.id}`, "_blank")
+        }
+      }
+      setStatus("success")
+      setStatusMessage("Your list has been duplicated.")
+    } else {
+      setStatus("failure")
+      setStatusMessage("Your list could not be duplicated.")
+    }
+  } catch (error) {
+    console.error("Error duplicating list:", error)
+    setStatus("failure")
+    setStatusMessage("Your list could not be duplicated.")
+  }
 }

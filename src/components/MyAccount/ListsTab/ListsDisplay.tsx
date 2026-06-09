@@ -1,51 +1,80 @@
 import { useContext, useRef, useState, useEffect } from "react"
-import { Box, Flex, Table } from "@nypl/design-system-react-components"
+import {
+  Box,
+  Flex,
+  SkeletonLoader,
+  Table,
+} from "@nypl/design-system-react-components"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
-import List from "../../../models/List"
 import Link from "../../Link/Link"
 import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
-import CreateListButton from "./CreateListButton"
-import ListOptionsModal from "./ListOptionsModal"
+import { CreateListButton } from "./ListActions/CreateEditList"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
+import type { List } from "../../../types/listTypes"
+import type { StatusType } from "../Settings/StatusBanner"
+import { StatusBanner } from "../Settings/StatusBanner"
+import ListActionsMenu from "./ListActions/ListActionsMenu"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
-  const {
-    updatedAccountData: { lists: listResults, patron },
-  } = useContext(PatronDataContext)
+  const { setUpdatedAccountData, updatedAccountData } =
+    useContext(PatronDataContext)
 
+  const { lists, patron } = updatedAccountData
   const router = useRouter()
 
-  const [lists, setLists] = useState(
-    listResults.map((list: any) => new List(list))
-  )
-
-  // Keep local lists in sync
-  useEffect(() => {
-    setLists(listResults.map((list: any) => new List(list)))
-  }, [listResults])
-
   const { setPersistentFocus } = useFocusContext()
+
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
   const [activeSort, setActiveSort] = useState("modified_date_desc")
 
+  const [isLoading, setIsLoading] = useState(false)
+
+  // Manage status banner display for list actions
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
+    }
+  }, [status])
+
+  const loader = (
+    <SkeletonLoader
+      showImage={false}
+      mb="m"
+      ml="0"
+      maxWidth="1200px"
+      contentSize={5}
+      showHeading={false}
+    />
+  )
+
   const handleSortChange = async (selectedSortOption: string) => {
+    setIsLoading(true)
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
       )
       if (response.ok) {
         const data = await response.json()
-        setLists(data.lists.map((list: any) => new List(list)))
+        setUpdatedAccountData({
+          ...updatedAccountData,
+          lists: data.lists || [],
+        })
+        setActiveSort(selectedSortOption)
       }
     } catch (error) {
       console.error("Error sorting lists:", error)
     }
-    setActiveSort(selectedSortOption)
+    setIsLoading(false)
     setPersistentFocus(idConstants.listsSort)
   }
 
@@ -59,6 +88,7 @@ const ListsDisplay = () => {
         key={list.id}
         onClick={(e: any) => {
           e.preventDefault()
+          setPersistentFocus(null)
           const queryIndex = ["lists", list.id]
           if (slug) queryIndex.push(slug)
           router.push(
@@ -81,7 +111,13 @@ const ListsDisplay = () => {
       list.recordCount.toString(),
       list.createdDate,
       list.modifiedDate,
-      <ListOptionsModal key={list.id} list={list} />,
+      <ListActionsMenu
+        key={list.id}
+        list={list}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+        bannerRef={bannerRef}
+      />,
     ]
   })
 
@@ -94,7 +130,11 @@ const ListsDisplay = () => {
         mb="m"
         gap="xs"
       >
-        <CreateListButton />
+        <CreateListButton
+          setStatus={setStatus}
+          setStatusMessage={setStatusMessage}
+          bannerRef={bannerRef}
+        />
         <ListSort
           ref={sortMenuRef}
           selectedValue={activeSort}
@@ -102,32 +142,41 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
-      <Box display="grid">
-        <Table
-          className={styles.listsTable}
-          columnHeaders={[
-            "List name",
-            "List description",
-            "Records",
-            "Date created",
-            "Date modified",
-            "Action",
-          ]}
-          columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
-          columnStyles={[
-            { width: 320, minWidth: 240 },
-            { width: "auto", minWidth: 240 },
-            { width: 160, minWidth: 120 },
-            { width: 160, minWidth: 120 },
-            { width: 160, minWidth: 120 },
-            { width: 120, minWidth: 128 },
-          ]}
-          tableData={tableData}
-          isScrollable
-          showRowDividers
-          my={{ base: 0, md: "s" }}
-          data-testid="list-table"
-        />
+      <div tabIndex={-1} ref={bannerRef}>
+        {status !== "" && (
+          <StatusBanner status={status} statusMessage={statusMessage} />
+        )}
+      </div>
+      <Box display="grid" mt="xs">
+        {isLoading ? (
+          loader
+        ) : (
+          <Table
+            className={styles.listsTable}
+            columnHeaders={[
+              "List name",
+              "List description",
+              "Records",
+              "Date created",
+              "Date modified",
+              "Action",
+            ]}
+            columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
+            columnStyles={[
+              { width: 320, minWidth: 240 },
+              { width: "auto", minWidth: 240 },
+              { width: 160, minWidth: 120 },
+              { width: 160, minWidth: 120 },
+              { width: 160, minWidth: 120 },
+              { width: 120, minWidth: 128 },
+            ]}
+            tableData={tableData}
+            isScrollable
+            showRowDividers
+            my={{ base: 0, md: "s" }}
+            data-testid="list-table"
+          />
+        )}
       </Box>
     </Flex>
   )

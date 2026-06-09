@@ -9,7 +9,7 @@ import {
 import { useRef, useState, useMemo, useEffect } from "react"
 import { BASE_URL } from "../../../config/constants"
 import { useFocusContext, idConstants } from "../../../context/FocusContext"
-import type ListRecord from "../../../models/ListRecord"
+import styles from "../../../../styles/components/MyAccount.module.scss"
 import {
   LIST_RECORDS_PER_PAGE,
   listResultsHeading,
@@ -17,19 +17,26 @@ import {
   buildListRecords,
 } from "../../../utils/listUtils"
 import ListSort from "./ListSort"
-import type List from "../../../models/List"
-import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
 import ManageListRecord from "../../List/ManageListRecord"
+import type { List, ListRecord } from "../../../types/listTypes"
+import type { DiscoverySearchResultsElement } from "../../../types/searchTypes"
 
 /* The ListRecordsTable fetches corresponding bib data, merges it with the list records,
  * sorts and paginates, and renders the results heading, sort menu, and table of records. */
 
-const ListRecordsTable = ({ list }: { list: List }) => {
+const ListRecordsTable = ({
+  list,
+  activeSort,
+  setActiveSort,
+}: {
+  list: List
+  activeSort
+  setActiveSort
+}) => {
   const listRecordsHeadingRef = useRef(null)
   const { setPersistentFocus } = useFocusContext()
   const sortMenuRef = useRef<HTMLDivElement | null>(null)
-  const [activeSort, setActiveSort] = useState("added_date_asc")
 
   const [listRecords, setListRecords] = useState<ListRecord[]>(
     list?.records || []
@@ -46,39 +53,52 @@ const ListRecordsTable = ({ list }: { list: List }) => {
     return records
   }, [list, activeSort])
 
-  // TO DO: caching...
+  // TO DO: caching??
   useEffect(() => {
     const fetchBibData = async () => {
       if (!list || sortedRecords.length === 0) return
       setIsLoading(true)
 
-      const isLocalSort = activeSort.includes("added_date")
+      const canSortWithoutBibData = activeSort.includes("added_date")
       const startIndex = (currentPage - 1) * LIST_RECORDS_PER_PAGE
       const endIndex = startIndex + LIST_RECORDS_PER_PAGE
 
-      // If sorting by title/author, fetch ALL records so the Discovery API can sort globally
-      // otherwise: sorting by date added, only need to fetch the 20 records for the current page
-      const recordsToFetch = isLocalSort
+      // If sorting by title/author/call number, need to fetch bib data for all records
+      // otherwise: sorting by date added, only need to fetch bib data for the current page
+      const recordsToFetch = canSortWithoutBibData
         ? sortedRecords.slice(startIndex, endIndex)
         : sortedRecords
 
-      const uris = recordsToFetch.map((r) => r.uri).join(",")
+      const chunkSize = 50
+      let allBibData: DiscoverySearchResultsElement[] = []
+
+      for (let i = 0; i < recordsToFetch.length; i += chunkSize) {
+        const chunk = recordsToFetch.slice(i, i + chunkSize)
+        const uris = chunk.map((r) => r.uri).join(",")
+        try {
+          const sortParam = canSortWithoutBibData ? "" : `&sort=${activeSort}`
+          const response = await fetch(
+            `${BASE_URL}/api/account/lists/records?uris=${uris}${sortParam}`
+          )
+          if (response.ok) {
+            const data = await response.json()
+            allBibData = allBibData.concat(data.bibData || [])
+          }
+        } catch (error) {
+          console.error("Error fetching bib data chunk:", error)
+        }
+      }
 
       try {
-        const sortParam = isLocalSort ? "" : `&sort=${activeSort}`
-        const response = await fetch(
-          `${BASE_URL}/api/account/lists/records?uris=${uris}${sortParam}`
-        )
-        const data = await response.json()
-        if (data.bibData) {
+        if (allBibData.length > 0) {
           let updatedRecords = buildListRecords(
-            data.bibData,
+            allBibData,
             recordsToFetch,
             activeSort
           )
 
-          // slice out the current page to display if global fetch
-          if (!isLocalSort) {
+          // slice out the current page to display if fetching all
+          if (!canSortWithoutBibData) {
             updatedRecords = updatedRecords.slice(startIndex, endIndex)
           }
 
@@ -114,7 +134,7 @@ const ListRecordsTable = ({ list }: { list: List }) => {
       </>,
       record.callNumber,
       record.location,
-      record.addedDate,
+      record.addedFormattedDate,
       <ManageListRecord key={record.uri} />,
     ]
   })

@@ -66,12 +66,13 @@
 }
 
 .noIconBody {
-  font-size: var(--nypl-fontSizes-desktop-body-body1);
+  font-size: var(--nypl-fontSizes-desktop-body-body2);
   display: flex;
   flex-direction: column;
   p {
     margin-left: var(--nypl-space-s);
-    margin-right: var(--nypl-space-m);
+    margin-right: var(--nypl-space-s);
+    margin-bottom: var(--nypl-space-s);
   }
 }
 
@@ -156,6 +157,7 @@
   }
   tbody > tr > td:last-of-type {
     padding-top: 8px;
+    padding-right: 32px;
   }
   thead > tr > th:last-of-type {
     padding-right: 24px;
@@ -203,6 +205,20 @@
     tbody > tr > td,
     tbody > tr > td:last-of-type {
       width: auto;
+    }
+  }
+}
+
+.listOptionsMenu {
+  [role="menuitem"] {
+    svg {
+      fill: var(--nypl-colors-ui-gray-dark);
+    }
+  }
+  [role="menuitem"]:last-of-type {
+    color: var(--nypl-colors-ui-error-primary);
+    svg {
+      fill: var(--nypl-colors-ui-error-primary);
     }
   }
 }

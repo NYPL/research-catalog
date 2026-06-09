@@ -7,7 +7,7 @@ type StatusBannerProps = {
   statusMessage: string
 }
 
-const successContent = <Text>Your changes were saved.</Text>
+const generalSuccessContent = <Text>Your changes were saved.</Text>
 
 const generalFailureContent = <Text>Your changes were not saved.</Text>
 
@@ -15,15 +15,28 @@ const specificFailureContent = (statusMessage: string) => {
   return (
     <Text marginBottom={0}>
       {statusMessage} Please try again or{" "}
-      <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
+      <Link
+        color="ui.link.primary !important"
+        href="https://www.nypl.org/get-help/contact-us"
+      >
+        contact us
+      </Link>{" "}
       for assistance.
     </Text>
   )
 }
 
+const specificSuccessContent = (statusMessage: string) => {
+  return <Text marginBottom={0}>{statusMessage}</Text>
+}
+
 const statusContent = (status, statusMessage) => {
   if (status === "success") {
-    return successContent
+    if (statusMessage !== "") {
+      return specificSuccessContent(statusMessage)
+    } else {
+      return generalSuccessContent
+    }
   }
   if (status === "failure" && statusMessage !== "") {
     return specificFailureContent(statusMessage)
@@ -35,7 +48,6 @@ const statusContent = (status, statusMessage) => {
 export const StatusBanner = ({ status, statusMessage }: StatusBannerProps) => {
   return (
     <Banner
-      sx={{ marginTop: "m" }}
       isDismissible
       content={
         <div style={{ alignItems: "center" }}>

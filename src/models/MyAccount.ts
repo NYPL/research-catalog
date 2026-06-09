@@ -17,6 +17,10 @@ import { logger } from "@nypl/node-utils"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
+import type { List, ListRecord, ListResult } from "../types/listTypes"
+import { formatMMDDYYYY } from "../utils/dateUtils"
+import { fetchLists } from "../server/api/lists"
+import { buildListRecordWithBibData } from "../utils/listUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -92,6 +96,11 @@ export default class MyAccount {
   async getFines() {
     const fines = await this.fetchFines()
     return this.buildFines(fines)
+  }
+
+  async getLists(patronId) {
+    const listsResult = await fetchLists({ patronId })
+    return this.buildLists(listsResult?.lists)
   }
 
   async fetchBibItemData(
@@ -370,6 +379,36 @@ export default class MyAccount {
     }
   }
 
+  buildLists = (
+    listResults: ListResult[],
+    bibDataMap: Record<string, any> = {}
+  ): List[] => {
+    return listResults.map((list: ListResult) => {
+      return {
+        id: list.id,
+        patronId: list.patronId,
+        listName: list.listName,
+        description: list.description,
+        recordCount: list.records?.length || 0,
+        createdDate: formatMMDDYYYY(list.createdDate),
+        modifiedDate: formatMMDDYYYY(list.modifiedDate),
+        records: this.buildRecordsFromListResult(list, bibDataMap),
+      }
+    })
+  }
+
+  buildRecordsFromListResult(
+    result: ListResult,
+    bibData?: Record<string, any>
+  ): ListRecord[] {
+    return result?.records?.length
+      ? result.records.map((record) => {
+          const bib = bibData?.[record.uri] || {}
+          return buildListRecordWithBibData(record, bib)
+        })
+      : []
+  }
+
   /**
    * getDueDate
    * Returns date in readable string ("Month day, year")
@@ -417,5 +456,6 @@ export const MyAccountFactory = async (id: string, client) => {
       else return null
     }
   ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
-  return { pickupLocations, checkouts, holds, patron, fines }
+  const lists = await patronFetcher.getLists(patron.id.toString())
+  return { pickupLocations, checkouts, holds, patron, fines, lists }
 }

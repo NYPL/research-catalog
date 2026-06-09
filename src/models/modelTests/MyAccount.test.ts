@@ -15,7 +15,13 @@ import {
   checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
+import {
+  listsResponse,
+  processedLists,
+} from "../../../__test__/fixtures/listFixtures"
 import type { Hold, SierraHold } from "../../types/myAccountTypes"
+import { fetchLists } from "../../server/api/lists"
+jest.mock("../../server/api/lists")
 
 describe("MyAccountModel", () => {
   const fetchBibs = MyAccount.prototype.fetchBibItemData
@@ -112,6 +118,13 @@ describe("MyAccountModel", () => {
       const processedFinesToTest = await fetcher.getFines()
       expect(processedFinesToTest).toStrictEqual(processedFines)
     })
+    it("can return lists", async () => {
+      ;(fetchLists as jest.Mock).mockResolvedValue({ lists: listsResponse })
+      const fetcher = new MyAccount({}, "12345")
+      const processedListsToTest = await fetcher.getLists("12345")
+      expect(processedListsToTest).toStrictEqual(processedLists)
+      expect(fetchLists).toHaveBeenCalledWith({ patronId: "12345" })
+    })
   })
 
   describe("getResearchAndOwnership", () => {
@@ -184,6 +197,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => Promise.resolve(fines)
+      MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
       MyAccount.prototype.fetchBibItemData = jest
         .fn()
         .mockResolvedValueOnce({
@@ -202,6 +216,7 @@ describe("MyAccountModel", () => {
       expect(account.holds).toStrictEqual(processedHolds)
       expect(account.checkouts).toStrictEqual(processedCheckouts)
       expect(account.fines).toStrictEqual(processedFines)
+      expect(account.lists).toStrictEqual(processedLists)
     })
 
     it("builds empty Account data model with empty phones, email, username", async () => {
@@ -214,6 +229,7 @@ describe("MyAccountModel", () => {
         varFields: [{ fieldtag: "not u", content: "irrelevant" }],
       })
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.prototype.getLists = async () => []
       MyAccount.prototype.fetchBibItemData = async () => ({
         total: 0,
         bibEntries: [],
@@ -225,6 +241,7 @@ describe("MyAccountModel", () => {
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
       expect(emptyAccount.fines).toStrictEqual({ total: 0, entries: [] })
+      expect(emptyAccount.lists).toStrictEqual([])
     })
     it("will return other processed data if one fetch fails", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
@@ -232,6 +249,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = jest.fn().mockRejectedValue({})
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
       MyAccount.prototype.fetchBibItemData = jest
         .fn()
         .mockResolvedValueOnce({
@@ -247,6 +265,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.checkouts).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
+      expect(patronWithFails.lists).toStrictEqual(processedLists)
     })
     it("will return other processed data if an error is thrown", async () => {
       MyAccount.prototype.fetchCheckouts = async () =>
@@ -254,6 +273,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
+      MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
       MyAccount.prototype.fetchBibItemData = jest
         .fn()
         .mockImplementationOnce(() => {
@@ -268,6 +288,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
+      expect(patronWithFails.lists).toStrictEqual(processedLists)
     })
   })
   describe("fetchBibItemData", () => {

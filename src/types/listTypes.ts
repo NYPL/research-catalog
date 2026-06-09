@@ -6,6 +6,27 @@ export interface ListErrorResponse {
   error: string
 }
 
+export interface List {
+  id: string
+  listName: string
+  patronId: string
+  records: ListRecord[]
+  recordCount: number
+  description: string | null
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface ListRecord {
+  uri: string
+  addedFormattedDate: string
+  title: string
+  publicationStatement?: string
+  creatorLiteral?: string
+  itemCount?: number
+  callNumber?: string
+  location?: string
+}
 export interface ListResult {
   id: string
   listName: string
