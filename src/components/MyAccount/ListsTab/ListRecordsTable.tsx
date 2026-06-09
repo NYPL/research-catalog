@@ -76,8 +76,9 @@ const ListRecordsTable = ({
         const chunk = recordsToFetch.slice(i, i + chunkSize)
         const uris = chunk.map((r) => r.uri).join(",")
         try {
+          const sortParam = canSortWithoutBibData ? "" : `&sort=${activeSort}`
           const response = await fetch(
-            `${BASE_URL}/api/account/lists/records?uris=${uris}`
+            `${BASE_URL}/api/account/lists/records?uris=${uris}${sortParam}`
           )
           if (response.ok) {
             const data = await response.json()
@@ -133,7 +134,7 @@ const ListRecordsTable = ({
       </>,
       record.callNumber,
       record.location,
-      record.addedDate,
+      record.addedFormattedDate,
       <ManageListRecord key={record.uri} />,
     ]
   })

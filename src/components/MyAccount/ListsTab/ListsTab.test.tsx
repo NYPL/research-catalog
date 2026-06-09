@@ -144,11 +144,11 @@ describe("ListsTab", () => {
           {
             uri: "b123",
             title: "Record 1",
-            addedDate: "01/01/2023",
+            addedFormattedDate: "01/01/2023",
           },
           {
             uri: "b456",
-            addedDate: "01/02/2023",
+            addedFormattedDate: "01/02/2023",
             title: "Record 2",
           },
         ],
@@ -215,7 +215,7 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "long-list"] }
     const records = Array.from({ length: 25 }, (_, i) => ({
       uri: `b${i}`,
-      addedDate: "01/01/2023",
+      addedFormattedDate: "01/01/2023",
       addedToListDate: "2023-01-01T12:00:00Z",
     }))
 

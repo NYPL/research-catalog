@@ -63,16 +63,17 @@ export const buildListRecordWithBibData = (
 ): ListRecord => {
   const bibResult = bibData?.result || bibData || {}
 
-  const addedDate =
-    "addedDate" in listRecord && listRecord.addedDate
-      ? listRecord.addedDate
+  // Returned in UTC on the raw list record, needs to be formatted for display
+  const addedFormattedDate =
+    "addedFormattedDate" in listRecord && listRecord.addedFormattedDate
+      ? listRecord.addedFormattedDate
       : "addedToListDate" in listRecord && listRecord.addedToListDate
       ? formatMMDDYYYY(listRecord.addedToListDate)
       : ""
 
   return {
     uri: listRecord.uri,
-    addedDate,
+    addedFormattedDate,
     title: bibResult.titleDisplay?.[0] || bibResult?.title?.[0] || null,
     publicationStatement: bibResult?.publicationStatement?.[0] || null,
     creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
@@ -105,6 +106,7 @@ export const buildListRecords = (
   }, {})
 
   // Map over the fetched bib data to build whole ListRecords
+  // OR just sort already built ListRecords
   const updatedRecords = bibData.map((bib: any) => {
     const bibResult = bib.result || bib
     const uri =
@@ -142,24 +144,6 @@ export const buildListRecords = (
       const indexA = indexMap.get(a.uri) ?? Infinity
       const indexB = indexMap.get(b.uri) ?? Infinity
       return indexA - indexB
-    })
-  } else {
-    updatedRecords.sort((a: any, b: any) => {
-      let valA = ""
-      let valB = ""
-      if (activeSort.includes("title")) {
-        valA = a.title || ""
-        valB = b.title || ""
-      } else if (activeSort.includes("creator")) {
-        valA = a.creatorLiteral || ""
-        valB = b.creatorLiteral || ""
-      } else if (activeSort.includes("callnumber")) {
-        valA = a.callNumber || ""
-        valB = b.callNumber || ""
-      }
-
-      const comparison = valA.localeCompare(valB)
-      return activeSort.includes("desc") ? -comparison : comparison
     })
   }
 
@@ -230,7 +214,7 @@ export const downloadList = async (
         }"`,
         `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
         `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
-        `"${r.addedDate || ""}"`,
+        `"${r.addedFormattedDate || ""}"`,
       ]),
     ]
 
