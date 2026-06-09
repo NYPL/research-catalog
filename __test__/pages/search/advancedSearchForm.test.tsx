@@ -92,7 +92,7 @@ describe("Advanced search form", () => {
   it("defaults to call number sort when call number is the only field passed", async () => {
     const callNumberInput = screen.getByLabelText("Call number")
     fireEvent.change(callNumberInput, { target: { value: "12345" } })
-    await delay(500)
+    await delay(600)
     submit()
     expect(mockRouter.asPath).toBe(
       "/search?q=&callnumber=12345&sort=callnumber&searched_from=advanced"

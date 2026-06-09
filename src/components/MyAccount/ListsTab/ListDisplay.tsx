@@ -43,8 +43,6 @@ const ListDisplay = ({ list }: { list?: List }) => {
   const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusBannerState | null>(null)
 
-  console.log(status)
-
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const [modalProps, setModalProps] = useState<BaseModalProps>()
