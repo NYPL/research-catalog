@@ -15,7 +15,7 @@ import { CreateListButton } from "./ListActions/CreateEditList"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
 import type { List } from "../../../types/listTypes"
-import type { StatusType } from "../Settings/StatusBanner"
+import type { StatusBannerState } from "../Settings/StatusBanner"
 import { StatusBanner } from "../Settings/StatusBanner"
 import ListActionsMenu from "./ListActions/ListActionsMenu"
 
@@ -36,10 +36,9 @@ const ListsDisplay = () => {
 
   // Manage status banner display for list actions
   const bannerRef = useRef<HTMLDivElement>(null)
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
   useEffect(() => {
-    if (status !== "" && bannerRef.current) {
+    if (status && bannerRef.current) {
       setTimeout(() => {
         bannerRef.current?.focus()
       }, 100)
@@ -115,7 +114,6 @@ const ListsDisplay = () => {
         key={list.id}
         list={list}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         bannerRef={bannerRef}
       />,
     ]
@@ -130,11 +128,7 @@ const ListsDisplay = () => {
         mb="m"
         gap="xs"
       >
-        <CreateListButton
-          setStatus={setStatus}
-          setStatusMessage={setStatusMessage}
-          bannerRef={bannerRef}
-        />
+        <CreateListButton setStatus={setStatus} bannerRef={bannerRef} />
         <ListSort
           ref={sortMenuRef}
           selectedValue={activeSort}
@@ -143,9 +137,7 @@ const ListsDisplay = () => {
         />
       </Flex>
       <div tabIndex={-1} ref={bannerRef}>
-        {status !== "" && (
-          <StatusBanner status={status} statusMessage={statusMessage} />
-        )}
+        {status && <StatusBanner type={status.type} message={status.message} />}
       </div>
       <Box display="grid" mt="xs">
         {isLoading ? (

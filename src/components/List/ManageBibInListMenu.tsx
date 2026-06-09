@@ -21,9 +21,10 @@ import {
 import { useContext, useState, useEffect, useRef } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
-import type { StatusType } from "../MyAccount/Settings/StatusBanner"
-import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import { SearchableCheckboxGroup } from "./SearchableCheckboxGroup"
+import { STATIC_STATUS_MESSAGES } from "../../utils/statusUtils"
+import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
+import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 
 /** Render list management menu (inside Chakra Popover, Drawer on mobile) */
 export const ManageBibInListMenu = ({
@@ -31,7 +32,6 @@ export const ManageBibInListMenu = ({
   onClose,
   list,
   setStatus,
-  setStatusMessage,
   recordId,
   isMobile,
 }: {
@@ -39,7 +39,6 @@ export const ManageBibInListMenu = ({
   onClose: () => void
   list?: any
   setStatus: any
-  setStatusMessage: any
   recordId: string
   isMobile?: boolean
 }) => {
@@ -51,11 +50,10 @@ export const ManageBibInListMenu = ({
   // Create list form banner and button focus management
   const createListButtonRef = useRef<HTMLButtonElement>(null)
   const internalBannerRef = useRef<HTMLDivElement>(null)
-  const [listCreationStatus, setListCreationStatus] = useState<StatusType>("")
-  const [listCreationStatusMessage, setListCreationStatusMessage] =
-    useState<string>("")
+  const [listCreationStatus, setListCreationStatus] =
+    useState<StatusBannerState | null>(null)
   useEffect(() => {
-    if (listCreationStatus !== "" && internalBannerRef.current) {
+    if (listCreationStatus && internalBannerRef.current) {
       setTimeout(() => {
         internalBannerRef.current?.focus()
       }, 100)
@@ -87,8 +85,8 @@ export const ManageBibInListMenu = ({
     if (isOpen) {
       setListName(list?.listName || "")
       setShowCreateForm(false)
-      setStatus("")
-      setListCreationStatus("")
+      setStatus(null)
+      setListCreationStatus(null)
       setSelectedLists(
         lists
           ?.filter((l: any) =>
@@ -127,11 +125,9 @@ export const ManageBibInListMenu = ({
           })
           setSelectedLists((prev) => [...prev, data.list.id])
         }
-        setListCreationStatus("success")
-        setListCreationStatusMessage("List created.")
+        setListCreationStatus(STATIC_STATUS_MESSAGES["create-list-success"])
       } else {
-        setListCreationStatus("failure")
-        setListCreationStatusMessage("List creation failed.")
+        setListCreationStatus(STATIC_STATUS_MESSAGES["create-list-failure"])
       }
     } catch (error) {
       console.error("Error creating list:", error)
@@ -234,14 +230,12 @@ export const ManageBibInListMenu = ({
 
           return { ...data, lists: updatedLists }
         })
+        setStatus(STATIC_STATUS_MESSAGES["list-changes-success"])
+      } else {
+        setStatus(STATIC_STATUS_MESSAGES["list-changes-failure"])
       }
-
-      setStatus("success")
-      setStatusMessage("Your list changes have been saved.")
     } catch (error) {
       console.error("Error updating bib in lists:", error)
-      setStatus("failure")
-      setStatusMessage("Your list changes could not be saved.")
     } finally {
       setIsSubmitting(false)
       onClose()
@@ -292,6 +286,7 @@ export const ManageBibInListMenu = ({
       </HeaderWrapper>
       <BodyWrapper
         sx={{
+          fontWeight: "normal",
           maxHeight: "360px",
           overflowY: "auto",
           ...(isMobile
@@ -367,11 +362,15 @@ export const ManageBibInListMenu = ({
           </Button>
         )}
 
-        <div tabIndex={-1} ref={internalBannerRef} style={{ marginTop: "8px" }}>
-          {listCreationStatus !== "" && (
+        <div
+          tabIndex={-1}
+          ref={internalBannerRef}
+          style={{ marginTop: "8px", marginBottom: "16px" }}
+        >
+          {listCreationStatus && (
             <StatusBanner
-              status={listCreationStatus}
-              statusMessage={listCreationStatusMessage}
+              type={listCreationStatus.type}
+              message={listCreationStatus.message}
             />
           )}
         </div>

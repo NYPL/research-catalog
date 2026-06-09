@@ -53,8 +53,8 @@ import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 import { ManageBibInList } from "../../../src/components/List/ManageBibInList"
 import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
-import type { StatusType } from "../../../src/components/MyAccount/Settings/StatusBanner"
 import { StatusBanner } from "../../../src/components/MyAccount/Settings/StatusBanner"
+import type { StatusBannerState } from "../../../src/components/MyAccount/Settings/StatusBanner"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -104,10 +104,9 @@ export default function BibPage({
 
   // Manage status banner display for list actions
   const bannerRef = useRef<HTMLDivElement>(null)
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
   useEffect(() => {
-    if (status !== "" && bannerRef.current) {
+    if (status && bannerRef.current) {
       setTimeout(() => {
         bannerRef.current?.focus()
       }, 100)
@@ -255,8 +254,8 @@ export default function BibPage({
           ref={bannerRef}
           style={{ marginTop: "-16px", marginBottom: "32px" }}
         >
-          {status !== "" && (
-            <StatusBanner status={status} statusMessage={statusMessage} />
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
           )}
         </div>
         {findingAid && (
@@ -270,7 +269,6 @@ export default function BibPage({
           </Heading>
           <ManageBibInList
             setStatus={setStatus}
-            setStatusMessage={setStatusMessage}
             recordId={bib.id}
             isAuthenticated={isAuthenticated}
           />

@@ -17,8 +17,8 @@ import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 import SearchResultItems from "./SearchResultItems"
 import { ManageBibInList } from "../List/ManageBibInList"
-import type { StatusType } from "../MyAccount/Settings/StatusBanner"
 import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
+import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useEffect, useRef, useState } from "react"
 
 interface SearchResultProps {
@@ -58,10 +58,9 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
 
   // Manage status banner display for list actions
   const bannerRef = useRef<HTMLDivElement>(null)
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
   useEffect(() => {
-    if (status !== "" && bannerRef.current) {
+    if (status && bannerRef.current) {
       setTimeout(() => {
         bannerRef.current?.focus()
       }, 100)
@@ -102,7 +101,6 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
               recordId={bib.id}
               isAuthenticated={isAuthenticated}
               setStatus={setStatus}
-              setStatusMessage={setStatusMessage}
             />
           </Box>
         </Flex>
@@ -118,8 +116,8 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
           {joinedMetadata}
         </Box>
         <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
-          {status !== "" && (
-            <StatusBanner status={status} statusMessage={statusMessage} />
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
           )}
         </div>
         {(bib.findingAid || bib.hasElectronicResources) && (

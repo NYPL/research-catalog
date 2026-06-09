@@ -5,15 +5,13 @@ import SettingsInputForm from "./SettingsInputForm"
 import SettingsSelectForm from "./SettingsSelectForm"
 import PasswordForm from "./PasswordForm"
 import { StatusBanner } from "./StatusBanner"
-
-type StatusType = "" | "failure" | "success"
+import type { StatusBannerState } from "./StatusBanner"
 
 const AccountSettingsTab = () => {
   const {
     updatedAccountData: { patron, pickupLocations },
   } = useContext(PatronDataContext)
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
   const [editingField, setEditingField] = useState<string>("")
   const bannerRef = useRef<HTMLDivElement>(null)
 
@@ -25,20 +23,20 @@ const AccountSettingsTab = () => {
 
   const passwordSettingsState = {
     ...settingsState,
-    setStatusMessage,
+    setStatus,
   }
 
   useEffect(() => {
-    if (status !== "" && bannerRef.current) {
+    if (status && bannerRef.current) {
       bannerRef.current.focus()
     }
   }, [status])
 
   return (
     <>
-      {status !== "" && (
+      {status && (
         <div ref={bannerRef} tabIndex={-1} style={{ marginTop: "32px" }}>
-          <StatusBanner status={status} statusMessage={statusMessage} />
+          <StatusBanner type={status.type} message={status.message} />
         </div>
       )}
       <Flex flexDir="column" sx={{ marginTop: "m", gap: "s" }}>

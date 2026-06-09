@@ -2,7 +2,6 @@ import { useContext, useEffect, useRef, useState } from "react"
 import {
   Button,
   Icon,
-  Text,
   Box,
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
@@ -10,7 +9,6 @@ import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
-import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
 import {
   Popover,
@@ -20,12 +18,15 @@ import {
   DrawerOverlay,
 } from "@chakra-ui/react"
 import { ManageBibInListMenu } from "./ManageBibInListMenu"
+import {
+  DYNAMIC_STATUS_MESSAGES,
+  STATIC_STATUS_MESSAGES,
+} from "../../utils/statusUtils"
 
 interface ManageBibInListProps {
   recordId: string
   isAuthenticated: boolean
   setStatus
-  setStatusMessage
 }
 
 /* Render button to indicate saved state of bib and open list management menu.
@@ -34,7 +35,6 @@ export const ManageBibInList = ({
   recordId,
   isAuthenticated,
   setStatus,
-  setStatusMessage,
 }: ManageBibInListProps) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const [isLoading, setIsLoading] = useState(false)
@@ -53,42 +53,6 @@ export const ManageBibInList = ({
       ? "Remove"
       : "Manage"
     : "Save"
-
-  const successRemoveDefault = (defaultListId) => (
-    <Text marginBottom={0}>
-      This record has been removed from{" "}
-      <Link
-        target="_blank"
-        color="ui.link.primary !important"
-        href={`/account/lists/${defaultListId}`}
-      >
-        My workspace (default list)
-      </Link>
-      . Lists can be managed from your{" "}
-      <Link target="_blank" color="ui.link.primary !important" href="/account">
-        patron account
-      </Link>
-      .
-    </Text>
-  )
-
-  const successSaveDefault = (defaultListId) => (
-    <Text marginBottom={0}>
-      This record has been saved to{" "}
-      <Link
-        target="_blank"
-        color="ui.link.primary !important"
-        href={`/account/lists/${defaultListId}`}
-      >
-        My workspace (default list)
-      </Link>
-      . Lists can be managed from your{" "}
-      <Link target="_blank" color="ui.link.primary !important" href="/account">
-        patron account
-      </Link>
-      .
-    </Text>
-  )
 
   // Manage bib menu state
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -139,8 +103,7 @@ export const ManageBibInList = ({
         (list) => list.isDefaultList
       )
       const defaultListId = defaultList?.id
-      setStatus("")
-      setStatusMessage("")
+      setStatus(null)
       setIsLoading(true)
 
       try {
@@ -174,16 +137,16 @@ export const ManageBibInList = ({
               return { ...data, lists: updatedLists as List[] }
             })
           }
-          setStatus("success")
-          setStatusMessage(
+          setStatus(
             isSaved
-              ? successRemoveDefault(defaultListId)
-              : successSaveDefault(defaultListId)
+              ? DYNAMIC_STATUS_MESSAGES["remove-record-success"](defaultListId)
+              : DYNAMIC_STATUS_MESSAGES["save-record-success"](defaultListId)
           )
         } else {
-          setStatus("failure")
-          setStatusMessage(
-            `This record could not be ${isSaved ? "removed" : "saved"}.`
+          setStatus(
+            isSaved
+              ? STATIC_STATUS_MESSAGES["remove-record-failure"]
+              : STATIC_STATUS_MESSAGES["save-record-failure"]
           )
         }
       } catch (error) {
@@ -193,9 +156,10 @@ export const ManageBibInList = ({
           } list ${defaultListId}:`,
           error
         )
-        setStatus("failure")
-        setStatusMessage(
-          `This record could not be ${isSaved ? "removed" : "saved"}.`
+        setStatus(
+          isSaved
+            ? STATIC_STATUS_MESSAGES["remove-record-failure"]
+            : STATIC_STATUS_MESSAGES["save-record-failure"]
         )
       } finally {
         setIsLoading(false)
@@ -262,7 +226,6 @@ export const ManageBibInList = ({
             isOpen={isOpen}
             onClose={onClose}
             setStatus={setStatus}
-            setStatusMessage={setStatusMessage}
             recordId={recordId}
             isMobile={isMobile}
           />
@@ -285,7 +248,6 @@ export const ManageBibInList = ({
         isOpen={isOpen}
         onClose={onClose}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         recordId={recordId}
         isMobile={isMobile}
       />

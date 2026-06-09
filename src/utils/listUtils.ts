@@ -7,6 +7,7 @@ import type {
 } from "../types/listTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
+import { STATIC_STATUS_MESSAGES } from "./statusUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -176,15 +177,12 @@ export const buildListRecords = (
 export const downloadList = async (
   list: List,
   sort: ListRecordsSort,
-  setStatus: any,
-  setStatusMessage: any
+  setStatus: any
 ) => {
-  setStatus("")
-  setStatusMessage("")
+  setStatus(null)
   try {
     if (list.recordCount === 0 || !list.records) {
-      setStatus("failure")
-      setStatusMessage("Your list has no records to download.")
+      setStatus(STATIC_STATUS_MESSAGES["download-list-failure"])
       return
     }
 
@@ -258,11 +256,9 @@ export const downloadList = async (
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
 
-    setStatus("success")
-    setStatusMessage("Your list has been downloaded.")
+    setStatus(STATIC_STATUS_MESSAGES["download-list-success"])
   } catch (error) {
     console.error("Error downloading list:", error)
-    setStatus("failure")
-    setStatusMessage("Your list could not be downloaded.")
+    setStatus(STATIC_STATUS_MESSAGES["download-list-failure"])
   }
 }

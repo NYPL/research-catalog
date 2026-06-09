@@ -18,6 +18,7 @@ import type { List } from "../../../../types/listTypes"
 import { downloadList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
+import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
 
 /**
  * The ListActionsMenu component renders the actions button and menu (with list operations)
@@ -26,12 +27,10 @@ import { CreateEditListModal } from "./CreateEditList"
 const ListActionsMenu = ({
   list,
   setStatus,
-  setStatusMessage,
   bannerRef,
 }: {
   list: List
   setStatus
-  setStatusMessage
   bannerRef?: any
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
@@ -72,11 +71,9 @@ const ListActionsMenu = ({
             ...updatedAccountData,
             lists: updatedLists,
           })
-          setStatus("success")
-          setStatusMessage("Your list has been deleted.")
+          setStatus(STATIC_STATUS_MESSAGES["delete-list-success"])
         } else {
-          setStatus("failure")
-          setStatusMessage("Your list could not be deleted.")
+          setStatus(STATIC_STATUS_MESSAGES["delete-list-failure"])
         }
       } catch (error) {
         console.error("Error deleting list:", error)
@@ -85,7 +82,7 @@ const ListActionsMenu = ({
       }
     },
     onCancel: () => {
-      setStatus("")
+      setStatus(null)
       closeModal()
     },
   }
@@ -104,8 +101,7 @@ const ListActionsMenu = ({
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
       onClick: async () => {
-        setStatus("")
-        setStatusMessage("")
+        setStatus(null)
         try {
           const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
             method: "POST",
@@ -127,16 +123,12 @@ const ListActionsMenu = ({
                 lists: [data.list, ...lists],
               })
             }
-            setStatus("success")
-            setStatusMessage("Your list has been duplicated.")
+            setStatus(STATIC_STATUS_MESSAGES["duplicate-list-success"])
           } else {
-            setStatus("failure")
-            setStatusMessage("Your list could not be duplicated.")
+            setStatus(STATIC_STATUS_MESSAGES["duplicate-list-failure"])
           }
         } catch (error) {
           console.error("Error duplicating list:", error)
-          setStatus("failure")
-          setStatusMessage("Your list could not be duplicated.")
         }
       },
     },
@@ -146,9 +138,8 @@ const ListActionsMenu = ({
       label: "Download",
       media: { type: "icon", name: "download" },
       onClick: async () => {
-        setStatus("")
-        setStatusMessage("")
-        downloadList(list, "modified_date_asc", setStatus, setStatusMessage)
+        setStatus(null)
+        downloadList(list, "modified_date_asc", setStatus)
       },
     },
   ]
@@ -160,8 +151,7 @@ const ListActionsMenu = ({
       label: "Delete",
       media: { type: "icon", name: "actionDelete" },
       onClick: () => {
-        setStatus("")
-        setStatusMessage("")
+        setStatus(null)
         setModalProps(deleteListModalProps as ConfirmationModalProps)
         openModal()
       },
@@ -172,8 +162,7 @@ const ListActionsMenu = ({
       label: "Edit",
       media: { type: "icon", name: "editorMode" },
       onClick: () => {
-        setStatus("")
-        setStatusMessage("")
+        setStatus(null)
         openEdit()
       },
     })
@@ -202,7 +191,6 @@ const ListActionsMenu = ({
         mode="edit"
         list={list}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         bannerRef={bannerRef}
       />
     </>

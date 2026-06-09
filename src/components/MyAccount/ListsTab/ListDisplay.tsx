@@ -19,11 +19,13 @@ import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List, ListRecordsSort } from "../../../types/listTypes"
 import { useContext, useEffect, useRef, useState } from "react"
-import { StatusBanner, type StatusType } from "../Settings/StatusBanner"
+import { StatusBanner } from "../Settings/StatusBanner"
+import type { StatusBannerState } from "../Settings/StatusBanner"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import { BASE_URL } from "../../../config/constants"
 import { EditListButton } from "./ListActions/CreateEditList"
 import { downloadList } from "../../../utils/listUtils"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
 const ListDisplay = ({ list }: { list?: List }) => {
@@ -40,10 +42,10 @@ const ListDisplay = ({ list }: { list?: List }) => {
   const bannerRef = useRef<HTMLDivElement>(null)
 
   // Manage status banner display for list actions
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
+
   useEffect(() => {
-    if (status !== "" && bannerRef.current) {
+    if (status && bannerRef.current) {
       setTimeout(() => {
         bannerRef.current?.focus()
       }, 100)
@@ -120,9 +122,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
             ...updatedAccountData,
             lists: updatedLists,
           })
+          setStatus(STATIC_STATUS_MESSAGES["delete-list-success"])
         } else {
-          setStatus("failure")
-          setStatusMessage("Your list could not be deleted.")
+          setStatus(STATIC_STATUS_MESSAGES["delete-list-failure"])
           closeModal()
         }
       } catch (error) {
@@ -130,7 +132,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
       }
     },
     onCancel: () => {
-      setStatus("")
+      setStatus(null)
       closeModal()
     },
   }
@@ -195,14 +197,12 @@ const ListDisplay = ({ list }: { list?: List }) => {
               list={list}
               bannerRef={bannerRef}
               setStatus={setStatus}
-              setStatusMessage={setStatusMessage}
             />
           )}
           <Button
             variant="secondary"
             onClick={async () => {
-              setStatus("")
-              setStatusMessage("")
+              setStatus(null)
               try {
                 const response = await fetch(
                   `${BASE_URL}/api/account/lists/list`,
@@ -233,49 +233,42 @@ const ListDisplay = ({ list }: { list?: List }) => {
                       "_blank"
                     )
                   }
-                  setStatus("success")
-                  setStatusMessage("Your list has been duplicated.")
+                  setStatus(STATIC_STATUS_MESSAGES["duplicate-list-success"])
                 } else {
-                  setStatus("failure")
-                  setStatusMessage("Your list could not be duplicated.")
+                  setStatus(STATIC_STATUS_MESSAGES["duplicate-list-failure"])
                 }
               } catch (error) {
                 console.error("Error duplicating list:", error)
-                setStatus("failure")
-                setStatusMessage("Your list could not be duplicated.")
               }
             }}
           >
             <Icon name="contentCopy" align="left" size="medium" />
             Duplicate
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              downloadList(
-                list,
-                activeSort as ListRecordsSort,
-                setStatus,
-                setStatusMessage
-              )
-            }}
-          >
-            <Icon align="left" size="medium">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-              >
-                <path
-                  d="M15 9L13.9425 7.9425L9.75 12.1275V3H8.25V12.1275L4.065 7.935L3 9L9 15L15 9Z"
-                  fill="#0069BF"
-                />
-              </svg>
-            </Icon>
-            Download
-          </Button>
+          {list.recordCount > 0 && (
+            <Button
+              variant="secondary"
+              onClick={() => {
+                downloadList(list, activeSort as ListRecordsSort, setStatus)
+              }}
+            >
+              <Icon align="left" size="medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                >
+                  <path
+                    d="M15 9L13.9425 7.9425L9.75 12.1275V3H8.25V12.1275L4.065 7.935L3 9L9 15L15 9Z"
+                    fill="#0069BF"
+                  />
+                </svg>
+              </Icon>
+              Download
+            </Button>
+          )}
           {!list.isDefaultList && (
             <Button
               variant="secondary"
@@ -289,8 +282,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
                 },
               }}
               onClick={() => {
-                setStatus("")
-                setStatusMessage("")
+                setStatus(null)
                 setModalProps(deleteListModalProps as ConfirmationModalProps)
                 openModal()
               }}
@@ -302,8 +294,8 @@ const ListDisplay = ({ list }: { list?: List }) => {
         </ButtonGroup>
         <Modal {...modalProps} />
         <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
-          {status !== "" && (
-            <StatusBanner status={status} statusMessage={statusMessage} />
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
           )}
         </div>
       </Flex>
@@ -312,7 +304,6 @@ const ListDisplay = ({ list }: { list?: List }) => {
         activeSort={activeSort}
         setActiveSort={setActiveSort}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
       />
     </Flex>
   )

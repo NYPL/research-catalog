@@ -16,6 +16,7 @@ import SettingsLabel from "./SettingsLabel"
 import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import AddButton from "./AddButton"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 interface SettingsInputFormProps {
   patronData: Patron
@@ -147,7 +148,7 @@ const SettingsInputForm = ({
   const submitInputs = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("")
+    setStatus(null)
     const validInputs = tempInputs.filter((input) =>
       validateInput(input, tempInputs)
     )
@@ -173,11 +174,11 @@ const SettingsInputForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus("success")
+        setStatus(STATIC_STATUS_MESSAGES["account-success"])
         setInputs([...validInputs])
         setTempInputs([...validInputs])
       } else {
-        setStatus("failure")
+        setStatus(STATIC_STATUS_MESSAGES["account-failure"])
         setTempInputs([...inputs])
       }
     } catch (error) {

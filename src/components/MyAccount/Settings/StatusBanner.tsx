@@ -1,64 +1,22 @@
-import { Banner, Text, Link } from "@nypl/design-system-react-components"
+import { Banner } from "@nypl/design-system-react-components"
+import type { ReactElement } from "react"
 
-export type StatusType = "" | "failure" | "usernameFailure" | "success"
-
-type StatusBannerProps = {
-  status: StatusType
-  statusMessage: string
+export type StatusBannerState = {
+  type: string
+  message: ReactElement | string
 }
 
-const generalSuccessContent = <Text>Your changes were saved.</Text>
-
-const generalFailureContent = <Text>Your changes were not saved.</Text>
-
-const specificFailureContent = (statusMessage: string) => {
-  return (
-    <Text marginBottom={0}>
-      {statusMessage} Please try again or{" "}
-      <Link
-        color="ui.link.primary !important"
-        href="https://www.nypl.org/get-help/contact-us"
-      >
-        contact us
-      </Link>{" "}
-      for assistance.
-    </Text>
-  )
-}
-
-const specificSuccessContent = (statusMessage: string) => {
-  if (typeof statusMessage === "string") {
-    return <Text marginBottom={0}>{statusMessage}</Text>
-  } else {
-    return statusMessage
-  }
-}
-
-const statusContent = (status, statusMessage) => {
-  if (status === "success") {
-    if (statusMessage !== "") {
-      return specificSuccessContent(statusMessage)
-    } else {
-      return generalSuccessContent
-    }
-  }
-  if (status === "failure" && statusMessage !== "") {
-    return specificFailureContent(statusMessage)
-  } else {
-    return generalFailureContent
-  }
-}
-
-export const StatusBanner = ({ status, statusMessage }: StatusBannerProps) => {
+export const StatusBanner = ({ type, message }: StatusBannerState) => {
   return (
     <Banner
       isDismissible
-      content={
-        <div style={{ alignItems: "center" }}>
-          {statusContent(status, statusMessage)}
-        </div>
-      }
-      variant={status === "failure" ? "negative" : "positive"}
+      content={message}
+      variant={type === "failure" ? "negative" : "positive"}
+      sx={{
+        alignContent: "center",
+        color: "ui.body",
+        a: { color: "ui.link.primary" },
+      }}
     />
   )
 }

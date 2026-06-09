@@ -20,6 +20,7 @@ import styles from "../../../../../styles/components/MyAccount.module.scss"
 import { useContext, useState, useEffect } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import { BASE_URL } from "../../../../config/constants"
+import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
 
 /* Renders the Create or Edit list modal, and the triggering buttons (Create new list, Edit list). */
 export const CreateEditListModal = ({
@@ -28,7 +29,6 @@ export const CreateEditListModal = ({
   mode = "create",
   list,
   setStatus,
-  setStatusMessage,
   bannerRef,
 }: {
   isOpen: boolean
@@ -36,7 +36,6 @@ export const CreateEditListModal = ({
   mode?: "create" | "edit"
   list?: any
   setStatus: any
-  setStatusMessage: any
   bannerRef?: any
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
@@ -101,22 +100,20 @@ export const CreateEditListModal = ({
             })
           }
         }
-        setStatus("success")
-        setStatusMessage(
+        setStatus(
           isEdit
-            ? "Your changes have been saved."
-            : "Your list has been created."
+            ? STATIC_STATUS_MESSAGES["account-success"]
+            : STATIC_STATUS_MESSAGES["create-list-success"]
         )
       } else {
         if (isEdit) {
           setListName(list?.listName || "")
           setListDescription(list?.description || "")
         }
-        setStatus("failure")
-        setStatusMessage(
+        setStatus(
           isEdit
-            ? "Your changes were not saved."
-            : "Your list could not be created."
+            ? STATIC_STATUS_MESSAGES["account-failure"]
+            : STATIC_STATUS_MESSAGES["create-list-failure"]
         )
       }
     } catch (error) {
@@ -224,11 +221,7 @@ export const CreateEditListModal = ({
   )
 }
 
-export const CreateListButton = ({
-  setStatus,
-  setStatusMessage,
-  bannerRef,
-}: any) => {
+export const CreateListButton = ({ setStatus, bannerRef }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -242,19 +235,13 @@ export const CreateListButton = ({
         onClose={onClose}
         mode="create"
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         bannerRef={bannerRef}
       />
     </>
   )
 }
 
-export const EditListButton = ({
-  list,
-  setStatus,
-  setStatusMessage,
-  bannerRef,
-}: any) => {
+export const EditListButton = ({ list, setStatus, bannerRef }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -268,7 +255,6 @@ export const EditListButton = ({
         mode="edit"
         list={list}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         bannerRef={bannerRef}
       />
     </>
