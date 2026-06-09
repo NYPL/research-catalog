@@ -15,19 +15,14 @@ import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import AddButton from "./AddButton"
 import { BASE_URL } from "../../../config/constants"
-
-export const usernameStatusMessages = {
-  USERNAME_FAILURE: "This username already exists.",
-  FAILURE: "Your changes could not be saved.",
-  SUCCESS: "Your changes were saved.",
-}
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 interface UsernameFormProps {
   patron: Patron
-  usernameState
+  setUsernameStatus
 }
 
-const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
+const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -43,7 +38,6 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const [tempUsername, setTempUsername] = useState(usernameInSierra)
   const currentUsernameNotDeleted = tempUsername !== null
 
-  const { setUsernameStatus, setUsernameStatusMessage } = usernameState
   const inputRef = useRef<TextInputRefType | null>()
   const editingRef = useRef<HTMLButtonElement | null>()
   const addButtonRef = useRef<HTMLButtonElement | null>()
@@ -75,7 +69,7 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
   const submitInput = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setUsernameStatus("")
+    setUsernameStatus(null)
     const submissionInput = tempUsername === null ? "" : tempUsername
     try {
       const response = await fetch(
@@ -91,21 +85,19 @@ const UsernameForm = ({ patron, usernameState }: UsernameFormProps) => {
       const responseMessage = await response.json()
       if (responseMessage !== "Username taken" && response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setUsernameStatus("success")
+        setUsernameStatus(STATIC_STATUS_MESSAGES["account-success"])
         setusernameInSierra(submissionInput)
         setTempUsername(submissionInput)
       } else {
-        setUsernameStatus("failure")
-        setUsernameStatusMessage(
+        setUsernameStatus(
           responseMessage === "Username taken"
-            ? usernameStatusMessages.USERNAME_FAILURE
-            : usernameStatusMessages.FAILURE
+            ? STATIC_STATUS_MESSAGES["username-failure"]
+            : STATIC_STATUS_MESSAGES["account-failure"]
         )
         setTempUsername(usernameInSierra)
       }
     } catch (error) {
-      setUsernameStatus("failure")
-      setUsernameStatusMessage(usernameStatusMessages.FAILURE)
+      setUsernameStatus(STATIC_STATUS_MESSAGES["account-failure"])
       console.error("Error submitting username:", error)
     } finally {
       setIsLoading(false)

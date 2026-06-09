@@ -6,11 +6,10 @@ import {
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
-import { passwordFormMessages } from "./PasswordForm"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 const mockSettingsState = {
   setStatus: jest.fn(),
-  setStatusMessage: jest.fn(),
   editingField: "",
   setEditingField: jest.fn(),
 }
@@ -33,7 +32,6 @@ const component = (
 
 beforeEach(() => {
   mockSettingsState.setStatus.mockClear()
-  mockSettingsState.setStatusMessage.mockClear()
   mockSettingsState.setEditingField.mockClear()
 })
 
@@ -116,10 +114,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
-    )
-    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
-      passwordFormMessages.INCORRECT
+      expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES["password-incorrect-failure"]
+      )
     )
   })
 
@@ -149,11 +146,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
-    )
-    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(2, "failure")
-    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
-      passwordFormMessages.INVALID
+      expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES["password-invalid-failure"]
+      )
     )
   })
 

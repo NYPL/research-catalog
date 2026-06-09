@@ -12,25 +12,20 @@ import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
 import UsernameForm from "./Settings/UsernameForm"
 import { useEffect, useRef, useState } from "react"
-import type { StatusType } from "./Settings/StatusBanner"
 import { StatusBanner } from "./Settings/StatusBanner"
+import type { StatusBannerState } from "./Settings/StatusBanner"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
-  const [usernameStatus, setUsernameStatus] = useState<StatusType>("")
-  const [usernameStatusMessage, setUsernameStatusMessage] = useState<string>("")
+  const [usernameStatus, setUsernameStatus] =
+    useState<StatusBannerState | null>(null)
   const usernameBannerRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (usernameStatus !== "" && usernameBannerRef.current) {
+    if (usernameStatus && usernameBannerRef.current) {
       usernameBannerRef.current.focus()
     }
   }, [usernameStatus])
-
-  const usernameState = {
-    setUsernameStatus,
-    setUsernameStatusMessage,
-  }
 
   const profileData = (
     [
@@ -39,7 +34,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
         icon: "actionIdentity",
         term: "Username",
         description: (
-          <UsernameForm patron={patron} usernameState={usernameState} />
+          <UsernameForm patron={patron} setUsernameStatus={setUsernameStatus} />
         ),
       },
       {
@@ -74,15 +69,15 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
 
   return (
     <>
-      {usernameStatus !== "" && (
+      {usernameStatus && (
         <div
           ref={usernameBannerRef}
           tabIndex={-1}
           style={{ marginTop: "32px", marginBottom: "32px" }}
         >
           <StatusBanner
-            status={usernameStatus}
-            statusMessage={usernameStatusMessage}
+            type={usernameStatus.type}
+            message={usernameStatus.message}
           />
         </div>
       )}

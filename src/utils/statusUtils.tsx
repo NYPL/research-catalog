@@ -17,6 +17,7 @@ export type StaticStatusKey =
   | "create-list-failure"
   | "password-incorrect-failure"
   | "password-invalid-failure"
+  | "username-failure"
 
 export const STATIC_STATUS_MESSAGES: Record<
   StaticStatusKey,
@@ -82,7 +83,15 @@ export const STATIC_STATUS_MESSAGES: Record<
   },
   "account-failure": {
     type: "failure",
-    message: <Text marginBottom={0}>Your changes were not saved.</Text>,
+    message: (
+      <Text marginBottom={0}>
+        Your changes could not be saved. Please try again or{" "}
+        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
+          contact us
+        </Link>{" "}
+        for assistance.
+      </Text>
+    ),
   },
   "password-incorrect-failure": {
     type: "failure",
@@ -108,8 +117,21 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
+  "username-failure": {
+    type: "failure",
+    message: (
+      <Text marginBottom={0}>
+        This username already exists. Please try again or{" "}
+        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
+          contact us
+        </Link>{" "}
+        for assistance.
+      </Text>
+    ),
+  },
 }
 
+// Statii that require a param to set a linked value.
 export type DynamicStatusKey =
   | "save-record-success"
   | "remove-record-success"

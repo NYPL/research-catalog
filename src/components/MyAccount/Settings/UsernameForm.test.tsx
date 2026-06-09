@@ -6,15 +6,13 @@ import {
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import UsernameForm from "./UsernameForm"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 describe("username form", () => {
-  const mockUsernameState = {
-    setUsernameStatus: jest.fn(),
-    setUsernameStatusMessage: jest.fn(),
-  }
-
+  const mockSetUsernameStatus = jest.fn()
   beforeEach(() => {
     jest.clearAllMocks()
+
     global.fetch = jest.fn().mockResolvedValue({
       json: async () => {
         console.log("Updated")
@@ -32,7 +30,7 @@ describe("username form", () => {
     >
       <UsernameForm
         patron={processedPatron}
-        usernameState={mockUsernameState}
+        setUsernameStatus={mockSetUsernameStatus}
       />
     </PatronDataProvider>
   )
@@ -44,7 +42,10 @@ describe("username form", () => {
         pickupLocations: filteredPickupLocations,
       }}
     >
-      <UsernameForm patron={emptyPatron} usernameState={mockUsernameState} />
+      <UsernameForm
+        patron={emptyPatron}
+        setUsernameStatus={mockSetUsernameStatus}
+      />
     </PatronDataProvider>
   )
 
@@ -184,5 +185,27 @@ describe("username form", () => {
 
     expect(screen.getByText(processedPatron.username)).toBeInTheDocument()
     expect(screen.queryByDisplayValue("newUsername")).not.toBeInTheDocument()
+  })
+
+  it("handles 'Username taken' response from Sierra", async () => {
+    global.fetch = jest.fn().mockResolvedValue({
+      status: 400,
+      json: async () => "Username taken",
+    } as Response)
+
+    render(component)
+
+    fireEvent.click(screen.getByRole("button", { name: /edit/i }))
+
+    const input = screen.getByLabelText("Username")
+    fireEvent.change(input, { target: { value: "takenName123" } })
+
+    fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
+
+    await waitFor(() => {
+      expect(mockSetUsernameStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES["username-failure"]
+      )
+    })
   })
 })
