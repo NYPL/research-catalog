@@ -34,16 +34,9 @@ const ListsDisplay = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  // Manage status banner display for list actions
+  // Manage status banner display for list actions (CreateEditList modal needs explicit ref)
   const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusBannerState | null>(null)
-  useEffect(() => {
-    if (status && bannerRef.current) {
-      setTimeout(() => {
-        bannerRef.current?.focus()
-      }, 100)
-    }
-  }, [status])
 
   const loader = (
     <SkeletonLoader
@@ -136,7 +129,7 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
-      <div tabIndex={-1} ref={bannerRef}>
+      <div tabIndex={-1} ref={bannerRef} id={idConstants.listStatusBanner}>
         {status && <StatusBanner type={status.type} message={status.message} />}
       </div>
       <Box display="grid" mt="xs">

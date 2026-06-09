@@ -64,6 +64,7 @@ export const CreateEditListModal = ({
 
     setIsSubmitting(true)
     setIsSubmitted(true)
+    setStatus(null)
     try {
       const isEdit = mode === "edit"
       const url = isEdit

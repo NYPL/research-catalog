@@ -25,6 +25,7 @@ import { SearchableCheckboxGroup } from "./SearchableCheckboxGroup"
 import { STATIC_STATUS_MESSAGES } from "../../utils/statusUtils"
 import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
+import { idConstants, useFocusContext } from "../../context/FocusContext"
 
 /** Render list management menu (inside Chakra Popover, Drawer on mobile) */
 export const ManageBibInListMenu = ({
@@ -46,6 +47,7 @@ export const ManageBibInListMenu = ({
     useContext(PatronDataContext)
   const patron = updatedAccountData?.patron
   const lists = updatedAccountData?.lists || []
+  const { setPersistentFocus } = useFocusContext()
 
   // Create list form banner and button focus management
   const createListButtonRef = useRef<HTMLButtonElement>(null)
@@ -231,8 +233,10 @@ export const ManageBibInListMenu = ({
           return { ...data, lists: updatedLists }
         })
         setStatus(STATIC_STATUS_MESSAGES["list-changes-success"])
+        setPersistentFocus(idConstants.listStatusBanner)
       } else {
         setStatus(STATIC_STATUS_MESSAGES["list-changes-failure"])
+        setPersistentFocus(idConstants.listStatusBanner)
       }
     } catch (error) {
       console.error("Error updating bib in lists:", error)

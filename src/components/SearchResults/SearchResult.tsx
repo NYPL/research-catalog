@@ -19,7 +19,8 @@ import SearchResultItems from "./SearchResultItems"
 import { ManageBibInList } from "../List/ManageBibInList"
 import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
+import { idConstants } from "../../context/FocusContext"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -57,15 +58,7 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
   }, [])
 
   // Manage status banner display for list actions
-  const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusBannerState | null>(null)
-  useEffect(() => {
-    if (status && bannerRef.current) {
-      setTimeout(() => {
-        bannerRef.current?.focus()
-      }, 100)
-    }
-  }, [status])
 
   return (
     <Card
@@ -115,7 +108,11 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
         >
           {joinedMetadata}
         </Box>
-        <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
+        <div
+          tabIndex={-1}
+          id={idConstants.listStatusBanner}
+          style={{ marginTop: "24px" }}
+        >
           {status && (
             <StatusBanner type={status.type} message={status.message} />
           )}

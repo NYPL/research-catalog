@@ -19,6 +19,7 @@ import { downloadList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
 import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../../context/FocusContext"
 
 /**
  * The ListActionsMenu component renders the actions button and menu (with list operations)
@@ -36,6 +37,7 @@ const ListActionsMenu = ({
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
+  const { setPersistentFocus } = useFocusContext()
 
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -72,8 +74,10 @@ const ListActionsMenu = ({
             lists: updatedLists,
           })
           setStatus(STATIC_STATUS_MESSAGES["delete-list-success"])
+          setPersistentFocus(idConstants.listStatusBanner)
         } else {
           setStatus(STATIC_STATUS_MESSAGES["delete-list-failure"])
+          setPersistentFocus(idConstants.listStatusBanner)
         }
       } catch (error) {
         console.error("Error deleting list:", error)
@@ -132,17 +136,20 @@ const ListActionsMenu = ({
         }
       },
     },
-    {
+  ]
+
+  if (list.recordCount > 0) {
+    listOptions.push({
       type: "action",
       id: "download",
       label: "Download",
       media: { type: "icon", name: "download" },
       onClick: async () => {
         setStatus(null)
-        downloadList(list, "modified_date_asc", setStatus)
+        downloadList(list, "modified_date_asc")
       },
-    },
-  ]
+    })
+  }
 
   if (!list.isDefaultList) {
     listOptions.push({

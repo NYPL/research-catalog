@@ -174,15 +174,9 @@ export const buildListRecords = (
   return updatedRecords
 }
 
-export const downloadList = async (
-  list: List,
-  sort: ListRecordsSort,
-  setStatus: any
-) => {
-  setStatus(null)
+export const downloadList = async (list: List, sort: ListRecordsSort) => {
   try {
     if (list.recordCount === 0 || !list.records) {
-      setStatus(STATIC_STATUS_MESSAGES["download-list-failure"])
       return
     }
 
@@ -255,10 +249,7 @@ export const downloadList = async (
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-
-    setStatus(STATIC_STATUS_MESSAGES["download-list-success"])
   } catch (error) {
     console.error("Error downloading list:", error)
-    setStatus(STATIC_STATUS_MESSAGES["download-list-failure"])
   }
 }

@@ -14,11 +14,11 @@ import type {
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
-import { useFocusContext } from "../../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../../context/FocusContext"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List, ListRecordsSort } from "../../../types/listTypes"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { StatusBanner } from "../Settings/StatusBanner"
 import type { StatusBannerState } from "../Settings/StatusBanner"
 import { PatronDataContext } from "../../../context/PatronDataContext"
@@ -39,18 +39,11 @@ const ListDisplay = ({ list }: { list?: List }) => {
   // Sort state for list records.
   const [activeSort, setActiveSort] = useState("added_date_asc")
 
+  // Manage status banner display for list actions (CreateEditList modal needs explicit ref)
   const bannerRef = useRef<HTMLDivElement>(null)
-
-  // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusBannerState | null>(null)
 
-  useEffect(() => {
-    if (status && bannerRef.current) {
-      setTimeout(() => {
-        bannerRef.current?.focus()
-      }, 100)
-    }
-  }, [status])
+  console.log(status)
 
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -195,8 +188,8 @@ const ListDisplay = ({ list }: { list?: List }) => {
           {!list.isDefaultList && (
             <EditListButton
               list={list}
-              bannerRef={bannerRef}
               setStatus={setStatus}
+              bannerRef={bannerRef}
             />
           )}
           <Button
@@ -237,6 +230,7 @@ const ListDisplay = ({ list }: { list?: List }) => {
                 } else {
                   setStatus(STATIC_STATUS_MESSAGES["duplicate-list-failure"])
                 }
+                setPersistentFocus(idConstants.listStatusBanner)
               } catch (error) {
                 console.error("Error duplicating list:", error)
               }
@@ -248,8 +242,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
           {list.recordCount > 0 && (
             <Button
               variant="secondary"
-              onClick={() => {
-                downloadList(list, activeSort as ListRecordsSort, setStatus)
+              onClick={async () => {
+                setStatus(null)
+                await downloadList(list, activeSort as ListRecordsSort)
               }}
             >
               <Icon align="left" size="medium">
@@ -293,7 +288,12 @@ const ListDisplay = ({ list }: { list?: List }) => {
           )}
         </ButtonGroup>
         <Modal {...modalProps} />
-        <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
+        <div
+          tabIndex={-1}
+          id={idConstants.listStatusBanner}
+          ref={bannerRef}
+          style={{ marginTop: "24px" }}
+        >
           {status && (
             <StatusBanner type={status.type} message={status.message} />
           )}

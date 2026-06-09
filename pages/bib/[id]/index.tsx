@@ -55,6 +55,7 @@ import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
 import { StatusBanner } from "../../../src/components/MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../../../src/components/MyAccount/Settings/StatusBanner"
+import { idConstants } from "../../../src/context/FocusContext"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -103,15 +104,7 @@ export default function BibPage({
   const controllerRef = useRef<AbortController>()
 
   // Manage status banner display for list actions
-  const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusBannerState | null>(null)
-  useEffect(() => {
-    if (status && bannerRef.current) {
-      setTimeout(() => {
-        bannerRef.current?.focus()
-      }, 100)
-    }
-  }, [status])
 
   if (errorStatus) {
     return (
@@ -251,7 +244,7 @@ export default function BibPage({
         </Box>
         <div
           tabIndex={-1}
-          ref={bannerRef}
+          id={idConstants.listStatusBanner}
           style={{ marginTop: "-16px", marginBottom: "32px" }}
         >
           {status && (
