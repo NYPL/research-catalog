@@ -19,7 +19,7 @@ import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
 import type { List, ListRecord, ListResult } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
-import { fetchLists } from "../server/api/lists"
+import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
 
 class MyAccountModelError extends Error {
@@ -100,7 +100,35 @@ export default class MyAccount {
 
   async getLists(patronId) {
     const listsResult = await fetchLists({ patronId })
-    return this.buildLists(listsResult?.lists)
+    const lists = listsResult?.lists
+
+    // If patron has no lists, create their default list
+    if (lists && lists.length === 0) {
+      const createResult = await createList({
+        patronId,
+        listName: "My workspace (default list)",
+        description: "Default list- cannot be deleted",
+      })
+      if (createResult.status === 200 && createResult.list) {
+        lists.push(createResult.list)
+      }
+    }
+
+    const builtLists = this.buildLists(lists || [])
+
+    // Set the isDefaultList prop
+    if (lists && lists.length > 0) {
+      const defaultListId = lists.reduce((oldest, current) => {
+        const currentDate = new Date(current.createdDate).getTime()
+        const oldestDate = new Date(oldest.createdDate).getTime()
+        return currentDate < oldestDate ? current : oldest
+      }).id
+      builtLists.forEach((list) => {
+        list.isDefaultList = list.id === defaultListId
+      })
+    }
+
+    return builtLists
   }
 
   async fetchBibItemData(

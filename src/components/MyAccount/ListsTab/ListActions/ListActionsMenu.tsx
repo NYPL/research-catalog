@@ -100,17 +100,6 @@ const ListActionsMenu = ({
   const listOptions: ListItemsData[] = [
     {
       type: "action",
-      id: "edit",
-      label: "Edit",
-      media: { type: "icon", name: "editorMode" },
-      onClick: () => {
-        setStatus("")
-        setStatusMessage("")
-        openEdit()
-      },
-    },
-    {
-      type: "action",
       id: "duplicate",
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
@@ -138,7 +127,10 @@ const ListActionsMenu = ({
         downloadList(list, "modified_date_asc", setStatus, setStatusMessage)
       },
     },
-    {
+  ]
+
+  if (!list.isDefaultList) {
+    listOptions.push({
       type: "action",
       id: "delete",
       label: "Delete",
@@ -149,15 +141,30 @@ const ListActionsMenu = ({
         setModalProps(deleteListModalProps as ConfirmationModalProps)
         openModal()
       },
-    },
-  ]
+    })
+    listOptions.unshift({
+      type: "action",
+      id: "edit",
+      label: "Edit",
+      media: { type: "icon", name: "editorMode" },
+      onClick: () => {
+        setStatus("")
+        setStatusMessage("")
+        openEdit()
+      },
+    })
+  }
 
   return (
     <>
       <Flex justifyContent="flex-end" width="100%">
         <Menu
           id="list-options-menu"
-          className={`${styles.listOptionsMenu} no-print`}
+          className={`${
+            list.isDefaultList
+              ? styles.defaultListOptionsMenu
+              : styles.listOptionsMenu
+          } no-print`}
           showLabel={false}
           showBorder={true}
           labelText="Options"
