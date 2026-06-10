@@ -48,7 +48,7 @@ export const processedLists: List[] = [
     records: [
       {
         uri: "b12404033",
-        addedDate: "4/21/2026",
+        addedFormattedDate: "4/21/2026",
         title: null,
         itemCount: 0,
         creatorLiteral: null,
