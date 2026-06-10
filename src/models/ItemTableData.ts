@@ -1,7 +1,7 @@
 import type { ReactElement } from "react"
 
 import type Item from "./Item"
-import type { ItemTableParams } from "../types/itemTypes"
+import type { Collection, ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
@@ -19,11 +19,13 @@ export default class ItemTableData {
   items?: Item[]
   inSearchResult: boolean
   isArchiveCollection: boolean
+  collection?: Collection
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
+    this.collection = itemTableParams.collection || null
   }
   /**
    * TODO: Consolidate tableHeadings and tableData into a single object to avoid relying on consistent ordering between the two.
@@ -37,6 +39,7 @@ export default class ItemTableData {
       ...(this.showAccessColumn() ? ["Access"] : []),
       "Call number",
       "Item location",
+      ...(this.showDivisionColumn() ? ["Division"] : []),
     ]
   }
 
@@ -52,18 +55,34 @@ export default class ItemTableData {
           : []),
         ItemTableCell({
           children: item.callNumber
-            ? `${item.callNumber}${
-                item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
+            ? `${item.callNumber}
               }`
             : "",
         }),
         ItemTableCell({ children: item.location.prefLabel }),
+        ...(this.showDivisionColumn()
+          ? [
+              ItemTableCell(
+                { children: this.collection.prefLabel },
+                `https://nypl.org/${this.collection.locationsPath}`
+              ),
+            ]
+          : []),
       ]
     })
   }
 
+  showDivisionColumn(): boolean {
+    return (
+      this.inSearchResult &&
+      this.collection &&
+      this.collection.prefLabel &&
+      this.items?.some((item) => !item.isPartnerReCAP())
+    )
+  }
+
   showVolumeColumn(): boolean {
-    return this.items?.some((item) => item.volume) && !this.inSearchResult
+    return this.items?.some((item) => item.volume)
   }
 
   showStatusColumn(): boolean {

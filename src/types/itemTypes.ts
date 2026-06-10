@@ -26,6 +26,13 @@ export interface DiscoveryItemResult {
   recapCustomerCode?: string[]
 }
 
+export interface Collection {
+  "@id": string
+  prefLabel?: string
+  buildingLocationLabel?: string
+  locationsPath?: string
+}
+
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
@@ -39,6 +46,7 @@ export interface ItemTableParams {
   isDesktop?: boolean
   inSearchResult?: boolean
   isArchiveCollection?: boolean
+  collection?: Collection
 }
 
 export type ItemCollectionAccess = "shelf" | "desk" | "special" | null
