@@ -7,6 +7,7 @@ import {
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { FocusProvider } from "../../../context/FocusContext"
 
 const mockSettingsState = {
   setStatus: jest.fn(),
@@ -16,18 +17,20 @@ const mockSettingsState = {
 const accountFetchSpy = jest.fn()
 
 const component = (
-  <PatronDataProvider
-    testSpy={accountFetchSpy}
-    value={{
-      patron: processedPatron,
-      pickupLocations: filteredPickupLocations,
-    }}
-  >
-    <PasswordForm
-      patronData={processedPatron}
-      settingsState={mockSettingsState}
-    />
-  </PatronDataProvider>
+  <FocusProvider>
+    <PatronDataProvider
+      testSpy={accountFetchSpy}
+      value={{
+        patron: processedPatron,
+        pickupLocations: filteredPickupLocations,
+      }}
+    >
+      <PasswordForm
+        patronData={processedPatron}
+        settingsState={mockSettingsState}
+      />
+    </PatronDataProvider>
+  </FocusProvider>
 )
 
 beforeEach(() => {

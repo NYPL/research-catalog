@@ -1,11 +1,12 @@
 import { Flex } from "@nypl/design-system-react-components"
-import { useContext, useEffect, useRef, useState } from "react"
+import { useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SettingsInputForm from "./SettingsInputForm"
 import SettingsSelectForm from "./SettingsSelectForm"
 import PasswordForm from "./PasswordForm"
 import { StatusBanner } from "./StatusBanner"
 import type { StatusBannerState } from "./StatusBanner"
+import { idConstants } from "../../../context/FocusContext"
 
 const AccountSettingsTab = () => {
   const {
@@ -26,16 +27,14 @@ const AccountSettingsTab = () => {
     setStatus,
   }
 
-  useEffect(() => {
-    if (status && bannerRef.current) {
-      bannerRef.current.focus()
-    }
-  }, [status])
-
   return (
     <>
       {status && (
-        <div ref={bannerRef} tabIndex={-1} style={{ marginTop: "32px" }}>
+        <div
+          id={idConstants.accountStatusBanner}
+          tabIndex={-1}
+          style={{ marginTop: "32px" }}
+        >
           <StatusBanner type={status.type} message={status.message} />
         </div>
       )}

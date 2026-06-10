@@ -14,6 +14,7 @@ import type { Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import EditButton from "./EditButton"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface PasswordFormProps {
   patronData: Patron
@@ -74,6 +75,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const { setStatus, editingField, setEditingField } = settingsState
   const editingRef = useRef<HTMLButtonElement | null>()
   const inputRef = useRef<TextInputRefType | null>()
+  const { setPersistentFocus } = useFocusContext()
 
   const cancelEditing = () => {
     setIsEditing(false)
@@ -117,7 +119,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const submitForm = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("")
+    setStatus(null)
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/update-pin/${patronData.id}`,
@@ -138,6 +140,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
         setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
+        setPersistentFocus(idConstants.accountStatusBanner)
       } else {
         if (errorMessage) {
           errorMessage.startsWith("Invalid parameter")
@@ -145,6 +148,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
               setStatus(STATIC_STATUS_MESSAGES.passwordIncorrectFailure)
             : setStatus(STATIC_STATUS_MESSAGES.passwordInvalidFailure)
         }
+        setPersistentFocus(idConstants.accountStatusBanner)
       }
     } catch (error) {
       console.error("Error submitting", error)

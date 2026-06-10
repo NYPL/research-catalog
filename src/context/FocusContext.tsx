@@ -38,6 +38,7 @@ export const idConstants = {
   advancedSearchError: "advanced-search-error",
   listRecordsHeading: "list-records-heading",
   listStatusBanner: "list-status-banner",
+  accountStatusBanner: "account-status-banner",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {

@@ -1,13 +1,11 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
-import {
-  processedPatron,
-  emptyPatron,
-} from "../../../../__test__/fixtures/processedMyAccountData"
+import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 import SettingsSelectForm from "./SettingsSelectForm"
 import type { Patron } from "../../../types/myAccountTypes"
+import { FocusProvider } from "../../../context/FocusContext"
 
 describe("notification preference form", () => {
   const mockSettingsState = {
@@ -83,20 +81,22 @@ describe("notification preference form", () => {
 
   const component = (patron) => {
     return (
-      <PatronDataProvider
-        testSpy={accountFetchSpy}
-        value={{
-          patron: patron,
-          pickupLocations: filteredPickupLocations,
-        }}
-      >
-        <SettingsSelectForm
-          patronData={patron}
-          settingsState={mockSettingsState}
-          pickupLocations={pickupLocations}
-          type="notification"
-        />
-      </PatronDataProvider>
+      <FocusProvider>
+        <PatronDataProvider
+          testSpy={accountFetchSpy}
+          value={{
+            patron: patron,
+            pickupLocations: filteredPickupLocations,
+          }}
+        >
+          <SettingsSelectForm
+            patronData={patron}
+            settingsState={mockSettingsState}
+            pickupLocations={pickupLocations}
+            type="notification"
+          />
+        </PatronDataProvider>
+      </FocusProvider>
     )
   }
 

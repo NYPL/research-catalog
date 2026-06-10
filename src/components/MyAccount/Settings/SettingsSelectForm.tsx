@@ -12,6 +12,7 @@ import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { useFocusContext, idConstants } from "../../../context/FocusContext"
 
 interface SettingsSelectFormProps {
   type: "library" | "notification"
@@ -30,7 +31,7 @@ const SettingsSelectForm = ({
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
-
+  const { setPersistentFocus } = useFocusContext()
   const { setStatus, editingField, setEditingField } = settingsState
   const selectRef = useRef<HTMLSelectElement | null>()
   const editingRef = useRef<HTMLButtonElement | null>()
@@ -135,6 +136,7 @@ const SettingsSelectForm = ({
         setStatus(STATIC_STATUS_MESSAGES.accountFailure)
         setTempSelection(tempSelection)
       }
+      setPersistentFocus(idConstants.accountStatusBanner)
     } catch (error) {
       console.error("Error submitting", error)
     } finally {
