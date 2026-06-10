@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
+import type { Collection, DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 import type { HTTPStatusCode } from "./appTypes"
 import type { AnnotatedMarc } from "./marcTypes"
@@ -15,6 +15,7 @@ export interface DiscoveryBibResult {
   titleDisplay?: string[]
   creatorLiteral?: string[]
   title?: string[]
+  collection?: Collection[]
   format?: format[]
   publicationStatement?: string[]
   dateStartYear?: number

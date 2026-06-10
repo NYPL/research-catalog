@@ -1,5 +1,5 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
-import type { JSONLDValue } from "../types/itemTypes"
+import type { Collection, JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
@@ -21,6 +21,7 @@ export default class Bib {
   electronicResources?: ElectronicResource[]
   numPhysicalItems: number
   numItemsMatched: number
+  collection?: Collection
   format?: string
   issuance?: JSONLDValue[]
   items?: Item[]
@@ -35,6 +36,8 @@ export default class Bib {
     this.electronicResources = result.electronicResources || []
     this.numPhysicalItems = result.numItemsTotal || 0
     this.numItemsMatched = result.numItemsMatched || 0
+    this.collection =
+      (result.collection?.length && result.collection[0]) || null
     this.format = (result.format?.length && result.format[0]?.prefLabel) || null
     this.issuance = (result.issuance?.length && result.issuance) || null
     this.itemAggregations = result.itemAggregations || null
@@ -74,6 +77,7 @@ export default class Bib {
       this.items?.length &&
       new ItemTableData(this.items, {
         isArchiveCollection: this.isArchiveCollection,
+        collection: this.collection,
       })
     )
   }

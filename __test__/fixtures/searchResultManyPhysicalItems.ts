@@ -321,4 +321,19 @@ export const searchResultManyPhysicalItems = {
   suppressed: false,
   hasItemVolumes: false,
   hasItemDates: false,
+  collection: [
+    {
+      "@id": "mal",
+      prefLabel: "General Research Division",
+      buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+      locationsPath: "locations/schwarzman/general-research-division",
+    },
+    {
+      "@id": "mac",
+      prefLabel: "Arents Collection",
+      buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+      locationsPath:
+        "locations/schwarzman/rare-books-division/arents-collection",
+    },
+  ],
 }

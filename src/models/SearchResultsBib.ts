@@ -30,6 +30,7 @@ export default class SearchResultsBib extends Bib {
           return new ItemTableData([item], {
             inSearchResult: true,
             isArchiveCollection: this.isArchiveCollection,
+            collection: this.collection,
           })
         })
       : null

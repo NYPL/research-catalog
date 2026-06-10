@@ -1,4 +1,4 @@
-import { Box } from "@nypl/design-system-react-components"
+import { Box, Link } from "@nypl/design-system-react-components"
 
 /**
  * The ItemTableCell component renders a table cell for the ItemTable
@@ -6,7 +6,7 @@ import { Box } from "@nypl/design-system-react-components"
  * Its extraction into a separate component allows for styling and other overrides on plain text cells
  * when rendered programatically in the ItemTableData class
  */
-const ItemTableCell = ({ children }) => {
+const ItemTableCell = ({ children, url = undefined }) => {
   return (
     <Box
       as="span"
@@ -15,7 +15,7 @@ const ItemTableCell = ({ children }) => {
         md: "desktop.body.body2",
       }}
     >
-      {children}
+      {url ? <Link href={url}>{children}</Link> : children}
     </Box>
   )
 }
