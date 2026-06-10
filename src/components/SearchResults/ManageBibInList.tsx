@@ -8,6 +8,7 @@ import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
+import { useFocusContext } from "../../context/FocusContext"
 
 interface ManageBibInListProps {
   bib: SearchResultsBib | Bib
@@ -26,6 +27,7 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
+  const { setPersistentFocus } = useFocusContext()
 
   const onlyHasDefaultList = updatedAccountData?.lists?.length === 1
 
@@ -79,7 +81,7 @@ export const ManageBibInList = ({
     const focusTarget = params.get("focus")
 
     if (focusTarget === `manage-bib-${bib.id}`) {
-      buttonRef.current?.focus()
+      setPersistentFocus(`manage-bib-${bib.id}`)
       // Clean up the URL
       params.delete("focus")
       const newUrl =
@@ -88,7 +90,7 @@ export const ManageBibInList = ({
         window.location.hash
 
       window.history.replaceState({}, "", newUrl)
-      //And open menu...
+      // And open menu...
     }
   }, [bib.id])
 
@@ -138,19 +140,18 @@ export const ManageBibInList = ({
           const responseData = await response.json()
           const updatedList = responseData.list || responseData
 
-          if (setUpdatedAccountData) {
-            setUpdatedAccountData((prevData: any) => {
-              const data = prevData || updatedAccountData
-              if (!data || !data.lists) return data
-              const updatedLists = data.lists.map((list: List) => {
-                if (list.id === defaultListId) {
-                  return { ...list, ...updatedList }
-                }
-                return list
-              })
-              return { ...data, lists: updatedLists as List[] }
+          setUpdatedAccountData((prevData: any) => {
+            const data = prevData || updatedAccountData
+            if (!data || !data.lists) return data
+            const updatedLists = data.lists.map((list: List) => {
+              if (list.id === defaultListId) {
+                return { ...list, ...updatedList }
+              }
+              return list
             })
-          }
+            return { ...data, lists: updatedLists as List[] }
+          })
+
           setStatus("success")
           setStatusMessage(
             isSaved
@@ -182,7 +183,6 @@ export const ManageBibInList = ({
 
   return (
     <Button
-      ref={buttonRef}
       id={`manage-bib-${bib.id}`}
       onClick={handleSaveClick}
       variant="text"
