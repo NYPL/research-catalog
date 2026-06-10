@@ -13,6 +13,7 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Advanced search form", () => {
   beforeEach(async () => {
+    mockRouter.setCurrentUrl("/search/advanced")
     render(<AdvancedSearch isAuthenticated={true} />)
   })
   const submit = () => {
@@ -67,20 +68,12 @@ describe("Advanced search form", () => {
   }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
+    await delay(200)
   })
 
   it("displays alert when no fields are submitted", () => {
     submit()
     expect(screen.getByText(defaultEmptySearchErrorMessage)).toBeInTheDocument()
-  })
-
-  it("can set keyword, contributor, title, subject, genre, and series", async () => {
-    await updateAllFields()
-    submit()
-
-    expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
-    )
   })
   it("renders inputs for all text input fields", () => {
     textInputFields.map(({ label }) => {
@@ -89,13 +82,23 @@ describe("Advanced search form", () => {
     })
   })
 
+  it("can set keyword, contributor, title, subject, genre, and series", async () => {
+    await updateAllFields()
+    await delay(500)
+    submit()
+
+    expect(mockRouter.asPath).toBe(
+      "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
+    )
+  })
+
   it("defaults to call number sort when call number is the only field passed", async () => {
     const callNumberInput = screen.getByLabelText("Call number")
-    fireEvent.change(callNumberInput, { target: { value: "12345" } })
-    submit()
+    fireEvent.change(callNumberInput, { target: { value: "1234" } })
     await delay(500)
+    submit()
     expect(mockRouter.asPath).toBe(
-      "/search?q=&callnumber=12345&sort=callnumber&searched_from=advanced"
+      "/search?q=&callnumber=1234&sort=callnumber&searched_from=advanced"
     )
   })
 
