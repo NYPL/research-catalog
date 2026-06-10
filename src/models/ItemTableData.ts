@@ -53,11 +53,12 @@ export default class ItemTableData {
       ItemTableCell({ children: item.location?.prefLabel })
     )
     const divisionCells = this.items?.map(() =>
-      ItemTableCell(
-        { children: this.collection?.prefLabel },
-        this.collection?.locationsPath &&
-          `https://nypl.org/${this.collection.locationsPath}`
-      )
+      ItemTableCell({
+        children: this.collection?.prefLabel,
+        url:
+          this.collection?.locationsPath &&
+          `https://nypl.org/${this.collection.locationsPath}`,
+      })
     )
 
     const volumeColumnWrapped = this.showVolumeColumn() && {

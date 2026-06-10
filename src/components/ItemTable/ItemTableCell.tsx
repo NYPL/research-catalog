@@ -6,7 +6,7 @@ import { Box, Link } from "@nypl/design-system-react-components"
  * Its extraction into a separate component allows for styling and other overrides on plain text cells
  * when rendered programatically in the ItemTableData class
  */
-const ItemTableCell = ({ children }, url?: string) => {
+const ItemTableCell = ({ children, url = undefined }) => {
   return (
     <Box
       as="span"
