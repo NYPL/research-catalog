@@ -393,15 +393,7 @@ export const ManageBibInListMenu = ({
           onChange={listCheckBoxChange}
           renderRightLabel={(item) =>
             item.records?.some((record: any) => record.uri === recordId) && (
-              // TODO: Replace with DS icon
-              <Icon size="medium">
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                  <path
-                    fill="#616161"
-                    d="M17 3H7C5.9 3 5 3.9 5 5V21L12 18L19 21V5C19 3.9 18.1 3 17 3Z"
-                  />
-                </svg>
-              </Icon>
+              <Icon size="medium" name="contentBookmark" color="ui.gray.dark" />
             )
           }
         />

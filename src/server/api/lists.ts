@@ -106,8 +106,6 @@ export async function createList({
   description?: string
 }) {
   const path = "/list"
-  // TO DO: Add handling for default first list
-  // (listName = "My workspace (default list)")
   const body = {
     listName,
     description,

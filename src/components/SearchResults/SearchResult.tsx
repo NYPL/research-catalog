@@ -101,9 +101,8 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
       <CardContent data-testid="card-content">
         <Box
           sx={{
-            p: {
-              display: "inline-block",
-            },
+            div: { display: "inline-block" },
+            p: { display: "inline-block" },
           }}
         >
           {joinedMetadata}

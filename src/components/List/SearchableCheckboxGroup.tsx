@@ -72,6 +72,7 @@ export const SearchableCheckboxGroup = ({
         mb="0"
         labelText={label}
         name={""}
+        sx={{ legend: { paddingBottom: "xs" } }}
       >
         {filteredItems?.map((item) => (
           <Flex key={item.id} justifyContent="space-between">
