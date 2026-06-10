@@ -204,7 +204,7 @@ describe("username form", () => {
 
     await waitFor(() => {
       expect(mockSetUsernameStatus).toHaveBeenCalledWith(
-        STATIC_STATUS_MESSAGES["username-failure"]
+        STATIC_STATUS_MESSAGES.usernameFailure
       )
     })
   })

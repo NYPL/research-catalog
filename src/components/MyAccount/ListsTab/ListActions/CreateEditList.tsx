@@ -103,8 +103,8 @@ export const CreateEditListModal = ({
         }
         setStatus(
           isEdit
-            ? STATIC_STATUS_MESSAGES["account-success"]
-            : STATIC_STATUS_MESSAGES["create-list-success"]
+            ? STATIC_STATUS_MESSAGES.accountSuccess
+            : STATIC_STATUS_MESSAGES.createListSuccess
         )
       } else {
         if (isEdit) {
@@ -113,8 +113,8 @@ export const CreateEditListModal = ({
         }
         setStatus(
           isEdit
-            ? STATIC_STATUS_MESSAGES["account-failure"]
-            : STATIC_STATUS_MESSAGES["create-list-failure"]
+            ? STATIC_STATUS_MESSAGES.accountFailure
+            : STATIC_STATUS_MESSAGES.createListFailure
         )
       }
     } catch (error) {

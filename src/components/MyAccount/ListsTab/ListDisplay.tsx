@@ -113,9 +113,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
             ...updatedAccountData,
             lists: updatedLists,
           })
-          setStatus(STATIC_STATUS_MESSAGES["delete-list-success"])
+          setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
         } else {
-          setStatus(STATIC_STATUS_MESSAGES["delete-list-failure"])
+          setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
           closeModal()
         }
       } catch (error) {
@@ -224,9 +224,9 @@ const ListDisplay = ({ list }: { list?: List }) => {
                       "_blank"
                     )
                   }
-                  setStatus(STATIC_STATUS_MESSAGES["duplicate-list-success"])
+                  setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
                 } else {
-                  setStatus(STATIC_STATUS_MESSAGES["duplicate-list-failure"])
+                  setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
                 }
                 setPersistentFocus(idConstants.listStatusBanner)
               } catch (error) {

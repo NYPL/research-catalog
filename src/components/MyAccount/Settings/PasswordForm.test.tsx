@@ -115,7 +115,7 @@ describe("Pin/password form", () => {
     fireEvent.click(submitButton)
     await waitFor(() =>
       expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
-        STATIC_STATUS_MESSAGES["password-incorrect-failure"]
+        STATIC_STATUS_MESSAGES.passwordIncorrectFailure
       )
     )
   })
@@ -147,7 +147,7 @@ describe("Pin/password form", () => {
     fireEvent.click(submitButton)
     await waitFor(() =>
       expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
-        STATIC_STATUS_MESSAGES["password-invalid-failure"]
+        STATIC_STATUS_MESSAGES.passwordInvalidFailure
       )
     )
   })

@@ -3,51 +3,51 @@ import Link from "../components/Link/Link"
 import type { StatusBannerState } from "../components/MyAccount/Settings/StatusBanner"
 
 export type StaticStatusKey =
-  | "duplicate-list-success"
-  | "duplicate-list-failure"
-  | "delete-list-success"
-  | "delete-list-failure"
-  | "save-record-failure"
-  | "list-changes-success"
-  | "list-changes-failure"
-  | "remove-record-failure"
-  | "account-success"
-  | "account-failure"
-  | "create-list-success"
-  | "create-list-failure"
-  | "password-incorrect-failure"
-  | "password-invalid-failure"
-  | "username-failure"
+  | "duplicateListSuccess"
+  | "duplicateListFailure"
+  | "deleteListSuccess"
+  | "deleteListFailure"
+  | "saveRecordFailure"
+  | "listChangesSuccess"
+  | "listChangesFailure"
+  | "removeRecordFailure"
+  | "accountSuccess"
+  | "accountFailure"
+  | "createListSuccess"
+  | "createListFailure"
+  | "passwordIncorrectFailure"
+  | "passwordInvalidFailure"
+  | "usernameFailure"
 
 export const STATIC_STATUS_MESSAGES: Record<
   StaticStatusKey,
   StatusBannerState
 > = {
-  "duplicate-list-success": {
+  duplicateListSuccess: {
     type: "success",
     message: <Text marginBottom={0}>Your list has been duplicated.</Text>,
   },
-  "duplicate-list-failure": {
+  duplicateListFailure: {
     type: "failure",
     message: <Text marginBottom={0}>Your list could not be duplicated.</Text>,
   },
-  "delete-list-success": {
+  deleteListSuccess: {
     type: "success",
     message: <Text marginBottom={0}>Your list has been deleted.</Text>,
   },
-  "delete-list-failure": {
+  deleteListFailure: {
     type: "failure",
     message: <Text marginBottom={0}>Your list could not be deleted.</Text>,
   },
-  "create-list-success": {
+  createListSuccess: {
     type: "success",
     message: <Text marginBottom={0}>List created.</Text>,
   },
-  "create-list-failure": {
+  createListFailure: {
     type: "failure",
     message: <Text marginBottom={0}>List creation failed. Try again.</Text>,
   },
-  "list-changes-success": {
+  listChangesSuccess: {
     type: "success",
     message: (
       <Text marginBottom={0}>
@@ -56,7 +56,7 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
-  "list-changes-failure": {
+  listChangesFailure: {
     type: "failure",
     message: (
       <Text>
@@ -69,19 +69,19 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
-  "save-record-failure": {
+  saveRecordFailure: {
     type: "failure",
     message: <Text marginBottom={0}>This record could not be saved.</Text>,
   },
-  "remove-record-failure": {
+  removeRecordFailure: {
     type: "failure",
     message: <Text marginBottom={0}>This record could not be removed.</Text>,
   },
-  "account-success": {
+  accountSuccess: {
     type: "success",
     message: <Text marginBottom={0}>Your changes were saved.</Text>,
   },
-  "account-failure": {
+  accountFailure: {
     type: "failure",
     message: (
       <Text marginBottom={0}>
@@ -93,7 +93,7 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
-  "password-incorrect-failure": {
+  passwordIncorrectFailure: {
     type: "failure",
     message: (
       <Text marginBottom={0}>
@@ -105,7 +105,7 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
-  "password-invalid-failure": {
+  passwordInvalidFailure: {
     type: "failure",
     message: (
       <Text marginBottom={0}>
@@ -117,7 +117,7 @@ export const STATIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   },
-  "username-failure": {
+  usernameFailure: {
     type: "failure",
     message: (
       <Text marginBottom={0}>
@@ -133,15 +133,15 @@ export const STATIC_STATUS_MESSAGES: Record<
 
 // Statii that require a param to set a linked value.
 export type DynamicStatusKey =
-  | "save-record-success"
-  | "remove-record-success"
-  | "account-specific-failure"
+  | "saveRecordSuccess"
+  | "removeRecordSuccess"
+  | "accountSpecificFailure"
 
 export const DYNAMIC_STATUS_MESSAGES: Record<
   DynamicStatusKey,
   (param: string) => StatusBannerState
 > = {
-  "save-record-success": (listId: string) => ({
+  saveRecordSuccess: (listId: string) => ({
     type: "success",
     message: (
       <Text marginBottom={0}>
@@ -165,7 +165,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   }),
-  "remove-record-success": (listId: string) => ({
+  removeRecordSuccess: (listId: string) => ({
     type: "success",
     message: (
       <Text marginBottom={0}>
@@ -189,7 +189,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
       </Text>
     ),
   }),
-  "account-specific-failure": (message: string) => ({
+  accountSpecificFailure: (message: string) => ({
     type: "failure",
     message: (
       <Text marginBottom={0}>

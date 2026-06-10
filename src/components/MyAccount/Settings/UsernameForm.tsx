@@ -85,19 +85,19 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
       const responseMessage = await response.json()
       if (responseMessage !== "Username taken" && response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setUsernameStatus(STATIC_STATUS_MESSAGES["account-success"])
+        setUsernameStatus(STATIC_STATUS_MESSAGES.accountSuccess)
         setusernameInSierra(submissionInput)
         setTempUsername(submissionInput)
       } else {
         setUsernameStatus(
           responseMessage === "Username taken"
-            ? STATIC_STATUS_MESSAGES["username-failure"]
-            : STATIC_STATUS_MESSAGES["account-failure"]
+            ? STATIC_STATUS_MESSAGES.usernameFailure
+            : STATIC_STATUS_MESSAGES.accountFailure
         )
         setTempUsername(usernameInSierra)
       }
     } catch (error) {
-      setUsernameStatus(STATIC_STATUS_MESSAGES["account-failure"])
+      setUsernameStatus(STATIC_STATUS_MESSAGES.accountFailure)
       console.error("Error submitting username:", error)
     } finally {
       setIsLoading(false)

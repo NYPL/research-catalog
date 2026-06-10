@@ -128,11 +128,11 @@ const SettingsSelectForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus(STATIC_STATUS_MESSAGES["account-success"])
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
         setSelection(tempSelection)
         setTempSelection(tempSelection)
       } else {
-        setStatus(STATIC_STATUS_MESSAGES["account-failure"])
+        setStatus(STATIC_STATUS_MESSAGES.accountFailure)
         setTempSelection(tempSelection)
       }
     } catch (error) {

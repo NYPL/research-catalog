@@ -127,9 +127,9 @@ export const ManageBibInListMenu = ({
           })
           setSelectedLists((prev) => [...prev, data.list.id])
         }
-        setListCreationStatus(STATIC_STATUS_MESSAGES["create-list-success"])
+        setListCreationStatus(STATIC_STATUS_MESSAGES.createListSuccess)
       } else {
-        setListCreationStatus(STATIC_STATUS_MESSAGES["create-list-failure"])
+        setListCreationStatus(STATIC_STATUS_MESSAGES.createListFailure)
       }
     } catch (error) {
       console.error("Error creating list:", error)
@@ -232,10 +232,10 @@ export const ManageBibInListMenu = ({
 
           return { ...data, lists: updatedLists }
         })
-        setStatus(STATIC_STATUS_MESSAGES["list-changes-success"])
+        setStatus(STATIC_STATUS_MESSAGES.listChangesSuccess)
         setPersistentFocus(idConstants.listStatusBanner)
       } else {
-        setStatus(STATIC_STATUS_MESSAGES["list-changes-failure"])
+        setStatus(STATIC_STATUS_MESSAGES.listChangesFailure)
         setPersistentFocus(idConstants.listStatusBanner)
       }
     } catch (error) {

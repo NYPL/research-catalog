@@ -139,14 +139,14 @@ export const ManageBibInList = ({
           }
           setStatus(
             isSaved
-              ? DYNAMIC_STATUS_MESSAGES["remove-record-success"](defaultListId)
-              : DYNAMIC_STATUS_MESSAGES["save-record-success"](defaultListId)
+              ? DYNAMIC_STATUS_MESSAGES.removeRecordSuccess(defaultListId)
+              : DYNAMIC_STATUS_MESSAGES.saveRecordSuccess(defaultListId)
           )
         } else {
           setStatus(
             isSaved
-              ? STATIC_STATUS_MESSAGES["remove-record-failure"]
-              : STATIC_STATUS_MESSAGES["save-record-failure"]
+              ? STATIC_STATUS_MESSAGES.removeRecordFailure
+              : STATIC_STATUS_MESSAGES.saveRecordFailure
           )
         }
       } catch (error) {
@@ -158,8 +158,8 @@ export const ManageBibInList = ({
         )
         setStatus(
           isSaved
-            ? STATIC_STATUS_MESSAGES["remove-record-failure"]
-            : STATIC_STATUS_MESSAGES["save-record-failure"]
+            ? STATIC_STATUS_MESSAGES.removeRecordFailure
+            : STATIC_STATUS_MESSAGES.saveRecordFailure
         )
       } finally {
         setIsLoading(false)

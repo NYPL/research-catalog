@@ -137,13 +137,13 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       const errorMessage = await response.json()
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus(STATIC_STATUS_MESSAGES["account-success"])
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
       } else {
         if (errorMessage) {
           errorMessage.startsWith("Invalid parameter")
             ? // Returning a more user-friendly error message.
-              setStatus(STATIC_STATUS_MESSAGES["password-incorrect-failure"])
-            : setStatus(STATIC_STATUS_MESSAGES["password-invalid-failure"])
+              setStatus(STATIC_STATUS_MESSAGES.passwordIncorrectFailure)
+            : setStatus(STATIC_STATUS_MESSAGES.passwordInvalidFailure)
         }
       }
     } catch (error) {

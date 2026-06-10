@@ -73,10 +73,10 @@ const ListActionsMenu = ({
             ...updatedAccountData,
             lists: updatedLists,
           })
-          setStatus(STATIC_STATUS_MESSAGES["delete-list-success"])
+          setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
           setPersistentFocus(idConstants.listStatusBanner)
         } else {
-          setStatus(STATIC_STATUS_MESSAGES["delete-list-failure"])
+          setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
           setPersistentFocus(idConstants.listStatusBanner)
         }
       } catch (error) {
@@ -127,9 +127,9 @@ const ListActionsMenu = ({
                 lists: [data.list, ...lists],
               })
             }
-            setStatus(STATIC_STATUS_MESSAGES["duplicate-list-success"])
+            setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
           } else {
-            setStatus(STATIC_STATUS_MESSAGES["duplicate-list-failure"])
+            setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
           }
         } catch (error) {
           console.error("Error duplicating list:", error)

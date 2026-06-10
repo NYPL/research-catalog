@@ -174,11 +174,11 @@ const SettingsInputForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus(STATIC_STATUS_MESSAGES["account-success"])
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
         setInputs([...validInputs])
         setTempInputs([...validInputs])
       } else {
-        setStatus(STATIC_STATUS_MESSAGES["account-failure"])
+        setStatus(STATIC_STATUS_MESSAGES.accountFailure)
         setTempInputs([...inputs])
       }
     } catch (error) {

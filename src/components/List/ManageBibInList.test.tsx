@@ -123,7 +123,7 @@ describe("ManageBibInList", () => {
 
     await waitFor(() => {
       expect(mockSetStatus).toHaveBeenLastCalledWith(
-        DYNAMIC_STATUS_MESSAGES["save-record-success"]("list-1")
+        DYNAMIC_STATUS_MESSAGES.saveRecordSuccess("list-1")
       )
     })
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
@@ -153,7 +153,7 @@ describe("ManageBibInList", () => {
 
     await waitFor(() => {
       expect(mockSetStatus).toHaveBeenCalledWith(
-        DYNAMIC_STATUS_MESSAGES["remove-record-success"]("list-1")
+        DYNAMIC_STATUS_MESSAGES.removeRecordSuccess("list-1")
       )
     })
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
@@ -186,7 +186,7 @@ describe("ManageBibInList", () => {
 
     await waitFor(() => {
       expect(mockSetStatus).toHaveBeenCalledWith(
-        STATIC_STATUS_MESSAGES["save-record-failure"]
+        STATIC_STATUS_MESSAGES.saveRecordFailure
       )
     })
   })

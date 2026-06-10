@@ -138,7 +138,7 @@ describe("ManageBibInListMenu", () => {
 
     await waitFor(() => {
       expect(mockSetStatus).toHaveBeenCalledWith(
-        STATIC_STATUS_MESSAGES["list-changes-success"]
+        STATIC_STATUS_MESSAGES.listChangesSuccess
       )
     })
     expect(mockOnClose).toHaveBeenCalled()

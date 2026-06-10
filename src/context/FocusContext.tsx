@@ -77,9 +77,7 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
   )
 
   useEffect(() => {
-    setTimeout(() => {
-      setIsClient(true)
-    }, 100)
+    setIsClient(true)
   }, [])
 
   return (
