@@ -169,7 +169,6 @@
     tbody > tr > td,
     tbody > tr > td:last-of-type {
       width: auto;
-      margin-left: auto;
     }
   }
 }
@@ -195,6 +194,7 @@
   }
   tbody > tr > td:last-of-type {
     padding-top: 8px;
+    padding-right: 8px;
     padding-bottom: 8px;
   }
   thead > tr > th:last-of-type {
