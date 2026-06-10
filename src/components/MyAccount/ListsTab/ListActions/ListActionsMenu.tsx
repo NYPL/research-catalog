@@ -74,11 +74,10 @@ const ListActionsMenu = ({
             lists: updatedLists,
           })
           setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
-          setPersistentFocus(idConstants.listStatusBanner)
         } else {
           setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
-          setPersistentFocus(idConstants.listStatusBanner)
         }
+        setPersistentFocus(idConstants.listStatusBanner)
       } catch (error) {
         console.error("Error deleting list:", error)
       } finally {
@@ -131,6 +130,7 @@ const ListActionsMenu = ({
           } else {
             setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
           }
+          setPersistentFocus(idConstants.listStatusBanner)
         } catch (error) {
           console.error("Error duplicating list:", error)
         }
