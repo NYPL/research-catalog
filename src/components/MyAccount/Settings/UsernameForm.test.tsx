@@ -7,6 +7,7 @@ import {
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import UsernameForm from "./UsernameForm"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { FocusProvider } from "../../../context/FocusContext"
 
 describe("username form", () => {
   const mockSetUsernameStatus = jest.fn()
@@ -22,31 +23,35 @@ describe("username form", () => {
   })
 
   const component = (
-    <PatronDataProvider
-      value={{
-        patron: processedPatron,
-        pickupLocations: filteredPickupLocations,
-      }}
-    >
-      <UsernameForm
-        patron={processedPatron}
-        setUsernameStatus={mockSetUsernameStatus}
-      />
-    </PatronDataProvider>
+    <FocusProvider>
+      <PatronDataProvider
+        value={{
+          patron: processedPatron,
+          pickupLocations: filteredPickupLocations,
+        }}
+      >
+        <UsernameForm
+          patron={processedPatron}
+          setUsernameStatus={mockSetUsernameStatus}
+        />
+      </PatronDataProvider>
+    </FocusProvider>
   )
 
   const noUsernameComponent = (
-    <PatronDataProvider
-      value={{
-        patron: emptyPatron,
-        pickupLocations: filteredPickupLocations,
-      }}
-    >
-      <UsernameForm
-        patron={emptyPatron}
-        setUsernameStatus={mockSetUsernameStatus}
-      />
-    </PatronDataProvider>
+    <FocusProvider>
+      <PatronDataProvider
+        value={{
+          patron: emptyPatron,
+          pickupLocations: filteredPickupLocations,
+        }}
+      >
+        <UsernameForm
+          patron={emptyPatron}
+          setUsernameStatus={mockSetUsernameStatus}
+        />
+      </PatronDataProvider>
+    </FocusProvider>
   )
 
   it("renders correctly with initial username", () => {

@@ -39,6 +39,10 @@ export const idConstants = {
   listRecordsHeading: "list-records-heading",
   listStatusBanner: "list-status-banner",
   accountStatusBanner: "account-status-banner",
+  listMenuStatusBanner: "list-menu-status-banner",
+  usernameStatusBanner: "username-status-banner",
+  createListNameInput: "list-name-input",
+  createListButton: "create-list",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
