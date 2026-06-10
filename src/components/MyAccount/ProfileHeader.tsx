@@ -11,21 +11,15 @@ import type { Patron } from "../../types/myAccountTypes"
 import type { IconListElementPropType } from "./IconListElement"
 import { buildListElementsWithIcons } from "./IconListElement"
 import UsernameForm from "./Settings/UsernameForm"
-import { useEffect, useRef, useState } from "react"
+import { useState } from "react"
 import { StatusBanner } from "./Settings/StatusBanner"
 import type { StatusBannerState } from "./Settings/StatusBanner"
+import { idConstants } from "../../context/FocusContext"
 
 const ProfileHeader = ({ patron }: { patron: Patron }) => {
   const { isLargerThanMobile } = useNYPLBreakpoints()
   const [usernameStatus, setUsernameStatus] =
     useState<StatusBannerState | null>(null)
-  const usernameBannerRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    if (usernameStatus && usernameBannerRef.current) {
-      usernameBannerRef.current.focus()
-    }
-  }, [usernameStatus])
 
   const profileData = (
     [
@@ -71,7 +65,7 @@ const ProfileHeader = ({ patron }: { patron: Patron }) => {
     <>
       {usernameStatus && (
         <div
-          ref={usernameBannerRef}
+          id={idConstants.usernameStatusBanner}
           tabIndex={-1}
           style={{ marginTop: "32px", marginBottom: "32px" }}
         >

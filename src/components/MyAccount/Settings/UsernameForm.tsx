@@ -16,6 +16,7 @@ import EditButton from "./EditButton"
 import AddButton from "./AddButton"
 import { BASE_URL } from "../../../config/constants"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface UsernameFormProps {
   patron: Patron
@@ -27,6 +28,7 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
+  const { setPersistentFocus } = useFocusContext()
 
   /**
    * In Sierra, the user NOT having a username is represented by the empty string: username = "".
@@ -97,6 +99,7 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
         )
         setTempUsername(usernameInSierra)
       }
+      setPersistentFocus(idConstants.usernameStatusBanner)
     } catch (error) {
       setUsernameStatus(STATIC_STATUS_MESSAGES.accountFailure)
       console.error("Error submitting username:", error)

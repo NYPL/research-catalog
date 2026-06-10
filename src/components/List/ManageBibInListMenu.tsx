@@ -18,7 +18,7 @@ import {
   DrawerFooter,
   DrawerHeader,
 } from "@chakra-ui/react"
-import { useContext, useState, useEffect, useRef } from "react"
+import { useContext, useState, useEffect } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import { SearchableCheckboxGroup } from "./SearchableCheckboxGroup"
@@ -49,18 +49,9 @@ export const ManageBibInListMenu = ({
   const lists = updatedAccountData?.lists || []
   const { setPersistentFocus } = useFocusContext()
 
-  // Create list form banner and button focus management
-  const createListButtonRef = useRef<HTMLButtonElement>(null)
-  const internalBannerRef = useRef<HTMLDivElement>(null)
+  // Create list form status banner
   const [listCreationStatus, setListCreationStatus] =
     useState<StatusBannerState | null>(null)
-  useEffect(() => {
-    if (listCreationStatus && internalBannerRef.current) {
-      setTimeout(() => {
-        internalBannerRef.current?.focus()
-      }, 100)
-    }
-  }, [listCreationStatus])
 
   const [listName, setListName] = useState(list?.listName || "")
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -72,15 +63,6 @@ export const ManageBibInListMenu = ({
       )
       .map((l: any) => l.id) || []
   )
-
-  // Keeping focus within the create list form
-  useEffect(() => {
-    if (showCreateForm) {
-      setTimeout(() => {
-        document.getElementById("list-name")?.focus()
-      }, 50)
-    }
-  }, [showCreateForm])
 
   // Reset whole menu state on open
   useEffect(() => {
@@ -131,6 +113,7 @@ export const ManageBibInListMenu = ({
       } else {
         setListCreationStatus(STATIC_STATUS_MESSAGES.createListFailure)
       }
+      setPersistentFocus(idConstants.listMenuStatusBanner)
     } catch (error) {
       console.error("Error creating list:", error)
     } finally {
@@ -233,11 +216,10 @@ export const ManageBibInListMenu = ({
           return { ...data, lists: updatedLists }
         })
         setStatus(STATIC_STATUS_MESSAGES.listChangesSuccess)
-        setPersistentFocus(idConstants.listStatusBanner)
       } else {
         setStatus(STATIC_STATUS_MESSAGES.listChangesFailure)
-        setPersistentFocus(idConstants.listStatusBanner)
       }
+      setPersistentFocus(idConstants.listStatusBanner)
     } catch (error) {
       console.error("Error updating bib in lists:", error)
     } finally {
@@ -314,7 +296,7 @@ export const ManageBibInListMenu = ({
           >
             <FormField>
               <TextInput
-                id="list-name"
+                id={idConstants.createListNameInput}
                 value={listName}
                 labelText="List name (required)"
                 showLabel={true}
@@ -345,7 +327,7 @@ export const ManageBibInListMenu = ({
                   variant="secondary"
                   onClick={() => {
                     setShowCreateForm(false)
-                    setTimeout(() => createListButtonRef.current?.focus(), 100)
+                    setPersistentFocus(idConstants.createListButton)
                   }}
                   sx={{ background: "white" }}
                 >
@@ -356,10 +338,13 @@ export const ManageBibInListMenu = ({
           </Form>
         ) : (
           <Button
-            ref={createListButtonRef}
+            id={idConstants.createListButton}
             variant="text"
             paddingLeft="xs"
-            onClick={() => setShowCreateForm(true)}
+            onClick={() => {
+              setShowCreateForm(true)
+              setPersistentFocus(idConstants.createListNameInput)
+            }}
           >
             <Icon name="plus" size="medium" align="left" />
             Create new list
@@ -368,7 +353,7 @@ export const ManageBibInListMenu = ({
 
         <div
           tabIndex={-1}
-          ref={internalBannerRef}
+          id={idConstants.listMenuStatusBanner}
           style={{ marginTop: "8px", marginBottom: "16px" }}
         >
           {listCreationStatus && (
