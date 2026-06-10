@@ -27,54 +27,74 @@ export default class ItemTableData {
     this.isArchiveCollection = itemTableParams.isArchiveCollection
     this.collection = itemTableParams.collection || null
   }
+
   /**
-   * TODO: Consolidate tableHeadings and tableData into a single object to avoid relying on consistent ordering between the two.
-   * Add getter functions to build the array structures expected by the tableHeadings and tableData props
-   * Extra credit: Create separate prop constructors for Bib page and Search Results to deprecate the excessive showColumn helpers.
+   * Returns an object with table headings as the keys, and the table data for each item as the values.
+   * The presence of certain table headings/columns are determined by whether the table is to be displayed on a
+   * search results or bib page
    */
+  getTable(): { [key: string]: ReactElement[] } {
+    const callNumberCells = this.items?.map((item) =>
+      ItemTableCell({
+        children: item.callNumber
+          ? `${item.callNumber}
+              }`
+          : "",
+      })
+    )
+    const volumeCells = this.items?.map((item) =>
+      ItemTableCell({ children: item.volume })
+    )
+    const statusCells = this.items?.map((item) => StatusLinks({ item }))
+    const accessMessageCells = this.items?.map((item) =>
+      ItemTableCell({ children: item.accessMessage })
+    )
+    const locationCells = this.items?.map((item) =>
+      ItemTableCell({ children: item.location?.prefLabel })
+    )
+    const divisionCells = this.items?.map(() =>
+      ItemTableCell(
+        { children: this.collection?.prefLabel },
+        `https://nypl.org/${this.collection?.locationsPath}`
+      )
+    )
+
+    const volumeColumnWrapped = this.showVolumeColumn() && {
+      [this.volumeColumnHeading()]: volumeCells,
+    }
+    const divisionColumnWrapped = this.showDivisionColumn() && {
+      Division: divisionCells,
+    }
+
+    return this.inSearchResult
+      ? {
+          "Call Number": callNumberCells,
+          ...volumeColumnWrapped,
+          "Item Location": locationCells,
+          ...divisionColumnWrapped,
+        }
+      : {
+          Status: statusCells,
+          ...volumeColumnWrapped,
+          Access: accessMessageCells,
+          "Call Number": callNumberCells,
+          "Item Location": locationCells,
+        }
+  }
+
   get tableHeadings(): string[] {
-    return [
-      ...(this.showStatusColumn() ? ["Status"] : []),
-      ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
-      ...(this.showAccessColumn() ? ["Access"] : []),
-      "Call number",
-      "Item location",
-      ...(this.showDivisionColumn() ? ["Division"] : []),
-    ]
+    return Object.keys(this.getTable())
   }
 
   get tableData(): ReactElement[][] {
-    return this.items?.map((item) => {
-      return [
-        ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
-        ...(this.showVolumeColumn()
-          ? [ItemTableCell({ children: item.volume })]
-          : []),
-        ...(this.showAccessColumn()
-          ? [ItemTableCell({ children: item.accessMessage })]
-          : []),
-        ItemTableCell({
-          children: item.callNumber
-            ? `${item.callNumber}
-              }`
-            : "",
-        }),
-        ItemTableCell({ children: item.location.prefLabel }),
-        ...(this.showDivisionColumn()
-          ? [
-              ItemTableCell(
-                { children: this.collection.prefLabel },
-                `https://nypl.org/${this.collection.locationsPath}`
-              ),
-            ]
-          : []),
-      ]
-    })
+    const tableObject = this.getTable()
+    return this.items?.map((_, itemIndex) =>
+      Object.keys(tableObject).map((heading) => tableObject[heading][itemIndex])
+    )
   }
 
   showDivisionColumn(): boolean {
     return (
-      this.inSearchResult &&
       this.collection &&
       this.collection.prefLabel &&
       this.items?.some((item) => !item.isPartnerReCAP())
@@ -83,14 +103,6 @@ export default class ItemTableData {
 
   showVolumeColumn(): boolean {
     return this.items?.some((item) => item.volume)
-  }
-
-  showStatusColumn(): boolean {
-    return !this.inSearchResult
-  }
-
-  showAccessColumn(): boolean {
-    return !this.inSearchResult
   }
 
   volumeColumnHeading(): string {

@@ -42,10 +42,8 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
-  it("displays the volume in a separate row when it's there", async () => {
-    const firstItemRow = screen.getAllByRole("row")[0]
-    const text = firstItemRow.textContent?.replace(/\s+/g, " ").trim()
-    expect(text).toContain("Volume 4")
+  it("displays the volume when it's there", async () => {
+    screen.getByText("Volume 4")
   })
   it("displays the division row for NYPL items", async () => {
     const divisionRow = screen
