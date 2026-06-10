@@ -55,7 +55,8 @@ export default class ItemTableData {
     const divisionCells = this.items?.map(() =>
       ItemTableCell(
         { children: this.collection?.prefLabel },
-        `https://nypl.org/${this.collection?.locationsPath}`
+        this.collection?.locationsPath &&
+          `https://nypl.org/${this.collection.locationsPath}`
       )
     )
 
@@ -95,8 +96,7 @@ export default class ItemTableData {
 
   showDivisionColumn(): boolean {
     return (
-      this.collection &&
-      this.collection.prefLabel &&
+      this.collection?.prefLabel &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
   }
