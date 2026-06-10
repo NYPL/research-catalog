@@ -14,6 +14,7 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 describe("Advanced search form", () => {
   beforeEach(async () => {
     render(<AdvancedSearch isAuthenticated={true} />)
+    await delay(200)
   })
   const submit = () => {
     fireEvent.click(screen.getByTestId("submit-advanced-search-button"))
@@ -67,6 +68,8 @@ describe("Advanced search form", () => {
   }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
+    // Flush any pending focus delays triggered by clearing the form
+    await delay(200)
   })
 
   it("displays alert when no fields are submitted", () => {
@@ -171,6 +174,8 @@ describe("Advanced search form", () => {
       "Division multiselect, 1 item selected"
     )
     await userEvent.click(screen.getByText("Clear fields"))
+    // Allow focus delay to resolve before assertions
+    await delay(200)
     ;[
       keywordInput,
       contributorInput,
