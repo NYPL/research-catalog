@@ -11,6 +11,7 @@ import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
+import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 
 interface ContributorResultsProps {
   bannerNotification?: string
@@ -97,7 +98,16 @@ export async function getServerSideProps({ req, query, params }) {
     field: "contributorLiteral",
   })
 
-  const results = await fetchSearchResults(mapQueryToSearchParams(baseQuery))
+  const searchParams = mapQueryToSearchParams(baseQuery)
+
+  const results = await fetchSearchResults(searchParams)
+
+  logSingleFilterNoResults(
+    "browse authors gSSP",
+    results,
+    searchParams,
+    req.headers?.referer
+  )
 
   if (results.status !== 200) {
     return { props: { errorStatus: results.status } }

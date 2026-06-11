@@ -13,11 +13,16 @@ import type {
 import { SITE_NAME } from "../../src/config/constants"
 import initializePatronTokenAuth from "../../src/server/auth"
 import { useFocusContext, idConstants } from "../../src/context/FocusContext"
-import type { HTTPStatusCode } from "../../src/types/appTypes"
+import type {
+  APIError,
+  APIErrorName,
+  HTTPStatusCode,
+} from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import MyAccount from "../../src/models/MyAccount"
+import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
   bannerNotification?: string
@@ -25,6 +30,7 @@ interface SearchPageProps {
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
   accountData?: any
+  errorName?: APIErrorName | null
 }
 
 /**
@@ -36,6 +42,7 @@ export default function SearchPage({
   isAuthenticated,
   errorStatus = null,
   accountData,
+  errorName = null,
 }: SearchPageProps) {
   const { push, query } = useRouter()
   // TODO: Move this to global context
@@ -71,6 +78,7 @@ export default function SearchPage({
     <PatronDataProvider value={accountData || null}>
       <Search
         errorStatus={errorStatus}
+        errorName={errorName}
         results={results}
         metadataTitle={`Search | ${SITE_NAME}`}
         activePage="search"
@@ -87,11 +95,27 @@ export default function SearchPage({
 export async function getServerSideProps({ req, query }) {
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
-  const results = await fetchSearchResults(mapQueryToSearchParams(query))
+  const searchParams = mapQueryToSearchParams(query)
+
+  const results = await fetchSearchResults(searchParams)
+
+  logSingleFilterNoResults(
+    "search page gSSP",
+    results,
+    searchParams,
+    req.headers?.referer
+  )
 
   // Direct to error display according to status
   if (results.status !== 200) {
-    return { props: { errorStatus: results.status } }
+    return {
+      props: {
+        errorStatus: (results as APIError).status,
+        ...((results as APIError).name && {
+          errorName: (results as APIError).name,
+        }),
+      },
+    }
   }
 
   // Check for `redirectOnMatch` trigger:

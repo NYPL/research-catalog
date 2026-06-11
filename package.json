@@ -1,6 +1,6 @@
 {
   "name": "research-catalog",
-  "version": "1.9.0",
+  "version": "2.0.0",
   "scripts": {
     "dev": "AWS_PROFILE=nypl-digital-dev next dev -p 8080",
     "build": "next build",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@nypl/design-system-react-components": "4.2.0",
     "@aws-sdk/client-ses": "3.922.0",
+    "@newrelic/next": "0.10.0",
     "@nypl/node-utils": "1.0.1",
     "@nypl/nypl-data-api-client": "1.0.5",
     "@nypl/pickup-time-estimator": "1.5.2",

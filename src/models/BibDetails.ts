@@ -73,8 +73,7 @@ export default class BibDetails {
     if (owner) return [owner]
   }
 
-  // Build a linked series or author field with link and display text,
-  // defaulting to the literal field
+  // Build a linked series or author field with link and display text
   buildLinkedDisplayFieldDetail(literalField: string): LinkedBibDetail | null {
     const {
       label: displayLabel,
@@ -91,24 +90,11 @@ export default class BibDetails {
       })
     )
 
-    // Literals (fallback)
-    const literalValues: string[] = this.bib[literalField] || []
-    const literals: BibDetailURL[] = literalValues.map((name) => ({
-      url: searchUrl(name),
-      urlText: name,
-    }))
-
     return displayValues?.length > 0
       ? {
           label: displayLabel,
           link: "internal",
           value: displayValues,
-        }
-      : literals?.length > 0
-      ? {
-          label: displayLabel,
-          link: "internal",
-          value: literals,
         }
       : null
   }

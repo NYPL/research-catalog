@@ -109,7 +109,7 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
         </Box>
         <div
           tabIndex={-1}
-          id={idConstants.listStatusBanner}
+          id={`${idConstants.listStatusBanner}-${bib.id}`}
           style={{ marginTop: "24px" }}
         >
           {status && (
@@ -138,21 +138,19 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
             gap="grid.m"
             mt="s"
             sx={{
-              "*:first-of-type table": {
+              "& > *:first-of-type table": {
                 borderTop: "none !important",
                 paddingTop: "xs !important",
               },
               paddingBottom: bib.showViewAllItemsLink() ? "s" : "m",
             }}
           >
-            <>
-              {bib.itemTables.map((itemTableData) => (
-                <SearchResultItems
-                  itemTableData={itemTableData}
-                  key={`search-results-item-${itemTableData.items[0].id}`}
-                />
-              ))}
-            </>
+            {bib.itemTables.map((itemTableData) => (
+              <SearchResultItems
+                itemTableData={itemTableData}
+                key={`search-results-item-${itemTableData.items[0].id}`}
+              />
+            ))}
           </SimpleGrid>
         )}
       </CardContent>

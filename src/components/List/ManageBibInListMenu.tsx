@@ -219,7 +219,7 @@ export const ManageBibInListMenu = ({
       } else {
         setStatus(STATIC_STATUS_MESSAGES.listChangesFailure)
       }
-      setPersistentFocus(idConstants.listStatusBanner)
+      setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
     } catch (error) {
       console.error("Error updating bib in lists:", error)
     } finally {
