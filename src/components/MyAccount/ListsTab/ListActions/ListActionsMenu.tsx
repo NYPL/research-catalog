@@ -15,7 +15,7 @@ import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
-import { downloadList } from "../../../../utils/listUtils"
+import { downloadList, duplicateList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
 import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
@@ -105,35 +105,16 @@ const ListActionsMenu = ({
       media: { type: "icon", name: "contentCopy" },
       onClick: async () => {
         setStatus(null)
-        try {
-          const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              patronId: patron.id.toString(),
-              listName: `${list.listName.substring(0, 90)} (copy)`,
-              description: list.description,
-              records: list.records ? list.records.map((r) => r.uri) : [],
-            }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            if (data && data.list) {
-              setUpdatedAccountData({
-                ...updatedAccountData,
-                lists: [data.list, ...lists],
-              })
-            }
-            setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
-          } else {
-            setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
-          }
-          setPersistentFocus(idConstants.listStatusBanner)
-        } catch (error) {
-          console.error("Error duplicating list:", error)
-        }
+        await duplicateList({
+          list,
+          patron,
+          lists,
+          updatedAccountData,
+          setUpdatedAccountData,
+          setStatus,
+          openListInNewTab: false,
+        })
+        setPersistentFocus(idConstants.listStatusBanner)
       },
     },
   ]

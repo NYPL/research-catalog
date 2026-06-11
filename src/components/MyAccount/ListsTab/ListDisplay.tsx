@@ -24,11 +24,12 @@ import type { StatusBannerState } from "../Settings/StatusBanner"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import { BASE_URL } from "../../../config/constants"
 import { EditListButton } from "./ListActions/CreateEditList"
-import { downloadList } from "../../../utils/listUtils"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { downloadList, duplicateList } from "../../../utils/listUtils"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
-const ListDisplay = ({ list }: { list?: List }) => {
+
+const ListDisplay = ({ list }: { list: List }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
@@ -194,44 +195,16 @@ const ListDisplay = ({ list }: { list?: List }) => {
             variant="secondary"
             onClick={async () => {
               setStatus(null)
-              try {
-                const response = await fetch(
-                  `${BASE_URL}/api/account/lists/list`,
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      patronId: patron.id.toString(),
-                      listName: `${list.listName.substring(0, 90)} (copy)`,
-                      description: list.description,
-                      records: list.records
-                        ? list.records.map((r) => r.uri)
-                        : [],
-                    }),
-                  }
-                )
-                if (response.ok) {
-                  const data = await response.json()
-                  if (data && data.list) {
-                    setUpdatedAccountData({
-                      ...updatedAccountData,
-                      lists: [data.list, ...lists],
-                    })
-                    window.open(
-                      `${BASE_URL}/account/lists/${data.list.id}`,
-                      "_blank"
-                    )
-                  }
-                  setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
-                } else {
-                  setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
-                }
-                setPersistentFocus(idConstants.listStatusBanner)
-              } catch (error) {
-                console.error("Error duplicating list:", error)
-              }
+              await duplicateList({
+                list,
+                patron,
+                lists,
+                updatedAccountData,
+                setUpdatedAccountData,
+                setStatus,
+                openListInNewTab: true,
+              })
+              setPersistentFocus(idConstants.listStatusBanner)
             }}
           >
             <Icon name="contentCopy" align="left" size="medium" />

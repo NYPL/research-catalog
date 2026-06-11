@@ -47,13 +47,13 @@ export const CreateEditListModal = ({
     list?.description || ""
   )
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
+  const [canFocusBannerOnClose, setCanFocusBannerOnClose] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setListName(list?.listName || "")
       setListDescription(list?.description || "")
-      setIsSubmitted(false)
+      setCanFocusBannerOnClose(false)
     }
   }, [isOpen, list])
 
@@ -63,8 +63,8 @@ export const CreateEditListModal = ({
       return
 
     setIsSubmitting(true)
-    setIsSubmitted(true)
     setStatus(null)
+    setCanFocusBannerOnClose(true)
     try {
       const isEdit = mode === "edit"
       const url = isEdit
@@ -133,8 +133,8 @@ export const CreateEditListModal = ({
       isOpen={isOpen}
       onClose={onClose}
       aria-labelledby={`${mode} list`}
-      finalFocusRef={isSubmitted ? bannerRef : undefined}
-      returnFocusOnClose={!isSubmitted}
+      finalFocusRef={canFocusBannerOnClose ? bannerRef : undefined}
+      returnFocusOnClose={!canFocusBannerOnClose}
     >
       <ModalOverlay />
       <ModalContent>

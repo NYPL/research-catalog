@@ -68,6 +68,7 @@ describe("Advanced search form", () => {
   }
   afterEach(async () => {
     await userEvent.click(screen.getByText("Clear fields"))
+    await delay(200)
   })
 
   it("displays alert when no fields are submitted", () => {

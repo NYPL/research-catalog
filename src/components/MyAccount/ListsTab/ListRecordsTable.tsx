@@ -94,8 +94,9 @@ const ListRecordsTable = ({
           .join(",")
         if (!uris) continue
         try {
+          const sortParam = canSortWithoutBibData ? "" : `&sort=${activeSort}`
           const response = await fetch(
-            `${BASE_URL}/api/account/lists/records?uris=${uris}`
+            `${BASE_URL}/api/account/lists/records?uris=${uris}${sortParam}`
           )
           if (response.ok) {
             const data = await response.json()
@@ -155,7 +156,7 @@ const ListRecordsTable = ({
       </>,
       record.callNumber,
       record.location,
-      record.addedDate,
+      record.addedFormattedDate,
       <ManageBibInList
         key={record.uri}
         recordId={record.uri}

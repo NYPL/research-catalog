@@ -20,7 +20,7 @@ export interface List {
 
 export interface ListRecord {
   uri: string
-  addedDate: string
+  addedFormattedDate: string
   title: string
   publicationStatement?: string
   creatorLiteral?: string
