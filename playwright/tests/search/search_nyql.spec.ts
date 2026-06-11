@@ -2,13 +2,10 @@ import { test, expect } from "@playwright/test"
 import { SearchPage } from "../../pages/search_page"
 
 let searchPage: SearchPage
-const queryBaseUrl =
-  process.env.PLAYWRIGHT_QUERY_BASE_URL ??
-  "https://train-research-catalog.nypl.org/research/research-catalog"
 
 test.beforeEach(async ({ page }) => {
   searchPage = new SearchPage(page, "")
-  await page.goto(queryBaseUrl)
+  await page.goto("")
 })
 
 test.describe("Query Search", () => {
