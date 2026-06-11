@@ -5,18 +5,17 @@ import { ManageBibInListMenu } from "./ManageBibInListMenu"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import { Popover } from "@chakra-ui/react"
+import { STATIC_STATUS_MESSAGES } from "../../utils/statusUtils"
 
 describe("ManageBibInListMenu", () => {
   let mockOnClose: jest.Mock
   let mockSetStatus: jest.Mock
-  let mockSetStatusMessage: jest.Mock
   let mockSetUpdatedAccountData: jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
     mockOnClose = jest.fn()
     mockSetStatus = jest.fn()
-    mockSetStatusMessage = jest.fn()
     mockSetUpdatedAccountData = jest.fn()
     global.fetch = jest.fn()
   })
@@ -41,7 +40,6 @@ describe("ManageBibInListMenu", () => {
             isOpen={true}
             onClose={mockOnClose}
             setStatus={mockSetStatus}
-            setStatusMessage={mockSetStatusMessage}
             recordId="b12345678"
           />
         </Popover>
@@ -112,7 +110,7 @@ describe("ManageBibInListMenu", () => {
     )
 
     await waitFor(() => {
-      expect(screen.getByText("List created.")).toBeInTheDocument()
+      expect(screen.getByText(/List created/)).toBeInTheDocument()
     })
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
   })
@@ -139,7 +137,9 @@ describe("ManageBibInListMenu", () => {
     expect(global.fetch).toHaveBeenCalledTimes(2)
 
     await waitFor(() => {
-      expect(mockSetStatus).toHaveBeenCalledWith("success")
+      expect(mockSetStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES.listChangesSuccess
+      )
     })
     expect(mockOnClose).toHaveBeenCalled()
   })

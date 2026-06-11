@@ -6,34 +6,35 @@ import {
   processedPatron,
 } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
-import { passwordFormMessages } from "./PasswordForm"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { FocusProvider } from "../../../context/FocusContext"
 
 const mockSettingsState = {
   setStatus: jest.fn(),
-  setStatusMessage: jest.fn(),
   editingField: "",
   setEditingField: jest.fn(),
 }
 const accountFetchSpy = jest.fn()
 
 const component = (
-  <PatronDataProvider
-    testSpy={accountFetchSpy}
-    value={{
-      patron: processedPatron,
-      pickupLocations: filteredPickupLocations,
-    }}
-  >
-    <PasswordForm
-      patronData={processedPatron}
-      settingsState={mockSettingsState}
-    />
-  </PatronDataProvider>
+  <FocusProvider>
+    <PatronDataProvider
+      testSpy={accountFetchSpy}
+      value={{
+        patron: processedPatron,
+        pickupLocations: filteredPickupLocations,
+      }}
+    >
+      <PasswordForm
+        patronData={processedPatron}
+        settingsState={mockSettingsState}
+      />
+    </PatronDataProvider>
+  </FocusProvider>
 )
 
 beforeEach(() => {
   mockSettingsState.setStatus.mockClear()
-  mockSettingsState.setStatusMessage.mockClear()
   mockSettingsState.setEditingField.mockClear()
 })
 
@@ -116,10 +117,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
-    )
-    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
-      passwordFormMessages.INCORRECT
+      expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES.passwordIncorrectFailure
+      )
     )
   })
 
@@ -149,11 +149,9 @@ describe("Pin/password form", () => {
     const submitButton = getByText("Save changes")
     fireEvent.click(submitButton)
     await waitFor(() =>
-      expect(mockSettingsState.setStatus).toHaveBeenCalledTimes(2)
-    )
-    expect(mockSettingsState.setStatus).toHaveBeenNthCalledWith(2, "failure")
-    expect(mockSettingsState.setStatusMessage).toHaveBeenCalledWith(
-      passwordFormMessages.INVALID
+      expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES.passwordInvalidFailure
+      )
     )
   })
 

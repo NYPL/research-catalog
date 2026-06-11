@@ -13,6 +13,8 @@ import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import EditButton from "./EditButton"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface PasswordFormProps {
   patronData: Patron
@@ -24,11 +26,6 @@ interface PasswordFormFieldProps {
   handler: (e) => void
   name: string
   isInvalid?: boolean
-}
-
-export const passwordFormMessages = {
-  INCORRECT: "Incorrect current pin/password.",
-  INVALID: "Invalid new pin/password.",
 }
 
 const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
@@ -75,10 +72,10 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     confirmPassword: "",
     passwordsMatch: true,
   })
-  const { setStatus, setStatusMessage, editingField, setEditingField } =
-    settingsState
+  const { setStatus, editingField, setEditingField } = settingsState
   const editingRef = useRef<HTMLButtonElement | null>()
   const inputRef = useRef<TextInputRefType | null>()
+  const { setPersistentFocus } = useFocusContext()
 
   const cancelEditing = () => {
     setIsEditing(false)
@@ -122,7 +119,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   const submitForm = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("")
+    setStatus(null)
     try {
       const response = await fetch(
         `${BASE_URL}/api/account/update-pin/${patronData.id}`,
@@ -142,15 +139,16 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
       const errorMessage = await response.json()
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus("success")
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
+        setPersistentFocus(idConstants.accountStatusBanner)
       } else {
-        setStatus("failure")
         if (errorMessage) {
           errorMessage.startsWith("Invalid parameter")
             ? // Returning a more user-friendly error message.
-              setStatusMessage(passwordFormMessages.INCORRECT)
-            : setStatusMessage(passwordFormMessages.INVALID)
+              setStatus(STATIC_STATUS_MESSAGES.passwordIncorrectFailure)
+            : setStatus(STATIC_STATUS_MESSAGES.passwordInvalidFailure)
         }
+        setPersistentFocus(idConstants.accountStatusBanner)
       }
     } catch (error) {
       console.error("Error submitting", error)

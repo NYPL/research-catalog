@@ -18,6 +18,8 @@ import type { List } from "../../../../types/listTypes"
 import { downloadList, duplicateList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
+import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../../context/FocusContext"
 
 /**
  * The ListActionsMenu component renders the actions button and menu (with list operations)
@@ -26,17 +28,16 @@ import { CreateEditListModal } from "./CreateEditList"
 const ListActionsMenu = ({
   list,
   setStatus,
-  setStatusMessage,
   bannerRef,
 }: {
   list: List
   setStatus
-  setStatusMessage
   bannerRef?: any
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
   const { patron, lists } = updatedAccountData
+  const { setPersistentFocus } = useFocusContext()
 
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -72,12 +73,11 @@ const ListActionsMenu = ({
             ...updatedAccountData,
             lists: updatedLists,
           })
-          setStatus("success")
-          setStatusMessage("Your list has been deleted.")
+          setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
         } else {
-          setStatus("failure")
-          setStatusMessage("Your list could not be deleted.")
+          setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
         }
+        setPersistentFocus(idConstants.listStatusBanner)
       } catch (error) {
         console.error("Error deleting list:", error)
       } finally {
@@ -85,7 +85,7 @@ const ListActionsMenu = ({
       }
     },
     onCancel: () => {
-      setStatus("")
+      setStatus(null)
       closeModal()
     },
   }
@@ -104,6 +104,7 @@ const ListActionsMenu = ({
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
       onClick: async () => {
+        setStatus(null)
         await duplicateList({
           list,
           patron,
@@ -111,23 +112,25 @@ const ListActionsMenu = ({
           updatedAccountData,
           setUpdatedAccountData,
           setStatus,
-          setStatusMessage,
           openListInNewTab: false,
         })
+        setPersistentFocus(idConstants.listStatusBanner)
       },
     },
-    {
+  ]
+
+  if (list.recordCount > 0) {
+    listOptions.push({
       type: "action",
       id: "download",
       label: "Download",
       media: { type: "icon", name: "download" },
       onClick: async () => {
-        setStatus("")
-        setStatusMessage("")
-        downloadList(list, "modified_date_asc", setStatus, setStatusMessage)
+        setStatus(null)
+        downloadList(list, "modified_date_asc")
       },
-    },
-  ]
+    })
+  }
 
   if (!list.isDefaultList) {
     listOptions.push({
@@ -136,8 +139,7 @@ const ListActionsMenu = ({
       label: "Delete",
       media: { type: "icon", name: "actionDelete" },
       onClick: () => {
-        setStatus("")
-        setStatusMessage("")
+        setStatus(null)
         setModalProps(deleteListModalProps as ConfirmationModalProps)
         openModal()
       },
@@ -148,8 +150,7 @@ const ListActionsMenu = ({
       label: "Edit",
       media: { type: "icon", name: "editorMode" },
       onClick: () => {
-        setStatus("")
-        setStatusMessage("")
+        setStatus(null)
         openEdit()
       },
     })
@@ -178,7 +179,6 @@ const ListActionsMenu = ({
         mode="edit"
         list={list}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
         bannerRef={bannerRef}
       />
     </>

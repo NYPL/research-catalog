@@ -14,15 +14,17 @@ import type {
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
-import { useFocusContext } from "../../../context/FocusContext"
+import { useFocusContext, idConstants } from "../../../context/FocusContext"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List, ListRecordsSort } from "../../../types/listTypes"
-import { useContext, useEffect, useRef, useState } from "react"
-import { StatusBanner, type StatusType } from "../Settings/StatusBanner"
+import { useContext, useRef, useState } from "react"
+import { StatusBanner } from "../Settings/StatusBanner"
+import type { StatusBannerState } from "../Settings/StatusBanner"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import { BASE_URL } from "../../../config/constants"
 import { EditListButton } from "./ListActions/CreateEditList"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { downloadList, duplicateList } from "../../../utils/listUtils"
 
 /* ListDisplay renders the list metadata, list operations, and the ListRecordTable. */
@@ -38,18 +40,9 @@ const ListDisplay = ({ list }: { list: List }) => {
   // Sort state for list records.
   const [activeSort, setActiveSort] = useState("added_date_asc")
 
+  // Manage status banner display for list actions (CreateEditList modal needs explicit ref)
   const bannerRef = useRef<HTMLDivElement>(null)
-
-  // Manage status banner display for list actions
-  const [status, setStatus] = useState<StatusType>("")
-  const [statusMessage, setStatusMessage] = useState<string>("")
-  useEffect(() => {
-    if (status !== "" && bannerRef.current) {
-      setTimeout(() => {
-        bannerRef.current?.focus()
-      }, 100)
-    }
-  }, [status])
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
 
   // DS Modal controls used for Delete list modal
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
@@ -121,9 +114,9 @@ const ListDisplay = ({ list }: { list: List }) => {
             ...updatedAccountData,
             lists: updatedLists,
           })
+          setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
         } else {
-          setStatus("failure")
-          setStatusMessage("Your list could not be deleted.")
+          setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
           closeModal()
         }
       } catch (error) {
@@ -131,7 +124,7 @@ const ListDisplay = ({ list }: { list: List }) => {
       }
     },
     onCancel: () => {
-      setStatus("")
+      setStatus(null)
       closeModal()
     },
   }
@@ -194,14 +187,14 @@ const ListDisplay = ({ list }: { list: List }) => {
           {!list.isDefaultList && (
             <EditListButton
               list={list}
-              bannerRef={bannerRef}
               setStatus={setStatus}
-              setStatusMessage={setStatusMessage}
+              bannerRef={bannerRef}
             />
           )}
           <Button
             variant="secondary"
             onClick={async () => {
+              setStatus(null)
               await duplicateList({
                 list,
                 patron,
@@ -209,41 +202,39 @@ const ListDisplay = ({ list }: { list: List }) => {
                 updatedAccountData,
                 setUpdatedAccountData,
                 setStatus,
-                setStatusMessage,
                 openListInNewTab: true,
               })
+              setPersistentFocus(idConstants.listStatusBanner)
             }}
           >
             <Icon name="contentCopy" align="left" size="medium" />
             Duplicate
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              downloadList(
-                list,
-                activeSort as ListRecordsSort,
-                setStatus,
-                setStatusMessage
-              )
-            }}
-          >
-            <Icon align="left" size="medium">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="18"
-                height="18"
-                viewBox="0 0 18 18"
-                fill="none"
-              >
-                <path
-                  d="M15 9L13.9425 7.9425L9.75 12.1275V3H8.25V12.1275L4.065 7.935L3 9L9 15L15 9Z"
-                  fill="#0069BF"
-                />
-              </svg>
-            </Icon>
-            Download
-          </Button>
+          {list.recordCount > 0 && (
+            <Button
+              variant="secondary"
+              onClick={async () => {
+                setStatus(null)
+                await downloadList(list, activeSort as ListRecordsSort)
+              }}
+            >
+              <Icon align="left" size="medium">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="18"
+                  height="18"
+                  viewBox="0 0 18 18"
+                  fill="none"
+                >
+                  <path
+                    d="M15 9L13.9425 7.9425L9.75 12.1275V3H8.25V12.1275L4.065 7.935L3 9L9 15L15 9Z"
+                    fill="#0069BF"
+                  />
+                </svg>
+              </Icon>
+              Download
+            </Button>
+          )}
           {!list.isDefaultList && (
             <Button
               variant="secondary"
@@ -257,8 +248,7 @@ const ListDisplay = ({ list }: { list: List }) => {
                 },
               }}
               onClick={() => {
-                setStatus("")
-                setStatusMessage("")
+                setStatus(null)
                 setModalProps(deleteListModalProps as ConfirmationModalProps)
                 openModal()
               }}
@@ -269,9 +259,14 @@ const ListDisplay = ({ list }: { list: List }) => {
           )}
         </ButtonGroup>
         <Modal {...modalProps} />
-        <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
-          {status !== "" && (
-            <StatusBanner status={status} statusMessage={statusMessage} />
+        <div
+          tabIndex={-1}
+          id={idConstants.listStatusBanner}
+          ref={bannerRef}
+          style={{ marginTop: "24px" }}
+        >
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
           )}
         </div>
       </Flex>
@@ -280,7 +275,6 @@ const ListDisplay = ({ list }: { list: List }) => {
         activeSort={activeSort}
         setActiveSort={setActiveSort}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
       />
     </Flex>
   )

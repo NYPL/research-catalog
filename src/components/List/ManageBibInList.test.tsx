@@ -4,6 +4,10 @@ import userEvent from "@testing-library/user-event"
 import { ManageBibInList } from "./ManageBibInList"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
+import {
+  DYNAMIC_STATUS_MESSAGES,
+  STATIC_STATUS_MESSAGES,
+} from "../../utils/statusUtils"
 
 // Mocking window behavior
 const mockAssign = jest.fn()
@@ -31,13 +35,11 @@ const mockBib = { id: "b12345678" } as any
 
 describe("ManageBibInList", () => {
   let mockSetStatus: jest.Mock
-  let mockSetStatusMessage: jest.Mock
   let mockSetUpdatedAccountData: jest.Mock
 
   beforeEach(() => {
     jest.clearAllMocks()
     mockSetStatus = jest.fn()
-    mockSetStatusMessage = jest.fn()
     mockSetUpdatedAccountData = jest.fn()
     window.location.search = ""
   })
@@ -61,7 +63,6 @@ describe("ManageBibInList", () => {
           recordId={mockBib.id}
           isAuthenticated={isAuthenticated}
           setStatus={mockSetStatus}
-          setStatusMessage={mockSetStatusMessage}
         />
       </PatronDataContext.Provider>
     )
@@ -121,9 +122,10 @@ describe("ManageBibInList", () => {
     )
 
     await waitFor(() => {
-      expect(mockSetStatus).toHaveBeenCalledWith("success")
+      expect(mockSetStatus).toHaveBeenLastCalledWith(
+        DYNAMIC_STATUS_MESSAGES.saveRecordSuccess("list-1")
+      )
     })
-    expect(mockSetStatusMessage).toHaveBeenCalled()
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
   })
 
@@ -150,9 +152,10 @@ describe("ManageBibInList", () => {
     )
 
     await waitFor(() => {
-      expect(mockSetStatus).toHaveBeenCalledWith("success")
+      expect(mockSetStatus).toHaveBeenCalledWith(
+        DYNAMIC_STATUS_MESSAGES.removeRecordSuccess("list-1")
+      )
     })
-    expect(mockSetStatusMessage).toHaveBeenCalled()
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
   })
 
@@ -182,22 +185,9 @@ describe("ManageBibInList", () => {
     await userEvent.click(screen.getByRole("button", { name: /Save/i }))
 
     await waitFor(() => {
-      expect(mockSetStatus).toHaveBeenCalledWith("failure")
+      expect(mockSetStatus).toHaveBeenCalledWith(
+        STATIC_STATUS_MESSAGES.saveRecordFailure
+      )
     })
-    expect(mockSetStatusMessage).toHaveBeenCalledWith(
-      "This record could not be saved."
-    )
-  })
-
-  it("focuses the expected button from the URL search params", () => {
-    window.location.search = "?focus=manage-bib-b12345678"
-
-    const focusSpy = jest.spyOn(HTMLButtonElement.prototype, "focus")
-
-    renderWithContext([{ id: "list-1", isDefaultList: true, records: [] }])
-    expect(focusSpy).toHaveBeenCalled()
-    expect(mockReplaceState).toHaveBeenCalled()
-
-    focusSpy.mockRestore()
   })
 })

@@ -32,13 +32,11 @@ const ListRecordsTable = ({
   activeSort,
   setActiveSort,
   setStatus,
-  setStatusMessage,
 }: {
   list: List
   activeSort
   setActiveSort
   setStatus
-  setStatusMessage
 }) => {
   const listRecordsHeadingRef = useRef(null)
   const { setPersistentFocus } = useFocusContext()
@@ -164,7 +162,6 @@ const ListRecordsTable = ({
         recordId={record.uri}
         isAuthenticated={true}
         setStatus={setStatus}
-        setStatusMessage={setStatusMessage}
       />,
     ]
   })

@@ -16,6 +16,8 @@ import SettingsLabel from "./SettingsLabel"
 import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import AddButton from "./AddButton"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface SettingsInputFormProps {
   patronData: Patron
@@ -40,6 +42,7 @@ const SettingsInputForm = ({
   const [error, setError] = useState(false)
 
   const { setStatus, editingField, setEditingField } = settingsState
+  const { setPersistentFocus } = useFocusContext()
 
   const [tempInputs, setTempInputs] = useState([...inputs])
 
@@ -147,7 +150,7 @@ const SettingsInputForm = ({
   const submitInputs = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setStatus("")
+    setStatus(null)
     const validInputs = tempInputs.filter((input) =>
       validateInput(input, tempInputs)
     )
@@ -173,13 +176,14 @@ const SettingsInputForm = ({
 
       if (response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setStatus("success")
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
         setInputs([...validInputs])
         setTempInputs([...validInputs])
       } else {
-        setStatus("failure")
+        setStatus(STATIC_STATUS_MESSAGES.accountFailure)
         setTempInputs([...inputs])
       }
+      setPersistentFocus(idConstants.accountStatusBanner)
     } catch (error) {
       console.error("Error submitting", inputType, error)
     } finally {

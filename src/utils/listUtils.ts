@@ -8,6 +8,7 @@ import type {
 import type { Patron } from "../types/myAccountTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
+import { STATIC_STATUS_MESSAGES } from "./statusUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -158,18 +159,9 @@ export const buildListRecords = (
   return updatedRecords
 }
 
-export const downloadList = async (
-  list: List,
-  sort: ListRecordsSort,
-  setStatus: any,
-  setStatusMessage: any
-) => {
-  setStatus("")
-  setStatusMessage("")
+export const downloadList = async (list: List, sort: ListRecordsSort) => {
   try {
     if (list.recordCount === 0 || !list.records) {
-      setStatus("failure")
-      setStatusMessage("Your list has no records to download.")
       return
     }
 
@@ -242,13 +234,8 @@ export const downloadList = async (
     link.click()
     document.body.removeChild(link)
     URL.revokeObjectURL(url)
-
-    setStatus("success")
-    setStatusMessage("Your list has been downloaded.")
   } catch (error) {
     console.error("Error downloading list:", error)
-    setStatus("failure")
-    setStatusMessage("Your list could not be downloaded.")
   }
 }
 
@@ -259,7 +246,6 @@ export const duplicateList = async ({
   updatedAccountData,
   setUpdatedAccountData,
   setStatus,
-  setStatusMessage,
   openListInNewTab = false,
 }: {
   list: List
@@ -268,11 +254,8 @@ export const duplicateList = async ({
   updatedAccountData: any
   setUpdatedAccountData: any
   setStatus: any
-  setStatusMessage: any
   openListInNewTab?: boolean
 }) => {
-  setStatus("")
-  setStatusMessage("")
   try {
     const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
       method: "POST",
@@ -297,15 +280,11 @@ export const duplicateList = async ({
           window.open(`${BASE_URL}/account/lists/${data.list.id}`, "_blank")
         }
       }
-      setStatus("success")
-      setStatusMessage("Your list has been duplicated.")
+      setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
     } else {
-      setStatus("failure")
-      setStatusMessage("Your list could not be duplicated.")
+      setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
     }
   } catch (error) {
     console.error("Error duplicating list:", error)
-    setStatus("failure")
-    setStatusMessage("Your list could not be duplicated.")
   }
 }
