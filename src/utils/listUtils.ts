@@ -246,7 +246,6 @@ export const duplicateList = async ({
   updatedAccountData,
   setUpdatedAccountData,
   setStatus,
-  setStatusMessage,
   openListInNewTab = false,
 }: {
   list: List
@@ -255,11 +254,8 @@ export const duplicateList = async ({
   updatedAccountData: any
   setUpdatedAccountData: any
   setStatus: any
-  setStatusMessage: any
   openListInNewTab?: boolean
 }) => {
-  setStatus("")
-  setStatusMessage("")
   try {
     const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
       method: "POST",
@@ -284,15 +280,11 @@ export const duplicateList = async ({
           window.open(`${BASE_URL}/account/lists/${data.list.id}`, "_blank")
         }
       }
-      setStatus("success")
-      setStatusMessage("Your list has been duplicated.")
+      setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
     } else {
-      setStatus("failure")
-      setStatusMessage("Your list could not be duplicated.")
+      setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
     }
   } catch (error) {
     console.error("Error duplicating list:", error)
-    setStatus("failure")
-    setStatusMessage("Your list could not be duplicated.")
   }
 }
