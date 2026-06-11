@@ -4,7 +4,7 @@ import {
   createList,
   updateList,
   deleteList,
-  deleteRecordsFromList,
+  deleteRecordFromList,
   addRecordsToList,
 } from "../lists"
 import nyplApiClient from "../../nyplApiClient"
@@ -188,7 +188,7 @@ describe("lists", () => {
     })
   })
 
-  describe("deleteRecordsFromList", () => {
+  describe("deleteRecordFromList", () => {
     it("returns success on successful deletion", async () => {
       mockClient.delete.mockResolvedValueOnce({
         id: "123",
@@ -199,18 +199,26 @@ describe("lists", () => {
         listName: "list 1",
         description: null,
       })
-      const result = await deleteRecordsFromList({
+      const result = await deleteRecordFromList({
         patronId: "12345",
         listId: "123",
-        records: ["b123", "b345"],
+        record: "b123",
       })
       expect(mockClient.delete).toHaveBeenCalledWith(
-        "/patrons/12345/list/123/records",
-        {
-          records: ["b123", "b345"],
-        }
+        "/patrons/12345/list/123/records?records=b123"
       )
-      expect(result).toEqual({ status: 200 })
+      expect(result).toEqual({
+        status: 200,
+        list: {
+          createdDate: "2026-04-15T15:58:58.396947",
+          description: null,
+          id: "123",
+          listName: "list 1",
+          modifiedDate: "2026-04-22T10:11:20.584139",
+          patronId: "12345",
+          records: [],
+        },
+      })
     })
   })
 
@@ -228,7 +236,7 @@ describe("lists", () => {
       const result = await addRecordsToList({
         patronId: "12345",
         listId: "123",
-        records: ["b123", "b345"],
+        records: "b123,b345",
       })
       expect(mockClient.patch).toHaveBeenCalledWith(
         "/patrons/12345/list/123/records",
@@ -236,7 +244,18 @@ describe("lists", () => {
           records: ["b123", "b345"],
         }
       )
-      expect(result).toEqual({ status: 200 })
+      expect(result).toEqual({
+        status: 200,
+        list: {
+          id: "123",
+          patronId: "12345",
+          records: ["b123", "b345"],
+          createdDate: "2026-04-15T15:58:58.396947",
+          modifiedDate: "2026-04-22T10:11:20.584139",
+          listName: "second list",
+          description: null,
+        },
+      })
     })
   })
 })

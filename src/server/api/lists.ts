@@ -181,31 +181,30 @@ export async function deleteList({
 }
 
 /**
- * Delete records from a list.
+ * Delete a record from a list.
  *
  * @param {object} params
  * @param {string} params.patronId - The patron's ID.
  * @param {string} params.listId - The ID of the list to update.
- * @param {string[]} params.records - An array of record IDs to remove from the list.
+ * @param {string[]} params.record - A record ID to remove from the list.
  * @returns {Promise<object>} A success status or an error object.
  */
-export async function deleteRecordsFromList({
+export async function deleteRecordFromList({
   patronId,
   listId,
-  records,
+  record,
 }: {
   patronId: string
   listId: string
-  records: string[]
+  record: string
 }) {
-  const path = `/patrons/${patronId}/list/${listId}/records`
-  const body = {
-    records,
-  }
+  const path = `/patrons/${patronId}/list/${listId}/records?records=${record}`
+
   return callListsServiceAndHandleError({
-    methodName: "deleteRecordsFromList",
+    methodName: "deleteRecordFromList",
     path,
-    apiCall: (client) => client.delete(path, body),
+    apiCall: (client) => client.delete(path),
+    onSuccess: (response) => ({ status: 200, list: response }),
   })
 }
 
@@ -215,7 +214,7 @@ export async function deleteRecordsFromList({
  * @param {object} params
  * @param {string} params.patronId - The patron's ID.
  * @param {string} params.listId - The ID of the list to update.
- * @param {string[]} params.records - An array of record IDs to add to the list.
+ * @param {string[]} params.records - A string of comma-separated record IDs to add to the list.
  * @returns {Promise<object>} A success status or an error object.
  */
 export async function addRecordsToList({
@@ -225,16 +224,17 @@ export async function addRecordsToList({
 }: {
   patronId: string
   listId: string
-  records: string[]
+  records: string
 }) {
   const path = `/patrons/${patronId}/list/${listId}/records`
   const body = {
-    records,
+    records: records.split(","),
   }
   return callListsServiceAndHandleError({
     methodName: "addRecordsToList",
     path,
     apiCall: (client) => client.patch(path, body),
+    onSuccess: (response) => ({ status: 200, list: response }),
   })
 }
 

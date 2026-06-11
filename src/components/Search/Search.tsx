@@ -196,7 +196,13 @@ const Search = ({
             ) : (
               <SimpleGrid columns={1} id="search-results-list" gap="grid.s">
                 {searchResultBibs.map((bib: SearchResultsBib) => {
-                  return <SearchResult key={bib.id} bib={bib} />
+                  return (
+                    <SearchResult
+                      key={bib.id}
+                      bib={bib}
+                      isAuthenticated={isAuthenticated}
+                    />
+                  )
                 })}
               </SimpleGrid>
             )}

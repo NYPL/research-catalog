@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added single list display [SCC-5246](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5246)
 - Added CRUD operations for lists [SCC-5247](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5247)
 - Added default list handling
+- Added lists context and manage bib button to search results/bib page
 
 ### Updated
 

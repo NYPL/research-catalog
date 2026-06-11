@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   StatusBadge,
   Icon,
+  Flex,
 } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
@@ -15,15 +16,20 @@ import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 import SearchResultItems from "./SearchResultItems"
+import { ManageBibInList } from "./ManageBibInList"
+import type { StatusType } from "../MyAccount/Settings/StatusBanner"
+import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
+import { useEffect, useRef, useState } from "react"
 
 interface SearchResultProps {
   bib: SearchResultsBib
+  isAuthenticated: boolean
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const SearchResult = ({ bib }: SearchResultProps) => {
+const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
   const separatingDot = (i) => (
     // @ts-ignore
     <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
@@ -50,6 +56,18 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     return acc
   }, [])
 
+  // Manage status banner display for list actions
+  const bannerRef = useRef<HTMLDivElement>(null)
+  const [status, setStatus] = useState<StatusType>("")
+  const [statusMessage, setStatusMessage] = useState<string>("")
+  useEffect(() => {
+    if (status !== "" && bannerRef.current) {
+      setTimeout(() => {
+        bannerRef.current?.focus()
+      }, 100)
+    }
+  }, [status])
+
   return (
     <Card
       key={bib.id}
@@ -70,12 +88,22 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         size="heading5"
         sx={{ a: { textDecoration: "none" } }}
       >
-        {bib.findingAid && (
-          <StatusBadge variant="informative" mb="s">
-            Finding aid available
-          </StatusBadge>
-        )}
-        <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <Box>
+            {bib.findingAid && (
+              <StatusBadge variant="informative" mb="s">
+                Finding aid available
+              </StatusBadge>
+            )}
+            <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+          </Box>
+          <ManageBibInList
+            bib={bib}
+            isAuthenticated={isAuthenticated}
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+          />
+        </Flex>
       </CardHeading>
       <CardContent data-testid="card-content">
         <Box
@@ -87,6 +115,11 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         >
           {joinedMetadata}
         </Box>
+        <div tabIndex={-1} ref={bannerRef} style={{ marginTop: "24px" }}>
+          {status !== "" && (
+            <StatusBanner status={status} statusMessage={statusMessage} />
+          )}
+        </div>
         {(bib.findingAid || bib.hasElectronicResources) && (
           <Box width="100%" mt="s">
             {bib.findingAid ? (

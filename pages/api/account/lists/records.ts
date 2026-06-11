@@ -1,21 +1,43 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchBibRecords } from "../../../../src/server/api/lists"
+import {
+  addRecordsToList,
+  deleteRecordFromList,
+  fetchBibRecords,
+} from "../../../../src/server/api/lists"
 import type { ListRecordsSort } from "../../../../src/types/listTypes"
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  if (req.method !== "GET") {
-    return res.status(405).json({ error: "Method not allowed" })
-  }
-
+  // Records requested in query for easy GETting.
+  // Note that this flips the pattern of other /lists endpoints,
+  // which indicate records in the body and the list ID in query params.
   const { uris, sort } = req.query
+  const { listId, patronId } = req.body
 
   if (!uris || typeof uris !== "string") {
     return res.status(400).json({ error: "Missing or invalid uris" })
   }
 
-  const response = await fetchBibRecords(uris, sort as ListRecordsSort)
-  res.status(response.status || 200).json(response)
+  if (req.method === "GET") {
+    const response = await fetchBibRecords(uris, sort as ListRecordsSort)
+    res.status(response.status || 200).json(response)
+  } else if (req.method === "PATCH") {
+    const response = await addRecordsToList({
+      records: uris,
+      listId,
+      patronId,
+    })
+    res.status(response.status || 200).json(response)
+  } else if (req.method === "DELETE") {
+    const response = await deleteRecordFromList({
+      record: uris,
+      listId,
+      patronId,
+    })
+    res.status(response.status || 200).json(response)
+  } else {
+    return res.status(405).json({ error: "Method not allowed" })
+  }
 }
