@@ -50,7 +50,7 @@ import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
 import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
-import { ManageBibInList } from "../../../src/components/SearchResults/ManageBibInList"
+import { ManageBibInList } from "../../../src/components/List/ManageBibInList"
 import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
 import type { StatusType } from "../../../src/components/MyAccount/Settings/StatusBanner"
@@ -265,13 +265,13 @@ export default function BibPage({
           </StatusBadge>
         )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Heading level="h2" size="heading3" mb="-m">
+          <Heading level="h2" size="heading3">
             {bib.title}
           </Heading>
           <ManageBibInList
             setStatus={setStatus}
             setStatusMessage={setStatusMessage}
-            bib={bib}
+            recordId={bib.id}
             isAuthenticated={isAuthenticated}
           />
         </Flex>

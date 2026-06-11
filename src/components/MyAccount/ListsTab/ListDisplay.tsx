@@ -15,7 +15,6 @@ import type {
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
 import { useFocusContext } from "../../../context/FocusContext"
-import EmptyList from "./EmptyList"
 import ListRecordsTable from "./ListRecordsTable"
 import { useRouter } from "next/router"
 import type { List, ListRecordsSort } from "../../../types/listTypes"
@@ -276,15 +275,13 @@ const ListDisplay = ({ list }: { list: List }) => {
           )}
         </div>
       </Flex>
-      {list.recordCount > 0 ? (
-        <ListRecordsTable
-          list={list}
-          activeSort={activeSort}
-          setActiveSort={setActiveSort}
-        />
-      ) : (
-        <EmptyList />
-      )}
+      <ListRecordsTable
+        list={list}
+        activeSort={activeSort}
+        setActiveSort={setActiveSort}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+      />
     </Flex>
   )
 }

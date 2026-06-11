@@ -40,7 +40,7 @@ const ResultsSort = forwardRef<HTMLDivElement, ResultsSortProps>(
 
     return (
       // TODO: Forcing focus, remove with repaired Menu component
-      <div style={{ zIndex: "9999" }} ref={ref}>
+      <div style={{ zIndex: "9" }} ref={ref}>
         <Menu
           key={selectedValue} // TODO: Forcing remount, replace with repaired Menu component
           id="results-sort"

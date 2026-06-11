@@ -4,6 +4,7 @@ import {
   deleteRecordFromList,
   fetchBibRecords,
 } from "../../../../src/server/api/lists"
+import MyAccount from "../../../../src/models/MyAccount"
 import type { ListRecordsSort } from "../../../../src/types/listTypes"
 
 export default async function handler(
@@ -29,6 +30,10 @@ export default async function handler(
       listId,
       patronId,
     })
+    if (response.list && patronId) {
+      const accountModel = new MyAccount(null, patronId)
+      response.list = accountModel.buildLists([response.list])[0]
+    }
     res.status(response.status || 200).json(response)
   } else if (req.method === "DELETE") {
     const response = await deleteRecordFromList({
@@ -36,6 +41,10 @@ export default async function handler(
       listId,
       patronId,
     })
+    if (response.list && patronId) {
+      const accountModel = new MyAccount(null, patronId)
+      response.list = accountModel.buildLists([response.list])[0]
+    }
     res.status(response.status || 200).json(response)
   } else {
     return res.status(405).json({ error: "Method not allowed" })

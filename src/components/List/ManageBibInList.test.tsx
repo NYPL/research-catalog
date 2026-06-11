@@ -58,7 +58,7 @@ describe("ManageBibInList", () => {
         }
       >
         <ManageBibInList
-          bib={mockBib}
+          recordId={mockBib.id}
           isAuthenticated={isAuthenticated}
           setStatus={mockSetStatus}
           setStatusMessage={mockSetStatusMessage}
@@ -154,6 +154,22 @@ describe("ManageBibInList", () => {
     })
     expect(mockSetStatusMessage).toHaveBeenCalled()
     expect(mockSetUpdatedAccountData).toHaveBeenCalled()
+  })
+
+  it("opens the menu when Manage is clicked", async () => {
+    renderWithContext([
+      {
+        id: "list-1",
+        listName: "List 1",
+        isDefaultList: true,
+        records: [{ uri: "b12345678" }],
+      },
+      { id: "list-2", listName: "List 2", isDefaultList: false, records: [] },
+    ])
+
+    expect(screen.queryByText("Select lists")).not.toBeInTheDocument()
+    await userEvent.click(screen.getByRole("button", { name: /Manage/i }))
+    expect(screen.getByText("Select lists")).toBeInTheDocument()
   })
 
   it("handles delete failure (no records to delete)", async () => {

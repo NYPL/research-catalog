@@ -1,24 +1,38 @@
 import { useContext, useEffect, useRef, useState } from "react"
-import { Button, Icon, Text } from "@nypl/design-system-react-components"
-import type SearchResultsBib from "../../models/SearchResultsBib"
+import {
+  Button,
+  Icon,
+  Text,
+  Box,
+  useNYPLBreakpoints,
+} from "@nypl/design-system-react-components"
 import { appConfig } from "../../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
-import type Bib from "../../models/Bib"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import Link from "../Link/Link"
 import type { List } from "../../types/listTypes"
+import {
+  Popover,
+  PopoverTrigger,
+  useDisclosure,
+  Drawer,
+  DrawerOverlay,
+} from "@chakra-ui/react"
+import { ManageBibInListMenu } from "./ManageBibInListMenu"
 import { useFocusContext } from "../../context/FocusContext"
 
 interface ManageBibInListProps {
-  bib: SearchResultsBib | Bib
+  recordId: string
   isAuthenticated: boolean
   setStatus
   setStatusMessage
 }
 
+/* Render button to indicate saved state of bib and open list management menu.
+ * Redirects to login if necessary. */
 export const ManageBibInList = ({
-  bib,
+  recordId,
   isAuthenticated,
   setStatus,
   setStatusMessage,
@@ -29,10 +43,12 @@ export const ManageBibInList = ({
     useContext(PatronDataContext)
   const { setPersistentFocus } = useFocusContext()
 
+  const { isLargerThanLargeMobile } = useNYPLBreakpoints()
+  const isMobile = !isLargerThanLargeMobile
   const onlyHasDefaultList = updatedAccountData?.lists?.length === 1
 
   const isSaved = updatedAccountData?.lists?.some((list) =>
-    list.records?.some((record) => record.uri === bib.id)
+    list.records?.some((record) => record.uri === recordId)
   )
   const buttonText = isSaved
     ? onlyHasDefaultList
@@ -75,13 +91,17 @@ export const ManageBibInList = ({
       .
     </Text>
   )
+
+  // Manage bib menu state
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const focusTarget = params.get("focus")
 
-    if (focusTarget === `manage-bib-${bib.id}`) {
-      setPersistentFocus(`manage-bib-${bib.id}`)
+    if (focusTarget === `manage-bib-${recordId}`) {
+      setPersistentFocus(`manage-bib-${recordId}`)
       // Clean up the URL
       params.delete("focus")
       const newUrl =
@@ -90,9 +110,12 @@ export const ManageBibInList = ({
         window.location.hash
 
       window.history.replaceState({}, "", newUrl)
-      // And open menu...
+      // And open menu
+      if (!onlyHasDefaultList) {
+        onOpen()
+      }
     }
-  }, [bib.id])
+  }, [recordId, onOpen, onlyHasDefaultList])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:
@@ -100,7 +123,7 @@ export const ManageBibInList = ({
       e.preventDefault()
 
       const currentUrl = new URL(window.location.href)
-      currentUrl.searchParams.set("focus", `manage-bib-${bib.id}`)
+      currentUrl.searchParams.set("focus", `manage-bib-${recordId}`)
 
       const loginEndpoint =
         appConfig.urls?.loginUrl?.[appConfig.environment] ||
@@ -124,7 +147,7 @@ export const ManageBibInList = ({
 
       try {
         const response = await fetch(
-          `${BASE_URL}/api/account/lists/records?uris=${bib.id}`,
+          `${BASE_URL}/api/account/lists/records?uris=${recordId}`,
           {
             method: isSaved ? "DELETE" : "PATCH",
             headers: {
@@ -166,7 +189,7 @@ export const ManageBibInList = ({
         }
       } catch (error) {
         console.error(
-          `Error ${isSaved ? "removing" : "adding"} record ${bib.id} ${
+          `Error ${isSaved ? "removing" : "adding"} record ${recordId} ${
             isSaved ? "from" : "to"
           } list ${defaultListId}:`,
           error
@@ -178,15 +201,28 @@ export const ManageBibInList = ({
       } finally {
         setIsLoading(false)
       }
+    } else {
+      onOpen()
     }
   }
 
-  return (
+  const triggerButton = (
     <Button
-      id={`manage-bib-${bib.id}`}
+      id={`manage-bib-${recordId}`}
       onClick={handleSaveClick}
       variant="text"
       isDisabled={isLoading}
+      sx={{
+        width: "fit-content",
+        padding: "8px",
+        marginLeft: "auto",
+        ...(isOpen && {
+          bg: "ui.link.primary-05",
+          _dark: {
+            bg: "dark.ui.bg.hover",
+          },
+        }),
+      }}
     >
       {/* TODO: Update to bookmark/bookmark outlined DS icon */}
       <Icon size="large">
@@ -206,7 +242,53 @@ export const ManageBibInList = ({
           </svg>
         )}
       </Icon>
-      {buttonText}
+      <Box
+        as="span"
+        display={{ base: "none", md: "inline-block" }}
+        textAlign="left"
+      >
+        {buttonText}
+      </Box>
     </Button>
+  )
+
+  if (isMobile) {
+    return (
+      <>
+        {triggerButton}
+        <Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
+          <DrawerOverlay />
+          <ManageBibInListMenu
+            isOpen={isOpen}
+            onClose={onClose}
+            setStatus={setStatus}
+            setStatusMessage={setStatusMessage}
+            recordId={recordId}
+            isMobile={isMobile}
+          />
+        </Drawer>
+      </>
+    )
+  }
+
+  return (
+    <Popover
+      isOpen={isOpen}
+      onClose={onClose}
+      placement="bottom-end"
+      flip={false}
+      isLazy
+      strategy="fixed"
+    >
+      <PopoverTrigger>{triggerButton}</PopoverTrigger>
+      <ManageBibInListMenu
+        isOpen={isOpen}
+        onClose={onClose}
+        setStatus={setStatus}
+        setStatusMessage={setStatusMessage}
+        recordId={recordId}
+        isMobile={isMobile}
+      />
+    </Popover>
   )
 }
