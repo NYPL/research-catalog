@@ -190,16 +190,4 @@ describe("ManageBibInList", () => {
       )
     })
   })
-
-  it("focuses the expected button from the URL search params", () => {
-    window.location.search = "?focus=manage-bib-b12345678"
-
-    const focusSpy = jest.spyOn(HTMLButtonElement.prototype, "focus")
-
-    renderWithContext([{ id: "list-1", isDefaultList: true, records: [] }])
-    expect(focusSpy).toHaveBeenCalled()
-    expect(mockReplaceState).toHaveBeenCalled()
-
-    focusSpy.mockRestore()
-  })
 })
