@@ -25,7 +25,8 @@ import {
 export function getSearchResultsHeading(
   searchParams: SearchParams,
   totalResults: number,
-  browseOptions?: { slug: string; browseType: string; role?: string }
+  browseOptions?: { slug: string; browseType: string; role?: string },
+  parsedQuery?: string[]
 ): string {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
@@ -41,7 +42,7 @@ export function getSearchResultsHeading(
       } "${browseOptions.slug}${
         browseOptions.role ? `, ${browseOptions.role}` : ""
       }"`
-    : buildQueryDisplayString(searchParams)
+    : buildQueryDisplayString(searchParams, parsedQuery)
 
   return `Displaying ${
     totalResults > RESULTS_PER_PAGE
@@ -53,7 +54,10 @@ export function getSearchResultsHeading(
 }
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
-function buildQueryDisplayString(searchParams: SearchParams): string {
+function buildQueryDisplayString(
+  searchParams: SearchParams,
+  parsedQuery?: string[]
+): string {
   const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
     .map((field) => ({ ...field, label: field.label.toLowerCase() }))
@@ -66,6 +70,7 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
       { name: "issn", label: "ISSN" },
       { name: "lccn", label: "LCCN" },
       { name: "callnumber", label: "call number" },
+      { name: "cql", label: "query" },
       { name: "genre", label: "genre" },
       { name: "series", label: "series" },
     ])
@@ -91,8 +96,12 @@ function buildQueryDisplayString(searchParams: SearchParams): string {
           label = "authors/contributors"
         }
       }
-
       paramsStringCollection[param] = `${label}${plural} "${value}"`
+      // Special case for CQL (query) formatting
+      if (label === "query") {
+        value = parsedQuery ? formatParsedQuery(parsedQuery) : value
+        paramsStringCollection[param] = `${label}: ${value}`
+      }
     }
   })
 
@@ -429,4 +438,15 @@ export function filtersObjectLength(obj) {
     }
   }
   return total
+}
+
+export const formatParsedQuery = (node: any): string => {
+  if (Array.isArray(node)) {
+    return node
+      .map((item) =>
+        Array.isArray(item) ? `(${formatParsedQuery(item)})` : item
+      )
+      .join(" ")
+  }
+  return String(node)
 }

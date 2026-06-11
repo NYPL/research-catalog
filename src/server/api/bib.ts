@@ -98,8 +98,8 @@ export async function fetchBib(
         }${getBibQueryString(bibQuery)}`
 
         if (
-          discoveryBibResult.error?.status === "422" ||
-          discoveryBibResult.error?.status === "404"
+          discoveryBibResult.status === 422 ||
+          discoveryBibResult.status === 404
         ) {
           logServerWarn("fetchBib", errorContents)
         } else {

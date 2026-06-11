@@ -7,10 +7,12 @@ import { fetchSearchResults } from "../../../../src/server/api/search"
 import { results } from "../../../fixtures/searchResultsManyBibs"
 import userEvent from "@testing-library/user-event"
 import initializePatronTokenAuth from "../../../../src/server/auth"
+import { logSingleFilterNoResults } from "../../../../src/utils/logUtils"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../../src/server/auth")
 jest.mock("../../../../src/server/api/search")
+jest.mock("../../../../src/utils/logUtils")
 
 describe("Browse subject heading results page", () => {
   it("displays bibs and heading", async () => {
@@ -114,6 +116,27 @@ describe("getServerSideProps", () => {
         filters: { subjectLiteral: ["test"] },
         page: 2,
       })
+    )
+  })
+
+  it("makes the correct call to logSingleFilterNoResults", async () => {
+    const response404 = { status: 404, message: "No results found" }
+    ;(fetchSearchResults as jest.Mock).mockResolvedValue(response404)
+
+    const params = { slug: "test" }
+    const query = { page: "2" }
+    const req = {
+      headers: {
+        referer: "a cat",
+      },
+    }
+
+    await getServerSideProps({ req, query, params })
+    expect(logSingleFilterNoResults).toHaveBeenCalledWith(
+      "browse subjects gSSP",
+      response404,
+      expect.any(Object),
+      "a cat"
     )
   })
 })

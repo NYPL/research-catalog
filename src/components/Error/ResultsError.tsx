@@ -1,5 +1,5 @@
 import { Heading, Flex, Text } from "@nypl/design-system-react-components"
-import type { HTTPStatusCode } from "../../types/appTypes"
+import type { APIErrorName, HTTPStatusCode } from "../../types/appTypes"
 import { appConfig } from "../../config/appConfig"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
@@ -14,10 +14,15 @@ import Link from "../Link/Link"
 type ResultsErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
+  errorName?: APIErrorName
 }
 
 /* Display error state that replaces browse/search results. */
-export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
+export default function ResultsError({
+  errorStatus,
+  errorName,
+  page,
+}: ResultsErrorProps) {
   const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent
@@ -28,6 +33,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
       metadataTitle = "Results not found"
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             No results found
           </Heading>
@@ -39,10 +51,6 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
             You can also search our{" "}
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
-            </Link>{" "}
-            or{" "}
-            <Link isExternal href={appConfig.urls.legacyCatalog}>
-              Legacy Catalog
             </Link>{" "}
             for more materials, or{" "}
             <Link
@@ -60,6 +68,13 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
     case 500:
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             Something went wrong on our end
           </Heading>
@@ -79,11 +94,58 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
         </>
       )
       break
-
+    case 422:
+      if (errorName === "InvalidQuerySyntaxError") {
+        errorContent = (
+          <>
+            <Image
+              src={errorImage}
+              alt="Error image"
+              width={96}
+              height={64}
+              style={{ marginBottom: "48px" }}
+            />
+            <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
+              Invalid query
+            </Heading>
+            <Text marginBottom="0">
+              Your query contained an invalid search scope or syntax error.
+              Change your query and try again.
+            </Text>
+            <Text>
+              {" "}
+              Read our{" "}
+              <Link
+                isExternal
+                href="https://libguides.nypl.org/researchcatalog/query"
+              >
+                Query Guide
+              </Link>{" "}
+              to learn how to construct queries or{" "}
+              <Link
+                onClick={() => openFeedbackFormWithError(errorStatus)}
+                id="feedback-link"
+              >
+                contact us
+              </Link>{" "}
+              for assistance.
+            </Text>
+          </>
+        )
+        break
+      }
     // 4xx
+    // fallthrough
     default:
       errorContent = (
         <>
+          <Image
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             There was an unexpected error
           </Heading>
@@ -119,13 +181,6 @@ export default function ResultsError({ errorStatus, page }: ResultsErrorProps) {
           justifyContent="center"
           textAlign="center"
         >
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           {errorContent}
         </Flex>
       </Layout>
