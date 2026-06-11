@@ -20,7 +20,7 @@ test.describe("Query Search", () => {
       .filter(Boolean)
 
     // now go to the advanced search page and do an Author/Contributor search and assert the results are the same as the query search
-    await searchPage.page.goto(queryBaseUrl + "/search/advanced")
+    await searchPage.page.goto("" + "/search/advanced")
     // enter "Meillassoux, Quentin" into the Author/Contributor textbox
     await searchPage.page
       .getByRole("textbox", { name: "Author/Contributor" })
@@ -51,7 +51,7 @@ test.describe("Query Search", () => {
       .filter(Boolean)
 
     // now go to the advanced search page and do a Keyword search and assert the results are the same as the query search
-    await searchPage.page.goto(queryBaseUrl + "/search/advanced")
+    await searchPage.page.goto("" + "/search/advanced")
     // enter "pterosaur" into the Keyword textbox
     await searchPage.page
       .getByRole("textbox", { name: "Keyword" })
@@ -83,7 +83,7 @@ test.describe("Query Search", () => {
       .filter(Boolean)
 
     // now go to the advanced search page and do a Keyword search and assert the results are the same as the query search
-    await searchPage.page.goto(queryBaseUrl + "/search/advanced")
+    await searchPage.page.goto("" + "/search/advanced")
     // enter "pterosaur" into the Keyword textbox
     await searchPage.page
       .getByRole("textbox", { name: "Keyword" })
@@ -118,7 +118,7 @@ test.describe("title = the cat in the hat", () => {
       .filter(Boolean)
 
     // now go to the advanced search page and do a Title search and assert the results are the same as the query search
-    await searchPage.page.goto(queryBaseUrl + "/search/advanced")
+    await searchPage.page.goto("" + "/search/advanced")
     // enter "the cat in the hat" into the Title textbox
     await searchPage.page
       .getByRole("textbox", { name: "Title" })
