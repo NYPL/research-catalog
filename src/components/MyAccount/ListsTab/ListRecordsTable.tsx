@@ -155,7 +155,7 @@ const ListRecordsTable = ({
         {record.itemCount > 1 && `(${record.itemCount} items)`}
       </>,
       record.callNumber,
-      record.location,
+      //record.location,
       record.addedFormattedDate,
       <ManageBibInList
         key={record.uri}
@@ -210,18 +210,12 @@ const ListRecordsTable = ({
         <Box display="grid">
           <Table
             className={styles.listTable}
-            columnHeaders={[
-              "Title",
-              "Call number",
-              "Location",
-              "Date added",
-              "Action",
-            ]}
+            //TODO: Restore Location column
+            columnHeaders={["Title", "Call number", "Date added", "Action"]}
             columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
             columnStyles={[
-              { width: 608, minWidth: 240 },
-              { width: 192, minWidth: 120 },
-              { width: 192, minWidth: 120 },
+              { width: 700, minWidth: 240 },
+              { width: 225, minWidth: 120 },
               { width: "auto", minWidth: 128 },
               { width: 128, minWidth: 128 },
             ]}

@@ -72,7 +72,7 @@ export const buildListRecordWithBibData = (
       ? formatMMDDYYYY(listRecord.addedToListDate)
       : ""
 
-  // TO DO: Reassess location checking
+  // TODO: Reassess location checking
   const location =
     bibResult?.location ||
     bibResult?.collection?.[0]?.buildingLocationLabel ||
@@ -88,7 +88,11 @@ export const buildListRecordWithBibData = (
     creatorLiteral: bibResult?.creatorLiteral?.[0] || null,
     itemCount: bibResult?.numItemsTotal || bibResult?.items?.length || 0,
     callNumber:
-      bibResult?.shelfMark?.[0] || bibResult?.callNumber || "Multiple",
+      bibResult?.shelfMark?.[0] ||
+      bibResult?.callNumber ||
+      (bibResult?.items?.length > 1 || bibResult?.numItemsTotal > 1
+        ? "Multiple"
+        : ""),
     location: location,
   }
 }
