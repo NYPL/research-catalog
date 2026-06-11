@@ -52,7 +52,7 @@ export const processedLists: List[] = [
         title: null,
         itemCount: 0,
         creatorLiteral: null,
-        callNumber: "Multiple",
+        callNumber: "",
         location: "",
         publicationStatement: null,
       },
