@@ -165,11 +165,10 @@ const ListDisplay = ({ list }: { list: List }) => {
           {list.listName}
         </Heading>
         <Box
-          mt="xs"
           sx={{
-            p: {
-              display: "inline-block",
-            },
+            mt: "xs",
+            div: { display: "inline-block" },
+            p: { display: "inline-block" },
           }}
         >
           {joinedMetadata}
@@ -218,20 +217,7 @@ const ListDisplay = ({ list }: { list: List }) => {
                 await downloadList(list, activeSort as ListRecordsSort)
               }}
             >
-              <Icon align="left" size="medium">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 18 18"
-                  fill="none"
-                >
-                  <path
-                    d="M15 9L13.9425 7.9425L9.75 12.1275V3H8.25V12.1275L4.065 7.935L3 9L9 15L15 9Z"
-                    fill="#0069BF"
-                  />
-                </svg>
-              </Icon>
+              <Icon align="left" size="medium" name="navigationArrowDown" />
               Download
             </Button>
           )}
