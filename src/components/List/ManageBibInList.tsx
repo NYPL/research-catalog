@@ -20,6 +20,7 @@ import {
   DrawerOverlay,
 } from "@chakra-ui/react"
 import { ManageBibInListMenu } from "./ManageBibInListMenu"
+import { useFocusContext } from "../../context/FocusContext"
 
 interface ManageBibInListProps {
   recordId: string
@@ -40,6 +41,7 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
+  const { setPersistentFocus } = useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const isMobile = !isLargerThanLargeMobile
@@ -99,7 +101,7 @@ export const ManageBibInList = ({
     const focusTarget = params.get("focus")
 
     if (focusTarget === `manage-bib-${recordId}`) {
-      buttonRef.current?.focus()
+      setPersistentFocus(`manage-bib-${recordId}`)
       // Clean up the URL
       params.delete("focus")
       const newUrl =
@@ -161,19 +163,18 @@ export const ManageBibInList = ({
           const responseData = await response.json()
           const updatedList = responseData.list || responseData
 
-          if (setUpdatedAccountData) {
-            setUpdatedAccountData((prevData: any) => {
-              const data = prevData || updatedAccountData
-              if (!data || !data.lists) return data
-              const updatedLists = data.lists.map((list: List) => {
-                if (list.id === defaultListId) {
-                  return { ...list, ...updatedList }
-                }
-                return list
-              })
-              return { ...data, lists: updatedLists as List[] }
+          setUpdatedAccountData((prevData: any) => {
+            const data = prevData || updatedAccountData
+            if (!data || !data.lists) return data
+            const updatedLists = data.lists.map((list: List) => {
+              if (list.id === defaultListId) {
+                return { ...list, ...updatedList }
+              }
+              return list
             })
-          }
+            return { ...data, lists: updatedLists as List[] }
+          })
+
           setStatus("success")
           setStatusMessage(
             isSaved
@@ -207,7 +208,6 @@ export const ManageBibInList = ({
 
   const triggerButton = (
     <Button
-      ref={buttonRef}
       id={`manage-bib-${recordId}`}
       onClick={handleSaveClick}
       variant="text"

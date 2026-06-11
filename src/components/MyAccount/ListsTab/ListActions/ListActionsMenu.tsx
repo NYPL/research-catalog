@@ -15,7 +15,7 @@ import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import type { List } from "../../../../types/listTypes"
-import { downloadList } from "../../../../utils/listUtils"
+import { downloadList, duplicateList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
 
@@ -104,40 +104,16 @@ const ListActionsMenu = ({
       label: "Duplicate",
       media: { type: "icon", name: "contentCopy" },
       onClick: async () => {
-        setStatus("")
-        setStatusMessage("")
-        try {
-          const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              patronId: patron.id.toString(),
-              listName: `${list.listName.substring(0, 90)} (copy)`,
-              description: list.description,
-              records: list.records ? list.records.map((r) => r.uri) : [],
-            }),
-          })
-          if (response.ok) {
-            const data = await response.json()
-            if (data && data.list) {
-              setUpdatedAccountData({
-                ...updatedAccountData,
-                lists: [data.list, ...lists],
-              })
-            }
-            setStatus("success")
-            setStatusMessage("Your list has been duplicated.")
-          } else {
-            setStatus("failure")
-            setStatusMessage("Your list could not be duplicated.")
-          }
-        } catch (error) {
-          console.error("Error duplicating list:", error)
-          setStatus("failure")
-          setStatusMessage("Your list could not be duplicated.")
-        }
+        await duplicateList({
+          list,
+          patron,
+          lists,
+          updatedAccountData,
+          setUpdatedAccountData,
+          setStatus,
+          setStatusMessage,
+          openListInNewTab: false,
+        })
       },
     },
     {

@@ -11,7 +11,9 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  // Records requested in query for easy GETting, note that this flips the pattern of other list endpoints
+  // Records requested in query for easy GETting.
+  // Note that this flips the pattern of other /lists endpoints,
+  // which indicate records in the body and the list ID in query params.
   const { uris, sort } = req.query
   const { listId, patronId } = req.body
 
