@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- Added Playwright tests for query searches [SCC-5420] (https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
+
 - Added warn log for no results from query with a single filter and no keyword [SCC-5269](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5269)
 
 ## [2.0.0] 2026-06-04
