@@ -39,7 +39,10 @@ test.describe("Query Search", () => {
     await searchPage.page
       .getByRole("textbox", { name: "Author/Contributor" })
       .fill("Meillassoux, Quentin")
-    await searchPage.page.locator("form").locator("#submit-advanced-search").click()
+    await searchPage.page
+      .locator("form")
+      .locator("#submit-advanced-search")
+      .click()
 
     await expect(async () => {
       await expect(searchPage.searchResults.first()).toBeVisible({
@@ -70,7 +73,10 @@ test.describe("Query Search", () => {
       .getByRole("textbox", { name: "Keyword" })
       .fill("pterosaur")
     // click the search button
-    await searchPage.page.locator("form").locator("#submit-advanced-search").click()
+    await searchPage.page
+      .locator("form")
+      .locator("#submit-advanced-search")
+      .click()
 
     await expect(async () => {
       await expect(searchPage.searchResults.first()).toBeVisible({
@@ -102,7 +108,10 @@ test.describe("Query Search", () => {
       .getByRole("textbox", { name: "Keyword" })
       .fill("pterosaur")
     // click the search button
-    await searchPage.page.locator("form").locator("#submit-advanced-search").click()
+    await searchPage.page
+      .locator("form")
+      .locator("#submit-advanced-search")
+      .click()
 
     await expect(async () => {
       await expect(searchPage.searchResults.first()).toBeVisible({
@@ -120,8 +129,6 @@ test.describe("Query Search", () => {
     }).toPass({ timeout: 15000 })
   })
 })
-
-
 
 test.describe("callnumber = JFE 86-3252", () => {
   test("callnumber = JFE 86-3252", async () => {
@@ -159,8 +166,6 @@ test.describe("callnumber = JFE 86-3252", () => {
   })
 })
 
-
-
 test.describe('callnumber = "^JFE 24"', () => {
   test('callnumber = "^JFE 24"', async () => {
     await searchPage.searchFor('callnumber = "^JFE 24"', "Query")
@@ -178,7 +183,10 @@ test.describe('callnumber = "^JFE 24"', () => {
       .getByRole("textbox", { name: "Call number" })
       .fill("^JFE 24")
     // click the search button
-    await searchPage.page.locator("form").locator("#submit-advanced-search").click()
+    await searchPage.page
+      .locator("form")
+      .locator("#submit-advanced-search")
+      .click()
 
     await expect(async () => {
       await expect(searchPage.searchResults.first()).toBeVisible({
@@ -225,7 +233,10 @@ test.describe('subject = "Mitanni (Ancient kingdom)"', () => {
       .getByRole("textbox", { name: "Subject" })
       .fill("Mitanni (Ancient kingdom)")
     // click the search button
-    await searchPage.page.locator("form").locator("#submit-advanced-search").click()
+    await searchPage.page
+      .locator("form")
+      .locator("#submit-advanced-search")
+      .click()
 
     await expect(async () => {
       await expect(searchPage.searchResults.first()).toBeVisible({
