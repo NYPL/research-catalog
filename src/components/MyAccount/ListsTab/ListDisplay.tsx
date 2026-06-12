@@ -175,6 +175,7 @@ const ListDisplay = ({ list }: { list: List }) => {
         </Box>
         {list.description ? (
           <Box as="span" mt="m">
+            <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
             {list.description}
           </Box>
         ) : (

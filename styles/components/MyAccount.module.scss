@@ -150,8 +150,10 @@
   }
   tbody > tr > td,
   tbody > tr > td:last-of-type {
+    align-content: center;
     border-color: var(--nypl-colors-ui-gray-light-cool);
   }
+
   thead > tr > th:last-of-type,
   tbody > tr > td:last-of-type {
     text-align: right;
