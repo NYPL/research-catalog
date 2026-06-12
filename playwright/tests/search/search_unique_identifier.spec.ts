@@ -16,9 +16,10 @@ test.describe("Unique Identifier Search", () => {
   }) => {
     await searchPage.searchFor(searchterm, "Unique identifier")
     await expect(searchPage.searchResultsHeading).toBeVisible()
-    // navigate to the first search result via its href to avoid portal overlay
-    const href = await searchPage.searchResults.first().getAttribute("href")
-    await page.goto(href || "")
+// navigate to the first search result via its href to avoid portal overlay
+const href = await searchPage.searchResults.first().getAttribute("href")
+expect(href, "Expected first search result to have an href").toBeTruthy()
+await page.goto(href!)
     // assert that the unique identifier is present on the item detail page
     await expect(page.getByText(new RegExp(searchterm))).toBeVisible()
   })
