@@ -207,7 +207,7 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
         "Author",
         "Publication information",
         "Call number",
-        "Location",
+        //"Location",
         "Date added",
       ],
       ...allUpdatedRecords.map((r: ListRecord, index: number) => [
@@ -221,7 +221,7 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
             : ""
         }"`,
         `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
-        `"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
+        //`"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
         `"${r.addedFormattedDate || ""}"`,
       ]),
     ]
