@@ -201,7 +201,7 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
 
     const tsvRows = [
       [
-        "",
+        "#",
         "Record number",
         "Title",
         "Author",
