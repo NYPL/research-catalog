@@ -11,8 +11,8 @@ test.beforeEach(async ({ page }) => {
   searchPage = new SearchPage(page, "")
   await page.goto("")
 
-  // Wait for hydration to complete and page to be stable
-  await page.waitForLoadState("networkidle")
+  // Wait for the search UI to be ready
+  await expect(searchPage.search_dropdown).toBeVisible()
 })
 
 test.describe("Query Search", () => {
