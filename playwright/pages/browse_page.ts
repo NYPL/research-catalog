@@ -26,10 +26,7 @@ export class BrowsePage {
 
     this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
-    this.search_submit_button = page.getByRole("button", {
-      name: "Search",
-      exact: true,
-    })
+    this.search_submit_button = page.locator(".ds-searchBar-button")
 
     this.searchResultsTitle = page.locator("//span/div", {
       hasText: this.searchterm,

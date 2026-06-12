@@ -19,10 +19,7 @@ export class SearchPage {
 
     this.search_dropdown = page.getByLabel("Select a category")
     this.search_input = page.getByRole("textbox")
-    this.search_submit_button = page.getByRole("button", {
-      name: "Search",
-      exact: true,
-    })
+    this.search_submit_button = page.locator(".ds-searchBar-button")
 
     this.searchResultsContainer = page.locator("#search-results-list")
     this.searchResults = page.locator("#search-results-list h3 a")
@@ -46,6 +43,9 @@ export class SearchPage {
     await this.search_dropdown.selectOption({ label: searchType })
 
     await this.search_input.fill(searchterm)
-    await this.search_submit_button.click()
+
+    // Firefox can intermittently show a portal overlay during hydration.
+    // Submitting with Enter avoids pointer interception on the button.
+    await this.search_input.press("Enter")
   }
 }

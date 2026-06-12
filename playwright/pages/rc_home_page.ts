@@ -38,10 +38,7 @@ export class RC_Home_Page extends BasePage {
     this.search_input = page.getByRole("textbox", {
       name: "Enter one or more keywords.",
     })
-    this.search_submit_button = page.getByRole("button", {
-      name: "Search",
-      exact: true,
-    })
+    this.search_submit_button = page.locator(".ds-searchBar-button")
     this.advanced_search_link = page.getByRole("link", {
       name: "Advanced Search",
     })
