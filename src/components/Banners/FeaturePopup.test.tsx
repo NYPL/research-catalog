@@ -1,29 +1,32 @@
 import React from "react"
 import { render, screen, fireEvent } from "../../utils/testUtils"
-import { QueryBanner } from "./QueryBanner"
+import { FeaturePopup } from "./FeaturePopup"
 
-describe("QueryBanner", () => {
+describe("FeaturePopup", () => {
   beforeEach(() => {
     // clear the cookie before each test
-    document.cookie = "seenQueryBanner=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
+    document.cookie = "seenTestId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
   })
+  const component = (
+    <FeaturePopup id="TestId" title="Test title" content="Test content" />
+  )
 
-  it("renders the banner when the cookie is absent", () => {
-    render(<QueryBanner />)
+  it("renders when the cookie is absent", () => {
+    render(component)
 
     expect(screen.getByText("Got it")).toBeInTheDocument()
-    expect(screen.getByText(/Search using queries/i)).toBeInTheDocument()
+    expect(screen.getByText(/Test title/i)).toBeInTheDocument()
   })
 
-  it("does not render the banner when the cookie is present", () => {
-    document.cookie = "seenQueryBanner=true"
-    render(<QueryBanner />)
+  it("does not render when the cookie is present", () => {
+    document.cookie = "seenTestId=true"
+    render(component)
 
     expect(screen.queryByText("Got it")).not.toBeInTheDocument()
   })
 
   it("dismisses the banner and sets the cookie when 'Got it' is clicked", () => {
-    render(<QueryBanner />)
+    render(component)
 
     const dismissLink = screen.getByText("Got it")
     fireEvent.click(dismissLink)
@@ -31,6 +34,6 @@ describe("QueryBanner", () => {
     expect(screen.queryByText("Got it")).not.toBeInTheDocument()
 
     // cookie should now be set in the mock document
-    expect(document.cookie).toContain("seenQueryBanner=true")
+    expect(document.cookie).toContain("seenTestId=true")
   })
 })
