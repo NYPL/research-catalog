@@ -129,10 +129,15 @@ const ListsDisplay = () => {
           handleSortChange={handleSortChange}
         />
       </Flex>
-      <div tabIndex={-1} ref={bannerRef} id={idConstants.listStatusBanner}>
+      <Box
+        tabIndex={-1}
+        ref={bannerRef}
+        id={idConstants.listStatusBanner}
+        sx={{ "&:not(:empty)": { marginBottom: "24px" } }}
+      >
         {status && <StatusBanner type={status.type} message={status.message} />}
-      </div>
-      <Box display="grid" mt="xs">
+      </Box>
+      <Box display="grid">
         {isLoading ? (
           loader
         ) : (
@@ -158,7 +163,6 @@ const ListsDisplay = () => {
             tableData={tableData}
             isScrollable
             showRowDividers
-            my={{ base: 0, md: "s" }}
             data-testid="list-table"
           />
         )}

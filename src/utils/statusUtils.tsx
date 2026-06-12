@@ -1,6 +1,6 @@
-import { Text } from "@nypl/design-system-react-components"
-import Link from "../components/Link/Link"
+import { Link, Text } from "@nypl/design-system-react-components"
 import type { StatusBannerState } from "../components/MyAccount/Settings/StatusBanner"
+import { BASE_URL } from "../config/constants"
 
 export type StaticStatusKey =
   | "duplicateListSuccess"
@@ -52,7 +52,7 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         Your list changes have been saved. Lists can be managed from your{" "}
-        <Link href="/account/lists">patron account.</Link>
+        <Link href={`${BASE_URL}/account/lists`}>patron account.</Link>
       </Text>
     ),
   },
@@ -61,11 +61,9 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text>
         Your list changes could not be saved. Try again or{" "}
-        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-          contact us
-        </Link>{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance. Lists can be managed from your{" "}
-        <Link href="/account/lists">patron account.</Link>
+        <Link href={`${BASE_URL}/account/lists`}>patron account.</Link>
       </Text>
     ),
   },
@@ -86,9 +84,7 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         Your changes could not be saved. Please try again or{" "}
-        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-          contact us
-        </Link>{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
       </Text>
     ),
@@ -98,9 +94,7 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         Incorrect current pin/password. Please try again or{" "}
-        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-          contact us
-        </Link>{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
       </Text>
     ),
@@ -110,9 +104,7 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         Invalid new pin/password. Please try again or{" "}
-        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-          contact us
-        </Link>{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
       </Text>
     ),
@@ -122,9 +114,7 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         This username already exists. Please try again or{" "}
-        <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-          contact us
-        </Link>{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
       </Text>
     ),
@@ -149,7 +139,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         <Link
           target="_blank"
           color="ui.link.primary !important"
-          href={`/account/lists/${listId}`}
+          href={`${BASE_URL}/account/lists/${listId}`}
         >
           My workspace (default list)
         </Link>
@@ -157,7 +147,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         <Link
           target="_blank"
           color="ui.link.primary !important"
-          href="/account/lists"
+          href={`${BASE_URL}/account/lists`}
         >
           patron account
         </Link>
@@ -173,7 +163,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         <Link
           target="_blank"
           color="ui.link.primary !important"
-          href={`/account/lists/${listId}`}
+          href={`${BASE_URL}/account/lists/${listId}`}
         >
           My workspace (default list)
         </Link>
@@ -181,7 +171,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         <Link
           target="_blank"
           color="ui.link.primary !important"
-          href="/account/lists"
+          href={`${BASE_URL}/account/lists`}
         >
           patron account
         </Link>

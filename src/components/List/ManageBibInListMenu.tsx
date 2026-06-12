@@ -7,6 +7,7 @@ import {
   TextInput,
   Heading,
   SkeletonLoader,
+  Box,
 } from "@nypl/design-system-react-components"
 import {
   PopoverContent,
@@ -281,7 +282,7 @@ export const ManageBibInListMenu = ({
                 paddingLeft: "s",
                 paddingRight: "s",
               }
-            : { margin: "xs" }),
+            : {}),
         }}
       >
         {showCreateForm ? (
@@ -291,7 +292,7 @@ export const ManageBibInListMenu = ({
               padding: "s",
               borderRadius: "2px",
               background: "var(--ui-bg-default, #F5F5F5)",
-              marginBottom: "s",
+              marginBottom: "xs",
             }}
           >
             <FormField>
@@ -341,6 +342,7 @@ export const ManageBibInListMenu = ({
             id={idConstants.createListButton}
             variant="text"
             paddingLeft="xs"
+            marginBottom="xs"
             onClick={() => {
               setShowCreateForm(true)
               setPersistentFocus(idConstants.createListNameInput)
@@ -351,10 +353,10 @@ export const ManageBibInListMenu = ({
           </Button>
         )}
 
-        <div
+        <Box
           tabIndex={-1}
           id={idConstants.listMenuStatusBanner}
-          style={{ marginTop: "8px", marginBottom: "16px" }}
+          sx={{ "&:not(:empty)": { marginTop: "xs", marginBottom: "xs" } }}
         >
           {listCreationStatus && (
             <StatusBanner
@@ -362,7 +364,7 @@ export const ManageBibInListMenu = ({
               message={listCreationStatus.message}
             />
           )}
-        </div>
+        </Box>
         <SearchableCheckboxGroup
           id="search-lists"
           searchPlaceholder="Search for a list"

@@ -107,7 +107,7 @@ export default class MyAccount {
       const createResult = await createList({
         patronId,
         listName: "My workspace (default list)",
-        description: "Default list- cannot be deleted",
+        description: "Default list - cannot be deleted",
       })
       if (createResult.status === 200 && createResult.list) {
         lists.push(createResult.list)
