@@ -4,12 +4,7 @@ import { SearchPage } from "../../pages/search_page"
 let searchPage: SearchPage
 
 test.beforeEach(async ({ page }) => {
-  // Suppress hydration warnings in console
-  page.on("console", (msg) => {
-    if (msg.type() === "warning" && msg.text().includes("hydration")) {
-      return
-    }
-  })
+  // No console listener is needed here; Playwright does not fail tests on console hydration warnings by default.
 
   // Dismiss any Next.js error dialogs that may appear
   page.on("dialog", async (dialog) => {
