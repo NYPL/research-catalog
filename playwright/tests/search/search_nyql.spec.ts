@@ -6,10 +6,7 @@ let searchPage: SearchPage
 test.beforeEach(async ({ page }) => {
   // No console listener is needed here; Playwright does not fail tests on console hydration warnings by default.
 
-  // Dismiss any Next.js error dialogs that may appear
-  page.on("dialog", async (dialog) => {
-    await dialog.dismiss()
-  })
+  // Do not auto-dismiss dialogs; unexpected dialogs should fail the test run so errors are visible.
 
   searchPage = new SearchPage(page, "")
   await page.goto("")
