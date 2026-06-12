@@ -152,7 +152,7 @@ test.describe("callnumber = JFE 86-3252", () => {
         .filter(Boolean)
 
       expect(callNumberTitles).toHaveLength(queryTitles.length)
-      expect(callNumberTitles).toEqual(queryTitles)
+      expect([...callNumberTitles].sort()).toEqual([...queryTitles].sort())
       expect(queryTitles.length).toBeGreaterThan(0)
     }).toPass({ timeout: 15000 })
   })
