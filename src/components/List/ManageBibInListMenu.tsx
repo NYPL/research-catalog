@@ -153,6 +153,10 @@ export const ManageBibInListMenu = ({
 
     if (listsToAdd.length === 0 && listsToRemove.length === 0) {
       onClose()
+      // Return focus to the trigger button since no changes were saved
+      setTimeout(() => {
+        setPersistentFocus(`manage-bib-${recordId}`)
+      }, 100)
       return
     }
     if (!patron?.id || !lists) {
@@ -220,7 +224,10 @@ export const ManageBibInListMenu = ({
       } else {
         setStatus(STATIC_STATUS_MESSAGES.listChangesFailure)
       }
-      setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
+      // Delay focus
+      setTimeout(() => {
+        setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
+      }, 100)
     } catch (error) {
       console.error("Error updating bib in lists:", error)
     } finally {
@@ -228,17 +235,6 @@ export const ManageBibInListMenu = ({
       onClose()
     }
   }
-
-  const loader = (
-    <SkeletonLoader
-      showImage={false}
-      maxWidth="300px"
-      contentSize={2}
-      mt="0"
-      mb="xs"
-      showHeading={false}
-    />
-  )
 
   const ContentWrapper: any = isMobile ? DrawerContent : PopoverContent
   const HeaderWrapper: any = isMobile ? DrawerHeader : PopoverHeader
@@ -391,27 +387,28 @@ export const ManageBibInListMenu = ({
         <Form id="save-list-management">
           <FormField>
             <Flex width="100%" justifyContent="flex-end" gap="xs">
-              {isSubmitting ? (
-                loader
-              ) : (
-                <>
-                  <Button
-                    id="cancel"
-                    variant="secondary"
-                    onClick={onClose}
-                    sx={{ background: "white" }}
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    id="submit"
-                    isDisabled={isSubmitting}
-                    onClick={handleSubmit}
-                  >
-                    Save changes
-                  </Button>
-                </>
-              )}
+              <Button
+                id="cancel"
+                variant="secondary"
+                onClick={() => {
+                  onClose()
+                  // Delay focus
+                  setTimeout(() => {
+                    setPersistentFocus(`manage-bib-${recordId}`)
+                  }, 100)
+                }}
+                isDisabled={isSubmitting}
+                sx={{ background: "white" }}
+              >
+                Cancel
+              </Button>
+              <Button
+                id="submit"
+                isDisabled={isSubmitting}
+                onClick={handleSubmit}
+              >
+                {isSubmitting ? "Saving..." : "Save changes"}
+              </Button>
             </Flex>
           </FormField>
         </Form>

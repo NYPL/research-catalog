@@ -206,7 +206,12 @@ export const ManageBibInList = ({
     return (
       <>
         {triggerButton}
-        <Drawer isOpen={isOpen} onClose={onClose} placement="bottom">
+        <Drawer
+          isOpen={isOpen}
+          onClose={onClose}
+          placement="bottom"
+          returnFocusOnClose={false}
+        >
           <DrawerOverlay />
           <ManageBibInListMenu
             isOpen={isOpen}
