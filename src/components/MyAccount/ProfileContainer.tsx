@@ -21,14 +21,15 @@ const ProfileContainer = ({ tabsPath }) => {
           position="absolute"
           sx={{
             bottom: "100%",
-            left: { base: "200px", md: "300px", xl: "400px" },
+            left: { base: 100, sm: 200, md: 350, lg: 400 },
             zIndex: "100",
           }}
         >
           <FeaturePopup
-            id="listAccountPopup"
+            id="listPopup"
             title="Save to lists"
             content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
+            pointerRight="50px"
           />
         </Box>
       </Box>

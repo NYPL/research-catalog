@@ -5,10 +5,12 @@ export const FeaturePopup = ({
   id,
   title,
   content,
+  pointerRight = "150px",
 }: {
   id: string
   title: string
   content: string
+  pointerRight?: string
 }) => {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -36,7 +38,7 @@ export const FeaturePopup = ({
           content: '""',
           position: "absolute",
           bottom: "-8px",
-          right: "40px",
+          right: pointerRight,
           borderLeft: "8px solid transparent",
           borderRight: "8px solid transparent",
           borderTop: "8px solid",
@@ -69,7 +71,7 @@ export const FeaturePopup = ({
       >
         {content}
       </Text>
-      <Flex flexDir="row" justifyContent="flex-end">
+      <Flex flexDir="row" justifyContent="flex-end" mt="s">
         <Link
           href="#"
           color="ui.typography.inverse.heading !important"

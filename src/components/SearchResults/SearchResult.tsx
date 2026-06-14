@@ -101,7 +101,7 @@ const SearchResult = ({
                 position="absolute"
                 sx={{
                   bottom: "100%",
-                  right: 0,
+                  right: -10,
                   zIndex: "100",
                 }}
               >
@@ -109,6 +109,7 @@ const SearchResult = ({
                   id="listPopup"
                   title="Save to lists"
                   content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
+                  pointerRight="50px"
                 />
               </Box>
             )}
