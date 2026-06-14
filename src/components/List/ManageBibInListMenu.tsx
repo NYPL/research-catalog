@@ -6,7 +6,6 @@ import {
   FormField,
   TextInput,
   Heading,
-  SkeletonLoader,
   Box,
 } from "@nypl/design-system-react-components"
 import {
@@ -36,6 +35,7 @@ export const ManageBibInListMenu = ({
   setStatus,
   recordId,
   isMobile,
+  inAccount = false,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -43,6 +43,7 @@ export const ManageBibInListMenu = ({
   setStatus: any
   recordId: string
   isMobile?: boolean
+  inAccount?: boolean
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -220,13 +221,25 @@ export const ManageBibInListMenu = ({
 
           return { ...data, lists: updatedLists }
         })
-        setStatus(STATIC_STATUS_MESSAGES.listChangesSuccess)
+        setStatus(
+          inAccount
+            ? STATIC_STATUS_MESSAGES.accountSuccess
+            : STATIC_STATUS_MESSAGES.listChangesSuccess
+        )
       } else {
-        setStatus(STATIC_STATUS_MESSAGES.listChangesFailure)
+        setStatus(
+          inAccount
+            ? STATIC_STATUS_MESSAGES.accountFailure
+            : STATIC_STATUS_MESSAGES.listChangesFailure
+        )
       }
       // Delay focus
       setTimeout(() => {
-        setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
+        setPersistentFocus(
+          inAccount
+            ? `${idConstants.listStatusBanner}`
+            : `${idConstants.listStatusBanner}-${recordId}`
+        )
       }, 100)
     } catch (error) {
       console.error("Error updating bib in lists:", error)

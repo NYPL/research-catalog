@@ -28,6 +28,7 @@ interface ManageBibInListProps {
   recordId: string
   isAuthenticated: boolean
   setStatus
+  inAccount?: boolean
 }
 
 /* Render button to indicate saved state of bib and open list management menu.
@@ -36,8 +37,8 @@ export const ManageBibInList = ({
   recordId,
   isAuthenticated,
   setStatus,
+  inAccount = false,
 }: ManageBibInListProps) => {
-  const buttonRef = useRef<HTMLButtonElement>(null)
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -219,6 +220,7 @@ export const ManageBibInList = ({
             setStatus={setStatus}
             recordId={recordId}
             isMobile={isMobile}
+            inAccount={inAccount}
           />
         </Drawer>
       </>
@@ -241,6 +243,7 @@ export const ManageBibInList = ({
         setStatus={setStatus}
         recordId={recordId}
         isMobile={isMobile}
+        inAccount={inAccount}
       />
     </Popover>
   )

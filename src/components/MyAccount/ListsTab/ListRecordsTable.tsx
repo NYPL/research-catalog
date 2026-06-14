@@ -162,6 +162,7 @@ const ListRecordsTable = ({
         recordId={record.uri}
         isAuthenticated={true}
         setStatus={setStatus}
+        inAccount={true}
       />,
     ]
   })
