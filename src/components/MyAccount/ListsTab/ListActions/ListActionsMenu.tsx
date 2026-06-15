@@ -112,7 +112,7 @@ const ListActionsMenu = ({
           updatedAccountData,
           setUpdatedAccountData,
           setStatus,
-          openListInNewTab: false,
+          inList: false,
         })
         setPersistentFocus(idConstants.listStatusBanner)
       },
