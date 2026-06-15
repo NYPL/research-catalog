@@ -126,10 +126,11 @@ export type DynamicStatusKey =
   | "saveRecordSuccess"
   | "removeRecordSuccess"
   | "accountSpecificFailure"
+  | "duplicateListFromListSuccess"
 
 export const DYNAMIC_STATUS_MESSAGES: Record<
   DynamicStatusKey,
-  (param: string) => StatusBannerState
+  (listId: string, listName?: string) => StatusBannerState
 > = {
   saveRecordSuccess: (listId: string) => ({
     type: "success",
@@ -186,6 +187,22 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         {message} Please try again or{" "}
         <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
+      </Text>
+    ),
+  }),
+  duplicateListFromListSuccess: (listId: string, listName: string) => ({
+    type: "success",
+    message: (
+      <Text marginBottom={0}>
+        Your list has been duplicated to{" "}
+        <Link
+          target="_blank"
+          color="ui.link.primary !important"
+          href={`${BASE_URL}/account/lists/${listId}`}
+        >
+          {listName}
+        </Link>
+        .
       </Text>
     ),
   }),

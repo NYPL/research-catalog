@@ -244,7 +244,7 @@ export default function BibPage({
         </Box>
         <div
           tabIndex={-1}
-          id={idConstants.listStatusBanner}
+          id={`${idConstants.listStatusBanner}-${bib.id}`}
           style={{ marginTop: "-16px", marginBottom: "32px" }}
         >
           {status && (

@@ -28,6 +28,7 @@ interface ManageBibInListProps {
   recordId: string
   isAuthenticated: boolean
   setStatus
+  // If true, display different content and direct focus to account banner
   inAccount?: boolean
 }
 
@@ -235,6 +236,7 @@ export const ManageBibInList = ({
       flip={false}
       isLazy
       strategy="fixed"
+      closeOnBlur={false}
     >
       <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu

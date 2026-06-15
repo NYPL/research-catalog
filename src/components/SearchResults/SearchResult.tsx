@@ -81,20 +81,22 @@ const SearchResult = ({
         },
       }}
     >
-      <CardHeading
-        level="h3"
-        size="heading5"
-        sx={{ a: { textDecoration: "none" } }}
-      >
+      <CardContent data-testid="card-content">
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Box>
-            {bib.findingAid && (
-              <StatusBadge variant="informative" mb="s">
-                Finding aid available
-              </StatusBadge>
-            )}
-            <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
-          </Box>
+          <CardHeading
+            level="h3"
+            size="heading5"
+            sx={{ a: { textDecoration: "none" } }}
+          >
+            <Box>
+              {bib.findingAid && (
+                <StatusBadge variant="informative" mb="s">
+                  Finding aid available
+                </StatusBadge>
+              )}
+              <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+            </Box>
+          </CardHeading>
           <Box position="relative">
             {isFirstResult && (
               <Box
@@ -120,8 +122,6 @@ const SearchResult = ({
             />
           </Box>
         </Flex>
-      </CardHeading>
-      <CardContent data-testid="card-content">
         <Box
           sx={{
             div: { display: "inline-block" },

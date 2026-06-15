@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import {
   TextInput,
   CheckboxGroup,
@@ -47,6 +47,13 @@ export const SearchableCheckboxGroup = ({
   const filteredItems = items?.filter((item) =>
     item.label.toLowerCase().includes(searchTerm.toLowerCase())
   )
+  // Accessible announcements of list search results.
+  const liveRegionRef = useRef<HTMLDivElement | null>(null)
+  useEffect(() => {
+    if (liveRegionRef.current) {
+      liveRegionRef.current.textContent = `${filteredItems.length} lists available`
+    }
+  }, [filteredItems.length])
 
   return (
     <>
@@ -92,6 +99,21 @@ export const SearchableCheckboxGroup = ({
           </Text>
         )}
       </CheckboxGroup>
+      <div
+        id="search-live-region"
+        ref={liveRegionRef}
+        aria-live="polite"
+        style={{
+          position: "absolute",
+          width: "1px",
+          height: "1px",
+          margin: "-1px",
+          padding: 0,
+          overflow: "hidden",
+          clip: "rect(0,0,0,0)",
+          border: 0,
+        }}
+      />
     </>
   )
 }

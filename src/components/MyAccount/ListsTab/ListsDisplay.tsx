@@ -18,6 +18,7 @@ import type { List } from "../../../types/listTypes"
 import type { StatusBannerState } from "../Settings/StatusBanner"
 import { StatusBanner } from "../Settings/StatusBanner"
 import ListActionsMenu from "./ListActions/ListActionsMenu"
+import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
@@ -37,6 +38,24 @@ const ListsDisplay = () => {
   // Manage status banner display for list actions (CreateEditList modal needs explicit ref)
   const bannerRef = useRef<HTMLDivElement>(null)
   const [status, setStatus] = useState<StatusBannerState | null>(null)
+
+  // Handle banner display when returning from a deleted list in the single list view
+  useEffect(() => {
+    if (router.query.listDeleted) {
+      setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
+      setPersistentFocus(idConstants.listStatusBanner)
+      const query = { ...router.query }
+      delete query.listDeleted
+      router.replace(
+        {
+          pathname: "/account/[[...index]]",
+          query,
+        },
+        "/account/lists",
+        { shallow: true }
+      )
+    }
+  }, [router.query.listDeleted, router, setPersistentFocus])
 
   const loader = (
     <SkeletonLoader
@@ -75,7 +94,7 @@ const ListsDisplay = () => {
     const listUrl = `/account/lists/${list.id}${slug ? `/${slug}` : ""}`
     return [
       <Link
-        isUnderlined={false}
+        isUnderlined={true}
         href={listUrl}
         key={list.id}
         onClick={(e: any) => {
@@ -151,6 +170,7 @@ const ListsDisplay = () => {
               "Date modified",
               "Action",
             ]}
+            useRowHeaders
             columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
             columnStyles={[
               { width: 320, minWidth: 240 },

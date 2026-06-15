@@ -27,7 +27,7 @@ const EmptyList = () => {
           />
         </svg>
       </Icon>
-      <Heading level="h2" mt="s" mb="xs" size="heading5">
+      <Heading level="h3" mt="s" mb="xs" size="heading5">
         This list is currently empty
       </Heading>
       <Text mt="0" mb="0">

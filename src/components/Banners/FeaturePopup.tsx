@@ -37,7 +37,7 @@ export const FeaturePopup = ({
         _before: {
           content: '""',
           position: "absolute",
-          bottom: "-8px",
+          bottom: "-7px",
           right: pointerRight,
           borderLeft: "8px solid transparent",
           borderRight: "8px solid transparent",

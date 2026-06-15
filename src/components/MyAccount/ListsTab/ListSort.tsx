@@ -35,6 +35,21 @@ const ListSort = forwardRef<HTMLDivElement, ListSortProps>(
         width={{ base: "100%", sm: "auto" }}
         sx={{
           button: { width: "100%" },
+          // Hacky way to force scroll internally
+          "[role='menu'], .chakra-menu__menu-list": {
+            maxHeight: "50vh",
+            overflowY: "auto",
+          },
+        }}
+        onKeyDown={(e: any) => {
+          if (["ArrowDown", "ArrowUp", "Home", "End"].includes(e.key)) {
+            setTimeout(() => {
+              const activeEl = document.activeElement as HTMLElement
+              if (activeEl?.getAttribute("role") === "menuitem") {
+                activeEl.scrollIntoView({ block: "nearest" })
+              }
+            }, 10)
+          }
         }}
       >
         <Menu

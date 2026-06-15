@@ -149,7 +149,7 @@ const ListRecordsTable = ({
   const tableData = listRecords.map((record: ListRecord) => {
     return [
       <>
-        <Link isUnderlined={false} href={`/bib/${record.uri}`} key={record.uri}>
+        <Link isUnderlined={true} href={`/bib/${record.uri}`} key={record.uri}>
           {record.title}
         </Link>{" "}
         {record.itemCount > 1 && `(${record.itemCount} items)`}
@@ -211,7 +211,7 @@ const ListRecordsTable = ({
         <Box display="grid">
           <Table
             className={styles.listTable}
-            //TODO: Restore Location column
+            // TODO: Restore Location column
             columnHeaders={["Title", "Call number", "Date added", "Action"]}
             columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
             columnStyles={[

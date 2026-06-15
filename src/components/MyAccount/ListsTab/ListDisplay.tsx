@@ -104,9 +104,9 @@ const ListDisplay = ({ list }: { list: List }) => {
           await router.push(
             {
               pathname: "/account/[[...index]]",
-              query: { index: ["lists"] },
+              query: { index: ["lists"], listDeleted: true },
             },
-            "/account/lists",
+            "/account/lists?listDeleted=true",
             { shallow: true }
           )
           const updatedLists = lists.filter((l: any) => l.id !== list.id)
@@ -114,9 +114,9 @@ const ListDisplay = ({ list }: { list: List }) => {
             ...updatedAccountData,
             lists: updatedLists,
           })
-          setStatus(STATIC_STATUS_MESSAGES.deleteListSuccess)
         } else {
           setStatus(STATIC_STATUS_MESSAGES.deleteListFailure)
+          setPersistentFocus(idConstants.listStatusBanner)
           closeModal()
         }
       } catch (error) {
@@ -202,7 +202,7 @@ const ListDisplay = ({ list }: { list: List }) => {
                 updatedAccountData,
                 setUpdatedAccountData,
                 setStatus,
-                openListInNewTab: true,
+                inList: true,
               })
               setPersistentFocus(idConstants.listStatusBanner)
             }}

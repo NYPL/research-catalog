@@ -147,11 +147,18 @@
     border-color: var(--nypl-colors-ui-gray-light-cool);
     font-size: 14px;
     text-transform: uppercase;
+    border-right: unset !important;
   }
   tbody > tr > td,
-  tbody > tr > td:last-of-type {
+  tbody > tr > td:last-of-type,
+  tbody > tr > th {
     align-content: center;
     border-color: var(--nypl-colors-ui-gray-light-cool);
+    font-weight: normal;
+    text-align: left;
+    background: var(--nypl-colors-ui-white) !important;
+    border-right: unset !important;
+    text-transform: unset !important;
   }
 
   thead > tr > th:last-of-type,
@@ -169,7 +176,8 @@
   @media only screen and (max-width: 600px) {
     tbody > tr > td:first-of-type,
     tbody > tr > td,
-    tbody > tr > td:last-of-type {
+    tbody > tr > td:last-of-type,
+    tbody > tr > th {
       width: auto;
     }
   }
@@ -187,8 +195,11 @@
     text-transform: uppercase;
   }
   tbody > tr > td,
-  tbody > tr > td:last-of-type {
+  tbody > tr > td:last-of-type,
+  tbody > tr > th {
     border-color: var(--nypl-colors-ui-gray-light-cool);
+    font-weight: normal;
+    text-align: left;
   }
   thead > tr > th:last-of-type,
   tbody > tr > td:last-of-type {
@@ -206,7 +217,8 @@
   @media only screen and (max-width: 600px) {
     tbody > tr > td:first-of-type,
     tbody > tr > td,
-    tbody > tr > td:last-of-type {
+    tbody > tr > td:last-of-type,
+    tbody > tr > th {
       width: auto;
     }
   }

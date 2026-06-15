@@ -46,16 +46,37 @@ export const CreateEditListModal = ({
   const [listDescription, setListDescription] = useState(
     list?.description || ""
   )
+  const [debouncedListName, setDebouncedListName] = useState(
+    list?.listName || ""
+  )
+  const [debouncedListDescription, setDebouncedListDescription] = useState(
+    list?.description || ""
+  )
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [canFocusBannerOnClose, setCanFocusBannerOnClose] = useState(false)
 
   useEffect(() => {
     if (isOpen) {
       setListName(list?.listName || "")
+      setDebouncedListName(list?.listName || "")
       setListDescription(list?.description || "")
+      setDebouncedListDescription(list?.description || "")
       setCanFocusBannerOnClose(false)
     }
   }, [isOpen, list])
+
+  useEffect(() => {
+    const timer = setTimeout(() => setDebouncedListName(listName), 1000)
+    return () => clearTimeout(timer)
+  }, [listName])
+
+  useEffect(() => {
+    const timer = setTimeout(
+      () => setDebouncedListDescription(listDescription),
+      1000
+    )
+    return () => clearTimeout(timer)
+  }, [listDescription])
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault()
@@ -166,7 +187,29 @@ export const CreateEditListModal = ({
                 labelText="List name (required)"
                 showLabel={true}
                 placeholder="Enter list name"
-                helperText={`${100 - listName.length} characters remaining`}
+                helperText={
+                  <>
+                    <Box as="span" aria-hidden="true">
+                      {100 - listName.length} characters remaining
+                    </Box>
+                    <Box
+                      as="span"
+                      sx={{
+                        border: "0",
+                        clip: "rect(0, 0, 0, 0)",
+                        height: "1px",
+                        margin: "-1px",
+                        overflow: "hidden",
+                        padding: "0",
+                        position: "absolute",
+                        whiteSpace: "nowrap",
+                        width: "1px",
+                      }}
+                    >
+                      {100 - debouncedListName.length} characters remaining
+                    </Box>
+                  </>
+                }
                 isInvalid={listName.length > 100}
                 invalidText="List name must be 100 characters or less"
                 onChange={(e: any) => setListName(e.target.value)}
@@ -181,9 +224,30 @@ export const CreateEditListModal = ({
                 value={listDescription}
                 labelText="List description"
                 placeholder="Enter list description"
-                helperText={`${
-                  500 - listDescription.length
-                } characters remaining`}
+                helperText={
+                  <>
+                    <Box as="span" aria-hidden="true">
+                      {500 - listDescription.length} characters remaining
+                    </Box>
+                    <Box
+                      as="span"
+                      sx={{
+                        border: "0",
+                        clip: "rect(0, 0, 0, 0)",
+                        height: "1px",
+                        margin: "-1px",
+                        overflow: "hidden",
+                        padding: "0",
+                        position: "absolute",
+                        whiteSpace: "nowrap",
+                        width: "1px",
+                      }}
+                    >
+                      {500 - debouncedListDescription.length} characters
+                      remaining
+                    </Box>
+                  </>
+                }
                 showLabel={true}
                 isInvalid={listDescription.length > 500}
                 invalidText="List description must be 500 characters or less"

@@ -8,7 +8,7 @@ import type {
 import type { Patron } from "../types/myAccountTypes"
 import type { DiscoverySearchResultsElement } from "../types/searchTypes"
 import { formatMMDDYYYY } from "./dateUtils"
-import { STATIC_STATUS_MESSAGES } from "./statusUtils"
+import { DYNAMIC_STATUS_MESSAGES, STATIC_STATUS_MESSAGES } from "./statusUtils"
 
 export const LIST_RECORDS_PER_PAGE = 20
 
@@ -250,7 +250,7 @@ export const duplicateList = async ({
   updatedAccountData,
   setUpdatedAccountData,
   setStatus,
-  openListInNewTab = false,
+  inList = false,
 }: {
   list: List
   patron: Patron
@@ -258,7 +258,7 @@ export const duplicateList = async ({
   updatedAccountData: any
   setUpdatedAccountData: any
   setStatus: any
-  openListInNewTab?: boolean
+  inList?: boolean
 }) => {
   try {
     const response = await fetch(`${BASE_URL}/api/account/lists/list`, {
@@ -280,11 +280,15 @@ export const duplicateList = async ({
           ...updatedAccountData,
           lists: [data.list, ...lists],
         })
-        if (openListInNewTab) {
-          window.open(`${BASE_URL}/account/lists/${data.list.id}`, "_blank")
-        }
       }
-      setStatus(STATIC_STATUS_MESSAGES.duplicateListSuccess)
+      setStatus(
+        inList
+          ? DYNAMIC_STATUS_MESSAGES.duplicateListFromListSuccess(
+              data.list.id,
+              data.list.listName
+            )
+          : STATIC_STATUS_MESSAGES.duplicateListSuccess
+      )
     } else {
       setStatus(STATIC_STATUS_MESSAGES.duplicateListFailure)
     }
