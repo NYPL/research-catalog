@@ -290,7 +290,10 @@ export const ManageBibInListMenu = ({
             fontWeight: "normal",
             maxHeight: "360px",
             overflowY: "auto",
-            padding: "s",
+            paddingBottom: "s",
+            paddingRight: "s",
+            paddingLeft: "s",
+            paddingTop: "xs",
             flex: "1",
             ...(isMobile
               ? {
