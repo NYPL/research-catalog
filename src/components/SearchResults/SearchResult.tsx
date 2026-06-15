@@ -86,6 +86,7 @@ const SearchResult = ({
           <CardHeading
             level="h3"
             size="heading5"
+            mb="xs"
             sx={{ a: { textDecoration: "none" } }}
           >
             <Box>
