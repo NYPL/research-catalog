@@ -22,7 +22,7 @@ import {
   DYNAMIC_STATUS_MESSAGES,
   STATIC_STATUS_MESSAGES,
 } from "../../utils/statusUtils"
-import { useFocusContext } from "../../context/FocusContext"
+import { idConstants, useFocusContext } from "../../context/FocusContext"
 
 interface ManageBibInListProps {
   recordId: string
@@ -166,6 +166,7 @@ export const ManageBibInList = ({
         )
       } finally {
         setIsLoading(false)
+        setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
       }
     } else {
       onOpen()
@@ -238,7 +239,7 @@ export const ManageBibInList = ({
       strategy="fixed"
       closeOnBlur={false}
     >
-      <PopoverTrigger>{triggerButton}</PopoverTrigger>
+      {triggerButton}
       <ManageBibInListMenu
         isOpen={isOpen}
         onClose={onClose}
