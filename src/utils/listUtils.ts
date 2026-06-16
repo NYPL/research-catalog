@@ -158,6 +158,24 @@ export const buildListRecords = (
       const indexB = indexMap.get(b.uri) ?? Infinity
       return indexA - indexB
     })
+  } else {
+    updatedRecords.sort((a: any, b: any) => {
+      let valA = ""
+      let valB = ""
+      if (activeSort.includes("title")) {
+        valA = a.title || ""
+        valB = b.title || ""
+      } else if (activeSort.includes("creator")) {
+        valA = a.creatorLiteral || ""
+        valB = b.creatorLiteral || ""
+      } else if (activeSort.includes("callnumber")) {
+        valA = a.callNumber || ""
+        valB = b.callNumber || ""
+      }
+
+      const comparison = valA.localeCompare(valB)
+      return activeSort.includes("desc") ? -comparison : comparison
+    })
   }
 
   return updatedRecords
