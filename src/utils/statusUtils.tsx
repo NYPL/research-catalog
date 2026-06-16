@@ -18,6 +18,8 @@ export type StaticStatusKey =
   | "passwordIncorrectFailure"
   | "passwordInvalidFailure"
   | "usernameFailure"
+  | "duplicateListNameFailure"
+  | "duplicateEditListNameFailure"
 
 export const STATIC_STATUS_MESSAGES: Record<
   StaticStatusKey,
@@ -26,6 +28,24 @@ export const STATIC_STATUS_MESSAGES: Record<
   duplicateListSuccess: {
     type: "success",
     message: <Text marginBottom={0}>Your list has been duplicated.</Text>,
+  },
+  duplicateListNameFailure: {
+    type: "failure",
+    message: (
+      <Text marginBottom={0}>
+        List creation failed because a list with this name already exists. Try
+        again with a different list name.
+      </Text>
+    ),
+  },
+  duplicateEditListNameFailure: {
+    type: "failure",
+    message: (
+      <Text marginBottom={0}>
+        List changes failed because a list with this name already exists. Try
+        again with a different list name.
+      </Text>
+    ),
   },
   duplicateListFailure: {
     type: "failure",

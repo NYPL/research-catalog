@@ -310,6 +310,8 @@ export const ManageBibInListMenu = ({
                 borderRadius: "2px",
                 background: "var(--ui-bg-default, #F5F5F5)",
                 marginBottom: "xs",
+                marginTop: "xs",
+                div: { gap: "s" },
               }}
             >
               <FormField>
@@ -401,6 +403,7 @@ export const ManageBibInListMenu = ({
               <StatusBanner
                 type={listCreationStatus.type}
                 message={listCreationStatus.message}
+                isMiniBanner={true}
               />
             )}
           </Box>

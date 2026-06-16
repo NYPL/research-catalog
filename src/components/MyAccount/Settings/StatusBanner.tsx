@@ -4,15 +4,21 @@ import type { ReactElement } from "react"
 export type StatusBannerState = {
   type: string
   message: ReactElement | string
+  isMiniBanner?: boolean
 }
 
-export const StatusBanner = ({ type, message }: StatusBannerState) => {
+export const StatusBanner = ({
+  type,
+  message,
+  isMiniBanner = false,
+}: StatusBannerState) => {
   return (
     <Banner
       isDismissible
       content={message}
       variant={type === "failure" ? "negative" : "positive"}
       sx={{
+        ...(isMiniBanner && { paddingTop: "xs", paddingBottom: "xs" }),
         alignContent: "center",
         color: "ui.body",
         a: { color: "ui.link.primary" },

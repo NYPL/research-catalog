@@ -132,8 +132,14 @@ export const CreateEditListModal = ({
           setListName(list?.listName || "")
           setListDescription(list?.description || "")
         }
+        const errorData = await response.json()
+        // TO DO: Emma clean up
         setStatus(
-          isEdit
+          errorData.error === "List with that name already exists"
+            ? isEdit
+              ? STATIC_STATUS_MESSAGES.duplicateEditListNameFailure
+              : STATIC_STATUS_MESSAGES.duplicateListNameFailure
+            : isEdit
             ? STATIC_STATUS_MESSAGES.accountFailure
             : STATIC_STATUS_MESSAGES.createListFailure
         )

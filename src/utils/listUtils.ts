@@ -209,6 +209,7 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
         "Call number",
         //"Location",
         "Date added",
+        "URL",
       ],
       ...allUpdatedRecords.map((r: ListRecord, index: number) => [
         `"${index + 1}"`,
@@ -223,6 +224,11 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
         `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
         //`"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
         `"${r.addedFormattedDate || ""}"`,
+        `"${
+          r.uri
+            ? `https://catalog.nypl.org/record=${r.uri.replace(/"/g, '""')}`
+            : ""
+        }"`,
       ]),
     ]
 
