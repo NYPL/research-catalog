@@ -216,7 +216,6 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
       <Text marginBottom={0}>
         Your list has been duplicated to{" "}
         <Link
-          target="_blank"
           color="ui.link.primary !important"
           href={`${BASE_URL}/account/lists/${listId}`}
         >
