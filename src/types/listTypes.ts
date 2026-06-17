@@ -15,7 +15,7 @@ export interface List {
   description: string | null
   createdDate: string
   modifiedDate: string
-  isDefaultList?: boolean
+  isDefaultList: boolean
 }
 
 export interface ListRecord {

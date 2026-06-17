@@ -109,7 +109,9 @@ export const CreateEditListModal = ({
         if (data && data.list) {
           if (isEdit) {
             const updatedLists = lists.map((l: any) =>
-              l.id === list.id ? { ...l, ...data.list } : l
+              l.id === list.id
+                ? { ...l, ...data.list, isDefaultList: l.isDefaultList }
+                : l
             )
             setUpdatedAccountData({
               ...updatedAccountData,

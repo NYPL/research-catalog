@@ -239,7 +239,9 @@ export const ManageBibInListMenu = ({
           results.forEach((resData: any) => {
             const updatedList = resData.list || resData
             updatedLists = updatedLists.map((l: any) =>
-              l.id === updatedList.id ? { ...l, ...updatedList } : l
+              l.id === updatedList.id
+                ? { ...l, ...updatedList, isDefaultList: l.isDefaultList }
+                : l
             )
           })
 

@@ -139,7 +139,11 @@ export const ManageBibInList = ({
             if (!data || !data.lists) return data
             const updatedLists = data.lists.map((list: List) => {
               if (list.id === defaultListId) {
-                return { ...list, ...updatedList }
+                return {
+                  ...list,
+                  ...updatedList,
+                  isDefaultList: list.isDefaultList,
+                }
               }
               return list
             })
