@@ -172,7 +172,11 @@ export const ManageBibInList = ({
         )
       } finally {
         setIsLoading(false)
-        setPersistentFocus(`${idConstants.listStatusBanner}-${recordId}`)
+        setPersistentFocus(
+          inAccount
+            ? `${idConstants.listStatusBanner}`
+            : `${idConstants.listStatusBanner}-${recordId}`
+        )
       }
     } else {
       onOpen()
