@@ -64,6 +64,10 @@ describe("ManageBibInListMenu", () => {
     renderWithContext([
       { id: "list-1", listName: "My first list", records: [] },
       { id: "list-2", listName: "Another list", records: [] },
+      { id: "list-3", listName: "Emma list", records: [] },
+      { id: "list-4", listName: "Emma's second list", records: [] },
+      { id: "list-5", listName: "Yet more list", records: [] },
+      { id: "list-6", listName: "A list list", records: [] },
     ])
 
     const searchInput = screen.getByPlaceholderText("Search for a list")
