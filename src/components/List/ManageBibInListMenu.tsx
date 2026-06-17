@@ -132,7 +132,13 @@ export const ManageBibInListMenu = ({
         }
         setListCreationStatus(STATIC_STATUS_MESSAGES.createListSuccess)
       } else {
-        setListCreationStatus(STATIC_STATUS_MESSAGES.createListFailure)
+        const errorData = await response.json()
+        // TO DO: Emma clean up
+        setListCreationStatus(
+          errorData.error === "List with that name already exists"
+            ? STATIC_STATUS_MESSAGES.duplicateListNameFailure
+            : STATIC_STATUS_MESSAGES.createListFailure
+        )
       }
       setPersistentFocus(idConstants.listMenuStatusBanner)
     } catch (error) {

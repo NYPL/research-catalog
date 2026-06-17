@@ -120,6 +120,10 @@ export const CreateEditListModal = ({
               ...updatedAccountData,
               lists: [data.list, ...lists],
             })
+            setListName("")
+            setDebouncedListName("")
+            setListDescription("")
+            setDebouncedListDescription("")
           }
         }
         setStatus(
