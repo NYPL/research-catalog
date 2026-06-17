@@ -240,11 +240,16 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
             : ""
         }"`,
         `"${r.callNumber ? r.callNumber.replace(/"/g, '""') : ""}"`,
+        // TO DO: Restore location
         //`"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
         `"${r.addedFormattedDate || ""}"`,
+        // TO DO: Update to catalog.nypl.org link when it handles partner items
         `"${
           r.uri
-            ? `https://catalog.nypl.org/record=${r.uri.replace(/"/g, '""')}`
+            ? `https://nypl.org/research/research-catalog/bib/${r.uri.replace(
+                /"/g,
+                '""'
+              )}`
             : ""
         }"`,
       ]),
