@@ -35,6 +35,7 @@ export const ManageBibInListMenu = ({
   recordId,
   isMobile,
   inAccount = false,
+  initialFocusRef,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -43,6 +44,7 @@ export const ManageBibInListMenu = ({
   recordId: string
   isMobile?: boolean
   inAccount?: boolean
+  initialFocusRef?: any
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -71,10 +73,10 @@ export const ManageBibInListMenu = ({
   // Reset whole menu state on open
   useEffect(() => {
     if (isOpen) {
+      setStatus(null)
       setListName(list?.listName || "")
       setDebouncedListName(list?.listName || "")
       setShowCreateForm(false)
-      setStatus(null)
       setListCreationStatus(null)
       setSelectedLists(
         lists
@@ -90,6 +92,17 @@ export const ManageBibInListMenu = ({
     const timer = setTimeout(() => setDebouncedListName(listName), 1000)
     return () => clearTimeout(timer)
   }, [listName])
+
+  // Focus the "Create new list" button when popover opens
+  useEffect(() => {
+    if (isOpen) {
+      const timer = setTimeout(() => {
+        const btn = document.getElementById(idConstants.createListButton)
+        if (btn && document.activeElement !== btn) btn.focus()
+      }, 150)
+      return () => clearTimeout(timer)
+    }
+  }, [isOpen])
 
   const initialSelectedLists =
     lists
@@ -146,6 +159,7 @@ export const ManageBibInListMenu = ({
     } finally {
       setShowCreateForm(false)
       setListName("")
+      setIsSubmitting(false)
     }
   }
 
@@ -243,11 +257,13 @@ export const ManageBibInListMenu = ({
             : STATIC_STATUS_MESSAGES.listChangesFailure
         )
       }
-      setPersistentFocus(
-        inAccount
-          ? `${idConstants.listStatusBanner}`
-          : `${idConstants.listStatusBanner}-${recordId}`
-      )
+      setTimeout(() => {
+        setPersistentFocus(
+          inAccount
+            ? `${idConstants.listStatusBanner}`
+            : `${idConstants.listStatusBanner}-${recordId}`
+        )
+      }, 150)
     } catch (error) {
       console.error("Error updating bib in lists:", error)
     } finally {
@@ -262,6 +278,7 @@ export const ManageBibInListMenu = ({
 
   return (
     <ContentWrapper
+      aria-modal={true}
       _focus={{ outline: "none" }}
       textAlign="left"
       {...(isMobile
@@ -275,6 +292,7 @@ export const ManageBibInListMenu = ({
         returnFocus={false}
         persistentFocus={false}
         disabled={isMobile || !isOpen}
+        autoFocus={false}
       >
         <HeaderWrapper
           sx={{
@@ -386,12 +404,14 @@ export const ManageBibInListMenu = ({
             </Form>
           ) : (
             <Button
+              ref={initialFocusRef}
               id={idConstants.createListButton}
               variant="text"
               paddingLeft="xs"
               marginBottom="xs"
               onClick={() => {
                 setShowCreateForm(true)
+                setListCreationStatus(null)
                 setPersistentFocus(idConstants.createListNameInput)
               }}
             >
@@ -447,8 +467,13 @@ export const ManageBibInListMenu = ({
                   id="cancel"
                   variant="secondary"
                   onClick={() => {
+                    setShowCreateForm(false)
                     onClose()
-                    setPersistentFocus(`popover-trigger-manage-bib-${recordId}`)
+                    setTimeout(() => {
+                      setPersistentFocus(
+                        `popover-trigger-manage-bib-${recordId}`
+                      )
+                    }, 150)
                   }}
                   isDisabled={isSubmitting}
                   sx={{ background: "white" }}

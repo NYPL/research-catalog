@@ -22,7 +22,7 @@ export const StatusBanner = ({
           paddingTop: "xs",
           paddingBottom: "xs",
           paddingLeft: "s !important",
-          paddingRight: "m !important",
+          paddingRight: "36px !important",
         }),
         alignContent: "center",
         color: "ui.body",

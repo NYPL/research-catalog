@@ -61,6 +61,9 @@ export const ManageBibInList = ({
   // Manage bib menu state
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  // Ref to correctly direct focus to "Create new list" upon opening
+  const initialFocusRef = useRef<any>(null)
+
   const popoverBaseId = `manage-bib-${recordId}`
   const triggerId = `popover-trigger-${popoverBaseId}`
 
@@ -217,6 +220,7 @@ export const ManageBibInList = ({
           onClose={onClose}
           placement="bottom"
           returnFocusOnClose={false}
+          initialFocusRef={initialFocusRef}
         >
           <DrawerOverlay />
           <ManageBibInListMenu
@@ -226,6 +230,7 @@ export const ManageBibInList = ({
             recordId={recordId}
             isMobile={isMobile}
             inAccount={inAccount}
+            initialFocusRef={initialFocusRef}
           />
         </Drawer>
       </>
@@ -241,7 +246,9 @@ export const ManageBibInList = ({
       flip={false}
       isLazy
       strategy="fixed"
-      closeOnBlur={false}
+      closeOnBlur={true}
+      returnFocusOnClose={false}
+      initialFocusRef={initialFocusRef}
     >
       <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu
@@ -251,6 +258,7 @@ export const ManageBibInList = ({
         recordId={recordId}
         isMobile={isMobile}
         inAccount={inAccount}
+        initialFocusRef={initialFocusRef}
       />
     </Popover>
   )
