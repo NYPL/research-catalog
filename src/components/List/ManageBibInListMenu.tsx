@@ -437,6 +437,7 @@ export const ManageBibInListMenu = ({
             id="search-lists"
             searchPlaceholder="Search for a list"
             label="Recent lists"
+            isSearchable={lists.length > 5}
             items={
               lists?.map((list: any) => ({
                 id: list.id,
