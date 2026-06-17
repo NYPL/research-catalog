@@ -442,7 +442,7 @@ export const ManageBibInListMenu = ({
                   variant="secondary"
                   onClick={() => {
                     onClose()
-                    setPersistentFocus(`manage-bib-${recordId}`)
+                    setPersistentFocus(`popover-trigger-manage-bib-${recordId}`)
                   }}
                   isDisabled={isSubmitting}
                   sx={{ background: "white" }}

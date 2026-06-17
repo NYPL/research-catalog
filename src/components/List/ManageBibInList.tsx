@@ -61,13 +61,16 @@ export const ManageBibInList = ({
   // Manage bib menu state
   const { isOpen, onOpen, onClose } = useDisclosure()
 
+  const popoverBaseId = `manage-bib-${recordId}`
+  const triggerId = `popover-trigger-${popoverBaseId}`
+
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
     const focusTarget = params.get("focus")
 
-    if (focusTarget === `manage-bib-${recordId}`) {
-      setPersistentFocus(`manage-bib-${recordId}`)
+    if (focusTarget === triggerId) {
+      setPersistentFocus(triggerId)
       // Clean up the URL
       params.delete("focus")
       const newUrl =
@@ -81,7 +84,7 @@ export const ManageBibInList = ({
         onOpen()
       }
     }
-  }, [recordId, onOpen, onlyHasDefaultList])
+  }, [recordId, onOpen, onlyHasDefaultList, triggerId])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:
@@ -89,7 +92,7 @@ export const ManageBibInList = ({
       e.preventDefault()
 
       const currentUrl = new URL(window.location.href)
-      currentUrl.searchParams.set("focus", `manage-bib-${recordId}`)
+      currentUrl.searchParams.set("focus", triggerId)
 
       const loginEndpoint =
         appConfig.urls?.loginUrl?.[appConfig.environment] ||
@@ -175,7 +178,7 @@ export const ManageBibInList = ({
 
   const triggerButton = (
     <Button
-      id={`manage-bib-${recordId}`}
+      id={triggerId}
       onClick={handleSaveClick}
       variant="text"
       isDisabled={isLoading}
@@ -231,6 +234,7 @@ export const ManageBibInList = ({
 
   return (
     <Popover
+      id={popoverBaseId}
       isOpen={isOpen}
       onClose={onClose}
       placement="bottom-end"
@@ -239,7 +243,7 @@ export const ManageBibInList = ({
       strategy="fixed"
       closeOnBlur={false}
     >
-      {triggerButton}
+      <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu
         isOpen={isOpen}
         onClose={onClose}
