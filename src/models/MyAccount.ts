@@ -421,6 +421,7 @@ export default class MyAccount {
         createdDate: formatMMDDYYYY(list.createdDate),
         modifiedDate: formatMMDDYYYY(list.modifiedDate),
         records: this.buildRecordsFromListResult(list, bibDataMap),
+        isDefaultList: false,
       }
     })
   }
