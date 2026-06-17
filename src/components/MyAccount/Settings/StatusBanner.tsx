@@ -18,7 +18,12 @@ export const StatusBanner = ({
       content={message}
       variant={type === "failure" ? "negative" : "positive"}
       sx={{
-        ...(isMiniBanner && { paddingTop: "xs", paddingBottom: "xs" }),
+        ...(isMiniBanner && {
+          paddingTop: "xs",
+          paddingBottom: "xs",
+          paddingLeft: "s !important",
+          paddingRight: "s",
+        }),
         alignContent: "center",
         color: "ui.body",
         a: { color: "ui.link.primary" },
