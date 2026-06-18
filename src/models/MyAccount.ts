@@ -102,8 +102,13 @@ export default class MyAccount {
     const listsResult = await fetchLists({ patronId })
     const lists = listsResult?.lists
 
-    // If patron has no lists, create their default list
-    if (lists && lists.length === 0) {
+    // Check if the default list exists based on its unique name
+    const hasDefaultList = lists?.some(
+      (list) => list.listName === "My workspace (default list)"
+    )
+
+    // If patron doesn't have the default list, provision it
+    if (lists && !hasDefaultList) {
       const createResult = await createList({
         patronId,
         listName: "My workspace (default list)",
@@ -118,11 +123,19 @@ export default class MyAccount {
 
     // Set the isDefaultList prop
     if (lists && lists.length > 0) {
-      const defaultListId = lists.reduce((oldest, current) => {
-        const currentDate = new Date(current.createdDate).getTime()
-        const oldestDate = new Date(oldest.createdDate).getTime()
+      // Use name + oldest id to confirm
+      const defaultLists = lists.filter(
+        (list) => list.listName === "My workspace (default list)"
+      )
+      const candidateLists = defaultLists.length > 0 ? defaultLists : lists
+
+      const defaultListId = candidateLists.reduce((oldest, current) => {
+        const currentDate = new Date(current.createdDate).getTime() || 0
+        const oldestDate = new Date(oldest.createdDate).getTime() || 0
+        console.log(currentDate, oldestDate)
         return currentDate < oldestDate ? current : oldest
       }).id
+
       builtLists.forEach((list) => {
         list.isDefaultList = list.id === defaultListId
       })
