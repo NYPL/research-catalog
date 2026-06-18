@@ -152,7 +152,14 @@ const Search = ({
               direction={{ base: "column", md: "row" }}
               mb={{ base: "m", md: 0 }}
             >
-              <Box flex={1} mb={{ base: "s", md: "l" }} mr="m">
+              <Box
+                flex={1}
+                mb={{ base: "s", md: "l" }}
+                mr="m"
+                tabIndex={-1}
+                id="search-results-heading"
+                aria-live="polite"
+              >
                 {isLoading ? (
                   <SkeletonLoader
                     contentSize={1}
@@ -161,8 +168,6 @@ const Search = ({
                   />
                 ) : (
                   <Heading
-                    id="search-results-heading"
-                    tabIndex={-1}
                     ref={searchResultsHeadingRef}
                     data-testid="search-results-heading"
                     level="h2"
