@@ -7,8 +7,8 @@ export const listsResponse = [
     records: [],
     createdDate: "2026-04-15T15:26:18.209896",
     modifiedDate: "2026-04-15T15:26:18.209897",
-    listName: "First list",
-    description: null,
+    listName: "My workspace (default list)",
+    description: "Default list - cannot delete",
   },
   {
     id: "1234-cc-vv",
@@ -36,8 +36,8 @@ export const processedLists: List[] = [
     recordCount: 0,
     createdDate: "4/15/2026",
     modifiedDate: "4/15/2026",
-    listName: "First list",
-    description: null,
+    listName: "My workspace (default list)",
+    description: "Default list - cannot delete",
     isDefaultList: true,
   },
   {

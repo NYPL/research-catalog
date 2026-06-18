@@ -74,20 +74,37 @@ describe("ManageBibInList", () => {
   })
 
   it("renders 'Save' when the user is authenticated but the record is not in any list", () => {
-    renderWithContext([{ id: "list-1", isDefaultList: true, records: [] }])
+    renderWithContext([
+      {
+        id: "list-1",
+        listName: "My workspace (default list)",
+        isDefaultList: true,
+        records: [],
+      },
+    ])
     expect(screen.getByRole("button", { name: /Save/i })).toBeInTheDocument()
   })
 
   it("renders 'Remove' when the user is authenticated, has only the default list, and the record is saved", () => {
     renderWithContext([
-      { id: "list-1", isDefaultList: true, records: [{ uri: "b12345678" }] },
+      {
+        id: "list-1",
+        listName: "My workspace (default list)",
+        isDefaultList: true,
+        records: [{ uri: "b12345678" }],
+      },
     ])
     expect(screen.getByRole("button", { name: /Remove/i })).toBeInTheDocument()
   })
 
   it("renders 'Manage' when the user is authenticated, has multiple lists, and the record is saved", () => {
     renderWithContext([
-      { id: "list-1", isDefaultList: true, records: [{ uri: "b12345678" }] },
+      {
+        id: "list-1",
+        listName: "My workspace (default list)",
+        isDefaultList: true,
+        records: [{ uri: "b12345678" }],
+      },
       { id: "list-2", isDefaultList: false, records: [] },
     ])
     expect(screen.getByRole("button", { name: /Manage/i })).toBeInTheDocument()
@@ -105,11 +122,23 @@ describe("ManageBibInList", () => {
     global.fetch = jest.fn().mockResolvedValue({
       ok: true,
       json: async () => ({
-        list: { id: "list-1", recordCount: 1, records: [{ uri: "b12345678" }] },
+        list: {
+          id: "list-1",
+          listName: "My workspace (default list)",
+          recordCount: 1,
+          records: [{ uri: "b12345678" }],
+        },
       }),
     } as Response)
 
-    renderWithContext([{ id: "list-1", isDefaultList: true, records: [] }])
+    renderWithContext([
+      {
+        id: "list-1",
+        listName: "My workspace (default list)",
+        isDefaultList: true,
+        records: [],
+      },
+    ])
 
     await userEvent.click(screen.getByRole("button", { name: /Save/i }))
 

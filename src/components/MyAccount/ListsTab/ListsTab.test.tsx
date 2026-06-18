@@ -47,8 +47,12 @@ describe("ListsTab", () => {
     // Header row and 2 lists
     expect(rows.length).toBe(3)
 
-    expect(within(rows[1]).getByText("First list")).toBeInTheDocument()
-    expect(within(rows[1]).getByText("No description")).toBeInTheDocument()
+    expect(
+      within(rows[1]).getByText("My workspace (default list)")
+    ).toBeInTheDocument()
+    expect(
+      within(rows[1]).getByText("Default list - cannot delete")
+    ).toBeInTheDocument()
     expect(within(rows[1]).getByText("0")).toBeInTheDocument()
 
     expect(within(rows[2]).getByText("Spaghetti westerns")).toBeInTheDocument()
@@ -94,7 +98,9 @@ describe("ListsTab", () => {
 
     // Now Spaghetti westerns should be in the first row
     expect(within(rows[1]).getByText("Spaghetti westerns")).toBeInTheDocument()
-    expect(within(rows[2]).getByText("First list")).toBeInTheDocument()
+    expect(
+      within(rows[2]).getByText("My workspace (default list)")
+    ).toBeInTheDocument()
   })
 
   it("renders a single list display when the URL matches", () => {
@@ -280,7 +286,7 @@ describe("ListsTab", () => {
     const defaultList = {
       ...processedLists[0],
       id: "999",
-      listName: "My workspace",
+      listName: "My workspace (default list)",
       isDefaultList: true,
     } as unknown as List
 
@@ -295,17 +301,17 @@ describe("ListsTab", () => {
   })
 
   it("does not render the Delete or Edit buttons for the default list in the single list view", () => {
-    mockRouter.query = { index: ["lists", "999", "my-workspace"] }
+    mockRouter.query = { index: ["lists", "999", "my-workspace-default-list"] }
     const defaultList = {
       ...processedLists[0],
       id: "999",
-      listName: "My workspace",
+      listName: "My workspace (default list)",
       isDefaultList: true,
     } as unknown as List
 
     renderWithPatronDataContext([defaultList])
 
-    expect(screen.getByText("My workspace")).toBeInTheDocument()
+    expect(screen.getByText("My workspace (default list)")).toBeInTheDocument()
     expect(screen.getByText("Duplicate")).toBeInTheDocument()
     expect(screen.queryByText("Delete")).not.toBeInTheDocument()
     expect(screen.queryByText("Edit")).not.toBeInTheDocument()
