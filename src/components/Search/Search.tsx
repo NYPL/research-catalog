@@ -152,33 +152,40 @@ const Search = ({
               direction={{ base: "column", md: "row" }}
               mb={{ base: "m", md: 0 }}
             >
-              <Heading
-                id="search-results-heading"
-                data-testid="search-results-heading"
-                level="h2"
-                size="heading5"
-                tabIndex={-1}
-                paddingBottom="0"
-                mb={{ base: "s", md: "l" }}
-                mr="m"
-                minH="40px"
-                ref={searchResultsHeadingRef}
-                aria-live="polite"
-              >
-                {getSearchResultsHeading(
-                  searchParams,
-                  totalResults,
+              <Box flex={1} mb={{ base: "s", md: "l" }} mr="m">
+                {isLoading ? (
+                  <SkeletonLoader
+                    contentSize={1}
+                    showImage={false}
+                    headingSize={0}
+                  />
+                ) : (
+                  <Heading
+                    id="search-results-heading"
+                    tabIndex={-1}
+                    ref={searchResultsHeadingRef}
+                    data-testid="search-results-heading"
+                    level="h2"
+                    size="heading5"
+                    paddingBottom="0"
+                    minH="40px"
+                  >
+                    {getSearchResultsHeading(
+                      searchParams,
+                      totalResults,
 
-                  slug
-                    ? {
-                        slug,
-                        browseType: resultsType,
-                        role,
-                      }
-                    : undefined,
-                  parsedQuery
+                      slug
+                        ? {
+                            slug,
+                            browseType: resultsType,
+                            role,
+                          }
+                        : undefined,
+                      parsedQuery
+                    )}
+                  </Heading>
                 )}
-              </Heading>
+              </Box>
               <ResultsSort
                 ref={sortMenuRef}
                 sortOptions={sortOptions}
