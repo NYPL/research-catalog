@@ -17,7 +17,7 @@ import { logger } from "@nypl/node-utils"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
-import type { List, ListRecord, ListResult } from "../types/listTypes"
+import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
@@ -98,8 +98,8 @@ export default class MyAccount {
     return this.buildFines(fines)
   }
 
-  async getLists(patronId) {
-    const listsResult = await fetchLists({ patronId })
+  async getLists(patronId: string, sort?: ListSort) {
+    const listsResult = await fetchLists({ patronId, sort })
     const lists = listsResult?.lists
 
     // Check if the default list exists based on its unique name

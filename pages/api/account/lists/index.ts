@@ -1,7 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from "next"
-import { fetchLists } from "../../../../src/server/api/lists"
-import type { ListSort } from "../../../../src/types/listTypes"
 import MyAccount from "../../../../src/models/MyAccount"
+import type { ListSort } from "../../../../src/types/listTypes"
 
 export default async function handler(
   req: NextApiRequest,
@@ -17,15 +16,12 @@ export default async function handler(
     return res.status(400).json({ error: "Missing or invalid patronId" })
   }
 
-  const response = await fetchLists({
-    patronId,
-    sort: sort as ListSort,
-  })
-
-  if (response.lists) {
+  try {
     const accountModel = new MyAccount(null, patronId)
-    response.lists = accountModel.buildLists(response.lists)
+    const lists = await accountModel.getLists(patronId, sort as ListSort)
+    res.status(200).json({ lists })
+  } catch (error) {
+    console.error("Error fetching lists:", error)
+    res.status(500).json({ error: "Failed to fetch lists" })
   }
-
-  res.status(response.status || 200).json(response)
 }
