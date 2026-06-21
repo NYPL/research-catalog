@@ -14,7 +14,7 @@ import styles from "../../../../../styles/components/MyAccount.module.scss"
 import { BASE_URL } from "../../../../config/constants"
 import { useContext, useState } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
-import type { List } from "../../../../types/listTypes"
+import type { List, ListSort } from "../../../../types/listTypes"
 import { downloadList, duplicateList } from "../../../../utils/listUtils"
 import { useDisclosure } from "@chakra-ui/react"
 import { CreateEditListModal } from "./CreateEditList"
@@ -29,10 +29,12 @@ const ListActionsMenu = ({
   list,
   setStatus,
   bannerRef,
+  activeSort,
 }: {
   list: List
-  setStatus
+  setStatus: any
   bannerRef?: any
+  activeSort?: ListSort
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -180,6 +182,7 @@ const ListActionsMenu = ({
         list={list}
         setStatus={setStatus}
         bannerRef={bannerRef}
+        activeSort={activeSort}
       />
     </>
   )

@@ -8,17 +8,20 @@ import {
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import Link from "../../Link/Link"
-import ListSort from "./ListSort"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 import { generateListSlug, listsSortOptions } from "../../../utils/listUtils"
 import { CreateListButton } from "./ListActions/CreateEditList"
 import { BASE_URL } from "../../../config/constants"
 import { useRouter } from "next/router"
-import type { List } from "../../../types/listTypes"
+import type {
+  List,
+  ListSort as ListSortOptions,
+} from "../../../types/listTypes"
 import type { StatusBannerState } from "../Settings/StatusBanner"
 import { StatusBanner } from "../Settings/StatusBanner"
 import ListActionsMenu from "./ListActions/ListActionsMenu"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
+import ListSort from "./ListSort"
 
 /* ListsDisplay renders a sort menu and all of a user's lists in a table. */
 const ListsDisplay = () => {
@@ -127,6 +130,7 @@ const ListsDisplay = () => {
         list={list}
         setStatus={setStatus}
         bannerRef={bannerRef}
+        activeSort={activeSort as ListSortOptions}
       />,
     ]
   })
@@ -140,7 +144,11 @@ const ListsDisplay = () => {
         mb="m"
         gap="xs"
       >
-        <CreateListButton setStatus={setStatus} bannerRef={bannerRef} />
+        <CreateListButton
+          setStatus={setStatus}
+          bannerRef={bannerRef}
+          activeSort={activeSort}
+        />
         <ListSort
           ref={sortMenuRef}
           selectedValue={activeSort}

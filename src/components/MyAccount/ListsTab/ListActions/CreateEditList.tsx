@@ -21,6 +21,7 @@ import { useContext, useState, useEffect } from "react"
 import { PatronDataContext } from "../../../../context/PatronDataContext"
 import { BASE_URL } from "../../../../config/constants"
 import { STATIC_STATUS_MESSAGES } from "../../../../utils/statusUtils"
+import type { ListSort } from "../../../../types/listTypes"
 
 /* Renders the Create or Edit list modal, and the triggering buttons (Create new list, Edit list). */
 export const CreateEditListModal = ({
@@ -30,6 +31,7 @@ export const CreateEditListModal = ({
   list,
   setStatus,
   bannerRef,
+  activeSort,
 }: {
   isOpen: boolean
   onClose: () => void
@@ -37,6 +39,7 @@ export const CreateEditListModal = ({
   list?: any
   setStatus: any
   bannerRef?: any
+  activeSort?: ListSort
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
@@ -107,21 +110,18 @@ export const CreateEditListModal = ({
       if (response.ok) {
         const data = await response.json()
         if (data && data.list) {
-          if (isEdit) {
-            const updatedLists = lists.map((l: any) =>
-              l.id === list.id
-                ? { ...l, ...data.list, isDefaultList: l.isDefaultList }
-                : l
-            )
+          const sortToUse = activeSort || "modified_date_desc"
+          const fetchResponse = await fetch(
+            `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${sortToUse}`
+          )
+          if (fetchResponse.ok) {
+            const listsData = await fetchResponse.json()
             setUpdatedAccountData({
               ...updatedAccountData,
-              lists: updatedLists,
+              lists: listsData.lists || [],
             })
-          } else {
-            setUpdatedAccountData({
-              ...updatedAccountData,
-              lists: [data.list, ...lists],
-            })
+          }
+          if (!isEdit) {
             setListName("")
             setDebouncedListName("")
             setListDescription("")
@@ -298,7 +298,7 @@ export const CreateEditListModal = ({
   )
 }
 
-export const CreateListButton = ({ setStatus, bannerRef }: any) => {
+export const CreateListButton = ({ setStatus, bannerRef, activeSort }: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
 
   return (
@@ -313,12 +313,18 @@ export const CreateListButton = ({ setStatus, bannerRef }: any) => {
         mode="create"
         setStatus={setStatus}
         bannerRef={bannerRef}
+        activeSort={activeSort}
       />
     </>
   )
 }
 
-export const EditListButton = ({ list, setStatus, bannerRef }: any) => {
+export const EditListButton = ({
+  list,
+  setStatus,
+  bannerRef,
+  activeSort,
+}: any) => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   return (
     <>
@@ -333,6 +339,7 @@ export const EditListButton = ({ list, setStatus, bannerRef }: any) => {
         list={list}
         setStatus={setStatus}
         bannerRef={bannerRef}
+        activeSort={activeSort}
       />
     </>
   )

@@ -65,7 +65,7 @@ export default function MyAccount({
   }
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, query = {} }: any) {
   // Ensure config is loaded before initializing Sierra client.
   await bootstrapConfig()
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -93,9 +93,8 @@ export async function getServerSideProps({ req, res }) {
   }
 
   // Parsing path from URL
-  const tabsPathRegex = /\/account\/(.+)/
-  const match = req.url.match(tabsPathRegex)
-  const tabsPath = match ? match[1] : null
+  const index = query.index as string[] | undefined
+  const tabsPath = index ? index.join("/") : null
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
@@ -136,20 +135,28 @@ export async function getServerSideProps({ req, res }) {
             }
           } else {
             // Handle list URLs (match on the list ID)
-            const pathWithoutQuery = tabsPath.split("?")[0]
-            const listId = pathWithoutQuery.split("/")[1]
+            const listId = tabsPath.split("/")[1]
             const list = lists?.find((l: any) => l.id === listId)
             if (list) {
               // Get a human-readable slug from the list's name and construct the id + slug URL
               const slug = generateListSlug(list.listName)
               const canonicalPath = `lists/${listId}${slug ? `/${slug}` : ""}`
-              if (pathWithoutQuery !== canonicalPath) {
-                const queryString = tabsPath.includes("?")
-                  ? `?${tabsPath.split("?")[1]}`
+              if (tabsPath !== canonicalPath) {
+                const queryParams = new URLSearchParams()
+                for (const [key, value] of Object.entries(query)) {
+                  if (key === "index") continue
+                  if (Array.isArray(value))
+                    value.forEach((v: string) => queryParams.append(key, v))
+                  else if (value !== undefined)
+                    queryParams.append(key, value as string)
+                }
+                const queryString = queryParams.toString()
+                const formattedQueryString = queryString
+                  ? `?${queryString}`
                   : ""
                 return {
                   redirect: {
-                    destination: `/account/${canonicalPath}${queryString}`,
+                    destination: `/account/${canonicalPath}${formattedQueryString}`,
                     permanent: false,
                   },
                 }
@@ -178,7 +185,7 @@ export async function getServerSideProps({ req, res }) {
           pickupLocations,
           lists,
         },
-        tabsPath: tabsPath ? tabsPath.split("?")[0].split("/")[0] : null,
+        tabsPath: tabsPath ? tabsPath.split("/")[0] : null,
         isAuthenticated,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
@@ -187,7 +194,7 @@ export async function getServerSideProps({ req, res }) {
     console.log(e.message)
     return {
       props: {
-        tabsPath: tabsPath ? tabsPath.split("?")[0].split("/")[0] : null,
+        tabsPath: tabsPath ? tabsPath.split("/")[0] : null,
         isAuthenticated,
       },
     }
