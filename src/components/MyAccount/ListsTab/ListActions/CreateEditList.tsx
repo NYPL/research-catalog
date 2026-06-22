@@ -83,7 +83,11 @@ export const CreateEditListModal = ({
 
   const handleSubmit = async (e: React.MouseEvent) => {
     e.preventDefault()
-    if (!listName || listName.length > 100 || listDescription.length > 500)
+    if (
+      !listName.trim() ||
+      listName.length > 100 ||
+      listDescription.length > 500
+    )
       return
 
     setIsSubmitting(true)
@@ -102,7 +106,7 @@ export const CreateEditListModal = ({
         },
         body: JSON.stringify({
           patronId: patron.id.toString(),
-          listName,
+          listName: listName.trim(),
           description: listDescription,
           records: isEdit ? undefined : [],
         }),
@@ -280,7 +284,7 @@ export const CreateEditListModal = ({
                 <Button
                   id="submit"
                   isDisabled={
-                    !listName ||
+                    !listName.trim() ||
                     listName.length > 100 ||
                     listDescription.length > 500 ||
                     isSubmitting
