@@ -3,6 +3,7 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import SettingsInputForm from "./SettingsInputForm"
+import { FocusProvider } from "../../../context/FocusContext"
 
 describe("phone form", () => {
   const mockSettingsState = {
@@ -22,18 +23,20 @@ describe("phone form", () => {
   })
 
   const component = (
-    <PatronDataProvider
-      value={{
-        patron: processedPatron,
-        pickupLocations: filteredPickupLocations,
-      }}
-    >
-      <SettingsInputForm
-        patronData={processedPatron}
-        settingsState={mockSettingsState}
-        inputType="phones"
-      />
-    </PatronDataProvider>
+    <FocusProvider>
+      <PatronDataProvider
+        value={{
+          patron: processedPatron,
+          pickupLocations: filteredPickupLocations,
+        }}
+      >
+        <SettingsInputForm
+          patronData={processedPatron}
+          settingsState={mockSettingsState}
+          inputType="phones"
+        />
+      </PatronDataProvider>
+    </FocusProvider>
   )
 
   it("renders correctly with initial phone", () => {

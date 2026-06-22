@@ -1,0 +1,64 @@
+import type { HTTPStatusCode } from "./appTypes"
+
+export interface ListErrorResponse {
+  statusCode: HTTPStatusCode
+  name: string
+  error: string
+}
+
+export interface List {
+  id: string
+  listName: string
+  patronId: string
+  records: ListRecord[]
+  recordCount: number
+  description: string | null
+  createdDate: string
+  modifiedDate: string
+  isDefaultList: boolean
+}
+
+export interface ListRecord {
+  uri: string
+  addedFormattedDate: string
+  title: string
+  publicationStatement?: string
+  creatorLiteral?: string
+  itemCount?: number
+  callNumber?: string
+  location?: string
+}
+export interface ListResult {
+  id: string
+  listName: string
+  patronId: string
+  records: ListRecordResult[]
+  description: string | null
+  createdDate: string
+  modifiedDate: string
+}
+
+export interface ListRecordResult {
+  uri: string
+  addedToListDate: string
+  description: string
+}
+
+export type ListSort =
+  | "modified_date_desc"
+  | "modified_date_asc"
+  | "list_name_asc"
+  | "list_name_desc"
+  | "created_date_asc"
+  | "created_date_desc"
+  | "record_count_asc"
+  | "record_count_desc"
+
+export type ListRecordsSort =
+  | "modified_date_desc"
+  | "modified_date_asc"
+  | "title_asc"
+  | "title_desc"
+  | "callnumber_asc"
+  | "creator_desc"
+  | "creator_asc"

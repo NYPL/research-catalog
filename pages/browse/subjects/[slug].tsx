@@ -12,6 +12,8 @@ import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
 import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
 import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
+import { PatronDataProvider } from "../../../src/context/PatronDataContext"
+import MyAccount from "../../../src/models/MyAccount"
 
 interface SubjectHeadingResultsProps {
   bannerNotification?: string
@@ -20,6 +22,7 @@ interface SubjectHeadingResultsProps {
   slug: string
   errorStatus?: HTTPStatusCode | null
   metadataTitle?: string
+  accountData?: any
 }
 
 /**
@@ -34,6 +37,7 @@ export default function SubjectHeadingResults({
   errorStatus = null,
   metadataTitle,
   slug,
+  accountData,
 }: SubjectHeadingResultsProps) {
   const { pathname, push, query } = useRouter()
 
@@ -68,18 +72,20 @@ export default function SubjectHeadingResults({
   }
 
   return (
-    <Search
-      bannerNotification={bannerNotification}
-      results={results}
-      isAuthenticated={isAuthenticated}
-      errorStatus={errorStatus}
-      metadataTitle={metadataTitle}
-      activePage="browse-results"
-      searchParams={searchParams}
-      handlePageChange={handlePageChange}
-      handleSortChange={handleSortChange}
-      slug={slug}
-    />
+    <PatronDataProvider value={accountData || null}>
+      <Search
+        bannerNotification={bannerNotification}
+        results={results}
+        isAuthenticated={isAuthenticated}
+        errorStatus={errorStatus}
+        metadataTitle={metadataTitle}
+        activePage="browse-results"
+        searchParams={searchParams}
+        handlePageChange={handlePageChange}
+        handleSortChange={handleSortChange}
+        slug={slug}
+      />
+    </PatronDataProvider>
   )
 }
 
@@ -112,14 +118,26 @@ export async function getServerSideProps({ req, query, params }) {
   const redirect = checkForRedirectOnMatch(results, query)
   if (redirect) return { redirect }
 
+  const isAuthenticated = patronTokenResponse.isTokenValid
+
+  let accountData = null
+  if (isAuthenticated) {
+    const patronId = patronTokenResponse.decodedPatron.sub
+    const accountModel = new MyAccount(null, patronId)
+    const lists = await accountModel.getLists(patronId)
+
+    accountData = { patron: { id: patronId }, lists }
+  }
+
   return {
     props: {
       bannerNotification,
       results,
-      isAuthenticated: patronTokenResponse.isTokenValid,
+      isAuthenticated,
       metadataTitle: `Search | ${SITE_NAME}`,
       activePage: "browse-results",
       slug,
+      accountData,
     },
   }
 }

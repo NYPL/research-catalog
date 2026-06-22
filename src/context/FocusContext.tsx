@@ -26,6 +26,7 @@ export const idConstants = {
   browseResultsHeading: "browse-results-heading",
   searchResultsSort: "search-results-sort",
   browseResultsSort: "browse-results-sort",
+  listsSort: "lists-sort",
   filterResultsHeading: "filter-results-heading",
   activeFiltersHeading: "active-filters-heading",
   searchFiltersModal: "search-filters-modal",
@@ -35,6 +36,13 @@ export const idConstants = {
   dateFrom: "date-from",
   dateTo: "date-to",
   advancedSearchError: "advanced-search-error",
+  listRecordsHeading: "list-records-heading",
+  listStatusBanner: "list-status-banner",
+  accountStatusBanner: "account-status-banner",
+  listMenuStatusBanner: "list-menu-status-banner",
+  usernameStatusBanner: "username-status-banner",
+  createListNameInput: "list-name-input",
+  createListButton: "create-list",
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
@@ -49,10 +57,13 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
   const setFocusById = useCallback(
     (id: string) => {
       if (isClient) {
-        const el = document.getElementById(id)
-        if (el) {
-          el.focus()
-        }
+        // Focus happens after React flushes DOM updates
+        setTimeout(() => {
+          const el = document.getElementById(id)
+          if (el) {
+            el.focus()
+          }
+        }, 100)
       }
     },
     [isClient]

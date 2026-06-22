@@ -38,7 +38,7 @@ describe("ProfileTabs", () => {
     )
 
     const tabs = getAllByRole("tab")
-    expect(tabs.length).toBe(4)
+    expect(tabs.length).toBe(5)
   })
 
   it("renders correct number of tabs when fines are $0", () => {
@@ -47,7 +47,7 @@ describe("ProfileTabs", () => {
       "checkouts"
     )
     const tabs = getAllByRole("tab")
-    expect(tabs.length).toBe(3)
+    expect(tabs.length).toBe(4)
   })
 
   it("calls updatePath when tab is clicked", () => {

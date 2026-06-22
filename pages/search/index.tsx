@@ -20,6 +20,8 @@ import type {
 } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
 import { appConfig } from "../../src/config/appConfig"
+import { PatronDataProvider } from "../../src/context/PatronDataContext"
+import MyAccount from "../../src/models/MyAccount"
 import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
@@ -27,6 +29,7 @@ interface SearchPageProps {
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
+  accountData?: any
   errorName?: APIErrorName | null
 }
 
@@ -38,6 +41,7 @@ export default function SearchPage({
   results,
   isAuthenticated,
   errorStatus = null,
+  accountData,
   errorName = null,
 }: SearchPageProps) {
   const { push, query } = useRouter()
@@ -71,18 +75,20 @@ export default function SearchPage({
   }
 
   return (
-    <Search
-      errorStatus={errorStatus}
-      errorName={errorName}
-      results={results}
-      metadataTitle={`Search | ${SITE_NAME}`}
-      activePage="search"
-      bannerNotification={appConfig.searchNotification[appConfig.environment]}
-      isAuthenticated={isAuthenticated}
-      searchParams={searchParams}
-      handlePageChange={handlePageChange}
-      handleSortChange={handleSortChange}
-    />
+    <PatronDataProvider value={accountData || null}>
+      <Search
+        errorStatus={errorStatus}
+        errorName={errorName}
+        results={results}
+        metadataTitle={`Search | ${SITE_NAME}`}
+        activePage="search"
+        bannerNotification={appConfig.searchNotification[appConfig.environment]}
+        isAuthenticated={isAuthenticated}
+        searchParams={searchParams}
+        handlePageChange={handlePageChange}
+        handleSortChange={handleSortChange}
+      />
+    </PatronDataProvider>
   )
 }
 
@@ -120,11 +126,22 @@ export async function getServerSideProps({ req, query }) {
 
   const isAuthenticated = patronTokenResponse.isTokenValid
 
+  // Get just patron and lists data
+  let accountData = null
+  if (isAuthenticated) {
+    const patronId = patronTokenResponse.decodedPatron.sub
+    const accountModel = new MyAccount(null, patronId)
+    const lists = await accountModel.getLists(patronId)
+
+    accountData = { patron: { id: patronId }, lists }
+  }
+
   return {
     props: {
       results,
       isAuthenticated,
       activePage: "search",
+      accountData,
     },
   }
 }
