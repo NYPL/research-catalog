@@ -1,6 +1,11 @@
 import React from "react"
 import userEvent from "@testing-library/user-event"
-import { render, screen, fireEvent } from "../../../src/utils/testUtils"
+import {
+  render,
+  screen,
+  fireEvent,
+  waitFor,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import { results } from "../../fixtures/searchResultsManyBibs"
 import SearchPage from "../../../pages/search/index"
@@ -9,7 +14,6 @@ jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const query = "spaghetti"
 
 describe("Search Results page", () => {
-  // TODO: describe("focus", () => {})
   describe("More than 50 bibs", () => {
     it("displays many bibs", async () => {
       await mockRouter.push(`/search?q=${query}`)
@@ -17,9 +21,9 @@ describe("Search Results page", () => {
         <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
 
-      const displayingText = screen.getByText(
-        `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`
-      )
+      const displayingText = screen.getByRole("heading", {
+        name: `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`,
+      })
       expect(displayingText).toBeInTheDocument()
 
       const cards = screen.getAllByRole("heading", { level: 3 })
@@ -69,6 +73,37 @@ describe("Search Results page", () => {
         exact: false,
       })[0]
       expect(sortByPost).toHaveTextContent("Sort by: Title (Z - A)")
+    })
+  })
+  describe("focus", () => {
+    it("should focus on heading after search", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
+      )
+      const input = screen.getByRole("textbox")
+
+      await userEvent.type(input, "spaghetti")
+      fireEvent(
+        screen.getByText("Search").closest("button"),
+        new MouseEvent("click")
+      )
+
+      const heading = screen.getByTestId("search-results-heading")
+      await waitFor(() => expect(heading).toHaveFocus())
+    })
+    it("should focus on heading after pagination change", async () => {
+      await mockRouter.push(`/search?q=${query}`)
+      render(
+        <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
+      )
+      screen.getByLabelText("Pagination")
+
+      const pageButton = screen.getByLabelText("Page 2")
+      fireEvent.click(pageButton)
+
+      const heading = screen.getByTestId("search-results-heading")
+      await waitFor(() => expect(heading).toHaveFocus())
     })
   })
   describe("errors", () => {

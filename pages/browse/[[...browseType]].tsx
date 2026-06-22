@@ -9,7 +9,11 @@ import {
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/BrowseTable/SubjectTable/SubjectTable"
-import { SITE_NAME, BROWSE_RESULTS_PER_PAGE } from "../../src/config/constants"
+import {
+  SITE_NAME,
+  BROWSE_RESULTS_PER_PAGE,
+  FOCUS_TIMEOUT,
+} from "../../src/config/constants"
 import { fetchBrowse } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
@@ -35,6 +39,7 @@ import type { SortOrder } from "../../src/types/searchTypes"
 import { useBrowseContext } from "../../src/context/BrowseContext"
 import ContributorTable from "../../src/components/BrowseTable/ContributorTable/ContributorTable"
 import BrowseResultsSort from "../../src/components/SearchResults/Sort/BrowseResultsSort"
+import a11yStyles from "../../styles/utils/a11y.module.scss"
 
 interface BrowseProps {
   results: DiscoverySubjectsResponse | DiscoveryContributorsResponse
@@ -83,8 +88,8 @@ export default function Browse({
       page: page,
     })
 
-    setPersistentFocus(idConstants.browseResultsHeading)
     await push(`${basePath}${queryString}`, undefined, { scroll: false })
+    setPersistentFocus(idConstants.browseResultsHeading)
   }
 
   const handleSortChange = async (selectedSortOption: string) => {
@@ -164,6 +169,11 @@ export default function Browse({
   const renderResults = () => {
     // Separate from the browse type in BrowseProvider context: the browse type of the currently displaying results.
     const resultsType = isSubjectResponse(results) ? "subjects" : "contributors"
+    const browseIndexHeading = getBrowseIndexHeading(
+      resultsType,
+      browseParams,
+      results.totalResults
+    )
     return (
       <Box mb="xxl">
         <Flex
@@ -172,22 +182,28 @@ export default function Browse({
           mb="l"
           gap={{ base: 0, md: "xs" }}
         >
-          <Heading
+          <Box aria-live="polite" className={a11yStyles.screenreaderOnly}>
+            {browseIndexHeading}
+          </Box>
+          <Box
+            flex={1}
+            mb={{ base: "m", md: 0 }}
+            tabIndex={-1}
             id="browse-results-heading"
             data-testid="browse-results-heading"
-            level="h2"
-            size="heading5"
-            tabIndex={-1}
-            minH="40px"
-            aria-live="polite"
-            mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(
-              resultsType,
-              browseParams,
-              results.totalResults
+            {isLoading ? (
+              <SkeletonLoader
+                contentSize={1}
+                showImage={false}
+                headingSize={0}
+              />
+            ) : (
+              <Heading level="h2" size="heading5" minH="40px">
+                {browseIndexHeading}
+              </Heading>
             )}
-          </Heading>
+          </Box>
           <BrowseResultsSort
             ref={sortMenuRef}
             params={browseParams}

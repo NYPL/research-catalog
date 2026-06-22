@@ -27,9 +27,9 @@ describe("Browse subject heading results page", () => {
       />
     )
 
-    const displayingText = screen.queryByText(
-      'Displaying 1-50 of 423 results for Subject Heading "test"'
-    )
+    const displayingText = screen.getByRole("heading", {
+      name: 'Displaying 1-50 of 423 results for Subject Heading "test"',
+    })
     expect(displayingText).toBeInTheDocument()
 
     const cards = screen.getAllByRole("heading", { level: 3 })

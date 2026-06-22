@@ -42,7 +42,6 @@ export default function SubjectHeadingResults({
   const searchParams = mapQueryToSearchParams(query)
 
   const handlePageChange = async (newPage: number) => {
-    setPersistentFocus(idConstants.searchResultsHeading)
     await push({
       pathname,
       query: {
@@ -50,6 +49,7 @@ export default function SubjectHeadingResults({
         page: newPage.toString(),
       },
     })
+    setPersistentFocus(idConstants.searchResultsHeading)
   }
 
   const handleSortChange = async (selectedSortOption: string) => {

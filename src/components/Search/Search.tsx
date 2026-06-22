@@ -34,6 +34,7 @@ import type {
 import type { RCPage } from "../../types/pageTypes"
 import { getBrowseTypeFromPath } from "../../utils/appUtils"
 import { useRouter } from "next/router"
+import a11yStyles from "../../../styles/utils/a11y.module.scss"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -103,6 +104,20 @@ const Search = ({
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
 
+  const searchResultsHeading = getSearchResultsHeading(
+    searchParams,
+    totalResults,
+
+    slug
+      ? {
+          slug,
+          browseType: resultsType,
+          role,
+        }
+      : undefined,
+    parsedQuery
+  )
+
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   return (
     <>
@@ -152,13 +167,16 @@ const Search = ({
               direction={{ base: "column", md: "row" }}
               mb={{ base: "m", md: 0 }}
             >
+              <Box aria-live="polite" className={a11yStyles.screenreaderOnly}>
+                {searchResultsHeading}
+              </Box>
               <Box
                 flex={1}
                 mb={{ base: "s", md: "l" }}
                 mr="m"
                 tabIndex={-1}
                 id="search-results-heading"
-                aria-live="polite"
+                data-testid="search-results-heading"
               >
                 {isLoading ? (
                   <SkeletonLoader
@@ -169,25 +187,12 @@ const Search = ({
                 ) : (
                   <Heading
                     ref={searchResultsHeadingRef}
-                    data-testid="search-results-heading"
                     level="h2"
                     size="heading5"
                     paddingBottom="0"
                     minH="40px"
                   >
-                    {getSearchResultsHeading(
-                      searchParams,
-                      totalResults,
-
-                      slug
-                        ? {
-                            slug,
-                            browseType: resultsType,
-                            role,
-                          }
-                        : undefined,
-                      parsedQuery
-                    )}
+                    {searchResultsHeading}
                   </Heading>
                 )}
               </Box>

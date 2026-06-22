@@ -98,8 +98,8 @@ const BrowseForm = ({
       searchScope: optionData.scope,
     })
 
-    setPersistentFocus(idConstants.browseResultsHeading)
     await router.push(`${basePath}${queryString}`)
+    setPersistentFocus(idConstants.browseResultsHeading)
   }
 
   const displayFilters = !!aggregations?.filter((agg) => agg.values.length)
