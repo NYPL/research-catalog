@@ -370,7 +370,7 @@ export const ManageBibInListMenu = ({
                       </Box>
                     </>
                   }
-                  isInvalid={listName.length > 100}
+                  isInvalid={!listName.trim() || listName.length > 100}
                   invalidText="List name must be 100 characters or less"
                   onChange={(e: any) => setListName(e.target.value)}
                   isClearable
@@ -384,7 +384,7 @@ export const ManageBibInListMenu = ({
                   <Button
                     id="submit"
                     isDisabled={
-                      !listName || listName.length > 100 || isSubmitting
+                      !listName.trim() || listName.length > 100 || isSubmitting
                     }
                     onClick={handleCreateSubmit}
                   >
