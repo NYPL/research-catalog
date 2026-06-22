@@ -72,7 +72,14 @@ export const STATIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         Your list changes have been saved. Lists can be managed from your{" "}
-        <Link href={`${BASE_URL}/account/lists`}>patron account.</Link>
+        <Link
+          hasVisitedState={false}
+          target="_blank"
+          color="ui.link.primary !important"
+          href={`${BASE_URL}/account/lists`}
+        >
+          patron account.
+        </Link>
       </Text>
     ),
   },
@@ -83,7 +90,14 @@ export const STATIC_STATUS_MESSAGES: Record<
         Your list changes could not be saved. Try again or{" "}
         <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance. Lists can be managed from your{" "}
-        <Link href={`${BASE_URL}/account/lists`}>patron account.</Link>
+        <Link
+          hasVisitedState={false}
+          target="_blank"
+          color="ui.link.primary !important"
+          href={`${BASE_URL}/account/lists`}
+        >
+          patron account.
+        </Link>
       </Text>
     ),
   },
@@ -158,6 +172,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
       <Text marginBottom={0}>
         This record has been saved to{" "}
         <Link
+          hasVisitedState={false}
           target="_blank"
           color="ui.link.primary !important"
           href={`${BASE_URL}/account/lists/${listId}`}
@@ -166,6 +181,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         </Link>
         . Lists can be managed from your{" "}
         <Link
+          hasVisitedState={false}
           target="_blank"
           color="ui.link.primary !important"
           href={`${BASE_URL}/account/lists`}
@@ -183,6 +199,7 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
         This record has been removed from{" "}
         <Link
           target="_blank"
+          hasVisitedState={false}
           color="ui.link.primary !important"
           href={`${BASE_URL}/account/lists/${listId}`}
         >
@@ -205,7 +222,12 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
     message: (
       <Text marginBottom={0}>
         {message} Please try again or{" "}
-        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
+        <Link
+          hasVisitedState={false}
+          href="https://www.nypl.org/get-help/contact-us"
+        >
+          contact us
+        </Link>{" "}
         for assistance.
       </Text>
     ),
