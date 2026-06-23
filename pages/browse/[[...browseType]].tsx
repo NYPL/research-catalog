@@ -182,11 +182,13 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(
-              resultsType,
-              browseParams,
-              results.totalResults
-            )}
+            {isLoading
+              ? "Loading results..."
+              : getBrowseIndexHeading(
+                  resultsType,
+                  browseParams,
+                  results.totalResults
+                )}
           </Heading>
           <BrowseResultsSort
             ref={sortMenuRef}

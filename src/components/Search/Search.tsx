@@ -166,7 +166,7 @@ const Search = ({
                 aria-live="polite"
               >
                 {isLoading
-                  ? "Loading results"
+                  ? "Loading results..."
                   : getSearchResultsHeading(
                       searchParams,
                       totalResults,
