@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.1] 2026-06-22
+
+### Removed
+
+- Removed the "View in Legacy (onsite only)" link on the bib page [SCC-5327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5327)
+
 ## [2.1.0] 2026-06-22
 
 ### Added
@@ -19,7 +25,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added lists context and manage bib button to search results/bib page [SCC-5248](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5248)
 - Added manage bib in list menu [SCC-5248](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5248)
 - Added warn log for no results from query with a single filter and no keyword [SCC-5269](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5269)
-- Remove the "View in Legacy (onsite only)" link on the bib page [SCC-5327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5327)
 
 ### Updated
 
