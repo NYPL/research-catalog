@@ -11,6 +11,7 @@ import { getPatronData } from "../api/account/[id]"
 import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { bootstrapConfig } from "../../lib/bootstrap"
+import { generateListSlug } from "../../src/utils/listUtils"
 
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
@@ -25,7 +26,7 @@ export default function MyAccount({
   isAuthenticated,
   tabsPath,
 }: MyAccountPropsType) {
-  const errorRetrievingPatronData = !accountData.patron
+  const errorRetrievingPatronData = !accountData?.patron
 
   const serverError = (
     <Text>
@@ -64,7 +65,7 @@ export default function MyAccount({
   }
 }
 
-export async function getServerSideProps({ req, res }) {
+export async function getServerSideProps({ req, res, query = {} }: any) {
   // Ensure config is loaded before initializing Sierra client.
   await bootstrapConfig()
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
@@ -92,17 +93,24 @@ export async function getServerSideProps({ req, res }) {
   }
 
   // Parsing path from URL
-  const tabsPathRegex = /\/account\/(.+)/
-  const match = req.url.match(tabsPathRegex)
-  const tabsPath = match ? match[1] : null
+  const index = query.index as string[] | undefined
+  const tabsPath = index ? index.join("/") : null
   const id = patronTokenResponse.decodedPatron.sub
 
   try {
-    const { checkouts, holds, patron, fines, pickupLocations } =
-      await getPatronData(id)
+    const patronData = await getPatronData(id)
+    const { checkouts, holds, patron, fines, pickupLocations, lists } =
+      patronData
+
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
-      const allowedPaths = ["items", "requests", "overdues", "settings"]
+      const allowedPaths = [
+        "items",
+        "requests",
+        "overdues",
+        "settings",
+        "lists",
+      ]
       if (
         !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
         (tabsPath === "overdues" && fines?.total === 0)
@@ -118,11 +126,50 @@ export async function getServerSideProps({ req, res }) {
           tabsPath.startsWith(path)
         )
         if (tabsPath != matchedPath) {
-          return {
-            redirect: {
-              destination: "/account/" + matchedPath,
-              permanent: false,
-            },
+          if (!tabsPath.startsWith("lists/")) {
+            return {
+              redirect: {
+                destination: "/account/" + matchedPath,
+                permanent: false,
+              },
+            }
+          } else {
+            // Handle list URLs (match on the list ID)
+            const listId = tabsPath.split("/")[1]
+            const list = lists?.find((l: any) => l.id === listId)
+            if (list) {
+              // Get a human-readable slug from the list's name and construct the id + slug URL
+              const slug = generateListSlug(list.listName)
+              const canonicalPath = `lists/${listId}${slug ? `/${slug}` : ""}`
+              if (tabsPath !== canonicalPath) {
+                const queryParams = new URLSearchParams()
+                for (const [key, value] of Object.entries(query)) {
+                  if (key === "index") continue
+                  if (Array.isArray(value))
+                    value.forEach((v: string) => queryParams.append(key, v))
+                  else if (value !== undefined)
+                    queryParams.append(key, value as string)
+                }
+                const queryString = queryParams.toString()
+                const formattedQueryString = queryString
+                  ? `?${queryString}`
+                  : ""
+                return {
+                  redirect: {
+                    destination: `/account/${canonicalPath}${formattedQueryString}`,
+                    permanent: false,
+                  },
+                }
+              }
+            } else {
+              // If the requested list ID does not exist in the user's account, fallback to all lists
+              return {
+                redirect: {
+                  destination: "/account/lists",
+                  permanent: false,
+                },
+              }
+            }
           }
         }
       }
@@ -130,8 +177,15 @@ export async function getServerSideProps({ req, res }) {
 
     return {
       props: {
-        accountData: { checkouts, holds, patron, fines, pickupLocations },
-        tabsPath,
+        accountData: {
+          checkouts,
+          holds,
+          patron,
+          fines,
+          pickupLocations,
+          lists,
+        },
+        tabsPath: tabsPath ? tabsPath.split("/")[0] : null,
         isAuthenticated,
         renderAuthServerError: !redirectBasedOnNyplAccountRedirects,
       },
@@ -140,7 +194,7 @@ export async function getServerSideProps({ req, res }) {
     console.log(e.message)
     return {
       props: {
-        tabsPath,
+        tabsPath: tabsPath ? tabsPath.split("/")[0] : null,
         isAuthenticated,
       },
     }

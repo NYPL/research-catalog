@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from "react"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -50,6 +50,12 @@ import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
 import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
+import { ManageBibInList } from "../../../src/components/List/ManageBibInList"
+import { PatronDataProvider } from "../../../src/context/PatronDataContext"
+import MyAccount from "../../../src/models/MyAccount"
+import { StatusBanner } from "../../../src/components/MyAccount/Settings/StatusBanner"
+import type { StatusBannerState } from "../../../src/components/MyAccount/Settings/StatusBanner"
+import { idConstants } from "../../../src/context/FocusContext"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -58,6 +64,7 @@ interface BibPropsType {
   itemPage?: number
   viewAllItems?: boolean
   errorStatus?: HTTPStatusCode | null
+  accountData?: any
 }
 
 /**
@@ -70,6 +77,7 @@ export default function BibPage({
   itemPage = 1,
   viewAllItems = false,
   errorStatus = null,
+  accountData,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
@@ -94,6 +102,9 @@ export default function BibPage({
   const itemTableHeadingRef = useRef<HTMLDivElement>(null)
   const viewAllLoadingTextRef = useRef<HTMLDivElement & HTMLLabelElement>(null)
   const controllerRef = useRef<AbortController>()
+
+  // Manage status banner display for list actions
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
 
   if (errorStatus) {
     return (
@@ -225,20 +236,36 @@ export default function BibPage({
   }
 
   return (
-    <>
+    <PatronDataProvider value={accountData || null}>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
         <Box mb="l">
           <UserGuideBanner />
         </Box>
+        <div
+          tabIndex={-1}
+          id={`${idConstants.listStatusBanner}-${bib.id}`}
+          style={{ marginTop: "-16px", marginBottom: "32px" }}
+        >
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
+          )}
+        </div>
         {findingAid && (
           <StatusBadge mb="s" variant="informative">
             Finding aid available
           </StatusBadge>
         )}
-        <Heading level="h2" size="heading3" mb="-m">
-          {bib.title}
-        </Heading>
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <Heading level="h2" size="heading3">
+            {bib.title}
+          </Heading>
+          <ManageBibInList
+            setStatus={setStatus}
+            recordId={bib.id}
+            isAuthenticated={isAuthenticated}
+          />
+        </Flex>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
           {findingAid && (
@@ -353,7 +380,7 @@ export default function BibPage({
           </Flex>
         </Box>
       </Layout>
-    </>
+    </PatronDataProvider>
   )
 }
 
@@ -380,12 +407,23 @@ export async function getServerSideProps({ params, query, req }) {
       }
   }
 
+  // Get just patron and lists data
+  let accountData = null
+  if (isAuthenticated) {
+    const patronId = patronTokenResponse.decodedPatron.sub
+    const accountModel = new MyAccount(null, patronId)
+    const lists = await accountModel.getLists(patronId)
+
+    accountData = { patron: { id: patronId }, lists }
+  }
+
   return {
     props: {
       discoveryBibResult: results.discoveryBibResult,
       annotatedMarc: results.annotatedMarc,
       isAuthenticated,
       itemPage: query.item_page ? parseInt(query.item_page) : 1,
+      accountData,
     },
   }
 }

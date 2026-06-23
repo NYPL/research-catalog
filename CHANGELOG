@@ -7,6 +7,24 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.0] 2026-06-22
+
+### Added
+
+- Added lists API handlers [SCC-5243](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5243)
+- Added lists tab and all lists table [SCC-5245](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5245)
+- Added single list display [SCC-5246](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5246)
+- Added CRUD operations for lists [SCC-5247](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5247)
+- Added default list handling
+- Added lists context and manage bib button to search results/bib page [SCC-5248](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5248)
+- Added manage bib in list menu [SCC-5248](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5248)
+- Added warn log for no results from query with a single filter and no keyword [SCC-5269](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5269)
+
+### Updated
+
+- Condensed status state for account/lists banners
+- Updated to DS `v4.2.0` [SCC-5433](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5433)
+
 ## [2.0.0] 2026-06-04
 
 ### Added
