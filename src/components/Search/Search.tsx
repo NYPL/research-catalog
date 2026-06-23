@@ -165,19 +165,21 @@ const Search = ({
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
-                {getSearchResultsHeading(
-                  searchParams,
-                  totalResults,
+                {isLoading
+                  ? "Loading results"
+                  : getSearchResultsHeading(
+                      searchParams,
+                      totalResults,
 
-                  slug
-                    ? {
-                        slug,
-                        browseType: resultsType,
-                        role,
-                      }
-                    : undefined,
-                  parsedQuery
-                )}
+                      slug
+                        ? {
+                            slug,
+                            browseType: resultsType,
+                            role,
+                          }
+                        : undefined,
+                      parsedQuery
+                    )}
               </Heading>
               <ResultsSort
                 ref={sortMenuRef}
