@@ -16,12 +16,10 @@ import {
   FOCUS_TIMEOUT,
   ERROR_MESSAGES,
 } from "../../../src/config/constants"
-import { appConfig } from "../../../src/config/appConfig"
 import { fetchBib } from "../../../src/server/api/bib"
 import {
   getBibQueryString,
   buildItemTableDisplayingString,
-  isNyplBibID,
   buildBibMetadataTitle,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
@@ -120,7 +118,6 @@ export default function BibPage({
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
     new BibDetailsModel(discoveryBibResult, annotatedMarc)
-  const displayLegacyCatalogLink = isNyplBibID(bib.id)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
 
@@ -356,18 +353,6 @@ export default function BibPage({
             details={bottomDetails}
           />
           <Flex flexDirection="column">
-            {displayLegacyCatalogLink ? (
-              <Link
-                isExternal
-                id="legacy-catalog-link"
-                href={`${appConfig.urls.legacyCatalog}/record=${bib.id}`}
-                variant="standalone"
-                width="max-content"
-                mt="s"
-              >
-                View in Legacy Catalog (available onsite only)
-              </Link>
-            ) : null}
             <Link
               id="marc-link"
               href={`/bib/${bib.id}/marc`}
