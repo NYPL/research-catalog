@@ -267,6 +267,18 @@ export const ManageBibInListMenu = ({
         )
       }, 150)
     } catch (error) {
+      setStatus(
+        inAccount
+          ? STATIC_STATUS_MESSAGES.accountFailure
+          : STATIC_STATUS_MESSAGES.listChangesFailure
+      )
+      setTimeout(() => {
+        setPersistentFocus(
+          inAccount
+            ? `${idConstants.listStatusBanner}`
+            : `${idConstants.listStatusBanner}-${recordId}`
+        )
+      }, 150)
       console.error("Error updating bib in lists:", error)
     } finally {
       setIsSubmitting(false)
