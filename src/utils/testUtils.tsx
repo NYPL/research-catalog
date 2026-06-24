@@ -3,12 +3,15 @@ import { render, type RenderOptions } from "@testing-library/react"
 import { FeedbackProvider } from "../context/FeedbackContext"
 import { FocusProvider } from "../context/FocusContext"
 import { BrowseProvider } from "../context/BrowseContext"
+import { PatronDataProvider } from "../context/PatronDataContext"
 
 const AllTheProviders = ({ children }: { children: React.ReactNode }) => {
   return (
     <FeedbackProvider value={null}>
       <FocusProvider>
-        <BrowseProvider>{children}</BrowseProvider>
+        <BrowseProvider>
+          <PatronDataProvider value={null}>{children}</PatronDataProvider>
+        </BrowseProvider>
       </FocusProvider>
     </FeedbackProvider>
   )

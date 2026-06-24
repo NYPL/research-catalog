@@ -3,25 +3,22 @@
   margin-bottom: var(--nypl-space-s);
 
   tbody > tr > td {
-    border-style: dashed !important;
     font-size: 0;
   }
 
-  tr {
-    td:first-of-type,
-    th:first-of-type {
-      padding-left: 0;
-    }
+  thead > tr > th,
+  thead > tr > th:last-of-type {
+    vertical-align: center;
+    font-weight: var(--nypl-fontWeights-bold);
+    border-color: var(--nypl-colors-ui-gray-light-cool);
+    font-size: 14px;
+    text-transform: uppercase;
+  }
 
+  tr {
     td:last-of-type,
     th:last-of-type {
       padding-right: 0;
-    }
-
-    th {
-      border-style: dashed !important;
-      padding-top: 0;
-      padding-bottom: var(--nypl-space-xxs);
     }
 
     span {

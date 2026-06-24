@@ -4,6 +4,7 @@ import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 import HomeLibraryNotificationForm from "./SettingsSelectForm"
+import { FocusProvider } from "../../../context/FocusContext"
 
 describe("home library form", () => {
   const mockSettingsState = {
@@ -13,19 +14,21 @@ describe("home library form", () => {
   }
 
   const component = (
-    <PatronDataProvider
-      value={{
-        patron: processedPatron,
-        pickupLocations: filteredPickupLocations,
-      }}
-    >
-      <HomeLibraryNotificationForm
-        patronData={processedPatron}
-        settingsState={mockSettingsState}
-        pickupLocations={pickupLocations}
-        type="library"
-      />
-    </PatronDataProvider>
+    <FocusProvider>
+      <PatronDataProvider
+        value={{
+          patron: processedPatron,
+          pickupLocations: filteredPickupLocations,
+        }}
+      >
+        <HomeLibraryNotificationForm
+          patronData={processedPatron}
+          settingsState={mockSettingsState}
+          pickupLocations={pickupLocations}
+          type="library"
+        />
+      </PatronDataProvider>
+    </FocusProvider>
   )
 
   beforeEach(() => {

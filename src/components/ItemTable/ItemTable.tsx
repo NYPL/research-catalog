@@ -18,6 +18,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
       <Table
         className={`${styles.itemTable} itemTable`}
         columnHeaders={tableHeadings}
+        columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
         fontSize="body2"
         columnStyles={
           inSearchResult

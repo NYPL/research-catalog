@@ -31,7 +31,7 @@ const RequestsTab = () => {
         <Link
           isExternal
           whiteSpace="pre-line"
-          isUnderlined={false}
+          isUnderlined={true}
           href={hold.catalogHref}
         >
           {hold.title}
