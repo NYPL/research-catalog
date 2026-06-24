@@ -31,6 +31,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
                 { width: "17%", minWidth: 100 },
                 { width: "17%", minWidth: 100 },
                 { width: "17%", minWidth: 100 },
+                { width: "17%", minWidth: 100 },
               ]
         }
         tableData={tableData}

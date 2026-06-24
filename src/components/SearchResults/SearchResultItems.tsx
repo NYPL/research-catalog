@@ -1,6 +1,6 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
-import StatusLinks from "../ItemTable/StatusLinks"
+import StatusLinks from "../ItemTable/AvailabilityLinks"
 
 interface SearchResultItemsProps {
   itemTableData: ItemTableData

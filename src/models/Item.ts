@@ -3,6 +3,7 @@ import type {
   ItemLocation,
   DiscoveryItemResult,
   ItemCollectionAccess,
+  Collection,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -38,10 +39,12 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
   availability: ItemAvailability
+  collection: Collection
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
     this.bibId = bib.id
+    this.collection = item.collection
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
     this.accessMessage = item.accessMessage?.length

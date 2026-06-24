@@ -2,7 +2,7 @@ import type { ReactElement } from "react"
 
 import type Item from "./Item"
 import type { Collection, ItemTableParams } from "../types/itemTypes"
-import StatusLinks from "../components/ItemTable/StatusLinks"
+import AvailabilityLinks from "../components/ItemTable/AvailabilityLinks"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
 /**
@@ -25,7 +25,7 @@ export default class ItemTableData {
     this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
-    this.collection = itemTableParams.collection || null
+    this.collection = itemTableParams.collection
   }
 
   /**
@@ -36,34 +36,34 @@ export default class ItemTableData {
   getTable(): { [key: string]: ReactElement[] } {
     const callNumberCells = this.items?.map((item) =>
       ItemTableCell({
-        children: item.callNumber
-          ? `${item.callNumber}
-              }`
-          : "",
+        children: item.callNumber ? `${item.callNumber}` : "",
       })
     )
     const volumeCells = this.items?.map((item) =>
       ItemTableCell({ children: item.volume })
     )
-    const statusCells = this.items?.map((item) => StatusLinks({ item }))
+    const availabilityCells = this.items?.map((item) =>
+      AvailabilityLinks({ item })
+    )
     const accessMessageCells = this.items?.map((item) =>
       ItemTableCell({ children: item.accessMessage })
     )
     const locationCells = this.items?.map((item) =>
       ItemTableCell({ children: item.location?.prefLabel })
     )
-    const divisionCells = this.items?.map(() =>
+    const divisionCells = this.items?.map((item) =>
       ItemTableCell({
-        children: this.collection?.prefLabel,
-        url:
-          this.collection?.locationsPath &&
-          `https://nypl.org/${this.collection.locationsPath}`,
+        children: item.collection?.prefLabel,
+        url: item.collection?.locationsPath
+          ? `https://nypl.org/${item.collection.locationsPath}`
+          : undefined,
       })
     )
 
     const volumeColumnWrapped = this.showVolumeColumn() && {
       [this.volumeColumnHeading()]: volumeCells,
     }
+
     const divisionColumnWrapped = this.showDivisionColumn() && {
       Division: divisionCells,
     }
@@ -76,11 +76,12 @@ export default class ItemTableData {
           ...divisionColumnWrapped,
         }
       : {
-          Status: statusCells,
+          Availability: availabilityCells,
           ...volumeColumnWrapped,
-          Access: accessMessageCells,
           "Call Number": callNumberCells,
           "Item Location": locationCells,
+          Division: divisionCells,
+          "Use restrictions": accessMessageCells,
         }
   }
 
