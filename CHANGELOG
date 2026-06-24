@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.1] 2026-06-22
 
+### Updated
+
+- Updated copy on home page to reflect legacy deprecation updates [SCC-5444](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5444)
+
 ### Removed
 
 - Removed the "View in Legacy (onsite only)" link on the bib page [SCC-5327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5327)
