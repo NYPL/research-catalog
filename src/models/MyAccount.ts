@@ -17,6 +17,10 @@ import { logger } from "@nypl/node-utils"
 
 import { buildPatron, formatDate } from "../utils/myAccountUtils"
 import { getPickupLocations } from "../utils/pickupLocationsUtils"
+import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
+import { formatMMDDYYYY } from "../utils/dateUtils"
+import { fetchLists, createList } from "../server/api/lists"
+import { buildListRecordWithBibData } from "../utils/listUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -92,6 +96,52 @@ export default class MyAccount {
   async getFines() {
     const fines = await this.fetchFines()
     return this.buildFines(fines)
+  }
+
+  async getLists(patronId: string, sort?: ListSort) {
+    const listsResult = await fetchLists({ patronId, sort })
+    const lists = listsResult?.lists
+
+    // Check if the default list exists based on its unique name
+    const hasDefaultList = lists?.some(
+      (list) => list.listName === "My workspace (default list)"
+    )
+
+    // If patron doesn't have the default list, provision it
+    if (lists && !hasDefaultList) {
+      const createResult = await createList({
+        patronId,
+        listName: "My workspace (default list)",
+        description: "Default list - cannot be deleted",
+      })
+      if (createResult.status === 200 && createResult.list) {
+        lists.push(createResult.list)
+      }
+    }
+
+    const builtLists = this.buildLists(lists || [])
+
+    // Set the isDefaultList prop
+    if (lists && lists.length > 0) {
+      // Use name + oldest id to confirm
+      const defaultLists = lists.filter(
+        (list) => list.listName === "My workspace (default list)"
+      )
+      const candidateLists = defaultLists.length > 0 ? defaultLists : lists
+
+      const defaultListId = candidateLists.reduce((oldest, current) => {
+        const currentDate = new Date(current.createdDate).getTime() || 0
+        const oldestDate = new Date(oldest.createdDate).getTime() || 0
+        console.log(currentDate, oldestDate)
+        return currentDate < oldestDate ? current : oldest
+      }).id
+
+      builtLists.forEach((list) => {
+        list.isDefaultList = list.id === defaultListId
+      })
+    }
+
+    return builtLists
   }
 
   async fetchBibItemData(
@@ -370,6 +420,37 @@ export default class MyAccount {
     }
   }
 
+  buildLists = (
+    listResults: ListResult[],
+    bibDataMap: Record<string, any> = {}
+  ): List[] => {
+    return listResults.map((list: ListResult) => {
+      return {
+        id: list.id,
+        patronId: list.patronId,
+        listName: list.listName,
+        description: list.description,
+        recordCount: list.records?.length || 0,
+        createdDate: formatMMDDYYYY(list.createdDate),
+        modifiedDate: formatMMDDYYYY(list.modifiedDate),
+        records: this.buildRecordsFromListResult(list, bibDataMap),
+        isDefaultList: false,
+      }
+    })
+  }
+
+  buildRecordsFromListResult(
+    result: ListResult,
+    bibData?: Record<string, any>
+  ): ListRecord[] {
+    return result?.records?.length
+      ? result.records.map((record) => {
+          const bib = bibData?.[record.uri] || {}
+          return buildListRecordWithBibData(record, bib)
+        })
+      : []
+  }
+
   /**
    * getDueDate
    * Returns date in readable string ("Month day, year")
@@ -417,5 +498,6 @@ export const MyAccountFactory = async (id: string, client) => {
       else return null
     }
   ) as [SierraCodeName[], Checkout[], Hold[], Patron, Fine]
-  return { pickupLocations, checkouts, holds, patron, fines }
+  const lists = await patronFetcher.getLists(patron.id.toString())
+  return { pickupLocations, checkouts, holds, patron, fines, lists }
 }

@@ -44,3 +44,8 @@ export const isFutureDate = (date: Date): boolean => {
 export const rangeInvalid = (from: Date, to: Date): boolean => {
   return from.getTime() > to.getTime()
 }
+
+export const formatMMDDYYYY = (isoDateString): string => {
+  const date = new Date(isoDateString)
+  return date.toLocaleDateString("en-US")
+}

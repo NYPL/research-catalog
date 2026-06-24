@@ -65,11 +65,13 @@ describe("MyAccount page", () => {
       const responseWithZeroRedirects = await getServerSideProps({
         req: mockReq,
         res: mockRes,
+        query: {},
       })
       expect(responseWithZeroRedirects.redirect).toBeDefined()
       const responseWithTwoRedirects = await getServerSideProps({
         req: { ...mockReq, cookies: { nyplAccountRedirects: 2 } },
         res: mockRes,
+        query: {},
       })
       expect(responseWithTwoRedirects.redirect).toBeDefined()
     })
@@ -85,11 +87,16 @@ describe("MyAccount page", () => {
       const responseWithoutRedirect = await getServerSideProps({
         req: mockReq,
         res: mockRes,
+        query: {},
       })
       expect(responseWithoutRedirect.props.renderAuthServerError).toBe(true)
     })
     it("does not redirect if patron is authenticated", async () => {
-      const response = await getServerSideProps({ req: mockReq, res: mockRes })
+      const response = await getServerSideProps({
+        req: mockReq,
+        res: mockRes,
+        query: {},
+      })
       expect(response.redirect).toBeUndefined()
     })
     it("updates the nyplAccountRedirectsCookie upon redirecting", async () => {
@@ -100,7 +107,7 @@ describe("MyAccount page", () => {
         decodedPatron: { sub: "123" },
         isTokenValid: false,
       })
-      await getServerSideProps({ res: mockRes, req: mockReq })
+      await getServerSideProps({ res: mockRes, req: mockReq, query: {} })
       expect(mockRes.setHeader.mock.calls[0]).toStrictEqual([
         "Set-Cookie",
         "nyplAccountRedirects=1; Max-Age=10; path=/; domain=.nypl.org;",
@@ -153,7 +160,11 @@ describe("MyAccount page", () => {
       url: "/account/overdues",
     }
 
-    const result = await getServerSideProps({ req, res: mockRes })
+    const result = await getServerSideProps({
+      req,
+      res: mockRes,
+      query: { index: ["overdues"] },
+    })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -173,7 +184,11 @@ describe("MyAccount page", () => {
       url: "/account/spaghetti",
     }
 
-    const result = await getServerSideProps({ req: req, res: mockRes })
+    const result = await getServerSideProps({
+      req: req,
+      res: mockRes,
+      query: { index: ["spaghetti"] },
+    })
     expect(result).toStrictEqual({
       redirect: { destination: "/account", permanent: false },
     })
@@ -192,7 +207,11 @@ describe("MyAccount page", () => {
       url: "/account/settings/spaghetti",
     }
 
-    const result = await getServerSideProps({ req: req, res: mockRes })
+    const result = await getServerSideProps({
+      req: req,
+      res: mockRes,
+      query: { index: ["settings", "spaghetti"] },
+    })
     expect(result).toStrictEqual({
       redirect: { destination: "/account/settings", permanent: false },
     })
@@ -211,7 +230,11 @@ describe("MyAccount page", () => {
       url: "/account/settings",
     }
 
-    const result = await getServerSideProps({ req: req, res: mockRes })
+    const result = await getServerSideProps({
+      req: req,
+      res: mockRes,
+      query: { index: ["settings"] },
+    })
     expect(result.props.tabsPath).toBe("settings")
   })
 
@@ -228,7 +251,11 @@ describe("MyAccount page", () => {
       url: "/account/overdues",
     }
 
-    const result = await getServerSideProps({ req: req, res: mockRes })
+    const result = await getServerSideProps({
+      req: req,
+      res: mockRes,
+      query: { index: ["overdues"] },
+    })
     expect(result.props.tabsPath).toBe("overdues")
   })
   it("renders notification banner if user has fines", () => {

@@ -16,7 +16,7 @@ const CheckoutsTab = () => {
         <Link
           isExternal
           whiteSpace="pre-line"
-          isUnderlined={false}
+          isUnderlined={true}
           href={checkout.catalogHref}
         >
           {checkout.title}

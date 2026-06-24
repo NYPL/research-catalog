@@ -1,11 +1,21 @@
 import { Text, Box, Link, Flex } from "@nypl/design-system-react-components"
 import { useState, useEffect } from "react"
 
-export const QueryBanner = () => {
+export const FeaturePopup = ({
+  id,
+  title,
+  content,
+  pointerRight = "150px",
+}: {
+  id: string
+  title: string
+  content: string
+  pointerRight?: string
+}) => {
   const [isVisible, setIsVisible] = useState(false)
 
   useEffect(() => {
-    if (!document.cookie.includes("seenQueryBanner=true")) {
+    if (!document.cookie.includes(`seen${id}=true`)) {
       setIsVisible(true)
     }
   }, [])
@@ -27,13 +37,12 @@ export const QueryBanner = () => {
         _before: {
           content: '""',
           position: "absolute",
-          top: "-8px",
-          left: "140px",
-          marginTop: "2px",
+          bottom: "-7px",
+          right: pointerRight,
           borderLeft: "8px solid transparent",
           borderRight: "8px solid transparent",
-          borderBottom: "8px solid",
-          borderBottomColor: "ui.gray.xx-dark",
+          borderTop: "8px solid",
+          borderTopColor: "ui.gray.xx-dark",
         },
       }}
     >
@@ -52,7 +61,7 @@ export const QueryBanner = () => {
         >
           New!
         </Text>{" "}
-        Search using queries
+        {title}
       </Text>
       <Text
         marginBottom="0"
@@ -60,13 +69,13 @@ export const QueryBanner = () => {
         fontWeight="medium"
         color="ui.typography.inverse.heading"
       >
-        You can now search with more precision and control using boolean
-        operators against a wide set of fields. Check it out in this menu.
+        {content}
       </Text>
-      <Flex flexDir="row" justifyContent="flex-end">
+      <Flex flexDir="row" justifyContent="flex-end" mt="s">
         <Link
           href="#"
-          color="ui.typography.inverse.heading"
+          color="ui.typography.inverse.heading !important"
+          isUnderlined
           fontSize="14px"
           fontWeight="bold"
           onClick={(e) => {
@@ -75,10 +84,10 @@ export const QueryBanner = () => {
             const expirationDate = new Date(
               new Date().setFullYear(new Date().getFullYear() + 1)
             ).toUTCString()
-            document.cookie = `seenQueryBanner=true; expires=${expirationDate}; `
+            document.cookie = `seen${id}=true; expires=${expirationDate}; `
           }}
           sx={{
-            textDecoration: "underline solid 1px",
+            textDecoration: "underline solid 1px !important",
             textUnderlineOffset: "2px",
           }}
         >

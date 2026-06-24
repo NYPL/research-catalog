@@ -68,7 +68,7 @@ describe("SearchFilters", () => {
       setTimeout(() => {
         expect(subjectMultiselect).toHaveAttribute("aria-expanded", "true")
         expect(topFilterOption).toBeVisible()
-      }, 100)
+      }, 200)
     })
 
     it("searches filter options", async () => {
@@ -93,7 +93,7 @@ describe("SearchFilters", () => {
       setTimeout(() => {
         expect(audioFilter).not.toBeInTheDocument()
         expect(notatedMusicFilter).toBeInTheDocument()
-      }, 100)
+      }, 200)
     })
 
     it("should update the router query and add filter on checkbox click", async () => {

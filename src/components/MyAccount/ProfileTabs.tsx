@@ -7,6 +7,7 @@ import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { useContext } from "react"
 import AccountSettingsTab from "./Settings/AccountSettingsTab"
+import ListsTab from "./ListsTab/ListsTab"
 
 interface ProfileTabsPropsType {
   activePath: string
@@ -14,7 +15,7 @@ interface ProfileTabsPropsType {
 
 const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
   const {
-    updatedAccountData: { checkouts, holds, fines },
+    updatedAccountData: { checkouts, holds, fines, lists },
   } = useContext(PatronDataContext)
   // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
@@ -23,7 +24,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: checkouts ? (
         <CheckoutsTab />
       ) : (
-        <Text sx={{ mt: "s" }}>
+        <Text sx={{ mt: "m" }}>
           There was an error accessing your checkouts.
         </Text>
       ),
@@ -34,7 +35,9 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: holds ? (
         <RequestsTab />
       ) : (
-        <Text sx={{ mt: "s" }}>There was an error accessing your requests</Text>
+        <Text sx={{ mt: "m" }}>
+          There was an error accessing your requests.
+        </Text>
       ),
       urlPath: "requests",
     },
@@ -52,11 +55,20 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       content: <AccountSettingsTab />,
       urlPath: "settings",
     },
+    {
+      label: "Lists" + (lists ? ` (${lists.length})` : ""),
+      content: lists ? (
+        <ListsTab />
+      ) : (
+        <Text sx={{ mt: "m" }}>There was an error accessing your lists.</Text>
+      ),
+      urlPath: "lists",
+    },
   ]
   const tabsDict =
     fines?.total > 0
-      ? { items: 0, requests: 1, overdues: 2, settings: 3 }
-      : { items: 0, requests: 1, settings: 2 }
+      ? { items: 0, requests: 1, overdues: 2, settings: 3, lists: 4 }
+      : { items: 0, requests: 1, settings: 2, lists: 3 }
 
   const router = useRouter()
 

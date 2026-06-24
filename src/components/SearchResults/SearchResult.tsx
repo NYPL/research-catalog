@@ -8,6 +8,7 @@ import {
   SimpleGrid,
   StatusBadge,
   Icon,
+  Flex,
 } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 import ElectronicResourcesLink from "./ElectronicResourcesLink"
@@ -15,15 +16,27 @@ import type SearchResultsBib from "../../models/SearchResultsBib"
 import { PATHS } from "../../config/constants"
 import FindingAid from "../BibPage/FindingAid"
 import SearchResultItems from "./SearchResultItems"
+import { ManageBibInList } from "../List/ManageBibInList"
+import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
+import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
+import { useState } from "react"
+import { idConstants } from "../../context/FocusContext"
+import { FeaturePopup } from "../Banners/FeaturePopup"
 
 interface SearchResultProps {
   bib: SearchResultsBib
+  isAuthenticated: boolean
+  isFirstResult?: boolean
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const SearchResult = ({ bib }: SearchResultProps) => {
+const SearchResult = ({
+  bib,
+  isAuthenticated,
+  isFirstResult,
+}: SearchResultProps) => {
   const separatingDot = (i) => (
     // @ts-ignore
     <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
@@ -50,6 +63,9 @@ const SearchResult = ({ bib }: SearchResultProps) => {
     return acc
   }, [])
 
+  // Manage status banner display for list actions
+  const [status, setStatus] = useState<StatusBannerState | null>(null)
+
   return (
     <Card
       key={bib.id}
@@ -65,28 +81,65 @@ const SearchResult = ({ bib }: SearchResultProps) => {
         },
       }}
     >
-      <CardHeading
-        level="h3"
-        size="heading5"
-        sx={{ a: { textDecoration: "none" } }}
-      >
-        {bib.findingAid && (
-          <StatusBadge variant="informative" mb="s">
-            Finding aid available
-          </StatusBadge>
-        )}
-        <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
-      </CardHeading>
       <CardContent data-testid="card-content">
+        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+          <CardHeading
+            level="h3"
+            size="heading5"
+            mb="xs"
+            sx={{ a: { textDecoration: "none" } }}
+          >
+            <Box>
+              {bib.findingAid && (
+                <StatusBadge variant="informative" mb="s">
+                  Finding aid available
+                </StatusBadge>
+              )}
+              <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+            </Box>
+          </CardHeading>
+          <Box position="relative">
+            {isFirstResult && (
+              <Box
+                position="absolute"
+                sx={{
+                  bottom: "100%",
+                  right: -10,
+                  zIndex: "100",
+                }}
+              >
+                <FeaturePopup
+                  id="listPopup"
+                  title="Save to lists"
+                  content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
+                  pointerRight="50px"
+                />
+              </Box>
+            )}
+            <ManageBibInList
+              recordId={bib.id}
+              isAuthenticated={isAuthenticated}
+              setStatus={setStatus}
+            />
+          </Box>
+        </Flex>
         <Box
           sx={{
-            p: {
-              display: "inline-block",
-            },
+            div: { display: "inline-block" },
+            p: { display: "inline-block" },
           }}
         >
           {joinedMetadata}
         </Box>
+        <div
+          tabIndex={-1}
+          id={`${idConstants.listStatusBanner}-${bib.id}`}
+          style={{ marginTop: "24px" }}
+        >
+          {status && (
+            <StatusBanner type={status.type} message={status.message} />
+          )}
+        </div>
         {(bib.findingAid || bib.hasElectronicResources) && (
           <Box width="100%" mt="s">
             {bib.findingAid ? (

@@ -11,7 +11,7 @@ import { searchResultPartnerSource } from "../../../__test__/fixtures/searchResu
 describe("SearchResult with Physical Items", () => {
   beforeEach(() => {
     const bib = new SearchResultsBib(searchResultPhysicalItems)
-    render(<SearchResult bib={bib} />)
+    render(<SearchResult isAuthenticated={false} bib={bib} />)
   })
 
   it("renders a title link with the correct bib href", async () => {
@@ -33,7 +33,7 @@ describe("SearchResult with Many Physical Items", () => {
     const bib = new SearchResultsBib(
       searchResultManyPhysicalItems as DiscoveryBibResult
     )
-    render(<SearchResult bib={bib} />)
+    render(<SearchResult isAuthenticated={false} bib={bib} />)
   })
 
   it("renders a link to the bib page with the correct text when there are more than the set limit of items per search result", async () => {
@@ -63,7 +63,7 @@ describe("SearchResult with Many Physical Items", () => {
 describe("SearchResult with Electronic Resources", () => {
   it("renders the correct item message for bib with electronic resources", async () => {
     const bib = new SearchResultsBib(searchResultElectronicResources)
-    render(<SearchResult bib={bib} />)
+    render(<SearchResult isAuthenticated={false} bib={bib} />)
     screen.getByText("1 resource")
   })
 })
