@@ -9,6 +9,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.1.1] 2026-06-22
 
+### Updated
+
+- Updated copy on home page to reflect legacy deprecation updates [SCC-5444](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5444)
+
 ### Removed
 
 - Removed the "View in Legacy (onsite only)" link on the bib page [SCC-5327](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5327)
@@ -30,7 +34,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Condensed status state for account/lists banners
 - Updated to DS `v4.2.0` [SCC-5433](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5433)
-- Updated copy on home page to reflect legacy deprecation updates [SCC-5444](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5444)
 
 ## [2.0.0] 2026-06-04
 
