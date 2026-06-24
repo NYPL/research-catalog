@@ -108,11 +108,11 @@ describe("Item Filter Utils", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
         {
           id: "Offsite",
-          label: "Location > Offsite",
+          label: "Item location > Offsite",
         },
         {
           id: "status:a",
-          label: "Status > Available",
+          label: "Availability > Available",
         },
         { id: "2005", label: "Year > 2005" },
       ])
@@ -126,11 +126,11 @@ describe("Item Filter Utils", () => {
       ).toStrictEqual([
         {
           id: "status:a",
-          label: "Status > Available",
+          label: "Availability > Available",
         },
         {
           id: "status:na",
-          label: "Status > Not available",
+          label: "Availability > Not available",
         },
       ])
     })

@@ -27,12 +27,12 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
                 { width: 272, minWidth: 85 },
               ]
             : [
-                { width: "auto", minWidth: 250 },
-                { width: "17%", minWidth: 100 },
-                { width: "17%", minWidth: 100 },
-                { width: "17%", minWidth: 100 },
-                { width: "17%", minWidth: 100 },
-                { width: "17%", minWidth: 100 },
+                { width: "auto", minWidth: 350 },
+                { width: "12%", minWidth: 100 },
+                { width: "12%", minWidth: 100 },
+                { width: "12%", minWidth: 100 },
+                { width: "12%", minWidth: 100 },
+                { width: "17%", minWidth: 175 },
               ]
         }
         tableData={tableData}
