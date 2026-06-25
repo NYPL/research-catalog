@@ -66,6 +66,26 @@ const nyplApiClient = async ({
       return await originalPost(path, body)
     }
 
+    const originalPatch = client.patch.bind(client)
+    client.patch = async (path: string, body: unknown) => {
+      logger.info("Platform request", {
+        method: "PATCH",
+        path: `${baseUrl}${path}`,
+        body,
+      })
+      return originalPatch(path, body)
+    }
+
+    const originalDelete = client.dangerouslyCallDelete.bind(client)
+    client.delete = async (path: string, body: unknown) => {
+      logger.info("Platform request", {
+        method: "DELETE",
+        path: `${baseUrl}${path}`,
+        body,
+      })
+      return originalDelete(path)
+    }
+
     CACHE[clientCacheKey] = client
     return client
   } catch (error: any) {

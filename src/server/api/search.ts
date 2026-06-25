@@ -94,7 +94,7 @@ export async function fetchSearchResults(
       }
     }
 
-    // Handle general error
+    // Handle general error (no status code returned on success)
     if (results.status) {
       logServerError(
         "fetchSearchResults",

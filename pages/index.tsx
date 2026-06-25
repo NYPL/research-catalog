@@ -63,24 +63,8 @@ export default function Home({ isAuthenticated }: HomeProps) {
                 </Link>
               </Text>
               <Text mb="s">
-                NYPL began a phased deprecation of the{" "}
-                <Link isExternal href={appConfig.urls.legacyCatalog}>
-                  Legacy Catalog
-                </Link>{" "}
-                in May 2026. The Legacy Catalog is currently available onsite
-                only, and in June 2026, we will completely remove access to the
-                Legacy Catalog both onsite and offsite. The Legacy Catalog does
-                not include our{" "}
-                <Link
-                  isExternal
-                  href={
-                    "https://www.nypl.org/research/services/scan-and-deliver"
-                  }
-                >
-                  Scan & Deliver
-                </Link>{" "}
-                service or the Columbia University, Harvard University, or
-                Princeton University material from the Shared Collection.
+                As of June 23, 2026, the Legacy Catalog is no longer available
+                from any location.
               </Text>
             </Box>
             <SimpleGrid columns={1} gap="grid.m">

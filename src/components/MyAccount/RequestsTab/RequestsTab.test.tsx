@@ -1,5 +1,5 @@
 import React from "react"
-import { render, screen, waitFor, within } from "../../../utils/testUtils"
+import { render, screen, within } from "../../../utils/testUtils"
 import {
   processedHolds,
   processedPatron,
