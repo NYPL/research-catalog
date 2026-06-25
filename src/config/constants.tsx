@@ -100,7 +100,7 @@ export const SEARCH_FORM_OPTIONS = {
     placeholder: "e.g., Ornithology or Greek Architecture",
   },
   cql: {
-    text: <span>Query</span>,
+    text: "Query",
     searchTip: (
       <span>
         Read our{" "}
