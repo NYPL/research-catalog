@@ -68,6 +68,10 @@ export default class ItemTableData {
       Division: divisionCells,
     }
 
+    const useRestrictionsColumnWrapped = this.showUseRestrictionsColumn() && {
+      "Use restrictions": accessMessageCells,
+    }
+
     return this.inSearchResult
       ? {
           "Call Number": callNumberCells,
@@ -81,7 +85,7 @@ export default class ItemTableData {
           "Call Number": callNumberCells,
           "Item Location": locationCells,
           Division: divisionCells,
-          "Use restrictions": accessMessageCells,
+          ...useRestrictionsColumnWrapped,
         }
   }
 
@@ -101,6 +105,10 @@ export default class ItemTableData {
       this.collection?.prefLabel &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
+  }
+
+  showUseRestrictionsColumn(): boolean {
+    return this.items?.some((item) => item.accessMessage !== "")
   }
 
   showVolumeColumn(): boolean {
