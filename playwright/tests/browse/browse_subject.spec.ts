@@ -134,3 +134,14 @@ test.describe("Subject sort order", () => {
     }).toPass({ timeout: 5000 })
   })
 })
+test.describe("Subject results loading heading", () => {
+  test("Do an author/contributor search and assert that the heading reflects loading state", async () => {
+    await browsePage.searchFor("Jake", "Subject Headings containing") // doesn't render heading on first search
+
+    await browsePage.searchFor(searchterm, "Subject Headings containing")
+
+    await expect(browsePage.loadingSearchResultsHeading).toBeVisible({
+      timeout: 100,
+    })
+  })
+})

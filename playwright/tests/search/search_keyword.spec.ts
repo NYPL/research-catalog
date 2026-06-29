@@ -22,4 +22,18 @@ test.describe("Keyword Search", () => {
       expect(count).toBeGreaterThan(10)
     }).toPass({ timeout: 10000 })
   })
+  test("Do a keyword search and assert that the heading reflects loading state", async ({
+    page,
+  }) => {
+    await searchPage.searchFor("IBM 1402", "Keyword") // doesn't render heading on first search
+
+    await page
+      .getByRole("textbox", { name: "Enter one or more keywords." })
+      .fill(searchterm)
+    await searchPage.search_submit_button.click()
+
+    await expect(searchPage.loadingSearchResultsHeading).toBeVisible({
+      timeout: 100,
+    })
+  })
 })
