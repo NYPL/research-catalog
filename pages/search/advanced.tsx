@@ -194,6 +194,8 @@ const DivisionSelectMemo = memo(
 )
 DivisionSelectMemo.displayName = "DivisionSelectMemo"
 
+/** Advanced search page */
+
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
   goBackHref?: null | string
@@ -318,7 +320,7 @@ export default function AdvancedSearch({
     }
   }, [alert, dateError])
 
-  const fields = [
+  const nonDivisionMultiSelectFields = [
     { value: "format", label: "Format", options: formatOptions },
     {
       value: "buildingLocation",
@@ -326,29 +328,21 @@ export default function AdvancedSearch({
       options: buildingLocationOptions,
     },
     { value: "language", label: "Language", options: languageOptions },
-    { value: "collection", label: "Collection", options: collectionOptions },
   ]
 
-  const multiselects = fields.map((field) => {
-    return field.value !== "collection" ? (
-      <div key={field.value}>
-        <MultiSelectMemo
-          fieldValue={field.value}
-          label={field.label}
-          options={field.options}
-          onSelectionChange={handleFilterSelectionChange}
-          resetKey={resetKey}
-          globalInputChangeHandler={globalInputChangeHandler}
-        />
-      </div>
-    ) : (
-      <DivisionSelectMemo
+  const multiselects = nonDivisionMultiSelectFields.map((field) => (
+    <div key={field.value}>
+      <MultiSelectMemo
+        fieldValue={field.value}
+        label={field.label}
+        options={field.options}
         onSelectionChange={handleFilterSelectionChange}
         resetKey={resetKey}
         globalInputChangeHandler={globalInputChangeHandler}
       />
-    )
-  })
+    </div>
+  ))
+
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -400,7 +394,7 @@ export default function AdvancedSearch({
                   name={name}
                   label={label}
                   resetKey={resetKey}
-                  globalInputChangeHandler={() => setAlert(false)}
+                  globalInputChangeHandler={globalInputChangeHandler}
                 />
               ))}
               <FormField gridGap="xs">
@@ -415,6 +409,12 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {multiselects}
+              <DivisionSelectMemo
+                key="collection"
+                onSelectionChange={handleFilterSelectionChange}
+                resetKey={resetKey}
+                globalInputChangeHandler={globalInputChangeHandler}
+              />
             </Flex>
           </Flex>
 
