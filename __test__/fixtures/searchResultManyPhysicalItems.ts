@@ -36,44 +36,57 @@ export const searchResultManyPhysicalItems = {
   ],
   items: [
     {
-      "@id": "res:i14507546",
+      "@id": "res:i30068374",
+      "@type": ["bf:Item"],
       accessMessage: [
         {
-          "@id": "accessMessage:4",
-          prefLabel: "Restricted use",
+          "@id": "accessMessage:2",
+          prefLabel: "Request in advance",
         },
       ],
       catalogItemType: [
         {
-          "@id": "catalogItemType:2",
-          prefLabel: "book non-circ",
+          "@id": "catalogItemType:6",
+          prefLabel: "microfilm service copy",
         },
       ],
-      eddRequestable: false,
-      enumerationChronology: ["Volume 4"],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
+      eddRequestable: true,
+      enumerationChronology: ["*OSH p.v. 1-2"],
+      formatLiteral: ["Microform"],
       holdingLocation: [
         {
-          "@id": "loc:macc2",
-          prefLabel: "Schwarzman Building - Arents Collection Room 328",
-          endpoint: "schwarzman",
+          "@id": "loc:rcmi2",
+          prefLabel: "Offsite",
         },
       ],
+      idBarcode: ["33433105668325"],
       identifier: [
         {
           "@type": "bf:ShelfMark",
-          "@value": "Arents BIP (Hearn. Japanese) AL 04-11 [Text]",
+          "@value": "*ZO-*OSH p.v. 1, no. 1",
+        },
+        {
+          "@type": "bf:Barcode",
+          "@value": "33433105668325",
         },
       ],
       owner: [
         {
-          "@id": "orgs:1109",
-          prefLabel: "George Arents Collection",
+          "@id": "orgs:1000",
+          prefLabel: "Stephen A. Schwarzman Building",
         },
       ],
-      physRequestable: false,
-      physicalLocation: ["Arents BIP (Hearn. Japanese) AL 04-11 [Text]"],
-      requestable: [false],
-      shelfMark: ["Arents BIP (Hearn. Japanese) AL 04-11 [Text]"],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
+      physRequestable: true,
+      physicalLocation: ["*ZO-*OSH p.v. 1, no. 1"],
+      recapCustomerCode: ["NA"],
+      requestable: [true],
+      shelfMark: ["*ZO-*OSH p.v. 1, no. 1"],
       specRequestable: false,
       status: [
         {
@@ -81,14 +94,23 @@ export const searchResultManyPhysicalItems = {
           prefLabel: "Available",
         },
       ],
-      uri: "i14507546",
+      uri: "i30068374",
       idNyplSourceId: {
         "@type": "SierraNypl",
-        "@value": "14507546",
+        "@value": "30068374",
       },
+      collection: [
+        {
+          "@id": "mal",
+          prefLabel: "General Research Division",
+          buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+          locationsPath: "locations/schwarzman/general-research-division",
+        },
+      ],
     },
     {
       "@id": "res:i14507545",
+      "@type": ["bf:Item"],
       accessMessage: [
         {
           "@id": "accessMessage:p",
@@ -102,11 +124,11 @@ export const searchResultManyPhysicalItems = {
         },
       ],
       eddRequestable: false,
+      formatLiteral: ["Microform"],
       holdingLocation: [
         {
           "@id": "loc:mai82",
-          prefLabel: "Schwarzman Building M1 - Microforms Room 315",
-          endpoint: "schwarzman",
+          prefLabel: "Schwarzman Building - Microforms Room 315",
         },
       ],
       identifier: [
@@ -137,9 +159,80 @@ export const searchResultManyPhysicalItems = {
         "@type": "SierraNypl",
         "@value": "14507545",
       },
+      collection: [
+        {
+          "@id": "mal",
+          prefLabel: "General Research Division",
+          buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+          locationsPath: "locations/schwarzman/general-research-division",
+        },
+      ],
+    },
+    {
+      "@id": "res:i14507546",
+      "@type": ["bf:Item"],
+      accessMessage: [
+        {
+          "@id": "accessMessage:4",
+          prefLabel: "Restricted use",
+        },
+      ],
+      catalogItemType: [
+        {
+          "@id": "catalogItemType:2",
+          prefLabel: "book non-circ",
+        },
+      ],
+      eddRequestable: false,
+      formatLiteral: ["Microform"],
+      holdingLocation: [
+        {
+          "@id": "loc:macc2",
+          prefLabel: "Schwarzman Building - Arents Collection Room 328",
+          collectionAccessType: "special",
+        },
+      ],
+      identifier: [
+        {
+          "@type": "bf:ShelfMark",
+          "@value": "Arents BIP (Hearn. Japanese) AL 04-11 [Text] copy 2",
+        },
+      ],
+      owner: [
+        {
+          "@id": "orgs:1109",
+          prefLabel: "George Arents Collection",
+        },
+      ],
+      physRequestable: false,
+      physicalLocation: ["Arents BIP (Hearn. Japanese) AL 04-11 [Text]"],
+      requestable: [true],
+      shelfMark: ["Arents BIP (Hearn. Japanese) AL 04-11 [Text] copy 2"],
+      specRequestable: true,
+      status: [
+        {
+          "@id": "status:a",
+          prefLabel: "Available",
+        },
+      ],
+      uri: "i14507546",
+      idNyplSourceId: {
+        "@type": "SierraNypl",
+        "@value": "14507546",
+      },
+      collection: [
+        {
+          "@id": "mac",
+          prefLabel: "Arents Collection",
+          buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+          locationsPath:
+            "locations/schwarzman/rare-books-division/arents-collection",
+        },
+      ],
     },
     {
       "@id": "res:i14507543",
+      "@type": ["bf:Item"],
       accessMessage: [
         {
           "@id": "accessMessage:p",
@@ -152,7 +245,11 @@ export const searchResultManyPhysicalItems = {
           prefLabel: "microfilm service copy",
         },
       ],
+      eddFulfillment: {
+        "@id": "fulfillment:recap-edd",
+      },
       eddRequestable: true,
+      formatLiteral: ["Microform"],
       holdingLocation: [
         {
           "@id": "loc:rcmi2",
@@ -176,6 +273,9 @@ export const searchResultManyPhysicalItems = {
           prefLabel: "Stephen A. Schwarzman Building",
         },
       ],
+      physFulfillment: {
+        "@id": "fulfillment:recap-offsite",
+      },
       physRequestable: true,
       physicalLocation: ["*ZO-*OSH p.v. 3, no. 1"],
       recapCustomerCode: ["NA"],
@@ -193,63 +293,14 @@ export const searchResultManyPhysicalItems = {
         "@type": "SierraNypl",
         "@value": "14507543",
       },
-    },
-    {
-      "@id": "res:i30068374",
-      accessMessage: [
+      collection: [
         {
-          "@id": "accessMessage:2",
-          prefLabel: "Request in advance",
+          "@id": "mal",
+          prefLabel: "General Research Division",
+          buildingLocationLabel: "Stephen A. Schwarzman Building (SASB)",
+          locationsPath: "locations/schwarzman/general-research-division",
         },
       ],
-      catalogItemType: [
-        {
-          "@id": "catalogItemType:6",
-          prefLabel: "microfilm service copy",
-        },
-      ],
-      eddRequestable: true,
-      enumerationChronology: ["*OSH p.v. 1-2"],
-      holdingLocation: [
-        {
-          "@id": "loc:rcmi2",
-          prefLabel: "Offsite",
-        },
-      ],
-      idBarcode: ["33433105668325"],
-      identifier: [
-        {
-          "@type": "bf:ShelfMark",
-          "@value": "*ZO-*OSH p.v. 1, no. 1 *OSH p.v. 1-2",
-        },
-        {
-          "@type": "bf:Barcode",
-          "@value": "33433105668325",
-        },
-      ],
-      owner: [
-        {
-          "@id": "orgs:1000",
-          prefLabel: "Stephen A. Schwarzman Building",
-        },
-      ],
-      physRequestable: true,
-      physicalLocation: ["*ZO-*OSH p.v. 1, no. 1"],
-      recapCustomerCode: ["NA"],
-      requestable: [true],
-      shelfMark: ["*ZO-*OSH p.v. 1, no. 1 *OSH p.v. 1-2"],
-      specRequestable: false,
-      status: [
-        {
-          "@id": "status:a",
-          prefLabel: "Available",
-        },
-      ],
-      uri: "i30068374",
-      idNyplSourceId: {
-        "@type": "SierraNypl",
-        "@value": "30068374",
-      },
     },
   ],
   language: [

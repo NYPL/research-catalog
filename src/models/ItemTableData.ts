@@ -1,7 +1,7 @@
 import type { ReactElement } from "react"
 
 import type Item from "./Item"
-import type { Collection, ItemTableParams } from "../types/itemTypes"
+import type { ItemTableParams } from "../types/itemTypes"
 import StatusLinks from "../components/ItemTable/StatusLinks"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
@@ -19,13 +19,11 @@ export default class ItemTableData {
   items?: Item[]
   inSearchResult: boolean
   isArchiveCollection: boolean
-  collection?: Collection
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
-    this.collection = itemTableParams.collection || null
   }
 
   /**
@@ -36,10 +34,7 @@ export default class ItemTableData {
   getTable(): { [key: string]: ReactElement[] } {
     const callNumberCells = this.items?.map((item) =>
       ItemTableCell({
-        children: item.callNumber
-          ? `${item.callNumber}
-              }`
-          : "",
+        children: item.callNumber ? `${item.callNumber}` : "",
       })
     )
     const volumeCells = this.items?.map((item) =>
@@ -52,12 +47,13 @@ export default class ItemTableData {
     const locationCells = this.items?.map((item) =>
       ItemTableCell({ children: item.location?.prefLabel })
     )
-    const divisionCells = this.items?.map(() =>
+
+    const divisionCells = this.items?.map((item) =>
       ItemTableCell({
-        children: this.collection?.prefLabel,
+        children: item.collection?.prefLabel,
         url:
-          this.collection?.locationsPath &&
-          `https://nypl.org/${this.collection.locationsPath}`,
+          item.collection?.locationsPath &&
+          `https://nypl.org/${item.collection.locationsPath}`,
       })
     )
 
@@ -97,7 +93,7 @@ export default class ItemTableData {
 
   showDivisionColumn(): boolean {
     return (
-      this.collection?.prefLabel &&
+      this.items?.some((item) => item.collection?.prefLabel) &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
   }
