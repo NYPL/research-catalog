@@ -1,9 +1,10 @@
 import {
-  useReducer,
   useRef,
   useEffect,
   type SyntheticEvent,
   useState,
+  useCallback,
+  memo,
 } from "react"
 import { useRouter } from "next/router"
 import {
@@ -19,15 +20,8 @@ import {
   MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
+import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
 import {
-  BASE_URL,
-  DEBOUNCE_INTERVAL,
-  PATHS,
-  SITE_NAME,
-} from "../../src/config/constants"
-import { searchFormReducer } from "../../src/reducers/searchFormReducer"
-import {
-  initialSearchFormState,
   textInputFields,
   languageOptions,
   collectionOptions,
@@ -35,16 +29,12 @@ import {
   formatOptions,
   buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
-import type {
-  SearchParams,
-  SearchFormActionType,
-} from "../../src/types/searchTypes"
+import type { SearchParams } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/DateFilter/DateFilter"
-import { debounce } from "underscore"
 import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
@@ -55,6 +45,154 @@ export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
 export const dateErrorMessage =
   "Please enter a valid date format (YYYY, YYYY/MM, or YYYY/MM/DD) and try again."
+
+/** Isolated memoized components to prevent unnecessary rerenders */
+
+interface TextInputFieldProps {
+  name: string
+  label: string
+  resetKey: number
+  globalInputChangeHandler: () => void
+}
+
+const TextInputField = memo(
+  ({
+    name,
+    label,
+    resetKey,
+    globalInputChangeHandler,
+  }: TextInputFieldProps) => {
+    const [value, setValue] = useState("")
+
+    useEffect(() => {
+      setValue("")
+    }, [resetKey])
+
+    return (
+      <FormField>
+        <TextInput
+          id={name}
+          labelText={label}
+          name={name}
+          value={value}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+            globalInputChangeHandler()
+            setValue(e.target.value)
+          }}
+        />
+      </FormField>
+    )
+  }
+)
+TextInputField.displayName = "TextInputField"
+
+interface MultiSelectMemoProps {
+  fieldValue: string
+  label: string
+  options: { id: string; name: string }[]
+  onSelectionChange: (field: string, values: string[]) => void
+  resetKey: number
+  globalInputChangeHandler: () => void
+}
+
+const MultiSelectMemo = memo(
+  ({
+    fieldValue,
+    label,
+    options,
+    onSelectionChange,
+    resetKey,
+    globalInputChangeHandler,
+  }: MultiSelectMemoProps) => {
+    const [selected, setSelected] = useState<string[]>([])
+
+    useEffect(() => {
+      setSelected([])
+    }, [resetKey])
+
+    const handleChange = useCallback(
+      (value: string | null) => {
+        globalInputChangeHandler()
+        setSelected((prev) => {
+          const next =
+            value === null
+              ? []
+              : prev.includes(value)
+              ? prev.filter((v) => v !== value)
+              : [...prev, value]
+          onSelectionChange(fieldValue, next)
+          return next
+        })
+      },
+      [fieldValue, onSelectionChange, globalInputChangeHandler]
+    )
+
+    return (
+      <div>
+        <MultiSelect
+          sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
+          id={fieldValue}
+          isSearchable
+          closeOnBlur
+          buttonText={label}
+          selectedItems={{ [fieldValue]: { items: selected } }}
+          items={options}
+          onChange={(e) => handleChange(e.target.id)}
+          onClear={() => handleChange(null)}
+        />
+      </div>
+    )
+  }
+)
+MultiSelectMemo.displayName = "MultiSelectMemo"
+
+interface DivisionSelectMemoProps {
+  onSelectionChange: (field: string, values: string[]) => void
+  resetKey: number
+  globalInputChangeHandler: () => void
+}
+
+const DivisionSelectMemo = memo(
+  ({
+    onSelectionChange,
+    resetKey,
+    globalInputChangeHandler,
+  }: DivisionSelectMemoProps) => {
+    const [selected, setSelected] = useState<string[]>([])
+
+    useEffect(() => {
+      setSelected([])
+    }, [resetKey])
+
+    const handleChange = useCallback(
+      (value: string | null) => {
+        globalInputChangeHandler()
+        setSelected((prev) => {
+          const next =
+            value === null
+              ? []
+              : prev.includes(value)
+              ? prev.filter((v) => v !== value)
+              : [...prev, value]
+          onSelectionChange("collection", next)
+          return next
+        })
+      },
+      [onSelectionChange, globalInputChangeHandler]
+    )
+
+    return (
+      <MultiSelectWithGroupTitles
+        field={{ value: "collection", label: "Division" }}
+        groupedItems={collectionOptions}
+        onChange={(e) => handleChange(e.target.id)}
+        onClear={() => handleChange(null)}
+        selectedItems={{ collection: { items: selected } }}
+      />
+    )
+  }
+)
+DivisionSelectMemo.displayName = "DivisionSelectMemo"
 
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
@@ -72,68 +210,50 @@ export default function AdvancedSearch({
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
+  // resetKey is incremented when "Clear fields" is clicked
+  // It is passed to memoized components, which have corresponding useEffect to trigger clear
+  const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
 
-  const [searchFormState, dispatch] = useReducer(
-    searchFormReducer,
-    initialSearchFormState
-  )
-
-  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
-    dateTo: searchFormState["filters"].dateTo,
-    dateFrom: searchFormState["filters"].dateFrom,
-    changeHandler: (e) => handleInputChange(e, "filter_change"),
-    clearHandler: () => {
-      dispatch({
-        type: "filter_change",
-        field: "dateFrom",
-        payload: "",
-      })
-      dispatch({
-        type: "filter_change",
-        field: "dateTo",
-        payload: "",
-      })
-    },
-  })
-  const { dateError } = dateFilterProps
-
-  const handleInputChange = (e: SyntheticEvent, type: SearchFormActionType) => {
-    e.preventDefault()
-    alert && setAlert(false)
+  const globalInputChangeHandler = useCallback(() => {
+    setAlert(false)
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = ""
     }
-    const target = e.target as HTMLInputElement
-    dispatch({
-      type: type,
-      field: target.name,
-      payload: target.value,
-    })
-  }
+  }, [])
 
-  const handleFilterChange = (field: string, value: string | null) => {
-    setAlert(false)
-    if (value === null) {
-      dispatch({
-        type: "filter_change",
-        field,
-        payload: [],
-      })
-      return
-    }
+  const [dateFrom, setDateFrom] = useState("")
+  const [dateTo, setDateTo] = useState("")
 
-    const currentValues = searchFormState["filters"][field] || []
-    const updatedValues = currentValues.includes(value)
-      ? currentValues.filter((v) => v !== value)
-      : [...currentValues, value]
+  const filterValuesRef = useRef<Record<string, string[]>>({
+    language: [],
+    format: [],
+    buildingLocation: [],
+    collection: [],
+  })
 
-    dispatch({
-      type: "filter_change",
-      field,
-      payload: updatedValues,
-    })
-  }
+  const handleFilterSelectionChange = useCallback(
+    (field: string, values: string[]) => {
+      filterValuesRef.current[field] = values
+    },
+    []
+  )
+
+  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
+    dateTo,
+    dateFrom,
+    changeHandler: (e) => {
+      globalInputChangeHandler()
+      const target = e.target as HTMLInputElement
+      if (target.name === "dateFrom") setDateFrom(target.value)
+      else if (target.name === "dateTo") setDateTo(target.value)
+    },
+    clearHandler: () => {
+      setDateFrom("")
+      setDateTo("")
+    },
+  })
+  const { dateError } = dateFilterProps
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -152,7 +272,18 @@ export default function AdvancedSearch({
       return
     }
 
-    const queryString = getSearchQuery(searchFormState as SearchParams)
+    const formData = new FormData(e.target as HTMLFormElement)
+    const textValues = textInputFields.reduce<Partial<SearchParams>>(
+      (acc, { name }) => ({
+        ...acc,
+        [name]: (formData.get(name) as string) ?? "",
+      }),
+      {}
+    )
+    const searchParams: SearchParams = Object.assign({}, textValues, {
+      filters: { ...filterValuesRef.current, dateFrom, dateTo },
+    })
+    const queryString = getSearchQuery(searchParams)
 
     // If empty search (even with default sort) set error
     if (!queryString.length || queryString === "?q=&sort=relevance") {
@@ -168,7 +299,13 @@ export default function AdvancedSearch({
     e.preventDefault()
     setAlert(false)
     clearDateInputs()
-    dispatch({ type: "form_reset", payload: initialSearchFormState })
+    filterValuesRef.current = {
+      language: [],
+      format: [],
+      buildingLocation: [],
+      collection: [],
+    }
+    setResetKey((k) => k + 1)
 
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = "All fields have been cleared."
@@ -195,41 +332,20 @@ export default function AdvancedSearch({
   const multiselects = fields.map((field) => {
     return field.value !== "collection" ? (
       <div key={field.value}>
-        <MultiSelect
-          sx={{
-            "div > div > button": {
-              height: "40px",
-            },
-            mb: "25.5px",
-          }}
-          id={field.value}
-          isSearchable
-          closeOnBlur
-          buttonText={field.label}
-          selectedItems={{
-            [field.value]: {
-              items: searchFormState["filters"][field.value],
-            },
-          }}
-          items={field.options}
-          onChange={(e) => handleFilterChange(field.value, e.target.id)}
-          onClear={() => handleFilterChange(field.value, null)}
+        <MultiSelectMemo
+          fieldValue={field.value}
+          label={field.label}
+          options={field.options}
+          onSelectionChange={handleFilterSelectionChange}
+          resetKey={resetKey}
+          globalInputChangeHandler={globalInputChangeHandler}
         />
       </div>
     ) : (
-      <MultiSelectWithGroupTitles
-        key={field.value}
-        field={{ value: field.value, label: "Division" }}
-        groupedItems={field.options}
-        onChange={(e) => {
-          handleFilterChange(field.value, e.target.id)
-        }}
-        onClear={() => handleFilterChange(field.value, null)}
-        selectedItems={{
-          [field.value]: {
-            items: searchFormState["filters"][field.value],
-          },
-        }}
+      <DivisionSelectMemo
+        onSelectionChange={handleFilterSelectionChange}
+        resetKey={resetKey}
+        globalInputChangeHandler={globalInputChangeHandler}
       />
     )
   })
@@ -279,18 +395,13 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {textInputFields.map(({ name, label }) => (
-                <FormField key={name}>
-                  <TextInput
-                    id={name}
-                    labelText={label}
-                    name={name}
-                    value={searchFormState[name]}
-                    onChange={debounce(
-                      (e) => handleInputChange(e, "input_change"),
-                      DEBOUNCE_INTERVAL
-                    )}
-                  />
-                </FormField>
+                <TextInputField
+                  key={name}
+                  name={name}
+                  label={label}
+                  resetKey={resetKey}
+                  globalInputChangeHandler={() => setAlert(false)}
+                />
               ))}
               <FormField gridGap="xs">
                 <DateFilter isAdvancedSearch {...dateFilterProps} />
