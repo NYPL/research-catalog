@@ -12,7 +12,7 @@ export interface DateFilterHookPropsType {
   dateFrom: string
   dateTo: string
   changeHandler?: (e: SyntheticEvent) => void
-  applyHandler?: () => void
+  applyHandler?: (values: { dateFrom: string; dateTo: string }) => void
   clearHandler?: () => void
 }
 
@@ -36,8 +36,9 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   const [dateError, setDateError] = useState<DateErrorState>({})
   const { setPersistentFocus } = useFocusContext()
 
-  const onBlur = () => {
-    const errors = validateDates(dateFrom, dateTo)
+  const onBlur = (nextValues?: { dateFrom: string; dateTo: string }) => {
+    const values = nextValues ?? { dateFrom, dateTo }
+    const errors = validateDates(values.dateFrom, values.dateTo)
     setDateError(errors)
   }
 
@@ -58,8 +59,9 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     })
   }
 
-  const onApply = () => {
-    const errors = validateDates(dateFrom, dateTo)
+  const onApply = (nextValues?: { dateFrom: string; dateTo: string }) => {
+    const values = nextValues ?? { dateFrom, dateTo }
+    const errors = validateDates(values.dateFrom, values.dateTo)
     setDateError(errors)
 
     if (errors.from) {
@@ -67,7 +69,7 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     } else if (errors.to || errors.range) {
       setPersistentFocus(idConstants.dateTo)
     } else if (Object.keys(errors).length === 0 && applyHandler) {
-      applyHandler()
+      applyHandler(values)
     }
 
     return errors

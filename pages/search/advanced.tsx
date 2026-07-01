@@ -224,9 +224,6 @@ export default function AdvancedSearch({
     }
   }, [])
 
-  const [dateFrom, setDateFrom] = useState("")
-  const [dateTo, setDateTo] = useState("")
-
   const filterValuesRef = useRef<Record<string, string[]>>({
     language: [],
     format: [],
@@ -242,25 +239,26 @@ export default function AdvancedSearch({
   )
 
   const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
-    dateTo,
-    dateFrom,
-    changeHandler: (e) => {
-      globalInputChangeHandler()
-      const target = e.target as HTMLInputElement
-      if (target.name === "dateFrom") setDateFrom(target.value)
-      else if (target.name === "dateTo") setDateTo(target.value)
-    },
+    dateTo: "",
+    dateFrom: "",
+    changeHandler: globalInputChangeHandler,
     clearHandler: () => {
-      setDateFrom("")
-      setDateTo("")
+      dateFilterProps.dateTo = ""
+      dateFilterProps.dateFrom = ""
     },
   })
   const { dateError } = dateFilterProps
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    flushSync(() => dateFilterProps.onBlur())
-    const errors = dateFilterProps.onApply()
+    const formData = new FormData(e.target as HTMLFormElement)
+    const submittedDates = {
+      dateFrom: (formData.get("dateFrom") as string) ?? "",
+      dateTo: (formData.get("dateTo") as string) ?? "",
+    }
+
+    flushSync(() => dateFilterProps.onBlur(submittedDates))
+    const errors = dateFilterProps.onApply(submittedDates)
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
       if (errors.combined || errors.range || (errors.from && errors.to))
@@ -274,7 +272,6 @@ export default function AdvancedSearch({
       return
     }
 
-    const formData = new FormData(e.target as HTMLFormElement)
     const textValues = textInputFields.reduce<Partial<SearchParams>>(
       (acc, { name }) => ({
         ...acc,
@@ -283,7 +280,11 @@ export default function AdvancedSearch({
       {}
     )
     const searchParams: SearchParams = Object.assign({}, textValues, {
-      filters: { ...filterValuesRef.current, dateFrom, dateTo },
+      filters: {
+        ...filterValuesRef.current,
+        dateFrom: submittedDates.dateFrom,
+        dateTo: submittedDates.dateTo,
+      },
     })
     const queryString = getSearchQuery(searchParams)
 
@@ -398,7 +399,11 @@ export default function AdvancedSearch({
                 />
               ))}
               <FormField gridGap="xs">
-                <DateFilter isAdvancedSearch {...dateFilterProps} />
+                <DateFilter
+                  key={resetKey}
+                  isAdvancedSearch
+                  {...dateFilterProps}
+                />
               </FormField>
             </Flex>
             <Flex

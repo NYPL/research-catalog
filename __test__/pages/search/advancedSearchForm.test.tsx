@@ -1,5 +1,11 @@
 import React from "react"
-import { fireEvent, render, screen, delay } from "../../../src/utils/testUtils"
+import {
+  fireEvent,
+  render,
+  screen,
+  delay,
+  waitFor,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -240,7 +246,9 @@ describe("Advanced search form", () => {
 
     await userEvent.click(screen.getByText("Clear fields"))
 
-    expect(fromInput).toHaveValue("")
-    expect(toInput).toHaveValue("")
+    await waitFor(() => {
+      expect(fromInput).toHaveValue("")
+      expect(toInput).toHaveValue("")
+    })
   })
 })

@@ -5,10 +5,9 @@ import {
   Flex,
   MultiSelect,
 } from "@nypl/design-system-react-components"
-import type { TextInputRefType } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useState } from "react"
 import {
   buildFilterQuery,
   collapseMultiValueQueryParams,
@@ -188,12 +187,18 @@ const SearchFilters = ({
   }
 
   const { dateFilterProps } = useDateFilter({
-    dateFrom: appliedFilters.dateFrom?.[0],
-    dateTo: appliedFilters.dateTo?.[0],
-    applyHandler: () => {
+    dateFrom: appliedFilters.dateFrom?.[0] ?? "",
+    dateTo: appliedFilters.dateTo?.[0] ?? "",
+    applyHandler: ({ dateFrom, dateTo }) => {
+      const nextFilters = {
+        ...appliedFilters,
+        dateFrom: [dateFrom],
+        dateTo: [dateTo],
+      }
+      setAppliedFilters(nextFilters)
       setFocusedFilter("date")
       setPersistentFocus(idConstants.applyDates)
-      buildAndPushFilterQuery(appliedFilters)
+      buildAndPushFilterQuery(nextFilters)
     },
     changeHandler: (e: React.SyntheticEvent) => {
       const target = e.target as HTMLInputElement
