@@ -25,53 +25,81 @@ export default class ItemTableData {
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
   }
+
   /**
-   * TODO: Consolidate tableHeadings and tableData into a single object to avoid relying on consistent ordering between the two.
-   * Add getter functions to build the array structures expected by the tableHeadings and tableData props
-   * Extra credit: Create separate prop constructors for Bib page and Search Results to deprecate the excessive showColumn helpers.
+   * Returns an object with table headings as the keys, and the table data for each item as the values.
+   * The presence of certain table headings/columns are determined by whether the table is to be displayed on a
+   * search results card or bib page
    */
+  getTable(): { [key: string]: ReactElement[] } {
+    const callNumberCells = this.items?.map((item) =>
+      ItemTableCell({
+        text: item.callNumber ? `${item.callNumber}` : "",
+      })
+    )
+    const volumeCells = this.items?.map((item) =>
+      ItemTableCell({ text: item.volume })
+    )
+    const statusCells = this.items?.map((item) => StatusLinks({ item }))
+    const accessMessageCells = this.items?.map((item) =>
+      ItemTableCell({ text: item.accessMessage })
+    )
+    const locationCells = this.items?.map((item) =>
+      ItemTableCell({ text: item.location?.prefLabel })
+    )
+
+    const divisionCells = this.items?.map((item) =>
+      ItemTableCell({
+        text: item.collection?.prefLabel,
+        url:
+          item.collection?.locationsPath &&
+          `https://nypl.org/${item.collection.locationsPath}`,
+      })
+    )
+
+    const volumeColumnWrapped = this.showVolumeColumn() && {
+      [this.volumeColumnHeading()]: volumeCells,
+    }
+    const divisionColumnWrapped = this.showDivisionColumn() && {
+      Division: divisionCells,
+    }
+
+    return this.inSearchResult
+      ? {
+          "Call Number": callNumberCells,
+          ...volumeColumnWrapped,
+          "Item Location": locationCells,
+          ...divisionColumnWrapped,
+        }
+      : {
+          Status: statusCells,
+          ...volumeColumnWrapped,
+          Access: accessMessageCells,
+          "Call Number": callNumberCells,
+          "Item Location": locationCells,
+        }
+  }
+
   get tableHeadings(): string[] {
-    return [
-      ...(this.showStatusColumn() ? ["Status"] : []),
-      ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
-      ...(this.showAccessColumn() ? ["Access"] : []),
-      "Call number",
-      "Item location",
-    ]
+    return Object.keys(this.getTable())
   }
 
   get tableData(): ReactElement[][] {
-    return this.items?.map((item) => {
-      return [
-        ...(this.showStatusColumn() ? [StatusLinks({ item })] : []),
-        ...(this.showVolumeColumn()
-          ? [ItemTableCell({ children: item.volume })]
-          : []),
-        ...(this.showAccessColumn()
-          ? [ItemTableCell({ children: item.accessMessage })]
-          : []),
-        ItemTableCell({
-          children: item.callNumber
-            ? `${item.callNumber}${
-                item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
-              }`
-            : "",
-        }),
-        ItemTableCell({ children: item.location.prefLabel }),
-      ]
-    })
+    const tableObject = this.getTable()
+    return this.items?.map((_, itemIndex) =>
+      Object.keys(tableObject).map((heading) => tableObject[heading][itemIndex])
+    )
+  }
+
+  showDivisionColumn(): boolean {
+    return (
+      this.items?.some((item) => item.collection?.prefLabel) &&
+      this.items?.some((item) => !item.isPartnerReCAP())
+    )
   }
 
   showVolumeColumn(): boolean {
-    return this.items?.some((item) => item.volume) && !this.inSearchResult
-  }
-
-  showStatusColumn(): boolean {
-    return !this.inSearchResult
-  }
-
-  showAccessColumn(): boolean {
-    return !this.inSearchResult
+    return this.items?.some((item) => item.volume)
   }
 
   volumeColumnHeading(): string {

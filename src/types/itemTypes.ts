@@ -24,6 +24,14 @@ export interface DiscoveryItemResult {
   owner?: JSONLDValue[]
   physicalLocation?: string[]
   recapCustomerCode?: string[]
+  collection?: Collection[]
+}
+
+export interface Collection {
+  "@id": string
+  prefLabel?: string
+  buildingLocationLabel?: string
+  locationsPath?: string
 }
 
 export interface ItemLocation extends JSONLDValue {
@@ -39,6 +47,7 @@ export interface ItemTableParams {
   isDesktop?: boolean
   inSearchResult?: boolean
   isArchiveCollection?: boolean
+  collection?: Collection
 }
 
 export type ItemCollectionAccess = "shelf" | "desk" | "special" | null

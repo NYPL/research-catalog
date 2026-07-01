@@ -3,6 +3,7 @@ import type {
   ItemLocation,
   DiscoveryItemResult,
   ItemCollectionAccess,
+  Collection,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -38,6 +39,7 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
   availability: ItemAvailability
+  collection?: Collection
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -70,6 +72,7 @@ export default class Item {
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       findingAid: bib.findingAid,
     })
+    this.collection = item.collection?.length ? item.collection[0] : null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

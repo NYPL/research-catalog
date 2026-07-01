@@ -6,6 +6,7 @@ import { searchResultPhysicalItems } from "../../../__test__/fixtures/searchResu
 import { searchResultManyPhysicalItems } from "../../../__test__/fixtures/searchResultManyPhysicalItems"
 import { searchResultElectronicResources } from "../../../__test__/fixtures/searchResultElectronicResources"
 import type { DiscoveryBibResult } from "../../types/bibTypes"
+import { searchResultPartnerSource } from "../../../__test__/fixtures/searchResultPartnerSource"
 
 describe("SearchResult with Physical Items", () => {
   beforeEach(() => {
@@ -41,11 +42,25 @@ describe("SearchResult with Many Physical Items", () => {
     })
     expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
-  it("displays the volume next to call number when it's there", async () => {
-    const firstItemRow = screen.getAllByRole("row")[0]
-    const text = firstItemRow.textContent?.replace(/\s+/g, " ").trim()
-    expect(text).toContain(
-      "Arents BIP (Hearn. Japanese) AL 04-11 [Text] Volume 4"
+  it("displays the volume when it's there", async () => {
+    screen.getByText("*OSH p.v. 1-2")
+  })
+  it("displays the division row for NYPL items", async () => {
+    const divisionRow = screen
+      .getAllByRole("row")
+      .find((r) => r.textContent?.includes("Division"))
+    expect(divisionRow).toBeDefined
+  })
+  it("provides the correct division links", async () => {
+    const divisionLink1 = screen.getAllByText("General Research Division")[0]
+    expect(divisionLink1).toHaveAttribute(
+      "href",
+      "https://nypl.org/locations/schwarzman/general-research-division"
+    )
+    const divisionLink2 = screen.getByText("Arents Collection")
+    expect(divisionLink2).toHaveAttribute(
+      "href",
+      "https://nypl.org/locations/schwarzman/rare-books-division/arents-collection"
     )
   })
 })
@@ -56,4 +71,13 @@ describe("SearchResult with Electronic Resources", () => {
     render(<SearchResult isAuthenticated={false} bib={bib} />)
     screen.getByText("1 resource")
   })
+})
+
+describe("SearchResult from partner source", () => {
+  const bib = new SearchResultsBib(searchResultPartnerSource)
+  render(<SearchResult isAuthenticated={false} bib={bib} />)
+  const divisionRow = screen
+    .getAllByRole("row")
+    .find((r) => r.textContent?.includes("Division"))
+  expect(divisionRow).toBeUndefined
 })
