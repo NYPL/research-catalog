@@ -7,6 +7,7 @@ This guide provides technical information required for developers working on the
 - [Getting started](#getting-started)
 - [Development workflow](#development-workflow)
 - [Hotfixes and rolling back](#hotfixes-and-rolling-back)
+- [Alert banners](#alert-banners)
 - [Changelog](#changelog)
 - [Coding standards](#coding-standards)
   - [State management](#state-management)
@@ -80,6 +81,14 @@ When possible, roll "forward" with a hotfix. **Merge the hotfix branch directly 
 If the introduced issue(s) are too urgent to resolve with a hotfix, [manually trigger the rollback workflow](https://github.com/NYPL/research-catalog/actions/workflows/rollback_prod.yml) to immediately deploy the previous image to `production`.
 
 Note: this rollback only changes the running image in the ECS deployment, it does **not** revert the code in the `production` branch.
+
+## Alert banners
+
+A common shortcut we take in our deployment workflow is publishing an alert banner to the home/search pages. A banner with title "Service announcement" is set up to display when there's a value set in [`appConfig.searchNotification`](../src/config/appConfig.ts) (see QA for an example banner which is always up).
+
+To publish a new banner, you only need to populate the `production` value of `searchNotification` with the banner content and push to `production`.
+
+Adding/removing the alert banner does not require a changelog entry or a full release.
 
 ## Changelog
 
