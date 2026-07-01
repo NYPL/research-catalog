@@ -3,7 +3,6 @@ export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
   accessMessage?: JSONLDValue[]
-  collection?: Collection
   shelfMark?: string[]
   status?: JSONLDValue[]
   enumerationChronology?: string[]

@@ -45,7 +45,6 @@ export default class Item {
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
     this.bibId = bib.id
-    this.collection = item.collection
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
     this.accessMessage = this.getAccessMessageFromItem(item)
