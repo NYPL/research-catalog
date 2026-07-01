@@ -40,7 +40,7 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
   availability: ItemAvailability
-  collection: Collection
+  collection?: Collection
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -72,6 +72,7 @@ export default class Item {
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       findingAid: bib.findingAid,
     })
+    this.collection = item.collection ? item.collection[0] : null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

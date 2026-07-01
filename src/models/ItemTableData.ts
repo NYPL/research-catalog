@@ -1,7 +1,7 @@
 import type { ReactElement } from "react"
 
 import type Item from "./Item"
-import type { Collection, ItemTableParams } from "../types/itemTypes"
+import type { ItemTableParams } from "../types/itemTypes"
 import AvailabilityLinks from "../components/ItemTable/AvailabilityLinks"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
@@ -19,13 +19,11 @@ export default class ItemTableData {
   items?: Item[]
   inSearchResult: boolean
   isArchiveCollection: boolean
-  collection?: Collection
 
   constructor(items: Item[], itemTableParams: ItemTableParams) {
     this.items = items || null
     this.inSearchResult = itemTableParams.inSearchResult || false
     this.isArchiveCollection = itemTableParams.isArchiveCollection
-    this.collection = itemTableParams.collection
   }
 
   /**
@@ -51,12 +49,13 @@ export default class ItemTableData {
     const locationCells = this.items?.map((item) =>
       ItemTableCell({ children: item.location?.prefLabel })
     )
+
     const divisionCells = this.items?.map((item) =>
       ItemTableCell({
         children: item.collection?.prefLabel,
-        url: item.collection?.locationsPath
-          ? `https://nypl.org/${item.collection.locationsPath}`
-          : undefined,
+        url:
+          item.collection?.locationsPath &&
+          `https://nypl.org/${item.collection.locationsPath}`,
       })
     )
 
@@ -102,7 +101,7 @@ export default class ItemTableData {
 
   showDivisionColumn(): boolean {
     return (
-      this.collection?.prefLabel &&
+      this.items?.some((item) => item.collection?.prefLabel) &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
   }

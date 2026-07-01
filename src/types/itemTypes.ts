@@ -22,6 +22,7 @@ export interface DiscoveryItemResult {
   owner?: JSONLDValue[]
   physicalLocation?: string[]
   recapCustomerCode?: string[]
+  collection?: Collection[]
 }
 
 export interface Collection {

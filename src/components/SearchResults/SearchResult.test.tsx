@@ -43,7 +43,7 @@ describe("SearchResult with Many Physical Items", () => {
     expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
   it("displays the volume when it's there", async () => {
-    screen.getByText("Volume 4")
+    screen.getByText("*OSH p.v. 1-2")
   })
   it("displays the division row for NYPL items", async () => {
     const divisionRow = screen
@@ -51,7 +51,18 @@ describe("SearchResult with Many Physical Items", () => {
       .find((r) => r.textContent?.includes("Division"))
     expect(divisionRow).toBeDefined
   })
-  it.todo("provides the correct division link")
+  it("provides the correct division links", async () => {
+    const divisionLink1 = screen.getAllByText("General Research Division")[0]
+    expect(divisionLink1).toHaveAttribute(
+      "href",
+      "https://nypl.org/locations/schwarzman/general-research-division"
+    )
+    const divisionLink2 = screen.getByText("Arents Collection")
+    expect(divisionLink2).toHaveAttribute(
+      "href",
+      "https://nypl.org/locations/schwarzman/rare-books-division/arents-collection"
+    )
+  })
 })
 
 describe("SearchResult with Electronic Resources", () => {
@@ -64,7 +75,7 @@ describe("SearchResult with Electronic Resources", () => {
 
 describe("SearchResult from partner source", () => {
   const bib = new SearchResultsBib(searchResultPartnerSource)
-  render(<SearchResult bib={bib} isAuthenticated={false} />)
+  render(<SearchResult isAuthenticated={false} bib={bib} />)
   const divisionRow = screen
     .getAllByRole("row")
     .find((r) => r.textContent?.includes("Division"))
