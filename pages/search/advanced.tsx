@@ -282,8 +282,8 @@ export default function AdvancedSearch({
     const searchParams: SearchParams = Object.assign({}, textValues, {
       filters: {
         ...filterValuesRef.current,
-        dateFrom: submittedDates.dateFrom,
         dateTo: submittedDates.dateTo,
+        dateFrom: submittedDates.dateFrom,
       },
     })
     const queryString = getSearchQuery(searchParams)

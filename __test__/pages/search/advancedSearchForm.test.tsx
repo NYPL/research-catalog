@@ -247,6 +247,7 @@ describe("Advanced search form", () => {
     await userEvent.click(screen.getByText("Clear fields"))
 
     await waitFor(() => {
+      const { fromInput, toInput } = getDateInputs() // components are rerendered
       expect(fromInput).toHaveValue("")
       expect(toInput).toHaveValue("")
     })
