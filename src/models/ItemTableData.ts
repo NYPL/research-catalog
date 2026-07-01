@@ -2,7 +2,7 @@ import type { ReactElement } from "react"
 
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
-import StatusLinks from "../components/ItemTable/StatusLinks"
+import AvailabilityLinks from "../components/ItemTable/AvailabilityLinks"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
 /**
@@ -40,7 +40,9 @@ export default class ItemTableData {
     const volumeCells = this.items?.map((item) =>
       ItemTableCell({ children: item.volume })
     )
-    const statusCells = this.items?.map((item) => StatusLinks({ item }))
+    const availabilityCells = this.items?.map((item) =>
+      AvailabilityLinks({ item })
+    )
     const accessMessageCells = this.items?.map((item) =>
       ItemTableCell({ children: item.accessMessage })
     )
@@ -60,8 +62,13 @@ export default class ItemTableData {
     const volumeColumnWrapped = this.showVolumeColumn() && {
       [this.volumeColumnHeading()]: volumeCells,
     }
+
     const divisionColumnWrapped = this.showDivisionColumn() && {
       Division: divisionCells,
+    }
+
+    const useRestrictionsColumnWrapped = this.showUseRestrictionsColumn() && {
+      "Use restrictions": accessMessageCells,
     }
 
     return this.inSearchResult
@@ -72,11 +79,12 @@ export default class ItemTableData {
           ...divisionColumnWrapped,
         }
       : {
-          Status: statusCells,
+          Availability: availabilityCells,
           ...volumeColumnWrapped,
-          Access: accessMessageCells,
           "Call Number": callNumberCells,
           "Item Location": locationCells,
+          Division: divisionCells,
+          ...useRestrictionsColumnWrapped,
         }
   }
 
@@ -96,6 +104,10 @@ export default class ItemTableData {
       this.items?.some((item) => item.collection?.prefLabel) &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
+  }
+
+  showUseRestrictionsColumn(): boolean {
+    return this.items?.some((item) => item.accessMessage !== "")
   }
 
   showVolumeColumn(): boolean {

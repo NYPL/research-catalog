@@ -15,7 +15,13 @@ const ItemTableCell = ({ children, url = undefined }) => {
         md: "desktop.body.body2",
       }}
     >
-      {url ? <Link href={url}>{children}</Link> : children}
+      {url ? (
+        <Link hasVisitedState={false} href={url}>
+          {children}
+        </Link>
+      ) : (
+        children
+      )}
     </Box>
   )
 }

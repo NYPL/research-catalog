@@ -12,6 +12,7 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
+  accessMessageMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/appConfig"
 import ItemAvailability from "./ItemAvailability"
@@ -46,9 +47,7 @@ export default class Item {
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
-    this.accessMessage = item.accessMessage?.length
-      ? item.accessMessage[0]?.prefLabel
-      : ""
+    this.accessMessage = this.getAccessMessageFromItem(item)
     this.callNumber = item.shelfMark?.length ? item.shelfMark[0] : null
     this.volume = item.enumerationChronology?.length
       ? item.enumerationChronology[0]
@@ -72,7 +71,7 @@ export default class Item {
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       findingAid: bib.findingAid,
     })
-    this.collection = item.collection?.length ? item.collection[0] : null
+    this.collection = item.collection ? item.collection[0] : null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -128,6 +127,20 @@ export default class Item {
     return item.holdingLocation?.length
       ? (item.holdingLocation[0]?.collectionAccessType as ItemCollectionAccess)
       : null
+  }
+
+  getAccessMessageFromItem(item: DiscoveryItemResult) {
+    if (!item.accessMessage?.length) return ""
+    const message = item.accessMessage[0]
+    const idString = message?.["@id"] || ""
+    const code = idString.split(":").pop() || ""
+
+    // Don't display some access messages
+    if (["1", "2", "-"].includes(code)) return ""
+
+    if (message?.prefLabel) return message.prefLabel
+
+    return accessMessageMap[code] || ""
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute
