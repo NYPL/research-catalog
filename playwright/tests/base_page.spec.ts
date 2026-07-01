@@ -22,7 +22,7 @@ test.describe("Global Header", () => {
     await expect(basePage.header_research).toBeVisible()
     await expect(basePage.header_education).toBeVisible()
     await expect(basePage.header_events).toBeVisible()
-    await expect(basePage.header_connect).toBeVisible()
+    await expect(basePage.header_visit).toBeVisible()
     await expect(basePage.header_give).toBeVisible()
     await expect(basePage.header_get_help).toBeVisible()
     await expect(basePage.header_search).toBeVisible()
