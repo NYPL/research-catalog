@@ -272,20 +272,16 @@ export default function AdvancedSearch({
       return
     }
 
-    const textValues = textInputFields.reduce<Partial<SearchParams>>(
-      (acc, { name }) => ({
-        ...acc,
-        [name]: (formData.get(name) as string) ?? "",
-      }),
-      {}
-    )
-    const searchParams: SearchParams = Object.assign({}, textValues, {
-      filters: {
-        ...filterValuesRef.current,
-        dateTo: submittedDates.dateTo,
-        dateFrom: submittedDates.dateFrom,
-      },
+    const searchParams = {}
+    textInputFields.forEach((field) => {
+      searchParams[field.name] = formData.get(field.name) ?? ""
     })
+    searchParams["filters"] = {
+      ...filterValuesRef.current,
+      dateTo: submittedDates.dateTo,
+      dateFrom: submittedDates.dateFrom,
+    }
+
     const queryString = getSearchQuery(searchParams)
 
     // If empty search (even with default sort) set error
