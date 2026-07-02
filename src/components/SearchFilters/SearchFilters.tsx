@@ -187,8 +187,8 @@ const SearchFilters = ({
   }
 
   const { dateFilterProps } = useDateFilter({
-    dateFrom: appliedFilters.dateFrom?.[0] ?? "",
-    dateTo: appliedFilters.dateTo?.[0] ?? "",
+    dateFrom: appliedFilters.dateFrom?.[0],
+    dateTo: appliedFilters.dateTo?.[0],
     applyHandler: ({ dateFrom, dateTo }) => {
       const nextFilters = {
         ...appliedFilters,

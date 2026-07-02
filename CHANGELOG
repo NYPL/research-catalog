@@ -11,7 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated search bar Query option to use quotes instead of span tag
 - Updated header link Playwright tests
-- Updated advanced search page to use memoized uncontrolled inputs [SCC-5375](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5375)
+- Updated advanced search page to use isolated memoized inputs [SCC-5375](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5375)
 
 ## [2.1.1] 2026-06-22
 

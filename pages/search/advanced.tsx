@@ -29,7 +29,6 @@ import {
   formatOptions,
   buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
-import type { SearchParams } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
@@ -128,19 +127,17 @@ const MultiSelectMemo = memo(
     )
 
     return (
-      <div>
-        <MultiSelect
-          sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
-          id={fieldValue}
-          isSearchable
-          closeOnBlur
-          buttonText={label}
-          selectedItems={{ [fieldValue]: { items: selected } }}
-          items={options}
-          onChange={(e) => handleChange(e.target.id)}
-          onClear={() => handleChange(null)}
-        />
-      </div>
+      <MultiSelect
+        sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
+        id={fieldValue}
+        isSearchable
+        closeOnBlur
+        buttonText={label}
+        selectedItems={{ [fieldValue]: { items: selected } }}
+        items={options}
+        onChange={(e) => handleChange(e.target.id)}
+        onClear={() => handleChange(null)}
+      />
     )
   }
 )
@@ -218,11 +215,11 @@ export default function AdvancedSearch({
   const { setPersistentFocus } = useFocusContext()
 
   const globalInputChangeHandler = useCallback(() => {
-    setAlert(false)
+    alert && setAlert(false)
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = ""
     }
-  }, [])
+  }, [alert])
 
   const filterValuesRef = useRef<Record<string, string[]>>({
     language: [],
@@ -315,9 +312,9 @@ export default function AdvancedSearch({
     if (alert && !Object.keys(dateError || {}).length) {
       setPersistentFocus(idConstants.advancedSearchError)
     }
-  }, [alert, dateError])
+  }, [alert, dateError, setPersistentFocus])
 
-  const nonDivisionMultiSelectFields = [
+  const fields = [
     { value: "format", label: "Format", options: formatOptions },
     {
       value: "buildingLocation",
@@ -325,20 +322,32 @@ export default function AdvancedSearch({
       options: buildingLocationOptions,
     },
     { value: "language", label: "Language", options: languageOptions },
+    { value: "collection", label: "Collection", options: collectionOptions },
   ]
 
-  const multiselects = nonDivisionMultiSelectFields.map((field) => (
-    <div key={field.value}>
-      <MultiSelectMemo
-        fieldValue={field.value}
-        label={field.label}
-        options={field.options}
-        onSelectionChange={handleFilterSelectionChange}
-        resetKey={resetKey}
-        globalInputChangeHandler={globalInputChangeHandler}
-      />
-    </div>
-  ))
+  const multiselects = fields.map((field) => {
+    return field.value !== "collection" ? (
+      <div key={field.value}>
+        <MultiSelectMemo
+          fieldValue={field.value}
+          label={field.label}
+          options={field.options}
+          onSelectionChange={handleFilterSelectionChange}
+          resetKey={resetKey}
+          globalInputChangeHandler={globalInputChangeHandler}
+        />
+      </div>
+    ) : (
+      <div key={field.value}>
+        <DivisionSelectMemo
+          key="collection"
+          onSelectionChange={handleFilterSelectionChange}
+          resetKey={resetKey}
+          globalInputChangeHandler={globalInputChangeHandler}
+        />
+      </div>
+    )
+  })
 
   return (
     <>
@@ -410,12 +419,6 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {multiselects}
-              <DivisionSelectMemo
-                key="collection"
-                onSelectionChange={handleFilterSelectionChange}
-                resetKey={resetKey}
-                globalInputChangeHandler={globalInputChangeHandler}
-              />
             </Flex>
           </Flex>
 
