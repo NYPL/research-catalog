@@ -235,14 +235,10 @@ export default function AdvancedSearch({
     []
   )
 
-  const { dateFilterProps, clearInputs: clearDateInputs } = useDateFilter({
+  const { dateFilterProps } = useDateFilter({
     dateTo: "",
     dateFrom: "",
     changeHandler: globalInputChangeHandler,
-    clearHandler: () => {
-      dateFilterProps.dateTo = ""
-      dateFilterProps.dateFrom = ""
-    },
   })
   const { dateError } = dateFilterProps
 
@@ -294,7 +290,6 @@ export default function AdvancedSearch({
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     setAlert(false)
-    clearDateInputs()
     filterValuesRef.current = {
       language: [],
       format: [],
