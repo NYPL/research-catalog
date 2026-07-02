@@ -4,7 +4,6 @@ import {
   type SyntheticEvent,
   useState,
   useCallback,
-  memo,
 } from "react"
 import { useRouter } from "next/router"
 import {
@@ -12,12 +11,10 @@ import {
   Form,
   FormField,
   Flex,
-  TextInput,
   HorizontalRule,
   Box,
   Banner,
   Icon,
-  MultiSelect,
 } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
@@ -34,164 +31,18 @@ import initializePatronTokenAuth from "../../src/server/auth"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
 import RCHead from "../../src/components/Head/RCHead"
 import DateFilter from "../../src/components/DateFilter/DateFilter"
-import MultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import { flushSync } from "react-dom"
+import MultiSelectMemo from "../../src/components/AdvancedSearch/MultiSelectMemo"
+import DivisionSelectMemo from "../../src/components/AdvancedSearch/DivisionSelectMemo"
+import TextInputFieldMemo from "../../src/components/AdvancedSearch/TextInputFieldMemo"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
 export const dateErrorMessage =
   "Please enter a valid date format (YYYY, YYYY/MM, or YYYY/MM/DD) and try again."
-
-/** Isolated memoized components to prevent unnecessary rerenders */
-
-interface TextInputFieldProps {
-  name: string
-  label: string
-  resetKey: number
-  globalInputChangeHandler: () => void
-}
-
-const TextInputField = memo(
-  ({
-    name,
-    label,
-    resetKey,
-    globalInputChangeHandler,
-  }: TextInputFieldProps) => {
-    const [value, setValue] = useState("")
-
-    useEffect(() => {
-      setValue("")
-    }, [resetKey])
-
-    return (
-      <FormField>
-        <TextInput
-          id={name}
-          labelText={label}
-          name={name}
-          value={value}
-          onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-            globalInputChangeHandler()
-            setValue(e.target.value)
-          }}
-        />
-      </FormField>
-    )
-  }
-)
-TextInputField.displayName = "TextInputField"
-
-interface MultiSelectMemoProps {
-  fieldValue: string
-  label: string
-  options: { id: string; name: string }[]
-  onSelectionChange: (field: string, values: string[]) => void
-  resetKey: number
-  globalInputChangeHandler: () => void
-}
-
-const MultiSelectMemo = memo(
-  ({
-    fieldValue,
-    label,
-    options,
-    onSelectionChange,
-    resetKey,
-    globalInputChangeHandler,
-  }: MultiSelectMemoProps) => {
-    const [selected, setSelected] = useState<string[]>([])
-
-    useEffect(() => {
-      setSelected([])
-    }, [resetKey])
-
-    const handleChange = useCallback(
-      (value: string | null) => {
-        globalInputChangeHandler()
-        setSelected((prev) => {
-          const next =
-            value === null
-              ? []
-              : prev.includes(value)
-              ? prev.filter((v) => v !== value)
-              : [...prev, value]
-          onSelectionChange(fieldValue, next)
-          return next
-        })
-      },
-      [fieldValue, onSelectionChange, globalInputChangeHandler]
-    )
-
-    return (
-      <MultiSelect
-        sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
-        id={fieldValue}
-        isSearchable
-        closeOnBlur
-        buttonText={label}
-        selectedItems={{ [fieldValue]: { items: selected } }}
-        items={options}
-        onChange={(e) => handleChange(e.target.id)}
-        onClear={() => handleChange(null)}
-      />
-    )
-  }
-)
-MultiSelectMemo.displayName = "MultiSelectMemo"
-
-interface DivisionSelectMemoProps {
-  onSelectionChange: (field: string, values: string[]) => void
-  resetKey: number
-  globalInputChangeHandler: () => void
-}
-
-const DivisionSelectMemo = memo(
-  ({
-    onSelectionChange,
-    resetKey,
-    globalInputChangeHandler,
-  }: DivisionSelectMemoProps) => {
-    const [selected, setSelected] = useState<string[]>([])
-
-    useEffect(() => {
-      setSelected([])
-    }, [resetKey])
-
-    const handleChange = useCallback(
-      (value: string | null) => {
-        globalInputChangeHandler()
-        setSelected((prev) => {
-          const next =
-            value === null
-              ? []
-              : prev.includes(value)
-              ? prev.filter((v) => v !== value)
-              : [...prev, value]
-          onSelectionChange("collection", next)
-          return next
-        })
-      },
-      [onSelectionChange, globalInputChangeHandler]
-    )
-
-    return (
-      <MultiSelectWithGroupTitles
-        field={{ value: "collection", label: "Division" }}
-        groupedItems={collectionOptions}
-        onChange={(e) => handleChange(e.target.id)}
-        onClear={() => handleChange(null)}
-        selectedItems={{ collection: { items: selected } }}
-      />
-    )
-  }
-)
-DivisionSelectMemo.displayName = "DivisionSelectMemo"
-
-/** Advanced search page */
 
 interface AdvancedSearchPropTypes {
   isAuthenticated: boolean
@@ -336,6 +187,7 @@ export default function AdvancedSearch({
       <div key={field.value}>
         <DivisionSelectMemo
           key="collection"
+          collectionOptions={collectionOptions}
           onSelectionChange={handleFilterSelectionChange}
           resetKey={resetKey}
           globalInputChangeHandler={globalInputChangeHandler}
@@ -390,7 +242,7 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {textInputFields.map(({ name, label }) => (
-                <TextInputField
+                <TextInputFieldMemo
                   key={name}
                   name={name}
                   label={label}
