@@ -22,9 +22,12 @@ describe("SearchResult with Physical Items", () => {
   })
 
   it("renders the primary bib fields", async () => {
-    screen.getByText("Material")
-    screen.getByText("New York, Abelard-Schuman [1955]")
-    screen.getByText("2 items")
+    const format = screen.getByText("Material")
+    expect(format).toBeVisible()
+    const pubStmt = screen.getByText("New York, Abelard-Schuman [1955]")
+    expect(pubStmt).toBeVisible()
+    const numItems = screen.getByText("2 items")
+    expect(numItems).toBeVisible()
   })
 })
 
@@ -43,13 +46,14 @@ describe("SearchResult with Many Physical Items", () => {
     expect(resultTitleLink).toHaveAttribute("href", "/bib/b14753192#item-table")
   })
   it("displays the volume when it's there", async () => {
-    screen.getByText("*OSH p.v. 1-2")
+    const volumeText = screen.getByText("*OSH p.v. 1-2")
+    expect(volumeText).toBeVisible()
   })
   it("displays the division row for NYPL items", async () => {
     const divisionRow = screen
       .getAllByRole("row")
       .find((r) => r.textContent?.includes("Division"))
-    expect(divisionRow).toBeDefined
+    expect(divisionRow).toBeDefined()
   })
   it("provides the correct division links", async () => {
     const divisionLink1 = screen.getAllByText("General Research Division")[0]
@@ -69,7 +73,8 @@ describe("SearchResult with Electronic Resources", () => {
   it("renders the correct item message for bib with electronic resources", async () => {
     const bib = new SearchResultsBib(searchResultElectronicResources)
     render(<SearchResult isAuthenticated={false} bib={bib} />)
-    screen.getByText("1 resource")
+    const message = screen.getByText("1 resource")
+    expect(message).toBeVisible()
   })
 })
 
@@ -79,5 +84,5 @@ describe("SearchResult from partner source", () => {
   const divisionRow = screen
     .getAllByRole("row")
     .find((r) => r.textContent?.includes("Division"))
-  expect(divisionRow).toBeUndefined
+  expect(divisionRow).toBeUndefined()
 })
