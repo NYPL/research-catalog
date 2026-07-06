@@ -89,7 +89,7 @@ describe("ListsTab", () => {
     await userEvent.click(screen.getByText("List name (A - Z)"))
 
     expect(global.fetch).toHaveBeenCalledWith(
-      `${BASE_URL}/api/account/lists?patronId=${processedPatron.id}&sort=list_name_asc`
+      `${BASE_URL}/api/account/lists?sort=list_name_asc`
     )
 
     // Confirm rows flipped order
