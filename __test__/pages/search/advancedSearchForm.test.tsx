@@ -240,16 +240,17 @@ describe("Advanced search form", () => {
   })
 
   it("clears date inputs when 'Clear fields' is clicked", async () => {
-    const { fromInput, toInput } = getDateInputs()
+    let { fromInput, toInput } = getDateInputs()
     fireEvent.change(fromInput, { target: { value: "2000" } })
     fireEvent.change(toInput, { target: { value: "2020" } })
 
     await userEvent.click(screen.getByText("Clear fields"))
 
-    await waitFor(() => {
-      const { fromInput, toInput } = getDateInputs() // components are rerendered
-      expect(fromInput).toHaveValue("")
-      expect(toInput).toHaveValue("")
-    })
+    // components are rerendered
+    fromInput = getDateInputs().fromInput
+    toInput = getDateInputs().toInput
+
+    expect(fromInput).toHaveValue("")
+    expect(toInput).toHaveValue("")
   })
 })

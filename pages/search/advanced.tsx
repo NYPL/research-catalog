@@ -79,12 +79,9 @@ export default function AdvancedSearch({
     collection: [],
   })
 
-  const handleFilterSelectionChange = useCallback(
-    (field: string, values: string[]) => {
-      filterValuesRef.current[field] = values
-    },
-    []
-  )
+  const handleFilterChange = useCallback((field: string, values: string[]) => {
+    filterValuesRef.current[field] = values
+  }, [])
 
   const { dateFilterProps } = useDateFilter({
     dateTo: "",
@@ -178,7 +175,7 @@ export default function AdvancedSearch({
           fieldValue={field.value}
           label={field.label}
           options={field.options}
-          onSelectionChange={handleFilterSelectionChange}
+          onSelectionChange={handleFilterChange}
           resetKey={resetKey}
           globalInputChangeHandler={globalInputChangeHandler}
         />
@@ -188,7 +185,7 @@ export default function AdvancedSearch({
         <DivisionSelectMemo
           key="collection"
           collectionOptions={collectionOptions}
-          onSelectionChange={handleFilterSelectionChange}
+          onSelectionChange={handleFilterChange}
           resetKey={resetKey}
           globalInputChangeHandler={globalInputChangeHandler}
         />
