@@ -208,26 +208,24 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
   },
 }
 
+/* Availability keys correspond to the message displayed BELOW the request buttons on an item.
+ * There are many more availability cases than are covered here, but these are the ones we
+ * want messages for. */
 export const AVAILABILITY_KEYS = {
-  // anything not covered by the cases below is EDGE_CASE
-  EDGE_CASE: "edgeCase",
-  // there is only one not available case, so availability is assumed as the default
-  NOT_AVAILABLE: "notAvailable",
-  RECAP_GENERAL_COLLECTIONS: "Recap",
-  ONSITE_GENERAL_COLLECTIONS: "Onsite",
-  DESK_AVAILABLE: "deskAvailable",
-  SHELF_AVAILABLE: "shelfAvailable",
-  // special collections availability keys
-  RECAP_AEON: "RecapAeon",
-  AEON: "Aeon",
-  ONSITE_AEON: "OnsiteAeon",
-  ONSITE_AEON_FINDING_AID: "onsiteAeonFindingAid",
-  RECAP_AEON_FINDING_AID: "recapAeonFindingAid",
-  ONSITE_FINDING_AID: "onsiteFindingAid",
-  RECAP_FINDING_AID: "recapFindingAid",
-  ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
-  RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
+  // Not available (all partner, NYPL, etc.), if we know due date it will display
+  NOT_AVAILABLE: "notAvailableGeneral",
+  // Available, desk reference
+  AVAILABLE_DESK: "availableDeskGeneral",
+  // Available, shelf reference
+  AVAILABLE_SHELF: "availableShelfGeneral",
+  // Available onsite but needs appointment, no Aeon link
+  AVAILABLE_ONSITE_APPT: "availableOnsiteApptNoAeon",
+  // NYPL or partner item, but offsite and needs to be requested in advance
+  AVAILABLE_OFFSITE: "availableOffsite",
+  // Available onsite, in closed stacks, has no barcode
+  AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
 }
+
 export const HOLD_PAGE_HEADING = "Request for onsite use"
 export const EDD_PAGE_HEADING = "Request scan"
 

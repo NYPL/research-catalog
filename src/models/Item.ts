@@ -69,7 +69,7 @@ export default class Item {
       isReCAP: this.isReCAP,
       aeonUrl: this.aeonUrl,
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
-      findingAid: bib.findingAid,
+      hasBarcode: !!this.barcode,
     })
     this.collection = item.collection ? item.collection[0] : null
   }
