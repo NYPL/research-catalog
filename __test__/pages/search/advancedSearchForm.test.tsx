@@ -1,11 +1,5 @@
 import React from "react"
-import {
-  fireEvent,
-  render,
-  screen,
-  delay,
-  waitFor,
-} from "../../../src/utils/testUtils"
+import { fireEvent, render, screen, delay } from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
