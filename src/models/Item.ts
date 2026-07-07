@@ -70,6 +70,7 @@ export default class Item {
       aeonUrl: this.aeonUrl,
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       hasBarcode: !!this.barcode,
+      isPartnerReCAP: this.isPartnerReCAP,
     })
     this.collection = item.collection ? item.collection[0] : null
   }

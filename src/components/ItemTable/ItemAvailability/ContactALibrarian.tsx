@@ -1,8 +1,9 @@
-import { Link } from "@nypl/design-system-react-components"
 import { useContext } from "react"
 import { FeedbackContext } from "../../../context/FeedbackContext"
 import type { ItemMetadata } from "../../../types/itemTypes"
 import type Item from "../../../models/Item"
+import { Text } from "@nypl/design-system-react-components"
+import Link from "../../Link/Link"
 
 const ContactALibrarian = ({
   item,
@@ -15,8 +16,8 @@ const ContactALibrarian = ({
     onOpen()
   }
   return (
-    <>
-      {" Please "}
+    <Text size="body2">
+      {"Please "}
       <Link
         id="contact-librarian"
         onClick={() =>
@@ -33,7 +34,7 @@ const ContactALibrarian = ({
       </Link>
 
       {" for assistance."}
-    </>
+    </Text>
   )
 }
 

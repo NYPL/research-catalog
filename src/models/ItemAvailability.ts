@@ -3,6 +3,7 @@ import type { ItemCollectionAccess } from "../types/itemTypes"
 
 const {
   NOT_AVAILABLE,
+  NOT_AVAILABLE_PARTNER,
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
   AVAILABLE_ONSITE_APPT,
@@ -10,6 +11,9 @@ const {
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
 } = AVAILABILITY_KEYS
 
+/* Availability keys correspond to the message displayed BELOW the request buttons on an item.
+ * There are many more availability cases than are covered here, but these are the ones we
+ * want messages for. */
 class ItemAvailability {
   key: string
   isAvailable: boolean
@@ -19,6 +23,7 @@ class ItemAvailability {
   isSpecRequestable?: boolean
   isOnsite: boolean
   hasBarcode: boolean
+  isPartnerReCAP: boolean
 
   constructor({
     isAvailable,
@@ -27,6 +32,7 @@ class ItemAvailability {
     collectionAccessType,
     isSpecRequestable,
     hasBarcode,
+    isPartnerReCAP,
   }) {
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
@@ -36,13 +42,16 @@ class ItemAvailability {
     this.isSpecRequestable = isSpecRequestable
     this.key = this.buildKey()
     this.hasBarcode = hasBarcode
+    this.isPartnerReCAP = isPartnerReCAP
   }
   buildKey() {
     // Not available
+    if (!this.isAvailable && this.isPartnerReCAP) {
+      return NOT_AVAILABLE_PARTNER
+    }
     if (!this.isAvailable) {
       return NOT_AVAILABLE
     }
-
     // General collections, available
     if (this.collectionAccessType === "desk") {
       return AVAILABLE_DESK
@@ -50,7 +59,6 @@ class ItemAvailability {
     if (this.collectionAccessType === "shelf") {
       return AVAILABLE_SHELF
     }
-
     // Special collections, available
     if (!this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT

@@ -212,8 +212,10 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
  * There are many more availability cases than are covered here, but these are the ones we
  * want messages for. */
 export const AVAILABILITY_KEYS = {
-  // Not available (all partner, NYPL, etc.), if we know due date it will display
-  NOT_AVAILABLE: "notAvailableGeneral",
+  // Not available (all NYPL), if we know due date it will display
+  NOT_AVAILABLE: "notAvailable",
+  // Not available, partner offsite
+  NOT_AVAILABLE_PARTNER: "notAvailablePartner",
   // Available, desk reference
   AVAILABLE_DESK: "availableDeskGeneral",
   // Available, shelf reference

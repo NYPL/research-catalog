@@ -2,6 +2,7 @@ import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import AvailableText from "./ItemAvailability/AvailableText"
+import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -9,6 +10,7 @@ interface ItemAvailabilityProps {
 
 const {
   NOT_AVAILABLE,
+  NOT_AVAILABLE_PARTNER,
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
   AVAILABLE_ONSITE_APPT,
@@ -23,7 +25,14 @@ const {
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case NOT_AVAILABLE:
-      return <NotAvailable dueDate={item.dueDate} />
+      return (
+        <NotAvailable
+          text={"Please contact the division for assistance."}
+          dueDate={item.dueDate}
+        />
+      )
+    case NOT_AVAILABLE_PARTNER:
+      return <NotAvailable text={<ContactALibrarian item={item} />} />
     case AVAILABLE_DESK:
       return (
         <AvailableText

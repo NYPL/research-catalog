@@ -1,5 +1,5 @@
 import type { DiscoveryBibResult, ElectronicResource } from "../types/bibTypes"
-import type { Collection, JSONLDValue } from "../types/itemTypes"
+import type { JSONLDValue } from "../types/itemTypes"
 import type { Aggregation } from "../types/filterTypes"
 import Item from "../models/Item"
 import { ITEM_PAGINATION_BATCH_SIZE } from "../config/constants"
