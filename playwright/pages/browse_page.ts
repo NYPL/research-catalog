@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test"
+import { LOADING_RESULTS } from "../../src/config/constants"
 
 export class BrowsePage {
   readonly page: Page
@@ -44,6 +45,12 @@ export class BrowsePage {
     this.titleCount = page.locator(
       "//span[preceding-sibling::span[text()='Results']]"
     )
+  }
+
+  get loadingSearchResultsHeading() {
+    return this.page.getByRole("heading", {
+      name: LOADING_RESULTS,
+    })
   }
 
   get searchResultsHeading() {
