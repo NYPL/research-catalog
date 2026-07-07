@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated search bar Query option to use quotes instead of span tag
 - Updated header link Playwright tests
 - Updated lists route authentication [SCC-5486](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5486)
+- Improved accessibility of loading state in search results heading [SCC-5058](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5058)
 
 ## [2.1.1] 2026-06-22
 
