@@ -233,8 +233,6 @@ export const MultiSelect: ChakraComponent<
         ? itemsList.slice(0, lazyItemsVisible)
         : itemsList
 
-      console.log(visibleItemsList)
-
       const selectedItemsCount: number =
         selectedItems[mainId]?.items.length || 0
 
@@ -316,7 +314,6 @@ export const MultiSelect: ChakraComponent<
       }
 
       const loadMoreLazyItems = useCallback(() => {
-        console.log("lazy load")
         if (!isOverflowLazy) {
           return
         }
