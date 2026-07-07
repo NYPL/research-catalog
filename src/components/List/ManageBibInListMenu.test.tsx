@@ -105,7 +105,6 @@ describe("ManageBibInListMenu", () => {
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify({
-          patronId: "12345",
           listName: "New list",
           description: "",
           records: [],

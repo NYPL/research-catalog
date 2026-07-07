@@ -128,7 +128,6 @@ export const ManageBibInListMenu = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          patronId: patron.id.toString(),
           listName,
           description: "",
           records: [],
@@ -200,7 +199,6 @@ export const ManageBibInListMenu = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: patron.id.toString(),
               listId,
             }),
           }).then((res) => {
@@ -218,7 +216,6 @@ export const ManageBibInListMenu = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: patron.id.toString(),
               listId,
             }),
           }).then((res) => {

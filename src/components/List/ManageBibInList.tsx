@@ -125,7 +125,6 @@ export const ManageBibInList = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: updatedAccountData?.patron?.id?.toString(),
               listId: defaultListId,
             }),
           }

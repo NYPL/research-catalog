@@ -6,33 +6,29 @@ import {
   updateList,
 } from "../../../../src/server/api/lists"
 import MyAccount from "../../../../src/models/MyAccount"
+import initializePatronTokenAuth from "../../../../src/server/auth"
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { listId } = req.query
-
-  const {
-    description,
-    listName,
-    records,
-    patronId: bodyPatronId,
-  } = req.body || {}
-
-  const patronId = req.query.patronId || bodyPatronId
-  if (!patronId || typeof patronId !== "string") {
-    return res.status(400).json({ error: "Missing or invalid patronId" })
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  if (!cookiePatronId) {
+    return res.status(403).json({ error: "No authenticated patron" })
   }
 
-  const accountModel = new MyAccount(null, patronId)
+  const { listId } = req.query
+
+  const { description, listName, records } = req.body || {}
+  const accountModel = new MyAccount(null, cookiePatronId)
 
   if (req.method == "GET") {
     if (!listId || typeof listId !== "string") {
       return res.status(400).json({ error: "Missing or invalid listId" })
     }
     const response = await fetchList({
-      patronId,
+      patronId: cookiePatronId,
       listId,
     })
     if (response.list) {
@@ -46,7 +42,7 @@ export default async function handler(
 
     if (!listId) {
       const response = await createList({
-        patronId,
+        patronId: cookiePatronId,
         listName,
         description,
         records,
@@ -61,7 +57,7 @@ export default async function handler(
       return res.status(400).json({ error: "Invalid listId" })
     }
     const response = await updateList({
-      patronId,
+      patronId: cookiePatronId,
       listId,
       listName,
       description,
@@ -75,7 +71,7 @@ export default async function handler(
       return res.status(400).json({ error: "Missing or invalid listId" })
     }
     const response = await deleteList({
-      patronId,
+      patronId: cookiePatronId,
       listId,
     })
     res.status(response.status).json(response)
