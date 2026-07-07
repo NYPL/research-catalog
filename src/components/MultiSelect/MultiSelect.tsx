@@ -1,6 +1,12 @@
 import type { BoxProps, ChakraComponent } from "@chakra-ui/react"
 import { Box, chakra, useMultiStyleConfig } from "@chakra-ui/react"
-import React, { forwardRef, useEffect, useRef, useState } from "react"
+import React, {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react"
 
 import {
   Accordion,
@@ -21,7 +27,11 @@ export interface MultiSelectItem {
 }
 export const multiSelectWidthsArray = ["fitContent", "full"] as const
 export type MultiSelectWidths = (typeof multiSelectWidthsArray)[number]
-export const multiSelectListOverflowArray = ["scroll", "expand"] as const
+export const multiSelectListOverflowArray = [
+  "scroll",
+  "expand",
+  "lazy",
+] as const
 export type MultiSelectListOverflowTypes =
   (typeof multiSelectListOverflowArray)[number]
 export interface SelectedItems {
@@ -149,6 +159,10 @@ export const MultiSelect: ChakraComponent<
         useRef<HTMLDivElement>()
       const expandToggleButtonRef: React.RefObject<HTMLButtonElement> =
         useRef<HTMLButtonElement>()
+      const itemsListRef: React.RefObject<HTMLDivElement> =
+        useRef<HTMLDivElement>()
+      const lazyLoadSentinelRef: React.RefObject<HTMLDivElement> =
+        useRef<HTMLDivElement>()
 
       // Tells `Accordion` to close if open when user clicks outside of the container
       const handleClickOutside = (e) => {
@@ -192,6 +206,22 @@ export const MultiSelect: ChakraComponent<
 
       const MINIMUM_ITEMS_LIST_HEIGHT = "215px"
       const MAXIMUM_ITEMS_LIST_HEIGHT = "270px"
+      const isOverflowExpand =
+        items.length > defaultItemsVisible && listOverflow === "expand"
+      const isOverflowLazy =
+        items.length > defaultItemsVisible && listOverflow === "lazy"
+      const defaultItemsList = React.useMemo(
+        () => (isOverflowExpand ? items.slice(0, defaultItemsVisible) : items),
+        [isOverflowExpand, items, defaultItemsVisible]
+      )
+      const [itemsList, setItemsList] = useState(defaultItemsList)
+      const [isExpandable, setIsExpandable] = useState(true)
+      const [lazyItemsVisible, setLazyItemsVisible] =
+        useState(defaultItemsVisible)
+      // const [isSearchFilterActive, setIsSearchFilterActive] = useState(false);
+
+      const hasScrollablePanel = listOverflow === "scroll" || isOverflowLazy
+
       const listHeight =
         listOverflow === "expand"
           ? "unset"
@@ -199,14 +229,11 @@ export const MultiSelect: ChakraComponent<
           ? MAXIMUM_ITEMS_LIST_HEIGHT
           : MINIMUM_ITEMS_LIST_HEIGHT
 
-      const isOverflowExpand =
-        items.length > defaultItemsVisible && listOverflow === "expand"
-      const defaultItemsList = React.useMemo(
-        () => (isOverflowExpand ? items.slice(0, defaultItemsVisible) : items),
-        [isOverflowExpand, items, defaultItemsVisible]
-      )
-      const [itemsList, setItemsList] = useState(defaultItemsList)
-      const [isExpandable, setIsExpandable] = useState(true)
+      const visibleItemsList = isOverflowLazy
+        ? itemsList.slice(0, lazyItemsVisible)
+        : itemsList
+
+      console.log(visibleItemsList)
 
       const selectedItemsCount: number =
         selectedItems[mainId]?.items.length || 0
@@ -229,31 +256,6 @@ export const MultiSelect: ChakraComponent<
         return false
       }
 
-      const onChangeRef = useRef(onChange)
-      const onMixedStateChangeRef = useRef(onMixedStateChange)
-
-      useEffect(() => {
-        onChangeRef.current = onChange
-      }, [onChange])
-
-      useEffect(() => {
-        onMixedStateChangeRef.current = onMixedStateChange
-      }, [onMixedStateChange])
-
-      const handleItemChange = React.useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-          onChangeRef.current(event)
-        },
-        []
-      )
-
-      const handleMixedItemChange = React.useCallback(
-        (event: React.ChangeEvent<HTMLInputElement>) => {
-          onMixedStateChangeRef.current?.(event)
-        },
-        []
-      )
-
       // isAllChecked defines the isChecked status of parent checkboxes. If
       // all child items are selected, it will turn true, otherwise it returns
       // false. This prop is only passed to parent options.
@@ -261,9 +263,7 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        const childIds: string[] = item.children.map(
-          (childItem) => childItem.id
-        )
+        let childIds: string[] = item.children.map((childItem) => childItem.id)
         if (selectedItems[multiSelectId] !== undefined) {
           return childIds.every(
             (childItem) =>
@@ -280,9 +280,7 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        const childIds: string[] = item.children.map(
-          (childItem) => childItem.id
-        )
+        let childIds: string[] = item.children.map((childItem) => childItem.id)
         if (
           selectedItems[multiSelectId] !== undefined &&
           childIds.length > 0 &&
@@ -313,12 +311,26 @@ export const MultiSelect: ChakraComponent<
         return <Box>No options found</Box>
       }
 
+      const loadMoreLazyItems = useCallback(() => {
+        console.log("lazy load")
+        if (!isOverflowLazy) {
+          return
+        }
+
+        setLazyItemsVisible((previousVisibleItems) =>
+          Math.min(previousVisibleItems + defaultItemsVisible, itemsList.length)
+        )
+      }, [defaultItemsVisible, isOverflowLazy, itemsList])
+
       const onChangeSearch = (event) => {
         const value = event.target.value.trim().toLowerCase()
         if (!value) {
+          // setIsSearchFilterActive(false);
           isExpandable ? setItemsList(defaultItemsList) : setItemsList(items)
           return
         }
+
+        // setIsSearchFilterActive(true);
 
         const filteredItems = items.filter((item) => {
           if (item.children) {
@@ -342,6 +354,7 @@ export const MultiSelect: ChakraComponent<
        * of the ExpandToggleButton if applicable)
        */
       const clearSearchKeyword = () => {
+        // setIsSearchFilterActive(false);
         isExpandable ? setItemsList(defaultItemsList) : setItemsList(items)
       }
 
@@ -355,9 +368,57 @@ export const MultiSelect: ChakraComponent<
         }, 1) // Ensure focus logic runs after state update
       }
 
+      const onItemsListScroll = () => {
+        if (!isOverflowLazy || !itemsListRef.current) {
+          return
+        }
+
+        const { scrollTop, clientHeight, scrollHeight } = itemsListRef.current
+        const scrollThreshold = 8
+        const isAtBottom =
+          scrollTop + clientHeight >= scrollHeight - scrollThreshold
+
+        if (!isAtBottom) {
+          return
+        }
+
+        loadMoreLazyItems()
+      }
+
       React.useEffect(() => {
         setItemsList(isExpandable ? defaultItemsList : items)
       }, [isExpandable, defaultItemsList, items])
+
+      React.useEffect(() => {
+        setLazyItemsVisible(defaultItemsVisible)
+      }, [defaultItemsVisible, items])
+
+      React.useEffect(() => {
+        if (
+          !isOverflowLazy ||
+          !itemsListRef.current ||
+          !lazyLoadSentinelRef.current
+        ) {
+          return
+        }
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            if (entries.some((entry) => entry.isIntersecting)) {
+              loadMoreLazyItems()
+            }
+          },
+          {
+            root: itemsListRef.current,
+            rootMargin: "0px 0px 120px 0px",
+            threshold: 0,
+          }
+        )
+
+        observer.observe(lazyLoadSentinelRef.current)
+
+        return () => observer.disconnect()
+      }, [isOverflowLazy, loadMoreLazyItems])
 
       const ExpandToggleButton = (): JSX.Element => {
         return (
@@ -392,7 +453,7 @@ export const MultiSelect: ChakraComponent<
       ): JSX.Element[] => {
         if (item.children) {
           return [
-            <MultiSelectCheckboxItem
+            <Checkbox
               id={item.id}
               key={item.id}
               labelText={getItemLabelText(item)}
@@ -401,18 +462,18 @@ export const MultiSelect: ChakraComponent<
                 ? {
                     isChecked: isAllChecked(mainId, item),
                     isIndeterminate: isIndeterminate(mainId, item),
-                    onChange: handleMixedItemChange,
+                    onChange: onMixedStateChange,
                     isDisabled: isAllDisabled(item),
                   }
                 : {
                     isChecked: isChecked(mainId, item.id),
                     isDisabled: isAllDisabled(item),
-                    onChange: handleItemChange,
+                    onChange: onChange,
                   })}
             />,
             ...item.children.map((childItem) => {
               return (
-                <MultiSelectCheckboxItem
+                <Checkbox
                   key={childItem.id}
                   marginInlineStart="0"
                   id={childItem.id}
@@ -420,7 +481,7 @@ export const MultiSelect: ChakraComponent<
                   name={childItem.name}
                   isDisabled={childItem.isDisabled}
                   isChecked={isChecked(mainId, childItem.id)}
-                  onChange={handleItemChange}
+                  onChange={onChange}
                   __css={styles.menuChildren}
                 />
               )
@@ -428,13 +489,13 @@ export const MultiSelect: ChakraComponent<
           ]
         } else {
           return [
-            <MultiSelectCheckboxItem
+            <Checkbox
               id={item.id}
               labelText={getItemLabelText(item)}
               name={item.name}
               isDisabled={item.isDisabled}
               isChecked={isChecked(mainId, item.id)}
-              onChange={handleItemChange}
+              onChange={onChange}
               key={item.id}
             />,
           ]
@@ -470,22 +531,25 @@ export const MultiSelect: ChakraComponent<
 
       const accordionPanel = (
         <Box position="relative">
-          {isSearchable && !isOverflowExpand ? (
+          {isSearchable && hasScrollablePanel ? (
             <Box position="sticky" top="0" marginBottom="12px" zIndex="1">
               {searchInput}
             </Box>
-          ) : isSearchable && isOverflowExpand ? (
+          ) : isSearchable && (isOverflowExpand || isOverflowLazy) ? (
             searchInput
           ) : null}
 
           <Box
+            data-testid={isOverflowLazy ? `${mainId}-items-list` : undefined}
+            ref={itemsListRef}
+            onScroll={isOverflowLazy ? onItemsListScroll : undefined}
             maxHeight={listHeight}
             overflowY="auto"
             paddingTop="xxs"
             paddingLeft="xs"
             paddingBottom="xxs"
           >
-            {itemsList.length === 0 ? (
+            {visibleItemsList.length === 0 ? (
               <NoSearchResults />
             ) : (
               <>
@@ -498,13 +562,21 @@ export const MultiSelect: ChakraComponent<
                   showLabel={false}
                   name="multi-select-checkbox-group"
                 >
-                  {itemsList.map((item: MultiSelectItem) => (
+                  {visibleItemsList.map((item: MultiSelectItem) => (
                     <React.Fragment key={item.id}>
                       {getMultiSelectCheckboxItem(item)}
                     </React.Fragment>
                   ))}
                 </CheckboxGroup>
                 {isOverflowExpand && <ExpandToggleButton />}
+                {isOverflowLazy &&
+                  visibleItemsList.length < itemsList.length && (
+                    <Box
+                      ref={lazyLoadSentinelRef}
+                      data-testid={`${mainId}-lazy-load-sentinel`}
+                      height="1px"
+                    />
+                  )}
               </>
             )}
           </Box>
@@ -558,7 +630,5 @@ export const MultiSelect: ChakraComponent<
   // Pass all custom props to Chakra and override, for width prop.
   { shouldForwardProp: () => true }
 )
-
-MultiSelect.displayName = "MultiSelect"
 
 export default MultiSelect
