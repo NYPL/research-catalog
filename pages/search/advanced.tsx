@@ -16,8 +16,8 @@ import {
   Box,
   Banner,
   Icon,
-  MultiSelect,
 } from "@nypl/design-system-react-components"
+import MultiSelect from "../../src/components/MultiSelect/MultiSelect"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
