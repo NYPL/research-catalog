@@ -214,6 +214,7 @@ export default function AdvancedSearch({
           items={field.options}
           onChange={(e) => handleFilterChange(field.value, e.target.id)}
           onClear={() => handleFilterChange(field.value, null)}
+          listOverflow="lazy"
         />
       </div>
     ) : (
