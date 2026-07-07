@@ -11,6 +11,14 @@ import AdvancedSearch, {
 // Mock next router
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
+const intersectionObserverMock = () => ({
+  observe: () => null,
+  disconnect: () => null,
+})
+window.IntersectionObserver = jest
+  .fn()
+  .mockImplementation(intersectionObserverMock)
+
 describe("Advanced search form", () => {
   beforeEach(async () => {
     mockRouter.setCurrentUrl("/search/advanced")
@@ -109,14 +117,14 @@ describe("Advanced search form", () => {
     expect(languageMultiselect).toHaveAttribute("aria-expanded", "false")
     await userEvent.click(languageMultiselect)
     expect(languageMultiselect).toHaveAttribute("aria-expanded", "true")
-    const languageFilter = screen.getByLabelText(/Afrikaans/, {
+    const languageFilter = screen.getByLabelText(/Adygei/, {
       selector: "input",
     })
     await userEvent.click(languageFilter)
     submit()
-    // expect the label for Afrikaans (afr) to be in url
+    // expect the label for Adygei (ady) to be in url
     expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
+      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aady&searched_from=advanced"
     )
   })
   it("can search and select division checkboxes", async () => {

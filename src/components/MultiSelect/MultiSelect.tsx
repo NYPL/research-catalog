@@ -319,7 +319,12 @@ export const MultiSelect: ChakraComponent<
         }
 
         setLazyItemsVisible((previousVisibleItems) =>
-          Math.min(previousVisibleItems + defaultItemsVisible, itemsList.length)
+          Math.min(
+            previousVisibleItems +
+              defaultItemsVisible +
+              previousVisibleItems / defaultItemsVisible,
+            itemsList.length
+          )
         )
       }, [defaultItemsVisible, isOverflowLazy, itemsList])
 
@@ -375,7 +380,7 @@ export const MultiSelect: ChakraComponent<
         }
 
         const { scrollTop, clientHeight, scrollHeight } = itemsListRef.current
-        const scrollThreshold = 8
+        const scrollThreshold = scrollHeight / 2
         const isAtBottom =
           scrollTop + clientHeight >= scrollHeight - scrollThreshold
 
