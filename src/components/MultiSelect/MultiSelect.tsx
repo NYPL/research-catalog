@@ -119,7 +119,7 @@ export const MultiSelect: ChakraComponent<
   React.PropsWithChildren<MultiSelectProps>
 > = chakra(
   forwardRef<HTMLDivElement, React.PropsWithChildren<MultiSelectProps>>(
-    (props, _ref?) => {
+    function MultiSelectComponent(props, _ref?) {
       const {
         id,
         isBlockElement = false,
