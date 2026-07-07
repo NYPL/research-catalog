@@ -263,7 +263,9 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        let childIds: string[] = item.children.map((childItem) => childItem.id)
+        const childIds: string[] = item.children.map(
+          (childItem) => childItem.id
+        )
         if (selectedItems[multiSelectId] !== undefined) {
           return childIds.every(
             (childItem) =>
@@ -280,7 +282,9 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        let childIds: string[] = item.children.map((childItem) => childItem.id)
+        const childIds: string[] = item.children.map(
+          (childItem) => childItem.id
+        )
         if (
           selectedItems[multiSelectId] !== undefined &&
           childIds.length > 0 &&
