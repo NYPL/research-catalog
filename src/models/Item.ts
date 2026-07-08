@@ -43,7 +43,6 @@ export default class Item {
   collection?: Collection
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
-    console.log(this)
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null

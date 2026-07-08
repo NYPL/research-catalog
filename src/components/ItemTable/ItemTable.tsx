@@ -26,14 +26,11 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
                 { width: 272, minWidth: 85 },
                 { width: 272, minWidth: 85 },
               ]
-            : [
-                { width: "auto", minWidth: 300 },
-                { width: "15%", minWidth: 100 },
-                { width: "15%", minWidth: 100 },
-                { width: "15%", minWidth: 170 },
-                { width: "15%", minWidth: 170 },
-                { width: "15%", minWidth: 170 },
-              ]
+            : tableHeadings.map((_, index) =>
+                index === 0
+                  ? { width: "40%", minWidth: 300 }
+                  : { width: `${50 / (tableHeadings.length - 1)}%` }
+              )
         }
         tableData={tableData}
         isScrollable

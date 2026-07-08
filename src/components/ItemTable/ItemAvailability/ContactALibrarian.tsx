@@ -24,6 +24,7 @@ const ContactALibrarian = ({
       <Link
         id="contact-librarian"
         onClick={() =>
+          // If item's available, pass that metadata
           onContact(
             item
               ? {

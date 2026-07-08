@@ -10,6 +10,8 @@ export interface FeedbackMetadataAndComment {
   id?: string
   barcode?: string
   volume?: string
+  title?: string
+  callNumber?: string
   errorStatus?: string
 }
 

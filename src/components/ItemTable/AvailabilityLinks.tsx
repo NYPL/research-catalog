@@ -1,4 +1,4 @@
-import { Box } from "@nypl/design-system-react-components"
+import { Flex } from "@nypl/design-system-react-components"
 
 import RequestButtons from "./RequestButtons"
 import ItemAvailability from "./ItemAvailability"
@@ -13,10 +13,10 @@ interface AvailabilityLinksProps {
  */
 const AvailabilityLinks = ({ item }: AvailabilityLinksProps) => {
   return (
-    <Box>
+    <Flex flexDir="column" gap="s">
       <RequestButtons item={item} />
       <ItemAvailability item={item} />
-    </Box>
+    </Flex>
   )
 }
 

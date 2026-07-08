@@ -22,7 +22,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
           target="_self"
         >
           Request appointment
@@ -35,7 +34,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request for onsite use, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
         >
           Request for onsite use
         </Link>
@@ -46,7 +44,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
         >
           Request scan
         </Link>

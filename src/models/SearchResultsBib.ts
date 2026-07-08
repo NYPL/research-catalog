@@ -20,7 +20,7 @@ export default class SearchResultsBib extends Bib {
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
-    // Potential bib level fields to check if bib has no items
+    // Potential bib level fields to check if bib has no items:
     this.callNumber = result.shelfMark?.[0] || null
     this.collection = result.collection?.[0] || null
   }
