@@ -29,30 +29,30 @@ export default class ItemTableData {
   /**
    * Returns an object with table headings as the keys, and the table data for each item as the values.
    * The presence of certain table headings/columns are determined by whether the table is to be displayed on a
-   * search results or bib page
+   * search results card or bib page
    */
   getTable(): { [key: string]: ReactElement[] } {
     const callNumberCells = this.items?.map((item) =>
       ItemTableCell({
-        children: item.callNumber ? `${item.callNumber}` : "",
+        text: item.callNumber ? `${item.callNumber}` : "",
       })
     )
     const volumeCells = this.items?.map((item) =>
-      ItemTableCell({ children: item.volume })
+      ItemTableCell({ text: item.volume })
     )
     const availabilityCells = this.items?.map((item) =>
       AvailabilityLinks({ item })
     )
     const accessMessageCells = this.items?.map((item) =>
-      ItemTableCell({ children: item.accessMessage })
+      ItemTableCell({ text: item.accessMessage })
     )
     const locationCells = this.items?.map((item) =>
-      ItemTableCell({ children: item.location?.prefLabel })
+      ItemTableCell({ text: item.location?.prefLabel })
     )
 
     const divisionCells = this.items?.map((item) =>
       ItemTableCell({
-        children: item.collection?.prefLabel,
+        text: item.collection?.prefLabel,
         url:
           item.collection?.locationsPath &&
           `https://nypl.org/${item.collection.locationsPath}`,
