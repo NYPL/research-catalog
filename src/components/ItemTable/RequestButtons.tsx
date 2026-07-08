@@ -13,6 +13,15 @@ interface RequestButtonsProps {
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   if (item.allLocationsClosed) return null
+
+  if (
+    !item.aeonUrl &&
+    !item.isPhysicallyRequestable &&
+    !item.isEDDRequestable
+  ) {
+    return null
+  }
+
   return (
     <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (

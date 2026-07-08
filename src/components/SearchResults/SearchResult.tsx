@@ -195,7 +195,7 @@ const SearchResult = ({
                   key={`search-results-bib-${bib.id}`}
                 />
               </SimpleGrid>
-              {bib.noItemsBibTableData.tableHeadings["Division"] ? (
+              {bib.noItemsBibTableData.tableHeadings.includes("Division") ? (
                 <AvailableText text="Please contact the division for information." />
               ) : (
                 <Box

@@ -1,5 +1,5 @@
+import React from "react"
 import type { ReactElement } from "react"
-
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
 import AvailabilityLinks from "../components/ItemTable/AvailabilityLinks"
@@ -33,25 +33,25 @@ export default class ItemTableData {
    */
   getTable(): { [key: string]: ReactElement[] } {
     const callNumberCells = this.items?.map((item) =>
-      ItemTableCell({
+      React.createElement(ItemTableCell, {
         text: item.callNumber ? `${item.callNumber}` : "",
       })
     )
     const volumeCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.volume })
+      React.createElement(ItemTableCell, { text: item.volume })
     )
     const availabilityCells = this.items?.map((item) =>
-      AvailabilityLinks({ item })
+      React.createElement(AvailabilityLinks, { item })
     )
     const accessMessageCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.accessMessage })
+      React.createElement(ItemTableCell, { text: item.accessMessage })
     )
     const locationCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.location?.prefLabel })
+      React.createElement(ItemTableCell, { text: item.location?.prefLabel })
     )
 
     const divisionCells = this.items?.map((item) =>
-      ItemTableCell({
+      React.createElement(ItemTableCell, {
         text: item.collection?.prefLabel,
         url:
           item.collection?.locationsPath &&
