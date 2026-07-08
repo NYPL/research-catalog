@@ -1,10 +1,4 @@
-import {
-  useRef,
-  useEffect,
-  type SyntheticEvent,
-  useState,
-  useCallback,
-} from "react"
+import { useRef, type SyntheticEvent, useState } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -34,10 +28,9 @@ import DateFilter from "../../src/components/DateFilter/DateFilter"
 import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
-import { flushSync } from "react-dom"
-import MultiSelectMemo from "../../src/components/AdvancedSearch/MultiSelectMemo"
-import DivisionSelectMemo from "../../src/components/AdvancedSearch/DivisionSelectMemo"
-import TextInputFieldMemo from "../../src/components/AdvancedSearch/TextInputFieldMemo"
+import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
+import DivisionSelect from "../../src/components/AdvancedSearch/DivisionSelect"
+import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -61,16 +54,17 @@ export default function AdvancedSearch({
     defaultEmptySearchErrorMessage
   )
   // resetKey is incremented when "Clear fields" is clicked
-  // It is passed to memoized components, which have corresponding useEffect to trigger clear
+  // It is passed to isolated components, which clears their own input
+  // when this change is detected
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
 
-  const globalInputChangeHandler = useCallback(() => {
+  const globalInputChangeHandler = () => {
     alert && setAlert(false)
     if (liveRegionRef.current) {
       liveRegionRef.current.textContent = ""
     }
-  }, [alert])
+  }
 
   const filterValuesRef = useRef<Record<string, string[]>>({
     language: [],
@@ -79,9 +73,9 @@ export default function AdvancedSearch({
     collection: [],
   })
 
-  const handleFilterChange = useCallback((field: string, values: string[]) => {
+  const handleFilterChange = (field: string, values: string[]) => {
     filterValuesRef.current[field] = values
-  }, [])
+  }
 
   const { dateFilterProps } = useDateFilter({
     dateTo: "",
@@ -89,6 +83,9 @@ export default function AdvancedSearch({
     changeHandler: globalInputChangeHandler,
   })
   const { dateError } = dateFilterProps
+  if (alert && !Object.keys(dateError || {}).length) {
+    setPersistentFocus(idConstants.advancedSearchError)
+  }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
@@ -97,8 +94,6 @@ export default function AdvancedSearch({
       dateFrom: (formData.get("dateFrom") as string) ?? "",
       dateTo: (formData.get("dateTo") as string) ?? "",
     }
-
-    flushSync(() => dateFilterProps.onBlur(submittedDates))
     const errors = dateFilterProps.onApply(submittedDates)
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
@@ -151,12 +146,6 @@ export default function AdvancedSearch({
     }
   }
 
-  useEffect(() => {
-    if (alert && !Object.keys(dateError || {}).length) {
-      setPersistentFocus(idConstants.advancedSearchError)
-    }
-  }, [alert, dateError, setPersistentFocus])
-
   const fields = [
     { value: "format", label: "Format", options: formatOptions },
     {
@@ -171,7 +160,7 @@ export default function AdvancedSearch({
   const multiselects = fields.map((field) => {
     return field.value !== "collection" ? (
       <div key={field.value}>
-        <MultiSelectMemo
+        <IsolatedMultiSelect
           fieldValue={field.value}
           label={field.label}
           options={field.options}
@@ -182,7 +171,7 @@ export default function AdvancedSearch({
       </div>
     ) : (
       <div key={field.value}>
-        <DivisionSelectMemo
+        <DivisionSelect
           key="collection"
           collectionOptions={collectionOptions}
           onSelectionChange={handleFilterChange}
@@ -239,7 +228,7 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {textInputFields.map(({ name, label }) => (
-                <TextInputFieldMemo
+                <IsolatedTextInput
                   key={name}
                   name={name}
                   label={label}

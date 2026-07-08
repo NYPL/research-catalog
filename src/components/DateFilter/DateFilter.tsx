@@ -11,12 +11,7 @@ import type {
   DateErrorState,
   DateFilterHookPropsType,
 } from "../../hooks/useDateFilter"
-import {
-  useEffect,
-  useState,
-  type FocusEvent,
-  type SyntheticEvent,
-} from "react"
+import { useState, type FocusEvent, type SyntheticEvent } from "react"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
@@ -44,11 +39,6 @@ const DateFilter = ({
     dateError.combined || dateError.from || dateError.to || dateError.range
   const fromError = !!(dateError.from || dateError.range)
   const toError = !!(dateError.to || dateError.range)
-
-  useEffect(() => {
-    setLocalDateFrom(dateFrom)
-    setLocalDateTo(dateTo)
-  }, [dateFrom, dateTo])
 
   const getCurrentInputValues = () => {
     return {
