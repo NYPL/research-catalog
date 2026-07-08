@@ -27,6 +27,7 @@ export default class Bib {
   itemAggregations?: Aggregation[]
   hasItemDates?: boolean
   findingAid?: string
+  callNumber?: string
 
   constructor(result?: DiscoveryBibResult) {
     this.id = result["@id"] ? result["@id"].substring(4) : ""
@@ -43,6 +44,7 @@ export default class Bib {
       result.supplementaryContent
     )
     this.items = this.getItemsFromResult(result)
+    this.callNumber = result.shelfMark?.[0]
   }
 
   get url() {

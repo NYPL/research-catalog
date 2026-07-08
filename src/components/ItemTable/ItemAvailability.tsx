@@ -2,7 +2,7 @@ import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import AvailableText from "./ItemAvailability/AvailableText"
-import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
+import NotAvailablePartner from "./ItemAvailability/NotAvailablePartner"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -14,8 +14,11 @@ const {
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
   AVAILABLE_ONSITE_APPT,
+  AVAILABLE_ONSITE_APPT_AEON,
   AVAILABLE_OFFSITE,
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
+  AVAILABLE_CLOSED_STACK,
+  AVAILABLE_GENERAL,
 } = AVAILABILITY_KEYS
 
 /**
@@ -32,7 +35,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         />
       )
     case NOT_AVAILABLE_PARTNER:
-      return <NotAvailable text={<ContactALibrarian item={item} />} />
+      return <NotAvailablePartner item={item} />
     case AVAILABLE_DESK:
       return (
         <AvailableText
@@ -67,6 +70,10 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           text={"Please contact the division to schedule an appointment."}
         />
       )
+    // No particular message displays for these cases
+    case AVAILABLE_ONSITE_APPT_AEON:
+    case AVAILABLE_CLOSED_STACK:
+    case AVAILABLE_GENERAL:
   }
 }
 

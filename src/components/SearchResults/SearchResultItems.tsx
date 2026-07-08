@@ -1,9 +1,16 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
-import StatusLinks from "../ItemTable/AvailabilityLinks"
+import AvailabilityLinks from "../ItemTable/AvailabilityLinks"
 
 interface SearchResultItemsProps {
-  itemTableData: ItemTableData
+  itemTableData:
+    | ItemTableData
+    | {
+        tableHeadings: string[]
+        tableData: any[][]
+        inSearchResult: boolean
+        items?: any[]
+      }
 }
 
 /**
@@ -47,7 +54,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           ))}
         </tbody>
       </table>
-      <StatusLinks item={items[0]} />
+      {items && items.length > 0 && <AvailabilityLinks item={items[0]} />}
     </Box>
   )
 }

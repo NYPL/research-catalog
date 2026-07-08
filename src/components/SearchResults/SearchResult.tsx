@@ -22,6 +22,8 @@ import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useState } from "react"
 import { idConstants } from "../../context/FocusContext"
 import { FeaturePopup } from "../Banners/FeaturePopup"
+import AvailableText from "../ItemTable/ItemAvailability/AvailableText"
+import ContactALibrarian from "../ItemTable/ItemAvailability/ContactALibrarian"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -156,7 +158,7 @@ const SearchResult = ({
             ) : null}
           </Box>
         )}
-        {bib.itemTables?.length > 0 && (
+        {bib.itemTables?.length > 0 ? (
           <SimpleGrid
             columns={1}
             gap="grid.m"
@@ -176,6 +178,43 @@ const SearchResult = ({
               />
             ))}
           </SimpleGrid>
+        ) : (
+          bib.noItemsBibTableData && (
+            <>
+              <SimpleGrid
+                columns={1}
+                sx={{
+                  "& > *:first-of-type table": {
+                    borderTop: "none !important",
+                    paddingTop: "0 !important",
+                  },
+                }}
+              >
+                <SearchResultItems
+                  itemTableData={bib.noItemsBibTableData}
+                  key={`search-results-bib-${bib.id}`}
+                />
+              </SimpleGrid>
+              {bib.noItemsBibTableData.tableHeadings["Division"] ? (
+                <AvailableText text="Please contact the division for information." />
+              ) : (
+                <Box
+                  as="span"
+                  display="inline-flex"
+                  gap="xxs"
+                  alignItems="center"
+                >
+                  <Icon
+                    name="errorOutline"
+                    color="ui.gray.semi-dark"
+                    iconRotation="rotate180"
+                    size="medium"
+                  />
+                  <ContactALibrarian />
+                </Box>
+              )}
+            </>
+          )
         )}
       </CardContent>
       {bib.showViewAllItemsLink() && (

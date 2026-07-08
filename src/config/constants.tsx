@@ -208,24 +208,30 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
   },
 }
 
-/* Availability keys correspond to the message displayed BELOW the request buttons on an item.
- * There are many more availability cases than are covered here, but these are the ones we
- * want messages for. */
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 export const AVAILABILITY_KEYS = {
   // Not available (all NYPL), if we know due date it will display
   NOT_AVAILABLE: "notAvailable",
-  // Not available, partner offsite
+  // Not available, partner item
   NOT_AVAILABLE_PARTNER: "notAvailablePartner",
-  // Available, desk reference
+  // Available, general desk reference
   AVAILABLE_DESK: "availableDeskGeneral",
-  // Available, shelf reference
+  // Available, general shelf reference
   AVAILABLE_SHELF: "availableShelfGeneral",
-  // Available onsite but needs appointment, no Aeon link
+  // Available onsite, special collections, needs appointment, no Aeon link
   AVAILABLE_ONSITE_APPT: "availableOnsiteApptNoAeon",
-  // NYPL or partner item, but offsite and needs to be requested in advance
+  // Available onsite, special collections, needs appointment, has Aeon link
+  AVAILABLE_ONSITE_APPT_AEON: "availableOnsiteApptAeon",
+  // NYPL general or special collections, or partner item, but offsite = needs to be requested in advance
   AVAILABLE_OFFSITE: "availableOffsite",
-  // Available onsite, in closed stacks, has no barcode
+  // Available onsite, special collections, in closed stacks
+  AVAILABLE_CLOSED_STACK: "availableClosed",
+  // Available onsite, special collections, in closed stacks, has no barcode
   AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
+  // Available onsite, general collections
+  AVAILABLE_GENERAL: "availableGeneral",
 }
 
 export const HOLD_PAGE_HEADING = "Request for onsite use"

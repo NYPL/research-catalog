@@ -18,6 +18,7 @@ export interface DiscoveryBibResult {
   collection?: Collection[]
   format?: format[]
   publicationStatement?: string[]
+  shelfMark?: string[]
   dateStartYear?: number
   dateEndYear?: number
   electronicResources?: ElectronicResource[]

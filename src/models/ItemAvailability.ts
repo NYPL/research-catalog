@@ -7,13 +7,16 @@ const {
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
   AVAILABLE_ONSITE_APPT,
+  AVAILABLE_ONSITE_APPT_AEON,
   AVAILABLE_OFFSITE,
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
+  AVAILABLE_CLOSED_STACK,
+  AVAILABLE_GENERAL,
 } = AVAILABILITY_KEYS
 
-/* Availability keys correspond to the message displayed BELOW the request buttons on an item.
- * There are many more availability cases than are covered here, but these are the ones we
- * want messages for. */
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 class ItemAvailability {
   key: string
   isAvailable: boolean
@@ -40,34 +43,49 @@ class ItemAvailability {
     this.aeonUrl = aeonUrl
     this.isOnsite = !this.isReCAP
     this.isSpecRequestable = isSpecRequestable
-    this.key = this.buildKey()
     this.hasBarcode = hasBarcode
     this.isPartnerReCAP = isPartnerReCAP
+    this.key = this.buildKey()
   }
   buildKey() {
     // Not available
-    if (!this.isAvailable && this.isPartnerReCAP) {
+    if (this.isPartnerReCAP && !this.isAvailable) {
       return NOT_AVAILABLE_PARTNER
     }
     if (!this.isAvailable) {
       return NOT_AVAILABLE
     }
-    // General collections, available
+
+    // Reference, available
     if (this.collectionAccessType === "desk") {
       return AVAILABLE_DESK
     }
     if (this.collectionAccessType === "shelf") {
       return AVAILABLE_SHELF
     }
-    // Special collections, available
-    if (!this.aeonUrl && this.isOnsite) {
-      return AVAILABLE_ONSITE_APPT
-    }
+
+    // Available
     if (this.isReCAP) {
       return AVAILABLE_OFFSITE
     }
+
+    // General collections, available
+    if (!this.isSpecRequestable) {
+      return AVAILABLE_GENERAL
+    }
+
+    // Special collections, available
+    if (this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT_AEON
+    }
+    if (!this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT
+    }
     if (!this.hasBarcode) {
       return AVAILABLE_CLOSED_STACK_NO_BARCODE
+    }
+    if (this.isSpecRequestable) {
+      return AVAILABLE_CLOSED_STACK
     }
   }
 }

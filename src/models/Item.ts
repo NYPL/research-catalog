@@ -43,6 +43,7 @@ export default class Item {
   collection?: Collection
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
+    console.log(this)
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
@@ -70,7 +71,7 @@ export default class Item {
       aeonUrl: this.aeonUrl,
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       hasBarcode: !!this.barcode,
-      isPartnerReCAP: this.isPartnerReCAP,
+      isPartnerReCAP: this.isPartnerReCAP(),
     })
     this.collection = item.collection ? item.collection[0] : null
   }

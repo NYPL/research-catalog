@@ -2,6 +2,7 @@ import type { DiscoveryBibResult } from "../types/bibTypes"
 import Bib from "../models/Bib"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
+import ItemTableCell from "../components/ItemTable/ItemTableCell"
 
 /**
  * The SearchResultsBib class contains the data and getter functions
@@ -39,5 +40,41 @@ export default class SearchResultsBib extends Bib {
     return this.hasPhysicalItems
       ? this.numPhysicalItems
       : this.numElectronicResources
+  }
+
+  // Bibs with no items still display a table with their call number
+  // and division, if they have it
+  get noItemsBibTableData() {
+    const callNumberCell =
+      this.callNumber &&
+      ItemTableCell({
+        children: this.callNumber,
+      })
+
+    const collection = this.collection?.length
+      ? this.bibResult.collection[0]
+      : null
+
+    const divisionCell =
+      collection?.prefLabel &&
+      ItemTableCell({
+        children: collection.prefLabel,
+        url:
+          collection.locationsPath &&
+          `https://nypl.org/${collection.locationsPath}`,
+      })
+
+    if (!divisionCell && !callNumberCell) return null
+
+    const tableObject = {
+      ...(callNumberCell && { "Call Number": callNumberCell }),
+      ...(divisionCell && { Division: divisionCell }),
+    }
+
+    return {
+      tableHeadings: Object.keys(tableObject),
+      tableData: [Object.values(tableObject)],
+      inSearchResult: true,
+    }
   }
 }

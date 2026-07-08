@@ -67,13 +67,17 @@ export default class ItemTableData {
       Division: divisionCells,
     }
 
+    const callNumberColumnWrapped = this.showCallNumberColumn() && {
+      "Call number": callNumberCells,
+    }
+
     const useRestrictionsColumnWrapped = this.showUseRestrictionsColumn() && {
       "Use restrictions": accessMessageCells,
     }
 
     return this.inSearchResult
       ? {
-          "Call Number": callNumberCells,
+          ...callNumberColumnWrapped,
           ...volumeColumnWrapped,
           "Item Location": locationCells,
           ...divisionColumnWrapped,
@@ -81,9 +85,9 @@ export default class ItemTableData {
       : {
           Availability: availabilityCells,
           ...volumeColumnWrapped,
-          "Call Number": callNumberCells,
+          ...callNumberColumnWrapped,
           "Item Location": locationCells,
-          Division: divisionCells,
+          ...divisionColumnWrapped,
           ...useRestrictionsColumnWrapped,
         }
   }
@@ -104,6 +108,10 @@ export default class ItemTableData {
       this.items?.some((item) => item.collection?.prefLabel) &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
+  }
+
+  showCallNumberColumn(): boolean {
+    return this.items?.some((item) => item.callNumber)
   }
 
   showUseRestrictionsColumn(): boolean {
