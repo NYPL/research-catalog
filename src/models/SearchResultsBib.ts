@@ -3,6 +3,7 @@ import Bib from "../models/Bib"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
 import ItemTableCell from "../components/ItemTable/ItemTableCell"
+import type { Collection } from "../types/itemTypes"
 
 /**
  * The SearchResultsBib class contains the data and getter functions
@@ -11,12 +12,17 @@ import ItemTableCell from "../components/ItemTable/ItemTableCell"
  */
 export default class SearchResultsBib extends Bib {
   publicationStatement?: string
+  callNumber?: string
+  collection?: Collection
 
   constructor(result: DiscoveryBibResult) {
     super(result)
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
+    // Potential bib level fields to check if bib has no items
+    this.callNumber = result.shelfMark?.[0] || null
+    this.collection = result.collection?.[0] || null
   }
 
   showViewAllItemsLink() {
@@ -42,26 +48,22 @@ export default class SearchResultsBib extends Bib {
       : this.numElectronicResources
   }
 
-  // Bibs with no items still display a table with their call number
-  // and division, if they have it
+  // Bibs with no items still display a table with their
+  // call number and division, if they have it
   get noItemsBibTableData() {
     const callNumberCell =
       this.callNumber &&
       ItemTableCell({
-        children: this.callNumber,
+        text: this.callNumber,
       })
 
-    const collection = this.collection?.length
-      ? this.bibResult.collection[0]
-      : null
-
     const divisionCell =
-      collection?.prefLabel &&
+      this.collection &&
       ItemTableCell({
-        children: collection.prefLabel,
+        text: this.collection.prefLabel,
         url:
-          collection.locationsPath &&
-          `https://nypl.org/${collection.locationsPath}`,
+          this.collection.locationsPath &&
+          `https://nypl.org/${this.collection.locationsPath}`,
       })
 
     if (!divisionCell && !callNumberCell) return null

@@ -1,4 +1,5 @@
 import type { HTTPStatusCode } from "./appTypes"
+import type { BibMetadata } from "./bibTypes"
 import type { ItemMetadata } from "./itemTypes"
 import type { ChakraComponent } from "@chakra-ui/react"
 
@@ -18,8 +19,8 @@ export type FeedbackContextType = {
   FeedbackBox: ChakraComponent<any>
   onClose: () => void
   isOpen?: boolean
-  itemMetadata: ItemMetadata
-  setItemMetadata: (value: ItemMetadata) => void
+  feedbackMetadata: ItemMetadata | BibMetadata
+  setFeedbackMetadata: (value: ItemMetadata | BibMetadata) => void
   errorStatus?: HTTPStatusCode | null
   setErrorStatus: (value: HTTPStatusCode) => void
   openFeedbackFormWithError: (statusCode?: HTTPStatusCode) => void

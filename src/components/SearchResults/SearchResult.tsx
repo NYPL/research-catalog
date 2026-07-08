@@ -210,7 +210,7 @@ const SearchResult = ({
                     iconRotation="rotate180"
                     size="medium"
                   />
-                  <ContactALibrarian />
+                  <ContactALibrarian bib={bib} />
                 </Box>
               )}
             </>

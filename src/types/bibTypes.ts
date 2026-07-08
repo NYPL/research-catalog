@@ -102,3 +102,10 @@ export type SubjectHeading = {
   bib_count?: number
   desc_count?: number
 }
+
+export interface BibMetadata {
+  id?: string
+  callNumber?: string
+  title?: string
+  notificationText?: string
+}
