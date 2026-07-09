@@ -6,16 +6,23 @@ import {
 } from "../../../../src/server/api/lists"
 import MyAccount from "../../../../src/models/MyAccount"
 import type { ListRecordsSort } from "../../../../src/types/listTypes"
+import initializePatronTokenAuth from "../../../../src/server/auth"
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  if (!cookiePatronId) {
+    return res.status(403).json({ error: "No authenticated patron" })
+  }
+
   // Records requested in query for easy GETting.
   // Note that this flips the pattern of other /lists endpoints,
   // which indicate records in the body and the list ID in query params.
   const { uris, sort } = req.query
-  const { listId, patronId } = req.body
+  const { listId } = req.body
 
   if (!uris || typeof uris !== "string") {
     return res.status(400).json({ error: "Missing or invalid uris" })
@@ -28,10 +35,10 @@ export default async function handler(
     const response = await addRecordsToList({
       records: uris,
       listId,
-      patronId,
+      patronId: cookiePatronId,
     })
-    if (response.list && patronId) {
-      const accountModel = new MyAccount(null, patronId)
+    if (response.list) {
+      const accountModel = new MyAccount(null, cookiePatronId)
       response.list = accountModel.buildLists([response.list])[0]
     }
     res.status(response.status || 200).json(response)
@@ -39,10 +46,10 @@ export default async function handler(
     const response = await deleteRecordFromList({
       record: uris,
       listId,
-      patronId,
+      patronId: cookiePatronId,
     })
-    if (response.list && patronId) {
-      const accountModel = new MyAccount(null, patronId)
+    if (response.list) {
+      const accountModel = new MyAccount(null, cookiePatronId)
       response.list = accountModel.buildLists([response.list])[0]
     }
     res.status(response.status || 200).json(response)

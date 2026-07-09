@@ -9,9 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Updated advanced search page to use refs and isolated components [SCC-5375](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5375)
+
+## [2.1.2] 2026-07-07
+
+### Updated
+
 - Updated search bar Query option to use quotes instead of span tag
 - Updated header link Playwright tests
-- Updated advanced search page to use isolated memoized inputs [SCC-5375](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5375)
+- Updated lists route authentication [SCC-5486](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5486)
+- Improved accessibility of loading state in search results heading [SCC-5058](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5058)
 
 ## [2.1.1] 2026-06-22
 
