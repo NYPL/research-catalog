@@ -5,22 +5,15 @@ import type { MultiSelectItem } from "@nypl/design-system-react-components"
 interface DivisionSelectProps {
   collectionOptions: MultiSelectItem[]
   onSelectionChange: (field: string, values: string[]) => void
-  resetKey: number
   globalInputChangeHandler: () => void
 }
 
 const DivisionSelect = ({
   collectionOptions,
   onSelectionChange,
-  resetKey,
   globalInputChangeHandler,
 }: DivisionSelectProps) => {
   const [selected, setSelected] = useState<string[]>([])
-  const [prevResetKey, setPrevResetKey] = useState(resetKey)
-  if (resetKey !== prevResetKey) {
-    setPrevResetKey(resetKey)
-    setSelected([])
-  }
 
   const handleChange = (value: string | null) => {
     globalInputChangeHandler()

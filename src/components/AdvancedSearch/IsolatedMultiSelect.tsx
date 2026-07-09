@@ -6,7 +6,6 @@ interface IsolatedMultiSelectProps {
   label: string
   options: { id: string; name: string }[]
   onSelectionChange: (field: string, values: string[]) => void
-  resetKey: number
   globalInputChangeHandler: () => void
 }
 
@@ -15,15 +14,9 @@ const IsolatedMultiSelect = ({
   label,
   options,
   onSelectionChange,
-  resetKey,
   globalInputChangeHandler,
 }: IsolatedMultiSelectProps) => {
   const [selected, setSelected] = useState<string[]>([])
-  const [prevResetKey, setPrevResetKey] = useState(resetKey)
-  if (resetKey !== prevResetKey) {
-    setPrevResetKey(resetKey)
-    setSelected([])
-  }
 
   const handleChange = (value: string | null) => {
     globalInputChangeHandler()

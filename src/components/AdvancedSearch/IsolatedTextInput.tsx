@@ -4,22 +4,15 @@ import { useState } from "react"
 interface IsolatedTextInputProps {
   name: string
   label: string
-  resetKey: number
   globalInputChangeHandler: () => void
 }
 
 const IsolatedTextInput = ({
   name,
   label,
-  resetKey,
   globalInputChangeHandler,
 }: IsolatedTextInputProps) => {
   const [value, setValue] = useState("")
-  const [prevResetKey, setPrevResetKey] = useState(resetKey)
-  if (resetKey !== prevResetKey) {
-    setPrevResetKey(resetKey)
-    setValue("")
-  }
 
   return (
     <FormField>

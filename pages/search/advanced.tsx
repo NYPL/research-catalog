@@ -54,8 +54,7 @@ export default function AdvancedSearch({
     defaultEmptySearchErrorMessage
   )
   // resetKey is incremented when "Clear fields" is clicked
-  // It is passed to isolated components, which clears their own input
-  // when this change is detected
+  // It is contained in the key of isolated components, so incrementation triggers a reset
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
 
@@ -164,26 +163,21 @@ export default function AdvancedSearch({
 
   const multiselects = fields.map((field) => {
     return field.value !== "collection" ? (
-      <div key={field.value}>
-        <IsolatedMultiSelect
-          fieldValue={field.value}
-          label={field.label}
-          options={field.options}
-          onSelectionChange={handleFilterChange}
-          resetKey={resetKey}
-          globalInputChangeHandler={globalInputChangeHandler}
-        />
-      </div>
+      <IsolatedMultiSelect
+        key={`${field.value}-${resetKey}`}
+        fieldValue={field.value}
+        label={field.label}
+        options={field.options}
+        onSelectionChange={handleFilterChange}
+        globalInputChangeHandler={globalInputChangeHandler}
+      />
     ) : (
-      <div key={field.value}>
-        <DivisionSelect
-          key="collection"
-          collectionOptions={collectionOptions}
-          onSelectionChange={handleFilterChange}
-          resetKey={resetKey}
-          globalInputChangeHandler={globalInputChangeHandler}
-        />
-      </div>
+      <DivisionSelect
+        key={`collection-${resetKey}`}
+        collectionOptions={collectionOptions}
+        onSelectionChange={handleFilterChange}
+        globalInputChangeHandler={globalInputChangeHandler}
+      />
     )
   })
 
@@ -234,10 +228,9 @@ export default function AdvancedSearch({
             >
               {textInputFields.map(({ name, label }) => (
                 <IsolatedTextInput
-                  key={name}
+                  key={`${name}-${resetKey}`}
                   name={name}
                   label={label}
-                  resetKey={resetKey}
                   globalInputChangeHandler={globalInputChangeHandler}
                 />
               ))}
