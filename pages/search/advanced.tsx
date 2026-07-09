@@ -1,4 +1,4 @@
-import { useRef, type SyntheticEvent, useState } from "react"
+import { useEffect, useRef, type SyntheticEvent, useState } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -83,9 +83,12 @@ export default function AdvancedSearch({
     changeHandler: globalInputChangeHandler,
   })
   const { dateError } = dateFilterProps
-  if (alert && !Object.keys(dateError || {}).length) {
-    setPersistentFocus(idConstants.advancedSearchError)
-  }
+
+  useEffect(() => {
+    if (alert && !Object.keys(dateError || {}).length) {
+      setPersistentFocus(idConstants.advancedSearchError)
+    }
+  }, [alert, dateError, setPersistentFocus])
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
