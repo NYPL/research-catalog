@@ -41,6 +41,7 @@ export default class Item {
   bibTitle: string
   availability: ItemAvailability
   collection?: Collection
+  displayLocation?: string
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -73,6 +74,7 @@ export default class Item {
       isPartnerReCAP: this.isPartnerReCAP(),
     })
     this.collection = item.collection ? item.collection[0] : null
+    this.displayLocation = this.getDisplayLocation(item)
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -120,6 +122,22 @@ export default class Item {
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
     return location
+  }
+
+  // If item is offsite or reference, use label from holding location. Otherwise,
+  // use label from its collection/division.
+  getDisplayLocation(item: DiscoveryItemResult): string {
+    const itemCollectionAccess = this.getCollectionAccessTypeFromItem(item)
+    if (
+      itemCollectionAccess === "shelf" ||
+      itemCollectionAccess === "desk" ||
+      this.isNYPLReCAP ||
+      this.isPartnerReCAP
+    ) {
+      return this.location.prefLabel
+    } else {
+      return this.collection?.buildingLocationLabel
+    }
   }
 
   getCollectionAccessTypeFromItem(

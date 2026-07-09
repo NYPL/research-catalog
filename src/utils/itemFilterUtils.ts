@@ -9,7 +9,7 @@ import type {
 } from "../types/filterTypes"
 
 export const isRecapLocation = (loc: string) => {
-  return loc.split(":")[1].startsWith("rc")
+  return loc.split(":")[1]?.startsWith("rc")
 }
 
 export const combineRecapLocations = (locations: string[]) => {

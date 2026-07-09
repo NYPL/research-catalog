@@ -189,6 +189,7 @@ const ItemFilters = ({
           width={multiSelectWidth}
           closeOnBlur
           mt={{ base: "0", md: "6px" }}
+          sx={{ "div > fieldset": { width: "100%" } }}
         />
       ) : null
     })

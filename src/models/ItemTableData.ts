@@ -47,7 +47,9 @@ export default class ItemTableData {
       React.createElement(ItemTableCell, { text: item.accessMessage })
     )
     const locationCells = this.items?.map((item) =>
-      React.createElement(ItemTableCell, { text: item.location?.prefLabel })
+      React.createElement(ItemTableCell, {
+        text: item.displayLocation,
+      })
     )
 
     const divisionCells = this.items?.map((item) =>

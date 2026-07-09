@@ -50,20 +50,20 @@ export class LocationFilterData extends ItemFilterData {
 
   // Override display options to add Offsite if there are any Recap locations
   displayOptions(): FilterCheckbox[] {
-    let offsiteCount = 0
-    const optionsWithoutRecap = this.options.filter(({ value, count }) => {
-      if (isRecapLocation(value)) {
-        offsiteCount += count
-        return false
-      } else return true
-    })
+    // let offsiteCount = 0
+    // const optionsWithoutRecap = this.options.filter(({ value, count }) => {
+    //   if (isRecapLocation(value)) {
+    //     offsiteCount += count
+    //     return false
+    //   } else return true
+    // })
 
-    const newOptions = offsiteCount
-      ? [...optionsWithoutRecap, { label: "Offsite", value: "Offsite" }]
-      : optionsWithoutRecap
+    // const newOptions = offsiteCount
+    //   ? [...optionsWithoutRecap, { label: "Offsite", value: "Offsite" }]
+    //   : optionsWithoutRecap
 
     // Format the options for the MultiSelect component
-    return newOptions.map((option) => {
+    return this.options.map((option) => {
       return { id: option.value, name: option.label }
     })
   }
