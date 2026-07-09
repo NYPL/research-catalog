@@ -41,7 +41,7 @@ export default class Item {
   bibTitle: string
   availability: ItemAvailability
   collection?: Collection
-  displayLocation?: string
+  buildingLocation?: string
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
@@ -74,7 +74,9 @@ export default class Item {
       isPartnerReCAP: this.isPartnerReCAP(),
     })
     this.collection = item.collection ? item.collection[0] : null
-    this.displayLocation = this.getDisplayLocation(item)
+    this.buildingLocation = item.buildingLocation
+      ? item.buildingLocation[0]?.prefLabel
+      : null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -105,8 +107,9 @@ export default class Item {
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: DiscoveryItemResult): ItemLocation {
-    let location = defaultNYPLLocation
-    if (this.isPartnerReCAP) location = partnerDefaultLocation
+    let location = { ...defaultNYPLLocation }
+
+    if (this.isPartnerReCAP()) location = { ...partnerDefaultLocation }
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -115,31 +118,22 @@ export default class Item {
 
     // If location exists in the API response, parse the label and set branch endpoint
     if (itemLocationFromAPI) {
-      location = itemLocationFromAPI
+      location = { ...itemLocationFromAPI }
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
+
+    // If reference item, display the more specific holding location label. Otherwise,
+    // use the building location.
+    const itemCollectionAccess = this.getCollectionAccessTypeFromItem(item)
+    if (itemCollectionAccess !== "shelf" && itemCollectionAccess !== "desk") {
+      const buildingLocation = item.buildingLocation?.[0]?.prefLabel
+      if (buildingLocation) location.prefLabel = buildingLocation
+    }
     return location
   }
-
-  // If item is offsite or reference, use label from holding location. Otherwise,
-  // use label from its collection/division.
-  getDisplayLocation(item: DiscoveryItemResult): string {
-    const itemCollectionAccess = this.getCollectionAccessTypeFromItem(item)
-    if (
-      itemCollectionAccess === "shelf" ||
-      itemCollectionAccess === "desk" ||
-      this.isNYPLReCAP ||
-      this.isPartnerReCAP
-    ) {
-      return this.location.prefLabel
-    } else {
-      return this.collection?.buildingLocationLabel
-    }
-  }
-
   getCollectionAccessTypeFromItem(
     item: DiscoveryItemResult
   ): ItemCollectionAccess {

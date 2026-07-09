@@ -10,19 +10,26 @@ const NotAvailable = ({
 }) => {
   return (
     <>
-      <Box as="span" display="inline-flex" gap="xxs" alignItems="center">
+      <Box as="span" display="flex" gap="xxs" alignItems="flex-start">
         <Icon
           name="errorOutline"
           color="ui.gray.semi-dark"
           iconRotation="rotate180"
           size="medium"
+          mt="2px"
         />
-        <Text size="body2" color="ui.warning.secondary" fontWeight="500">
-          Not available
-        </Text>
-        <Text size="body2" fontStyle="italic">
-          {dueDate ? `- In use through ${formatDueDate(dueDate)}. ` : "- "}
-          {text}
+        <Text size="body2">
+          <Text
+            as="span"
+            color="ui.warning.secondary"
+            style={{ fontWeight: "500" }}
+          >
+            Not available
+          </Text>
+          <Text as="span" style={{ fontStyle: "italic" }}>
+            {dueDate ? ` - In use through ${formatDueDate(dueDate)}. ` : "- "}
+            {text}
+          </Text>
         </Text>
       </Box>
     </>
