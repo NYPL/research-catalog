@@ -11,7 +11,7 @@ import type {
   DateErrorState,
   DateFilterHookPropsType,
 } from "../../hooks/useDateFilter"
-import { useState, type FocusEvent, type SyntheticEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
@@ -31,6 +31,7 @@ const DateFilter = ({
   onApply,
   isAdvancedSearch = false,
 }: DateFilterPropsType) => {
+  // Including local state because advanced search form does not manage its own date range state
   const [localDateFrom, setLocalDateFrom] = useState(dateFrom)
   const [localDateTo, setLocalDateTo] = useState(dateTo)
 
@@ -54,11 +55,10 @@ const DateFilter = ({
     } else if (target.name === "dateTo") {
       setLocalDateTo(target.value)
     }
+    onChange(e)
   }
 
-  const handleFieldBlur = (e: FocusEvent<HTMLInputElement>) => {
-    handleFieldChange(e)
-    onChange(e)
+  const handleFieldBlur = () => {
     onBlur(getCurrentInputValues())
   }
 
