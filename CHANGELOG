@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated advanced search page to use refs and isolated components [SCC-5375](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5375)
+- Updated advanced search page to use refs and isolated components [SCC-5167](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5167)
 
 ## [2.1.2] 2026-07-07
 
