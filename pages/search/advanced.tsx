@@ -66,6 +66,7 @@ export default function AdvancedSearch({
     }
   }
 
+  // Using a ref instead of state to prevent unnecessary component rerenders
   const filterValuesRef = useRef<Record<string, string[]>>({
     language: [],
     format: [],
@@ -92,6 +93,7 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
+    // Get inputs from isolated components
     const formData = new FormData(e.target as HTMLFormElement)
     const submittedDates = {
       dateFrom: (formData.get("dateFrom") as string) ?? "",
