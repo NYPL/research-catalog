@@ -1,6 +1,7 @@
 import { useState } from "react"
 import MultiSelectWithGroupTitles from "./MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
 import type { MultiSelectItem } from "@nypl/design-system-react-components"
+import { getNewSelectedFilters } from "../../utils/searchUtils"
 
 interface DivisionSelectProps {
   collectionOptions: MultiSelectItem[]
@@ -18,12 +19,7 @@ const DivisionSelect = ({
   const handleChange = (value: string | null) => {
     globalInputChangeHandler()
     setSelected((prev) => {
-      const next =
-        value === null
-          ? []
-          : prev.includes(value)
-          ? prev.filter((v) => v !== value)
-          : [...prev, value]
+      const next = getNewSelectedFilters(prev, value)
       onSelectionChange("collection", next)
       return next
     })

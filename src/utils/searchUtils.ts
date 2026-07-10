@@ -450,3 +450,14 @@ export const formatParsedQuery = (node: any): string => {
   }
   return String(node)
 }
+
+export const getNewSelectedFilters = (
+  currentValues: string[],
+  optionValue: string
+): string[] => {
+  const isAlreadySelected = currentValues.includes(optionValue)
+  const updatedValues = isAlreadySelected
+    ? currentValues.filter((val) => val !== optionValue)
+    : [...currentValues, optionValue]
+  return updatedValues
+}

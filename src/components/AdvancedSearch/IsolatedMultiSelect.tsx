@@ -1,5 +1,6 @@
 import { MultiSelect } from "@nypl/design-system-react-components"
 import { useState } from "react"
+import { getNewSelectedFilters } from "../../utils/searchUtils"
 
 interface IsolatedMultiSelectProps {
   fieldValue: string
@@ -21,12 +22,7 @@ const IsolatedMultiSelect = ({
   const handleChange = (value: string | null) => {
     globalInputChangeHandler()
     setSelected((prev) => {
-      const next =
-        value === null
-          ? []
-          : prev.includes(value)
-          ? prev.filter((v) => v !== value)
-          : [...prev, value]
+      const next = getNewSelectedFilters(prev, value)
       onSelectionChange(fieldValue, next)
       return next
     })

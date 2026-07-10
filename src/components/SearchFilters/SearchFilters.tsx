@@ -19,6 +19,7 @@ import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTi
 import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
+import { getNewSelectedFilters } from "../../utils/searchUtils"
 
 let fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -77,10 +78,7 @@ const SearchFilters = ({
   }
   const handleCheckboxChange = (field: string, optionValue: string) => {
     const currentValues = appliedFilters[field] || []
-    const isAlreadySelected = currentValues.includes(optionValue)
-    const updatedValues = isAlreadySelected
-      ? currentValues.filter((val) => val !== optionValue)
-      : [...currentValues, optionValue]
+    const updatedValues = getNewSelectedFilters(currentValues, optionValue)
     const newFilters = {
       ...appliedFilters,
       [field]: updatedValues,
