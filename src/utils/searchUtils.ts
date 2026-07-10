@@ -451,6 +451,10 @@ export const formatParsedQuery = (node: any): string => {
   return String(node)
 }
 
+/**
+ * Given currently selected values for a certain MultiSelect filter, and a value
+ * that was selected/deselected, returns the updated selected values.
+ */
 export const getNewSelectedFilters = (
   currentValues: string[],
   optionValue: string

@@ -53,8 +53,9 @@ export default function AdvancedSearch({
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
-  // resetKey is incremented when "Clear fields" is clicked
-  // It is contained in the key of isolated components, so incrementation triggers a reset
+  // resetKey is incremented when "Clear fields" is clicked.
+  // It is contained in the key of "isolated" components,
+  // so incrementation triggers a reset of those components
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
 
@@ -77,6 +78,8 @@ export default function AdvancedSearch({
     filterValuesRef.current[field] = values
   }
 
+  // Date state is stored in DateFilter component for validation
+  // and obtained for form submission through React FormData.
   const { dateFilterProps } = useDateFilter({
     dateTo: "",
     dateFrom: "",
@@ -92,7 +95,7 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    // Get inputs from isolated components
+    // Get inputs from text fields and DateFilter
     const formData = new FormData(e.target as HTMLFormElement)
     const submittedDates = {
       dateFrom: (formData.get("dateFrom") as string) ?? "",
@@ -160,6 +163,13 @@ export default function AdvancedSearch({
     { value: "language", label: "Language", options: languageOptions },
     { value: "collection", label: "Collection", options: collectionOptions },
   ]
+
+  // Previously, the AdvancedSearch component managed state for all filters and
+  // inputs, leading to performance issues.
+  // Separating the state out to be managed by "isolated" components, and
+  // storing corresponding values in a ref in this component, means that
+  // inputs to an indiviual component triggers rerenders in only that component,
+  // rather than all components on the page.
 
   const multiselects = fields.map((field) => {
     return field.value !== "collection" ? (

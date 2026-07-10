@@ -7,6 +7,13 @@ interface IsolatedTextInputProps {
   globalInputChangeHandler: () => void
 }
 
+/**
+ * A component that manages state for the Design System TextInput component,
+ * separately from the AdvancedSearch component (for performance improvements
+ * over maintaining a global state in AdvancedSearch).
+ * Input value is obtained through FormData when Advanced Search page form is
+ * submitted.
+ */
 const IsolatedTextInput = ({
   name,
   label,

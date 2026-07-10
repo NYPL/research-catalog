@@ -9,6 +9,13 @@ interface DivisionSelectProps {
   globalInputChangeHandler: () => void
 }
 
+/**
+ * A component that manages state for the custom MultiSelectWithGroupTitles
+ * component, separately from the AdvancedSearch component (for performance
+ * improvements over maintaining a global state in AdvancedSearch).
+ * This is specific to the division/collection filter.
+ * Updates filterValuesRef in the Advanced Search page on change.
+ */
 const DivisionSelect = ({
   collectionOptions,
   onSelectionChange,

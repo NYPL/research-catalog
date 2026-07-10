@@ -10,6 +10,12 @@ interface IsolatedMultiSelectProps {
   globalInputChangeHandler: () => void
 }
 
+/**
+ * A component that manages state for the Design System MultiSelect component,
+ * separately from the AdvancedSearch component (for performance improvements
+ * over maintaining a global state in AdvancedSearch).
+ * Updates filterValuesRef in the Advanced Search page on change.
+ */
 const IsolatedMultiSelect = ({
   fieldValue,
   label,
