@@ -69,13 +69,8 @@ class ItemAvailability {
       return AVAILABLE_OFFSITE
     }
 
-    // General collections, available
-    if (!this.isSpecRequestable) {
-      return AVAILABLE_GENERAL
-    }
-
     // Special collections, available
-    if (this.aeonUrl && this.isOnsite) {
+    if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT_AEON
     }
     if (!this.hasBarcode) {
@@ -86,6 +81,11 @@ class ItemAvailability {
     }
     if (!this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT
+    }
+
+    // General collections, available
+    if (!this.isSpecRequestable) {
+      return AVAILABLE_GENERAL
     }
   }
 }
