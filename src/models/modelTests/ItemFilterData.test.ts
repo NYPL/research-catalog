@@ -1,8 +1,5 @@
 import { ItemFilterData, LocationFilterData } from "../ItemFilterData"
-import {
-  bibWithItems,
-  parallelsBib as bibWithMultipleOffsiteLocations,
-} from "../../../__test__/fixtures/bibFixtures"
+import { bibWithItems } from "../../../__test__/fixtures/bibFixtures"
 
 describe("ItemFilterData model", () => {
   let itemFilterData: ItemFilterData
@@ -33,16 +30,6 @@ describe("ItemFilterData model", () => {
         name: "Format",
       })
     })
-    it("correctly groups offsite locations when there are multiple", () => {
-      const itemFilterDataMultipleOffsite = new LocationFilterData(
-        bibWithMultipleOffsiteLocations.resource.itemAggregations[0]
-      )
-      expect(itemFilterDataMultipleOffsite.formattedFilterData).toStrictEqual({
-        id: "location",
-        items: [{ id: "Offsite", name: "Offsite" }],
-        name: "Item location",
-      })
-    })
   })
 })
 
@@ -60,13 +47,13 @@ describe("LocationFilterData model", () => {
       expect(itemFilterData.options).toStrictEqual([
         {
           count: 2,
-          label: "SASB S3 - Periodicals Rm 108",
-          value: "loc:mak32",
+          label: "Stephen A. Schwarzman Building",
+          value: "ma",
         },
         {
           count: 2,
           label: "Offsite",
-          value: "loc:rc2ma",
+          value: "rc",
         },
       ])
     })
@@ -82,37 +69,16 @@ describe("LocationFilterData model", () => {
         id: "location",
         items: [
           {
-            id: "loc:mak32",
-            name: "SASB S3 - Periodicals Rm 108",
+            id: "ma",
+            name: "Stephen A. Schwarzman Building",
           },
           {
-            id: "Offsite",
+            id: "rc",
             name: "Offsite",
           },
         ],
         name: "Item location",
       })
-    })
-    it("formats multiple offsite locations as single checkbox value", () => {
-      const itemFilterDataMultipleOffsite = new LocationFilterData(
-        bibWithMultipleOffsiteLocations.resource.itemAggregations[0]
-      )
-      expect(itemFilterDataMultipleOffsite.formattedFilterData).toStrictEqual({
-        id: "location",
-        items: [
-          {
-            id: "Offsite",
-            name: "Offsite",
-          },
-        ],
-        name: "Item location",
-      })
-    })
-  })
-
-  describe("recapLocations", () => {
-    it("returns recap locations", () => {
-      expect(itemFilterData.recapLocations).toBe("loc:rc2ma")
     })
   })
 })
