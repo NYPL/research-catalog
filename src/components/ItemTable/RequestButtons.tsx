@@ -8,7 +8,7 @@ interface RequestButtonsProps {
 }
 
 /**
- * The StatusLinks component appears in the Item Table
+ * The AvailabilityLinks component appears in the ItemTable
  * TODO: Pass search keywords to links as ?searchKeywords=${"TODO"}
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {

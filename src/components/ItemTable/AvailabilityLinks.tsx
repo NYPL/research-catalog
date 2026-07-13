@@ -6,14 +6,20 @@ import type Item from "../../models/Item"
 
 interface AvailabilityLinksProps {
   item: Item
+  mt?: string | number
 }
 
 /**
  * The AvailabilityLinks component renders the RequestButtons and ItemAvailability for a given Item
  */
-const AvailabilityLinks = ({ item }: AvailabilityLinksProps) => {
+const AvailabilityLinks = ({ item, mt }: AvailabilityLinksProps) => {
   return (
-    <Flex flexDir="column" gap="s">
+    <Flex
+      flexDir="column"
+      gap="s"
+      mt={mt}
+      sx={{ "&:empty": { display: "none" } }}
+    >
       <RequestButtons item={item} />
       <ItemAvailability item={item} />
     </Flex>

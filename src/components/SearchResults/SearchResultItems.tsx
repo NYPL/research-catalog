@@ -24,7 +24,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
         style={{
           width: "100%",
           paddingTop: "24px",
-          marginBottom: "20px",
+          marginBottom: "0",
           borderCollapse: "separate",
           borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
         }}
@@ -54,7 +54,9 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           ))}
         </tbody>
       </table>
-      {items && items.length > 0 && <AvailabilityLinks item={items[0]} />}
+      {items && items.length > 0 && (
+        <AvailabilityLinks item={items[0]} mt="20px" />
+      )}
     </Box>
   )
 }

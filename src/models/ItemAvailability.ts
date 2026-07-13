@@ -78,14 +78,14 @@ class ItemAvailability {
     if (this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT_AEON
     }
-    if (!this.aeonUrl && this.isOnsite) {
-      return AVAILABLE_ONSITE_APPT
-    }
     if (!this.hasBarcode) {
       return AVAILABLE_CLOSED_STACK_NO_BARCODE
     }
     if (this.isSpecRequestable) {
       return AVAILABLE_CLOSED_STACK
+    }
+    if (!this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT
     }
   }
 }
