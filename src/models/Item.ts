@@ -125,8 +125,8 @@ export default class Item {
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
 
-    // If reference item, display the more specific holding location label. Otherwise,
-    // use the building location.
+    // If reference item, display the more specific holding location label
+    // Otherwise, use the building location
     const itemCollectionAccess = this.getCollectionAccessTypeFromItem(item)
     if (itemCollectionAccess !== "shelf" && itemCollectionAccess !== "desk") {
       const buildingLocation = item.buildingLocation?.[0]?.prefLabel
