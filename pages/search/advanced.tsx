@@ -16,8 +16,8 @@ import {
   Box,
   Banner,
   Icon,
-  MultiSelect,
 } from "@nypl/design-system-react-components"
+import MultiSelect from "../../src/components/MultiSelect/MultiSelect"
 import Layout from "../../src/components/Layout/Layout"
 import {
   BASE_URL,
@@ -214,6 +214,7 @@ export default function AdvancedSearch({
           items={field.options}
           onChange={(e) => handleFilterChange(field.value, e.target.id)}
           onClear={() => handleFilterChange(field.value, null)}
+          listOverflow="lazy-load"
         />
       </div>
     ) : (
