@@ -32,6 +32,7 @@ import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMul
 import DivisionSelect from "../../src/components/AdvancedSearch/DivisionSelect"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
 import useLoading from "../../src/hooks/useLoading"
+import { getDisabledStateStyle } from "../../src/utils/appUtils"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -229,7 +230,7 @@ export default function AdvancedSearch({
           method="post"
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
-          className={`canDisable ${isLoading ? "isDisabled" : ""}`}
+          className={getDisabledStateStyle(isLoading)}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <Flex
