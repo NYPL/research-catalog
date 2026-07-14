@@ -70,11 +70,11 @@ class ItemAvailability {
     }
 
     // Special collections, available
-    if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
-      return AVAILABLE_ONSITE_APPT_AEON
-    }
     if (!this.hasBarcode) {
       return AVAILABLE_CLOSED_STACK_NO_BARCODE
+    }
+    if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT_AEON
     }
     if (this.isSpecRequestable) {
       return AVAILABLE_CLOSED_STACK
