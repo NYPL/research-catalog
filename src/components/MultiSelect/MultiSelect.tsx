@@ -73,48 +73,6 @@ export interface MultiSelectProps extends BoxProps {
   width?: MultiSelectWidths
 }
 
-interface MultiSelectCheckboxItemProps {
-  id: string
-  labelText: string | JSX.Element
-  name: string
-  isDisabled?: boolean
-  isChecked: boolean
-  isIndeterminate?: boolean
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
-  __css?: Record<string, unknown>
-  marginInlineStart?: string
-}
-
-// Memoizes Checkbox to prevent all items from rerendering on a single change
-const MultiSelectCheckboxItem = React.memo(
-  ({
-    id,
-    labelText,
-    name,
-    isDisabled,
-    isChecked,
-    isIndeterminate,
-    onChange,
-    __css,
-    marginInlineStart,
-  }: MultiSelectCheckboxItemProps): JSX.Element => {
-    return (
-      <Checkbox
-        id={id}
-        labelText={labelText}
-        name={name}
-        isDisabled={isDisabled}
-        isChecked={isChecked}
-        isIndeterminate={isIndeterminate}
-        onChange={onChange}
-        marginInlineStart={marginInlineStart}
-        __css={__css}
-      />
-    )
-  }
-)
-MultiSelectCheckboxItem.displayName = "MultiSelectCheckboxItem"
-
 /**
  * The MultiSelect component is a customizable form input that supports multiple
  * configurations, including search functionality, checkbox options, and
