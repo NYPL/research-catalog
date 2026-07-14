@@ -1,0 +1,54 @@
+import MultiSelect from "../MultiSelect/MultiSelect"
+import { useState } from "react"
+import { getNewSelectedFilters } from "../../utils/searchUtils"
+
+interface IsolatedMultiSelectProps {
+  fieldValue: string
+  label: string
+  options: { id: string; name: string }[]
+  onSelectionChange: (field: string, values: string[]) => void
+  globalInputChangeHandler: () => void
+}
+
+/**
+ * A component that manages state for the Design System MultiSelect component,
+ * separately from the AdvancedSearch component (for performance improvements
+ * over maintaining a global state in AdvancedSearch).
+ * Updates filterValuesRef in the Advanced Search page on change.
+ */
+const IsolatedMultiSelect = ({
+  fieldValue,
+  label,
+  options,
+  onSelectionChange,
+  globalInputChangeHandler,
+}: IsolatedMultiSelectProps) => {
+  const [selected, setSelected] = useState<string[]>([])
+
+  const handleChange = (value: string | null) => {
+    globalInputChangeHandler()
+    setSelected((prev) => {
+      const next = getNewSelectedFilters(prev, value)
+      onSelectionChange(fieldValue, next)
+      return next
+    })
+  }
+
+  return (
+    <MultiSelect
+      sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
+      id={fieldValue}
+      isSearchable
+      closeOnBlur
+      buttonText={label}
+      selectedItems={{ [fieldValue]: { items: selected } }}
+      items={options}
+      onChange={(e) => handleChange(e.target.id)}
+      onClear={() => handleChange(null)}
+      listOverflow="lazy-load"
+    />
+  )
+}
+IsolatedMultiSelect.displayName = "IsolatedMultiSelect"
+
+export default IsolatedMultiSelect

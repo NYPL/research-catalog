@@ -157,7 +157,7 @@ describe("Advanced search form", () => {
   })
 
   it("can clear the form", async () => {
-    const divisionMultiselect = screen.getByLabelText(/Division/, {
+    let divisionMultiselect = screen.getByLabelText(/Division/, {
       selector: "button",
     })
     await userEvent.click(divisionMultiselect)
@@ -193,6 +193,11 @@ describe("Advanced search form", () => {
       seriesInput,
     ].forEach((input) => {
       expect(input).toBeEmptyDOMElement()
+    })
+
+    // rerendered
+    divisionMultiselect = screen.getByLabelText(/Division/, {
+      selector: "button",
     })
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
@@ -242,11 +247,15 @@ describe("Advanced search form", () => {
   })
 
   it("clears date inputs when 'Clear fields' is clicked", async () => {
-    const { fromInput, toInput } = getDateInputs()
+    let { fromInput, toInput } = getDateInputs()
     fireEvent.change(fromInput, { target: { value: "2000" } })
     fireEvent.change(toInput, { target: { value: "2020" } })
 
     await userEvent.click(screen.getByText("Clear fields"))
+
+    // components are rerendered
+    fromInput = getDateInputs().fromInput
+    toInput = getDateInputs().toInput
 
     expect(fromInput).toHaveValue("")
     expect(toInput).toHaveValue("")

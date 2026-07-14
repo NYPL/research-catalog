@@ -11,12 +11,12 @@ import type {
   DateErrorState,
   DateFilterHookPropsType,
 } from "../../hooks/useDateFilter"
-import type { SyntheticEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
-  onBlur: () => void
-  onApply: () => void
+  onBlur: (nextValues?: { dateFrom: string; dateTo: string }) => void
+  onApply: (nextValues?: { dateFrom: string; dateTo: string }) => DateErrorState
   onChange: (e: SyntheticEvent) => void
   isAdvancedSearch?: boolean
 }
@@ -31,11 +31,37 @@ const DateFilter = ({
   onApply,
   isAdvancedSearch = false,
 }: DateFilterPropsType) => {
+  // Including local state because advanced search form does not manage its own date range state
+  const [localDateFrom, setLocalDateFrom] = useState(dateFrom)
+  const [localDateTo, setLocalDateTo] = useState(dateTo)
+
   const hasError = Object.values(dateError).some(Boolean)
   const errorText =
     dateError.combined || dateError.from || dateError.to || dateError.range
   const fromError = !!(dateError.from || dateError.range)
   const toError = !!(dateError.to || dateError.range)
+
+  const getCurrentInputValues = () => {
+    return {
+      dateFrom: localDateFrom,
+      dateTo: localDateTo,
+    }
+  }
+
+  const handleFieldChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    if (target.name === "dateFrom") {
+      setLocalDateFrom(target.value)
+    } else if (target.name === "dateTo") {
+      setLocalDateTo(target.value)
+    }
+    onChange(e)
+  }
+
+  const handleFieldBlur = () => {
+    onBlur(getCurrentInputValues())
+  }
+
   return (
     <>
       <Fieldset
@@ -67,9 +93,9 @@ const DateFilter = ({
                 labelText="From"
                 name="dateFrom"
                 showHelperInvalidText={false}
-                value={dateFrom || ""}
-                onChange={onChange}
-                onBlur={onBlur}
+                value={localDateFrom}
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 isInvalid={fromError}
                 maxLength={10}
                 sx={{
@@ -97,9 +123,9 @@ const DateFilter = ({
                 labelText="To"
                 name="dateTo"
                 showHelperInvalidText={false}
-                value={dateTo || ""}
-                onChange={onChange}
-                onBlur={onBlur}
+                value={localDateTo}
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 isInvalid={!!(dateError.to || dateError.range)}
                 maxLength={10}
                 sx={{
@@ -133,9 +159,9 @@ const DateFilter = ({
               id="apply-dates"
               onMouseDown={(e) => {
                 e.preventDefault()
-                onBlur()
+                onBlur(getCurrentInputValues())
               }}
-              onClick={onApply}
+              onClick={() => onApply(getCurrentInputValues())}
               width="100%"
             >
               Apply

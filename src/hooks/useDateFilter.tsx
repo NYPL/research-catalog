@@ -12,7 +12,7 @@ export interface DateFilterHookPropsType {
   dateFrom: string
   dateTo: string
   changeHandler?: (e: SyntheticEvent) => void
-  applyHandler?: () => void
+  applyHandler?: (values: { dateFrom: string; dateTo: string }) => void
   clearHandler?: () => void
 }
 
@@ -21,6 +21,19 @@ export interface DateErrorState {
   to?: string
   range?: string
   combined?: string
+}
+
+const hasError = (state: DateErrorState) => {
+  return Object.values(state).some(Boolean)
+}
+
+const areErrorsEqual = (a: DateErrorState, b: DateErrorState) => {
+  return (
+    a.from === b.from &&
+    a.to === b.to &&
+    a.range === b.range &&
+    a.combined === b.combined
+  )
 }
 
 /**
@@ -36,9 +49,23 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
   const [dateError, setDateError] = useState<DateErrorState>({})
   const { setPersistentFocus } = useFocusContext()
 
-  const onBlur = () => {
-    const errors = validateDates(dateFrom, dateTo)
-    setDateError(errors)
+  const validateAndSetError = (values: {
+    dateFrom: string
+    dateTo: string
+  }) => {
+    const errors = validateDates(values.dateFrom, values.dateTo)
+    setDateError((prev) => {
+      // Prevent unnecessary rerenders if error does not need to be set
+      if (!hasError(errors) && !hasError(prev)) return prev
+      if (areErrorsEqual(prev, errors)) return prev
+      return errors
+    })
+    return errors
+  }
+
+  const onBlur = (nextValues?: { dateFrom: string; dateTo: string }) => {
+    const values = nextValues ?? { dateFrom, dateTo }
+    validateAndSetError(values)
   }
 
   const onChange = (e: SyntheticEvent) => {
@@ -46,6 +73,8 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
     const { name } = target
     changeHandler?.(e)
     setDateError((prev) => {
+      if (!hasError(prev)) return prev
+
       const newErrors = { ...prev }
       if (name === "dateFrom") {
         newErrors.from = undefined
@@ -54,20 +83,21 @@ export const useDateFilter = (props: DateFilterHookPropsType) => {
       }
       delete newErrors.combined
       delete newErrors.range
-      return newErrors
+
+      return areErrorsEqual(prev, newErrors) ? prev : newErrors
     })
   }
 
-  const onApply = () => {
-    const errors = validateDates(dateFrom, dateTo)
-    setDateError(errors)
+  const onApply = (nextValues?: { dateFrom: string; dateTo: string }) => {
+    const values = nextValues ?? { dateFrom, dateTo }
+    const errors = validateAndSetError(values)
 
     if (errors.from) {
       setPersistentFocus(idConstants.dateFrom)
     } else if (errors.to || errors.range) {
       setPersistentFocus(idConstants.dateTo)
     } else if (Object.keys(errors).length === 0 && applyHandler) {
-      applyHandler()
+      applyHandler(values)
     }
 
     return errors
