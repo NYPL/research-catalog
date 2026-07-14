@@ -90,6 +90,12 @@ const SearchFilters = ({
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
+  const getLoadingStateClassName = (fieldValue) => {
+    return `canDisable ${
+      focusedFilter && focusedFilter !== fieldValue ? "isDisabled" : ""
+    }`
+  }
+
   // Do not display Subject filter if there is no query term and a subject filter is applied
   if (
     (router.query?.q === "" || !router.query.q) &&
@@ -108,9 +114,7 @@ const SearchFilters = ({
       return (
         <div
           key={field.value}
-          className={`canDisable ${
-            focusedFilter && focusedFilter !== field.value ? "isDisabled" : ""
-          }`}
+          className={getLoadingStateClassName(field.value)}
         >
           {!(field.value === "collection") ? (
             <MultiSelect
@@ -208,12 +212,7 @@ const SearchFilters = ({
   })
 
   const dateFilter = (
-    <div
-      key="date"
-      className={`canDisable ${
-        focusedFilter && focusedFilter !== "date" ? "isDisabled" : ""
-      }`}
-    >
+    <div key="date" className={getLoadingStateClassName("date")}>
       <Accordion
         data-testid="date-accordion"
         id="date"
