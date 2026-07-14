@@ -9,6 +9,7 @@ import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 import { BrowseProvider } from "../src/context/BrowseContext"
 import { useRouter } from "next/router"
+import "../public/styles/globals.css"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {

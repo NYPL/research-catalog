@@ -21,3 +21,12 @@
     table-layout: fixed !important;
   }
 }
+
+.canDisable {
+  transition: opacity 0.2s ease;
+}
+
+.isDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+}

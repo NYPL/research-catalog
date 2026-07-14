@@ -108,12 +108,9 @@ const SearchFilters = ({
       return (
         <div
           key={field.value}
-          style={{
-            opacity: focusedFilter && focusedFilter !== field.value ? 0.4 : 1,
-            pointerEvents:
-              focusedFilter && focusedFilter !== field.value ? "none" : "unset",
-            transition: "opacity 0.2s ease",
-          }}
+          className={`canDisable ${
+            focusedFilter && focusedFilter !== field.value ? "isDisabled" : ""
+          }`}
         >
           {!(field.value === "collection") ? (
             <MultiSelect
@@ -213,12 +210,9 @@ const SearchFilters = ({
   const dateFilter = (
     <div
       key="date"
-      style={{
-        opacity: focusedFilter && focusedFilter !== "date" ? 0.4 : 1,
-        pointerEvents:
-          focusedFilter && focusedFilter !== "date" ? "none" : "unset",
-        transition: "opacity 0.2s ease",
-      }}
+      className={`canDisable ${
+        focusedFilter && focusedFilter !== "date" ? "isDisabled" : ""
+      }`}
     >
       <Accordion
         data-testid="date-accordion"

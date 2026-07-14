@@ -31,6 +31,7 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
 import DivisionSelect from "../../src/components/AdvancedSearch/DivisionSelect"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
+import useLoading from "../../src/hooks/useLoading"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -58,6 +59,7 @@ export default function AdvancedSearch({
   // so incrementation triggers a reset of those components
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
+  const isLoading = useLoading()
 
   const globalInputChangeHandler = () => {
     alert && setAlert(false)
@@ -227,6 +229,7 @@ export default function AdvancedSearch({
           method="post"
           action={`${BASE_URL}/search`}
           onSubmit={handleSubmit}
+          className={`canDisable ${isLoading ? "isDisabled" : ""}`}
         >
           <Flex flexDirection={{ base: "column", md: "row" }}>
             <Flex

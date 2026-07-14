@@ -45,10 +45,7 @@ const HoldRequestForm = ({
       onSubmit={handleSubmit}
       mb="l"
       aria-disabled={isDisabled}
-      sx={{
-        opacity: isDisabled && 0.5,
-        pointerEvents: isDisabled && "none",
-      }}
+      className={`canDisable ${isDisabled ? "isDisabled" : ""}`}
     >
       <input type="hidden" id="patronId" name="patronId" value={patronId} />
       <input type="hidden" id="source" name="source" value={source} />
