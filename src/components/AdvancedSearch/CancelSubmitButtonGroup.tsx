@@ -35,8 +35,8 @@ const CancelSubmitButtonGroup = ({
       >
         {disableSubmit ? (
           <ProgressIndicator
-            id={"freeze-loading"}
-            labelText="Renew"
+            id="loading-submit"
+            labelText="Submit"
             showLabel={false}
             size="small"
             indicatorType="circular"
