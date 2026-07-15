@@ -10,6 +10,7 @@ import {
 import type { DeliveryLocation } from "../../../src/types/locationTypes"
 import type { HoldErrorStatus } from "../../../src/types/holdPageTypes"
 import { holdButtonDisabledStatuses } from "../../../src/utils/holdPageUtils"
+import { getDisabledStateStyle } from "../../utils/appUtils"
 
 import { BASE_URL } from "../../config/constants"
 
@@ -45,10 +46,7 @@ const HoldRequestForm = ({
       onSubmit={handleSubmit}
       mb="l"
       aria-disabled={isDisabled}
-      sx={{
-        opacity: isDisabled && 0.5,
-        pointerEvents: isDisabled && "none",
-      }}
+      className={getDisabledStateStyle(isDisabled)}
     >
       <input type="hidden" id="patronId" name="patronId" value={patronId} />
       <input type="hidden" id="source" name="source" value={source} />

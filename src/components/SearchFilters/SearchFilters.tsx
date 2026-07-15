@@ -20,6 +20,7 @@ import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
+import { getDisabledStateStyle } from "../../utils/appUtils"
 
 let fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -90,6 +91,10 @@ const SearchFilters = ({
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
+  const getFieldLoadingStateStyle = (fieldValue) => {
+    return getDisabledStateStyle(focusedFilter && focusedFilter !== fieldValue)
+  }
+
   // Do not display Subject filter if there is no query term and a subject filter is applied
   if (
     (router.query?.q === "" || !router.query.q) &&
@@ -108,12 +113,7 @@ const SearchFilters = ({
       return (
         <div
           key={field.value}
-          style={{
-            opacity: focusedFilter && focusedFilter !== field.value ? 0.4 : 1,
-            pointerEvents:
-              focusedFilter && focusedFilter !== field.value ? "none" : "unset",
-            transition: "opacity 0.2s ease",
-          }}
+          className={getFieldLoadingStateStyle(field.value)}
         >
           {!(field.value === "collection") ? (
             <MultiSelect
@@ -211,15 +211,7 @@ const SearchFilters = ({
   })
 
   const dateFilter = (
-    <div
-      key="date"
-      style={{
-        opacity: focusedFilter && focusedFilter !== "date" ? 0.4 : 1,
-        pointerEvents:
-          focusedFilter && focusedFilter !== "date" ? "none" : "unset",
-        transition: "opacity 0.2s ease",
-      }}
-    >
+    <div key="date" className={getFieldLoadingStateStyle("date")}>
       <Accordion
         data-testid="date-accordion"
         id="date"

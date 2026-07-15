@@ -31,6 +31,8 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
 import DivisionSelect from "../../src/components/AdvancedSearch/DivisionSelect"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
+import useLoading from "../../src/hooks/useLoading"
+import { getDisabledStateStyle } from "../../src/utils/appUtils"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -58,6 +60,7 @@ export default function AdvancedSearch({
   // so incrementation triggers a reset of those components
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
+  const isLoading = useLoading()
 
   const globalInputChangeHandler = () => {
     alert && setAlert(false)
@@ -171,25 +174,28 @@ export default function AdvancedSearch({
   // inputs to an indiviual component triggers rerenders in only that component,
   // rather than all components on the page.
 
-  const multiselects = fields.map((field) => {
-    return field.value !== "collection" ? (
-      <IsolatedMultiSelect
-        key={`${field.value}-${resetKey}`}
-        fieldValue={field.value}
-        label={field.label}
-        options={field.options}
-        onSelectionChange={handleFilterChange}
-        globalInputChangeHandler={globalInputChangeHandler}
-      />
-    ) : (
-      <DivisionSelect
-        key={`collection-${resetKey}`}
-        collectionOptions={collectionOptions}
-        onSelectionChange={handleFilterChange}
-        globalInputChangeHandler={globalInputChangeHandler}
-      />
-    )
-  })
+  const multiselects = fields.map((field) => (
+    <div
+      key={`${field.value}-${resetKey}`}
+      className={getDisabledStateStyle(isLoading)}
+    >
+      {field.value !== "collection" ? (
+        <IsolatedMultiSelect
+          fieldValue={field.value}
+          label={field.label}
+          options={field.options}
+          onSelectionChange={handleFilterChange}
+          globalInputChangeHandler={globalInputChangeHandler}
+        />
+      ) : (
+        <DivisionSelect
+          collectionOptions={collectionOptions}
+          onSelectionChange={handleFilterChange}
+          globalInputChangeHandler={globalInputChangeHandler}
+        />
+      )}
+    </div>
+  ))
 
   return (
     <>
@@ -241,6 +247,7 @@ export default function AdvancedSearch({
                   key={`${name}-${resetKey}`}
                   name={name}
                   label={label}
+                  isDisabled={isLoading}
                   globalInputChangeHandler={globalInputChangeHandler}
                 />
               ))}
@@ -249,6 +256,7 @@ export default function AdvancedSearch({
                   key={resetKey}
                   isAdvancedSearch
                   {...dateFilterProps}
+                  isDisabled={isLoading}
                 />
               </FormField>
             </Flex>
@@ -290,6 +298,7 @@ export default function AdvancedSearch({
               cancelHandler={handleClear}
               cancelLabel="Clear fields"
               submitLabel="Search"
+              disableSubmit={isLoading}
             />
           </Flex>
         </Form>

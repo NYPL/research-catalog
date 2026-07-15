@@ -87,3 +87,7 @@ export function tryInstantiate<T>({
 export function getBrowseTypeFromPath(path): BrowseType {
   return path.includes("/authors") ? "contributors" : "subjects"
 }
+
+export function getDisabledStateStyle(disabledCondition: boolean): string {
+  return `canDisable ${disabledCondition ? "isDisabled" : ""}`
+}
