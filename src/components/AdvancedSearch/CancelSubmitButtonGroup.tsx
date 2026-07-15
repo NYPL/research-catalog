@@ -1,4 +1,9 @@
-import { Button, Icon, ButtonGroup } from "@nypl/design-system-react-components"
+import {
+  Button,
+  Icon,
+  ButtonGroup,
+  ProgressIndicator,
+} from "@nypl/design-system-react-components"
 import type { SyntheticEvent } from "react"
 
 interface CancelSubmitButtonGroupProps {
@@ -27,9 +32,20 @@ const CancelSubmitButtonGroup = ({
         id={`submit-${formName}`}
         type="submit"
         variant="primary"
-        isDisabled={disableSubmit}
       >
-        <Icon name={submitIcon} align="left" size="large" />
+        {disableSubmit ? (
+          <ProgressIndicator
+            id={"freeze-loading"}
+            labelText="Renew"
+            showLabel={false}
+            size="small"
+            indicatorType="circular"
+            mr="xs"
+            isIndeterminate
+          />
+        ) : (
+          <Icon name={submitIcon} align="left" size="large" />
+        )}
         {submitLabel}
       </Button>
       <Button
@@ -39,6 +55,7 @@ const CancelSubmitButtonGroup = ({
         type="reset"
         variant="secondary"
         backgroundColor="ui.white"
+        isDisabled={disableSubmit}
       >
         <Icon name="actionDelete" align="left" size="large" />
         {cancelLabel}
