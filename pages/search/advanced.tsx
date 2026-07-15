@@ -13,6 +13,7 @@ import {
 import Layout from "../../src/components/Layout/Layout"
 import { BASE_URL, PATHS, SITE_NAME } from "../../src/config/constants"
 import {
+  getInitialSearchFormState,
   textInputFields,
   languageOptions,
   collectionOptions,
@@ -20,6 +21,7 @@ import {
   formatOptions,
   buildGoBackHref,
 } from "../../src/utils/advancedSearchUtils"
+import type { SearchParams } from "../../src/types/searchTypes"
 import { getSearchQuery } from "../../src/utils/searchUtils"
 import initializePatronTokenAuth from "../../src/server/auth"
 import CancelSubmitButtonGroup from "../../src/components/AdvancedSearch/CancelSubmitButtonGroup"
@@ -53,9 +55,8 @@ export default function AdvancedSearch({
   const [errorMessage, setErrorMessage] = useState(
     defaultEmptySearchErrorMessage
   )
-  // resetKey is incremented when "Clear fields" is clicked.
-  // It is contained in the key of "isolated" components,
-  // so incrementation triggers a reset of those components
+  // resetKey is incremented when "Clear fields" is clicked. It is contained in the key
+  // of isolated components, so incrementation triggers a reset of those components
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
 
@@ -66,24 +67,32 @@ export default function AdvancedSearch({
     }
   }
 
-  // Using a ref instead of state to prevent unnecessary component rerenders
-  const filterValuesRef = useRef<Record<string, string[]>>({
-    language: [],
-    format: [],
-    buildingLocation: [],
-    collection: [],
-  })
+  // The isolated components operate as the local state for each input, and they are
+  // responsible for updating formStateRef. formStateRef acts as the global form state.
+  // It is write-only from the point of view of the isolated components, and is only
+  // read from when we are submitting the final form.
+  const formStateRef = useRef<SearchParams>(getInitialSearchFormState())
 
-  const handleFilterChange = (field: string, values: string[]) => {
-    filterValuesRef.current[field] = values
+  const handleTextInputChange = (field: string, value: string) => {
+    globalInputChangeHandler()
+    formStateRef.current[field] = value
   }
 
-  // Date state is stored in DateFilter component for validation
-  // and obtained for form submission through React FormData.
+  const handleFilterChange = (field: string, values: string[]) => {
+    globalInputChangeHandler()
+    formStateRef.current["filters"][field] = values
+  }
+
+  // DateFilter manages own state because formStateRef updates don't trigger hooks
+  // correctly
   const { dateFilterProps } = useDateFilter({
     dateTo: "",
     dateFrom: "",
-    changeHandler: globalInputChangeHandler,
+    changeHandler: (e: React.SyntheticEvent) => {
+      globalInputChangeHandler()
+      const target = e.target as HTMLInputElement
+      formStateRef.current["filters"][target.name] = target.value
+    },
   })
   const { dateError } = dateFilterProps
 
@@ -95,12 +104,12 @@ export default function AdvancedSearch({
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
-    // Get inputs from text fields and DateFilter
-    const formData = new FormData(e.target as HTMLFormElement)
+
     const submittedDates = {
-      dateFrom: (formData.get("dateFrom") as string) ?? "",
-      dateTo: (formData.get("dateTo") as string) ?? "",
+      dateFrom: formStateRef.current["filters"].dateFrom,
+      dateTo: formStateRef.current["filters"].dateTo,
     }
+
     const errors = dateFilterProps.onApply(submittedDates)
     if (Object.keys(errors).length > 0) {
       let dateFieldError = ""
@@ -115,17 +124,7 @@ export default function AdvancedSearch({
       return
     }
 
-    const searchParams = {}
-    textInputFields.forEach((field) => {
-      searchParams[field.name] = formData.get(field.name) ?? ""
-    })
-    searchParams["filters"] = {
-      ...filterValuesRef.current,
-      dateTo: submittedDates.dateTo,
-      dateFrom: submittedDates.dateFrom,
-    }
-
-    const queryString = getSearchQuery(searchParams)
+    const queryString = getSearchQuery(formStateRef.current)
 
     // If empty search (even with default sort) set error
     if (!queryString.length || queryString === "?q=&sort=relevance") {
@@ -140,12 +139,7 @@ export default function AdvancedSearch({
   const handleClear = (e: SyntheticEvent) => {
     e.preventDefault()
     setAlert(false)
-    filterValuesRef.current = {
-      language: [],
-      format: [],
-      buildingLocation: [],
-      collection: [],
-    }
+    formStateRef.current = getInitialSearchFormState()
     setResetKey((k) => k + 1)
 
     if (liveRegionRef.current) {
@@ -164,29 +158,20 @@ export default function AdvancedSearch({
     { value: "collection", label: "Collection", options: collectionOptions },
   ]
 
-  // Previously, the AdvancedSearch component managed state for all filters and
-  // inputs, leading to performance issues.
-  // Separating the state out to be managed by "isolated" components, and
-  // storing corresponding values in a ref in this component, means that
-  // inputs to an indiviual component triggers rerenders in only that component,
-  // rather than all components on the page.
-
   const multiselects = fields.map((field) => {
     return field.value !== "collection" ? (
       <IsolatedMultiSelect
         key={`${field.value}-${resetKey}`}
-        fieldValue={field.value}
+        field={field.value}
         label={field.label}
         options={field.options}
         onSelectionChange={handleFilterChange}
-        globalInputChangeHandler={globalInputChangeHandler}
       />
     ) : (
       <DivisionSelect
         key={`collection-${resetKey}`}
         collectionOptions={collectionOptions}
         onSelectionChange={handleFilterChange}
-        globalInputChangeHandler={globalInputChangeHandler}
       />
     )
   })
@@ -237,12 +222,14 @@ export default function AdvancedSearch({
               width={{ base: "100%", md: "50%" }}
             >
               {textInputFields.map(({ name, label }) => (
-                <IsolatedTextInput
-                  key={`${name}-${resetKey}`}
-                  name={name}
-                  label={label}
-                  globalInputChangeHandler={globalInputChangeHandler}
-                />
+                <FormField key={name}>
+                  <IsolatedTextInput
+                    key={`${name}-${resetKey}`}
+                    name={name}
+                    label={label}
+                    onChange={handleTextInputChange}
+                  />
+                </FormField>
               ))}
               <FormField gridGap="xs">
                 <DateFilter

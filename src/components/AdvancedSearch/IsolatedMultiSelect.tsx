@@ -3,33 +3,30 @@ import { useState } from "react"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
 
 interface IsolatedMultiSelectProps {
-  fieldValue: string
+  field: string
   label: string
   options: { id: string; name: string }[]
   onSelectionChange: (field: string, values: string[]) => void
-  globalInputChangeHandler: () => void
 }
 
 /**
- * A component that manages state for the Design System MultiSelect component,
- * separately from the AdvancedSearch component (for performance improvements
- * over maintaining a global state in AdvancedSearch).
- * Updates filterValuesRef in the Advanced Search page on change.
+ * A component that manages local state for the Design System MultiSelect component
+ * (reduces unnecessary rerenders compared to using a global React state in
+ * Advanced Search page).
+ * Updates formStateRef in the Advanced Search page on change.
  */
 const IsolatedMultiSelect = ({
-  fieldValue,
+  field,
   label,
   options,
   onSelectionChange,
-  globalInputChangeHandler,
 }: IsolatedMultiSelectProps) => {
   const [selected, setSelected] = useState<string[]>([])
 
   const handleChange = (value: string | null) => {
-    globalInputChangeHandler()
     setSelected((prev) => {
       const next = getNewSelectedFilters(prev, value)
-      onSelectionChange(fieldValue, next)
+      onSelectionChange(field, next)
       return next
     })
   }
@@ -37,11 +34,11 @@ const IsolatedMultiSelect = ({
   return (
     <MultiSelect
       sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
-      id={fieldValue}
+      id={field}
       isSearchable
       closeOnBlur
       buttonText={label}
-      selectedItems={{ [fieldValue]: { items: selected } }}
+      selectedItems={{ [field]: { items: selected } }}
       items={options}
       onChange={(e) => handleChange(e.target.id)}
       onClear={() => handleChange(null)}
