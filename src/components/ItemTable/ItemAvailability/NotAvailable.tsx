@@ -27,7 +27,7 @@ const NotAvailable = ({
             Not available
           </Text>
           <Text as="span" style={{ fontStyle: "italic" }}>
-            {dueDate ? ` - In use through ${formatDueDate(dueDate)}. ` : "- "}
+            {dueDate ? ` - In use through ${formatDueDate(dueDate)}. ` : " - "}
             {text}
           </Text>
         </Text>

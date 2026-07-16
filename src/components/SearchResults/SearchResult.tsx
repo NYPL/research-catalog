@@ -188,6 +188,7 @@ const SearchResult = ({
                     borderTop: "none !important",
                     paddingTop: "0 !important",
                   },
+                  mb: "20px",
                 }}
               >
                 <SearchResultItems

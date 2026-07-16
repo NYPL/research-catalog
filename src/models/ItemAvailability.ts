@@ -70,17 +70,17 @@ class ItemAvailability {
     }
 
     // Special collections, available
-    if (!this.hasBarcode) {
+    if (!this.hasBarcode && !this.aeonUrl) {
       return AVAILABLE_CLOSED_STACK_NO_BARCODE
     }
     if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT_AEON
     }
+    if (this.isSpecRequestable && !this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT
+    }
     if (this.isSpecRequestable) {
       return AVAILABLE_CLOSED_STACK
-    }
-    if (!this.aeonUrl && this.isOnsite) {
-      return AVAILABLE_ONSITE_APPT
     }
 
     // General collections, available
