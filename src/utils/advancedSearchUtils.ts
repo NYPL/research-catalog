@@ -1,4 +1,4 @@
-import type { SearchFormInputField } from "../types/searchTypes"
+import type { SearchFormInputField, SearchParams } from "../types/searchTypes"
 import { BASE_URL } from "../config/constants"
 import { searchVocabularies } from "../../data/searchVocabularies"
 import type { MultiSelectItem } from "@nypl/design-system-react-components"
@@ -13,6 +13,25 @@ export const textInputFields: SearchFormInputField[] = [
   { name: "genre", label: "Genre" },
   { name: "series", label: "Series" },
 ]
+
+export const getInitialSearchFormState = (): SearchParams => ({
+  q: "",
+  title: "",
+  contributor: "",
+  subject: "",
+  callnumber: "",
+  standard_number: "",
+  genre: "",
+  series: "",
+  filters: {
+    language: [],
+    dateTo: "",
+    dateFrom: "",
+    format: [],
+    buildingLocation: [],
+    collection: [],
+  },
+})
 
 // Returns an array of objects of Language options types derived from the aggregations sorted by label text.
 export const languageOptions = searchVocabularies.languages

@@ -31,7 +31,9 @@ const DateFilter = ({
   onApply,
   isAdvancedSearch = false,
 }: DateFilterPropsType) => {
-  // Including local state because advanced search form does not manage its own date range state
+  // Local state used for validation in advanced search page
+  // (advanced search uses a ref to store date values, which does not trigger
+  // hooks correctly)
   const [localDateFrom, setLocalDateFrom] = useState(dateFrom)
   const [localDateTo, setLocalDateTo] = useState(dateTo)
 
