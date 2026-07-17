@@ -167,27 +167,31 @@ export const MultiSelect: ChakraComponent<
 
       const MINIMUM_ITEMS_LIST_HEIGHT = "215px"
       const MAXIMUM_ITEMS_LIST_HEIGHT = "270px"
-      const isOverflowExpand =
-        items.length > defaultItemsVisible && listOverflow === "expand"
-      const isOverflowLazy =
-        items.length > defaultItemsVisible && listOverflow === "lazy-load"
-      const defaultItemsList = React.useMemo(
-        () => (isOverflowExpand ? items.slice(0, defaultItemsVisible) : items),
-        [isOverflowExpand, items, defaultItemsVisible]
-      )
-      const [itemsList, setItemsList] = useState(defaultItemsList)
-      const [isExpandable, setIsExpandable] = useState(true)
-      const [lazyItemsVisible, setLazyItemsVisible] =
-        useState(defaultItemsVisible)
-
-      const hasScrollablePanel = listOverflow === "scroll" || isOverflowLazy
-
       const listHeight =
         listOverflow === "expand"
           ? "unset"
           : isSearchable
           ? MAXIMUM_ITEMS_LIST_HEIGHT
           : MINIMUM_ITEMS_LIST_HEIGHT
+
+      const isOverflowExpand =
+        items.length > defaultItemsVisible && listOverflow === "expand"
+      const lazyLoadIncrementNum = 20
+      const isOverflowLazy =
+        items.length > defaultItemsVisible + lazyLoadIncrementNum &&
+        listOverflow === "lazy-load"
+      const defaultItemsList = React.useMemo(
+        () => (isOverflowExpand ? items.slice(0, defaultItemsVisible) : items),
+        [isOverflowExpand, items, defaultItemsVisible]
+      )
+      const [itemsList, setItemsList] = useState(defaultItemsList)
+      const [isExpandable, setIsExpandable] = useState(true)
+      const [lazyItemsVisible, setLazyItemsVisible] = useState(
+        defaultItemsVisible + lazyLoadIncrementNum
+      )
+
+      const hasScrollablePanel =
+        listOverflow === "scroll" || listOverflow === "lazy-load"
 
       const visibleItemsList = isOverflowLazy
         ? itemsList.slice(0, lazyItemsVisible)
@@ -221,9 +225,7 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        const childIds: string[] = item.children.map(
-          (childItem) => childItem.id
-        )
+        let childIds: string[] = item.children.map((childItem) => childItem.id)
         if (selectedItems[multiSelectId] !== undefined) {
           return childIds.every(
             (childItem) =>
@@ -240,9 +242,7 @@ export const MultiSelect: ChakraComponent<
         multiSelectId: string,
         item: MultiSelectItem
       ): boolean => {
-        const childIds: string[] = item.children.map(
-          (childItem) => childItem.id
-        )
+        let childIds: string[] = item.children.map((childItem) => childItem.id)
         if (
           selectedItems[multiSelectId] !== undefined &&
           childIds.length > 0 &&
@@ -280,13 +280,11 @@ export const MultiSelect: ChakraComponent<
 
         setLazyItemsVisible((previousVisibleItems) =>
           Math.min(
-            previousVisibleItems +
-              defaultItemsVisible +
-              previousVisibleItems / defaultItemsVisible, // Scales with further scrolling
+            previousVisibleItems * 1.2 + lazyLoadIncrementNum,
             itemsList.length
           )
         )
-      }, [defaultItemsVisible, isOverflowLazy, itemsList])
+      }, [isOverflowLazy, itemsList])
 
       const onChangeSearch = (event) => {
         const value = event.target.value.trim().toLowerCase()
@@ -330,23 +328,6 @@ export const MultiSelect: ChakraComponent<
         }, 1) // Ensure focus logic runs after state update
       }
 
-      const onItemsListScroll = () => {
-        if (!isOverflowLazy || !itemsListRef.current) {
-          return
-        }
-
-        // const { scrollTop, clientHeight, scrollHeight } = itemsListRef.current;
-        // const scrollThreshold = scrollHeight / 2; // Scales with further scrolling
-        // const isAtBottom =
-        //   scrollTop + clientHeight >= scrollHeight - scrollThreshold;
-
-        // if (!isAtBottom) {
-        //   return;
-        // }
-
-        loadMoreLazyItems()
-      }
-
       React.useEffect(() => {
         setItemsList(isExpandable ? defaultItemsList : items)
       }, [isExpandable, defaultItemsList, items])
@@ -368,15 +349,15 @@ export const MultiSelect: ChakraComponent<
           },
           {
             root: itemsListRef.current,
-            rootMargin: "-5px",
             threshold: 0,
+            rootMargin: `${12 * lazyItemsVisible}px`,
           }
         )
 
         observer.observe(lazyLoadTargetRef.current)
 
         return () => observer.disconnect()
-      }, [isOverflowLazy, loadMoreLazyItems])
+      }, [isOverflowLazy, loadMoreLazyItems, lazyItemsVisible])
 
       const ExpandToggleButton = (): JSX.Element => {
         return (
@@ -500,7 +481,6 @@ export const MultiSelect: ChakraComponent<
           <Box
             data-testid={isOverflowLazy ? `${mainId}-items-list` : undefined}
             ref={itemsListRef}
-            onScroll={isOverflowLazy ? onItemsListScroll : undefined}
             maxHeight={listHeight}
             overflowY="auto"
             paddingTop="xxs"
@@ -529,11 +509,7 @@ export const MultiSelect: ChakraComponent<
                 {isOverflowExpand && <ExpandToggleButton />}
                 {isOverflowLazy &&
                   visibleItemsList.length < itemsList.length && (
-                    <Box
-                      ref={lazyLoadTargetRef}
-                      data-testid={`${mainId}-lazy-load-observer-target`}
-                      height="1px"
-                    />
+                    <Box ref={lazyLoadTargetRef} height="1px" />
                   )}
               </>
             )}
