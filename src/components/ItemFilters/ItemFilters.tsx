@@ -69,13 +69,7 @@ const ItemFilters = ({
     refreshedViaCheckbox = false
   ) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
-    const locationFilterData = filterData.find(
-      (filter) => filter.field === "location"
-    ) as LocationFilterData
-    const itemFilterQuery = buildItemFilterQuery(
-      newFilters,
-      locationFilterData.recapLocations
-    )
+    const itemFilterQuery = buildItemFilterQuery(newFilters)
     await handleFiltersChange(itemFilterQuery, refreshedViaCheckbox)
   }
 
