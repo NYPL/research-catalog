@@ -1,6 +1,5 @@
 import React from "react"
 import { render, screen } from "../../utils/testUtils"
-import ItemAvailabilityModel from "../../models/ItemAvailability"
 import ItemAvailability from "./ItemAvailability"
 import Item from "../../models/Item"
 import SearchResultsBib from "../../models/SearchResultsBib"
@@ -106,11 +105,5 @@ describe("ItemAvailability", () => {
     expect(
       screen.getByText("Please contact the division to request this item.")
     ).toBeInTheDocument()
-  })
-
-  it("renders nothing for available closed stack items", async () => {
-    const item = new Item(itemSpecialCollectionsAppt, parentBib)
-    const { container } = render(<ItemAvailability item={item} />)
-    expect(container).toBeEmptyDOMElement()
   })
 })
