@@ -479,7 +479,7 @@ export const ManageBibInListMenu = ({
               />
             </>
           ) : (
-            <div tabIndex={-1} id={idConstants.listStatusBanner}>
+            <div tabIndex={-1} id={idConstants.listMenuStatusBanner}>
               <StatusBanner
                 type={STATIC_STATUS_MESSAGES.listFetchFailure.type}
                 message={STATIC_STATUS_MESSAGES.listFetchFailure.message}
