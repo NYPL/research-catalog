@@ -28,7 +28,7 @@ const ListsDisplay = () => {
   const { setUpdatedAccountData, updatedAccountData } =
     useContext(PatronDataContext)
 
-  const { lists, patron } = updatedAccountData
+  const { lists } = updatedAccountData
   const router = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
@@ -117,10 +117,16 @@ const ListsDisplay = () => {
       >
         {list.listName}
       </Link>,
-      list.description || (
-        <Box as="span" color="ui.gray.dark" fontStyle="italic">
-          No description
+      list.isDefaultList ? (
+        <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">
+          Default list - cannot delete
         </Box>
+      ) : (
+        list.description || (
+          <Box as="span" color="ui.gray.dark" fontStyle="italic">
+            No description
+          </Box>
+        )
       ),
       list.recordCount.toString(),
       list.createdDate,
