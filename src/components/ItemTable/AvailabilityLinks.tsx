@@ -4,14 +4,14 @@ import RequestButtons from "./RequestButtons"
 import ItemAvailability from "./ItemAvailability"
 import type Item from "../../models/Item"
 
-interface StatusLinksProps {
+interface AvailabilityLinksProps {
   item: Item
 }
 
 /**
- * The StatusLinks component renders the RequestButtons and ItemAvailability for a given Item
+ * The AvailabilityLinks component renders the RequestButtons and ItemAvailability for a given Item
  */
-const StatusLinks = ({ item }: StatusLinksProps) => {
+const AvailabilityLinks = ({ item }: AvailabilityLinksProps) => {
   return (
     <Box>
       <RequestButtons item={item} />
@@ -20,4 +20,4 @@ const StatusLinks = ({ item }: StatusLinksProps) => {
   )
 }
 
-export default StatusLinks
+export default AvailabilityLinks

@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/naming-convention */
-
-// Item structure coming from the Search Results API response
-
+// Item structure coming from the Discovery API search response
 export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
@@ -65,8 +62,6 @@ export interface ItemDateRange {
   gte: string
   lte: string
 }
-
-/* eslint-disable @typescript-eslint/naming-convention */
 
 export interface JSONLDValue {
   "@id": string

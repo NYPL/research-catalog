@@ -48,13 +48,15 @@ export const buildAppliedFiltersTagSetData = (
       const fieldAggregations = itemAggregations.find(
         (aggregation: ItemFilterData) => aggregation.field === field
       )
+      const fieldLabel =
+        fieldAggregations?.formattedFilterData?.name || capitalize(field)
       const valueLabel =
         field === "year"
           ? filterValue
           : fieldAggregations?.labelForValue(filterValue)
       if (valueLabel) {
         filters.push({
-          label: `${capitalize(field)} > ${valueLabel}`,
+          label: `${fieldLabel} > ${valueLabel}`,
           // This ID needs to be the filters value to allow for proper clearing of the individual filters
           id: filterValue,
         })

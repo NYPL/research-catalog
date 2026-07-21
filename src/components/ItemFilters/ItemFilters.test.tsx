@@ -45,7 +45,7 @@ describe("ItemFilters", () => {
     it("calls the change handler when filter values are changed", async () => {
       await userEvent.click(
         screen.getByRole("button", {
-          name: "Location, 1 item currently selected",
+          name: "Item location, 1 item currently selected",
         })
       )
       const offsiteCheckbox = screen.getByRole("checkbox", {
@@ -62,7 +62,7 @@ describe("ItemFilters", () => {
     it("renders TagSet data when filters are applied and removes the filter when tag is clicked", async () => {
       expect(screen.queryByText("Active filters")).toBeInTheDocument()
       await userEvent.click(
-        screen.getByLabelText("Location > Offsite, click to remove filter")
+        screen.getByLabelText("Item location > Offsite, click to remove filter")
       )
       expect(filtersChangeMock).toHaveBeenCalledWith(
         {
