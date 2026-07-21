@@ -21,20 +21,64 @@ describe("Item Filter Utils", () => {
     })
     it("parses locations including multiple recap locations", () => {
       const query = {
-        item_location: "rc,rc,abc",
+        item_location: "rc,abc",
         item_status: "status:a,status:na",
       }
       expect(parseItemFilterQueryParams(query)).toEqual({
-        location: ["abc", "Offsite"],
+        location: ["rc", "abc"],
         status: ["status:a", "status:na"],
         year: [],
       })
     })
   })
 
+  describe("buildItemFilterQuery", () => {
+    it("should return an empty object if no filters are applied", () => {
+      const appliedFilters = {
+        location: [],
+        status: [],
+        year: [],
+      }
+      expect(buildItemFilterQuery(appliedFilters)).toEqual({})
+    })
+
+    it("should build a query with a single value for each filter", () => {
+      const appliedFilters = {
+        location: ["ma"],
+        status: ["status:a"],
+        year: ["2023"],
+      }
+      expect(buildItemFilterQuery(appliedFilters)).toEqual({
+        item_location: "ma",
+        item_status: "status:a",
+        item_date: "2023",
+      })
+    })
+
+    it("should build a query with multiple values for some filters", () => {
+      const appliedFilters = {
+        location: ["ma", "rc"],
+        status: ["status:a", "status:na"],
+        year: ["2023"],
+      }
+      expect(buildItemFilterQuery(appliedFilters)).toEqual({
+        item_location: "ma,rc",
+        item_status: "status:a,status:na",
+        item_date: "2023",
+      })
+    })
+
+    it("should not include filters with empty arrays", () => {
+      const appliedFilters = { location: ["ma"], status: [], year: [] }
+      expect(buildItemFilterQuery(appliedFilters)).toEqual({
+        item_location: "ma",
+      })
+    })
+  })
+
   describe("buildAppliedFiltersTagSetData", () => {
     const query = parseItemFilterQueryParams({
-      item_location: "rc,rc",
+      item_location: "rc",
       item_status: "status:a",
       item_date: "2005",
     })
@@ -50,7 +94,7 @@ describe("Item Filter Utils", () => {
     it("with all filters", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
         {
-          id: "Offsite",
+          id: "rc",
           label: "Item location > Offsite",
         },
         {

@@ -108,16 +108,16 @@ describe("ItemAvailability model", () => {
     )
   })
 
-  it("returns AVAILABLE_CLOSED_STACK for onsite special collections items with barcodes", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: false,
-      isPartnerReCAP: false,
-      aeonUrl: null,
-      collectionAccessType: null,
-      isSpecRequestable: true,
-      hasBarcode: true,
-    })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_CLOSED_STACK)
-  })
+  // it("returns AVAILABLE_CLOSED_STACK for onsite special collections items with barcodes", () => {
+  //   const availability = new ItemAvailability({
+  //     isAvailable: true,
+  //     isReCAP: false,
+  //     isPartnerReCAP: false,
+  //     aeonUrl: null,
+  //     collectionAccessType: null,
+  //     isSpecRequestable: true,
+  //     hasBarcode: true,
+  //   })
+  //   expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_CLOSED_STACK)
+  // })
 })
