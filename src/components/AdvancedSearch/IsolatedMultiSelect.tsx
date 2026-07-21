@@ -42,7 +42,6 @@ const IsolatedMultiSelect = ({
       items={options}
       onChange={(e) => handleChange(e.target.id)}
       onClear={() => handleChange(null)}
-      listOverflow="lazy-load"
     />
   )
 }
