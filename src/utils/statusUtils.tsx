@@ -10,6 +10,7 @@ export type StaticStatusKey =
   | "saveRecordFailure"
   | "listChangesSuccess"
   | "listChangesFailure"
+  | "listFetchFailure"
   | "removeRecordFailure"
   | "accountSuccess"
   | "accountFailure"
@@ -98,6 +99,14 @@ export const STATIC_STATUS_MESSAGES: Record<
         >
           patron account.
         </Link>
+      </Text>
+    ),
+  },
+  listFetchFailure: {
+    type: "failure",
+    message: (
+      <Text marginBottom={0}>
+        Lists failed to load. Refresh the page and try again.
       </Text>
     ),
   },
