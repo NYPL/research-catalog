@@ -71,8 +71,13 @@ export const SEARCH_FORM_OPTIONS = {
   },
   contributor: {
     text: "Author/Contributor",
-    searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results. To browse a list of authors instead, go to Browse the Catalog.",
+    searchTip: (
+      <span>
+        Enter the name of an author, contributor, or organization. Use Last
+        Name, First Name for more precise results. To browse a list of authors
+        instead, go to <Link href="/browse/authors">Browse the Catalog</Link>.
+      </span>
+    ),
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
