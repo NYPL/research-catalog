@@ -107,17 +107,4 @@ describe("ItemAvailability model", () => {
       AVAILABILITY_KEYS.AVAILABLE_CLOSED_STACK_NO_BARCODE
     )
   })
-
-  // it("returns AVAILABLE_CLOSED_STACK for onsite special collections items with barcodes", () => {
-  //   const availability = new ItemAvailability({
-  //     isAvailable: true,
-  //     isReCAP: false,
-  //     isPartnerReCAP: false,
-  //     aeonUrl: null,
-  //     collectionAccessType: null,
-  //     isSpecRequestable: true,
-  //     hasBarcode: true,
-  //   })
-  //   expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_CLOSED_STACK)
-  // })
 })

@@ -70,7 +70,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           text={"Please contact the division to schedule an appointment."}
         />
       )
-    // No particular message displays for these cases
+    // No message displays for these cases
     case AVAILABLE_ONSITE_APPT_AEON:
     case AVAILABLE_CLOSED_STACK:
     case AVAILABLE_GENERAL:

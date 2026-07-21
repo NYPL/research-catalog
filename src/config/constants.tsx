@@ -226,12 +226,12 @@ export const AVAILABILITY_KEYS = {
   AVAILABLE_ONSITE_APPT_AEON: "availableOnsiteApptAeon",
   // NYPL general or special collections, or partner item, but offsite = needs to be requested in advance
   AVAILABLE_OFFSITE: "availableOffsite",
-  // Available onsite, special collections, in closed stacks
-  AVAILABLE_CLOSED_STACK: "availableClosed",
   // Available onsite, special collections, in closed stacks, has no barcode
   AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
   // Available onsite, general collections
   AVAILABLE_GENERAL: "availableGeneral",
+  // Available onsite, special collections, has somehow missed all these other conditions
+  AVAILABLE_CLOSED_STACK: "availableClosed",
 }
 
 export const HOLD_PAGE_HEADING = "Request for onsite use"

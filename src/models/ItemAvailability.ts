@@ -64,7 +64,7 @@ class ItemAvailability {
       return AVAILABLE_SHELF
     }
 
-    // Available
+    // Offsite, available
     if (this.isReCAP) {
       return AVAILABLE_OFFSITE
     }
@@ -79,11 +79,11 @@ class ItemAvailability {
     if (this.isSpecRequestable && !this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT
     }
+
+    // Catch-alls:
     if (this.isSpecRequestable) {
       return AVAILABLE_CLOSED_STACK
     }
-
-    // General collections, available
     if (!this.isSpecRequestable) {
       return AVAILABLE_GENERAL
     }
