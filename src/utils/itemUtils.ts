@@ -22,6 +22,17 @@ export const locationEndpointsMap: Record<ItemLocationKey, string> = {
   Schomburg: "schomburg",
 }
 
+export const accessMessageMap: Record<string, string> = {
+  "1": "Use in library",
+  "2": "Request in advance",
+  "4": "Restricted use",
+  "-": "No restrictions",
+  a: "By appointment only",
+  o: "Oversize",
+  p: "Permit needed",
+  u: "Supervised use",
+}
+
 // Extract location key from the location label in the API response
 export function locationLabelToKey(label: string): ItemLocationKey {
   return label.replace(/SASB/, "Schwarzman").split(" ")[0] as ItemLocationKey

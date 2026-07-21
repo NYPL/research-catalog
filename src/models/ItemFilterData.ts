@@ -24,9 +24,14 @@ export class ItemFilterData {
   }
 
   get formattedFilterData(): FilterCheckboxGroup {
+    const displayNames: Record<string, string> = {
+      location: "Item location",
+      status: "Availability",
+    }
+
     return {
       id: this.field,
-      name: capitalize(this.field),
+      name: displayNames[this.field] || capitalize(this.field),
       items: this.displayOptions(),
     }
   }

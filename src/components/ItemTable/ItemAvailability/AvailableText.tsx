@@ -3,7 +3,7 @@ import { Box, Icon, Text } from "@nypl/design-system-react-components"
 const AvailableText = ({ text }: { text: string }) => {
   return (
     <>
-      <Box as="span" display="flex" gap="xxs" alignItems="center">
+      <Box as="span" display="flex" gap="xs" alignItems="center">
         <Icon
           name="errorOutline"
           color="ui.gray.semi-dark"

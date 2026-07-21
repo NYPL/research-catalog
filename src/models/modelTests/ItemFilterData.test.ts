@@ -40,7 +40,7 @@ describe("ItemFilterData model", () => {
       expect(itemFilterDataMultipleOffsite.formattedFilterData).toStrictEqual({
         id: "location",
         items: [{ id: "Offsite", name: "Offsite" }],
-        name: "Location",
+        name: "Item location",
       })
     })
   })
@@ -90,7 +90,7 @@ describe("LocationFilterData model", () => {
             name: "Offsite",
           },
         ],
-        name: "Location",
+        name: "Item location",
       })
     })
     it("formats multiple offsite locations as single checkbox value", () => {
@@ -105,7 +105,7 @@ describe("LocationFilterData model", () => {
             name: "Offsite",
           },
         ],
-        name: "Location",
+        name: "Item location",
       })
     })
   })
