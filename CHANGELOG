@@ -11,6 +11,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - In search results, moved vol/date to a separate row and added a division row [SCC-5255](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5255)
 - Updated bib page item table with new names/columns for clearer item status [SCC-5254](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5254)
+- Rewrote item availability cases and corresponding messages, updated search result for bibs with no items, simplified item location filtering [SCC-5253](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5253)
+
+### Removed
 
 ## [2.1.1] 2026-06-22
 
