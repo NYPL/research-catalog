@@ -4,8 +4,8 @@ import {
   CheckboxGroup,
   Checkbox,
   Flex,
+  Text,
   useMultiStyleConfig,
-  Banner,
 } from "@nypl/design-system-react-components"
 import React from "react"
 
@@ -94,10 +94,9 @@ export const SearchableCheckboxGroup = ({
           </Flex>
         ))}
         {filteredItems?.length === 0 && (
-          <Banner
-            content="Lists failed to load. Refresh the page and try again."
-            variant="negative"
-          />
+          <Text size="body2" mb="0" mt="xs" color="ui.gray.dark">
+            No lists found
+          </Text>
         )}
       </CheckboxGroup>
       <div

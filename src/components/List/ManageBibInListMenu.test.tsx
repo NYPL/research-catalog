@@ -89,7 +89,10 @@ describe("ManageBibInListMenu", () => {
       }),
     })
 
-    renderWithContext([])
+    renderWithContext([
+      { id: "list-1", listName: "My List 1", records: [] },
+      { id: "list-2", listName: "My List 2", records: [{ uri: "b12345678" }] },
+    ])
 
     await userEvent.click(
       screen.getByRole("button", { name: /Create new list/i })
