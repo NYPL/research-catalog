@@ -146,4 +146,17 @@ describe("ManageBibInListMenu", () => {
     })
     expect(mockOnClose).toHaveBeenCalled()
   })
+
+  it("renders error banner when no lists are found", async () => {
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    })
+
+    renderWithContext([])
+
+    expect(
+      screen.getByText("Lists failed to load. Refresh the page and try again.")
+    ).toBeInTheDocument()
+  })
 })
