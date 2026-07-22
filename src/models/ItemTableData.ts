@@ -13,7 +13,7 @@ import ItemTableCell from "../components/ItemTable/ItemTableCell"
  * the table in a Search Result or a Bib page, and whether we're on a Desktop
  * or Mobile breakpoint.
  *
- * TODO: Remove this class and move functionality to Bib class
+ * TODO: Refactor to separate rendering/data concerns
  */
 export default class ItemTableData {
   items?: Item[]
