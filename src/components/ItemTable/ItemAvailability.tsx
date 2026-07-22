@@ -74,6 +74,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case AVAILABLE_ONSITE_APPT_AEON:
     case AVAILABLE_CLOSED_STACK:
     case AVAILABLE_GENERAL:
+      return null
   }
 }
 
