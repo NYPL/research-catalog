@@ -78,7 +78,7 @@ describe("ItemAvailability", () => {
 
   it("renders the correct text for available onsite special collections items requiring an appointment", async () => {
     const item = new Item(itemSpecialCollectionsAppt, parentBib)
-    item.availability.key = AVAILABILITY_KEYS.AVAILABLE_ONSITE_APPT
+    item.availability.key = AVAILABILITY_KEYS.AVAILABLE_ONSITE_APPT_NO_AEON
     render(<ItemAvailability item={item} />)
     expect(
       screen.getByText(

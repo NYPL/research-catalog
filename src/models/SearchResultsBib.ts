@@ -21,8 +21,9 @@ export default class SearchResultsBib extends Bib {
       ? result.publicationStatement[0]
       : null
     // Potential bib level fields to check if bib has no items:
-    this.callNumber = result.shelfMark?.[0] || null
-    this.collection = result.collection?.[0] || null
+    const hasItems = !!result.items?.length
+    this.callNumber = hasItems ? null : result.shelfMark?.[0] || null
+    this.collection = hasItems ? null : result.collection?.[0] || null
   }
 
   showViewAllItemsLink() {

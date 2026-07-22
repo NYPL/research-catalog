@@ -25,7 +25,7 @@ describe("ItemAvailability model", () => {
       isSpecRequestable: false,
       hasBarcode: true,
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE)
+    expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_NYPL)
   })
 
   it("returns AVAILABLE_DESK for desk collection access items", () => {

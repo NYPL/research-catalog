@@ -74,9 +74,7 @@ export default class Item {
       isPartnerReCAP: this.isPartnerReCAP(),
     })
     this.collection = item.collection ? item.collection[0] : null
-    this.buildingLocation = item.buildingLocation
-      ? item.buildingLocation[0]?.prefLabel
-      : null
+    this.buildingLocation = item.buildingLocation?.[0]?.prefLabel || null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list

@@ -213,7 +213,7 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
  ** message (see the corresponding component). */
 export const AVAILABILITY_KEYS = {
   // Not available (all NYPL), if we know due date it will display
-  NOT_AVAILABLE: "notAvailable",
+  NOT_AVAILABLE_NYPL: "notAvailable",
   // Not available, partner item
   NOT_AVAILABLE_PARTNER: "notAvailablePartner",
   // Available, general desk reference
@@ -221,7 +221,7 @@ export const AVAILABILITY_KEYS = {
   // Available, general shelf reference
   AVAILABLE_SHELF: "availableShelfGeneral",
   // Available onsite, special collections, needs appointment, no Aeon link
-  AVAILABLE_ONSITE_APPT: "availableOnsiteApptNoAeon",
+  AVAILABLE_ONSITE_APPT_NO_AEON: "availableOnsiteApptNoAeon",
   // Available onsite, special collections, needs appointment, has Aeon link
   AVAILABLE_ONSITE_APPT_AEON: "availableOnsiteApptAeon",
   // NYPL general or special collections, or partner item, but offsite = needs to be requested in advance

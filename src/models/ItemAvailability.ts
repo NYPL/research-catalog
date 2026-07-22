@@ -2,11 +2,11 @@ import { AVAILABILITY_KEYS } from "../config/constants"
 import type { ItemCollectionAccess } from "../types/itemTypes"
 
 const {
-  NOT_AVAILABLE,
+  NOT_AVAILABLE_NYPL,
   NOT_AVAILABLE_PARTNER,
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
-  AVAILABLE_ONSITE_APPT,
+  AVAILABLE_ONSITE_APPT_NO_AEON,
   AVAILABLE_ONSITE_APPT_AEON,
   AVAILABLE_OFFSITE,
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
@@ -53,7 +53,7 @@ class ItemAvailability {
       return NOT_AVAILABLE_PARTNER
     }
     if (!this.isAvailable) {
-      return NOT_AVAILABLE
+      return NOT_AVAILABLE_NYPL
     }
 
     // Reference, available
@@ -77,7 +77,7 @@ class ItemAvailability {
       return AVAILABLE_ONSITE_APPT_AEON
     }
     if (this.isSpecRequestable && !this.aeonUrl && this.isOnsite) {
-      return AVAILABLE_ONSITE_APPT
+      return AVAILABLE_ONSITE_APPT_NO_AEON
     }
 
     // Catch-alls:

@@ -9,11 +9,11 @@ interface ItemAvailabilityProps {
 }
 
 const {
-  NOT_AVAILABLE,
+  NOT_AVAILABLE_NYPL,
   NOT_AVAILABLE_PARTNER,
   AVAILABLE_SHELF,
   AVAILABLE_DESK,
-  AVAILABLE_ONSITE_APPT,
+  AVAILABLE_ONSITE_APPT_NO_AEON,
   AVAILABLE_ONSITE_APPT_AEON,
   AVAILABLE_OFFSITE,
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
@@ -27,7 +27,7 @@ const {
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
-    case NOT_AVAILABLE:
+    case NOT_AVAILABLE_NYPL:
       return (
         <NotAvailable
           text={"Please contact the division for assistance."}
@@ -64,7 +64,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           text={"Item stored offsite and must be requested in advance."}
         />
       )
-    case AVAILABLE_ONSITE_APPT:
+    case AVAILABLE_ONSITE_APPT_NO_AEON:
       return (
         <AvailableText
           text={"Please contact the division to schedule an appointment."}
