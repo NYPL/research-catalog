@@ -64,15 +64,16 @@ class ItemAvailability {
       return AVAILABLE_SHELF
     }
 
+    if (!this.hasBarcode && !this.aeonUrl) {
+      return AVAILABLE_CLOSED_STACK_NO_BARCODE
+    }
+
     // Offsite, available
     if (this.isReCAP) {
       return AVAILABLE_OFFSITE
     }
 
     // Special collections, available
-    if (!this.hasBarcode && !this.aeonUrl) {
-      return AVAILABLE_CLOSED_STACK_NO_BARCODE
-    }
     if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
       return AVAILABLE_ONSITE_APPT_AEON
     }
@@ -80,13 +81,8 @@ class ItemAvailability {
       return AVAILABLE_ONSITE_APPT_NO_AEON
     }
 
-    // Catch-alls:
-    if (this.isSpecRequestable) {
-      return AVAILABLE_CLOSED_STACK
-    }
-    if (!this.isSpecRequestable) {
-      return AVAILABLE_GENERAL
-    }
+    // Catch-all:
+    return AVAILABLE_GENERAL
   }
 }
 
