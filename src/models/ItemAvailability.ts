@@ -2,101 +2,91 @@ import { AVAILABILITY_KEYS } from "../config/constants"
 import type { ItemCollectionAccess } from "../types/itemTypes"
 
 const {
-  EDGE_CASE,
-  RECAP_GENERAL_COLLECTIONS,
-  ONSITE_GENERAL_COLLECTIONS,
-  NOT_AVAILABLE,
-  DESK_AVAILABLE,
-  SHELF_AVAILABLE,
-  RECAP_AEON,
-  ONSITE_AEON,
-  ONSITE_AEON_FINDING_AID,
-  RECAP_AEON_FINDING_AID,
-  ONSITE_FINDING_AID,
-  RECAP_FINDING_AID,
-  ONSITE_NO_FINDING_AID_NO_AEON,
-  RECAP_NO_FINDING_AID_NO_AEON,
+  NOT_AVAILABLE_NYPL,
+  NOT_AVAILABLE_PARTNER,
+  AVAILABLE_SHELF,
+  AVAILABLE_DESK,
+  AVAILABLE_ONSITE_APPT_NO_AEON,
+  AVAILABLE_ONSITE_APPT_AEON,
+  AVAILABLE_OFFSITE,
+  AVAILABLE_CLOSED_STACK_NO_BARCODE,
+  AVAILABLE_CLOSED_STACK,
+  AVAILABLE_GENERAL,
 } = AVAILABILITY_KEYS
 
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 class ItemAvailability {
   key: string
   isAvailable: boolean
   isReCAP: boolean
   aeonUrl: string
-  findingAid: string
   collectionAccessType: ItemCollectionAccess
   isSpecRequestable?: boolean
   isOnsite: boolean
+  hasBarcode: boolean
+  isPartnerReCAP: boolean
 
   constructor({
     isAvailable,
     isReCAP,
     aeonUrl,
     collectionAccessType,
-    findingAid,
     isSpecRequestable,
+    hasBarcode,
+    isPartnerReCAP,
   }) {
-    this.findingAid = findingAid
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
     this.collectionAccessType = collectionAccessType
     this.aeonUrl = aeonUrl
     this.isOnsite = !this.isReCAP
     this.isSpecRequestable = isSpecRequestable
+    this.hasBarcode = hasBarcode
+    this.isPartnerReCAP = isPartnerReCAP
     this.key = this.buildKey()
   }
   buildKey() {
-    // General collections
-    if (!this.isAvailable) {
-      return NOT_AVAILABLE
+    // Not available
+    if (this.isPartnerReCAP && !this.isAvailable) {
+      return NOT_AVAILABLE_PARTNER
     }
+    if (!this.isAvailable) {
+      return NOT_AVAILABLE_NYPL
+    }
+
+    // Reference, available
     if (this.collectionAccessType === "desk") {
-      return DESK_AVAILABLE
+      return AVAILABLE_DESK
     }
     if (this.collectionAccessType === "shelf") {
-      return SHELF_AVAILABLE
+      return AVAILABLE_SHELF
     }
-    if (this.isOnsite && !this.isSpecRequestable) {
-      return ONSITE_GENERAL_COLLECTIONS
+
+    // Offsite, available
+    if (this.isReCAP) {
+      return AVAILABLE_OFFSITE
     }
-    if (this.isReCAP && !this.isSpecRequestable) {
-      return RECAP_GENERAL_COLLECTIONS
+
+    // Special collections, available
+    if (!this.hasBarcode && !this.aeonUrl) {
+      return AVAILABLE_CLOSED_STACK_NO_BARCODE
     }
-    // Special collections
-    if (this.aeonUrl && this.isReCAP && !this.findingAid) {
-      return RECAP_AEON
+    if (this.isSpecRequestable && this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT_AEON
     }
-    if (this.aeonUrl && this.isReCAP && this.findingAid) {
-      return RECAP_AEON_FINDING_AID
+    if (this.isSpecRequestable && !this.aeonUrl && this.isOnsite) {
+      return AVAILABLE_ONSITE_APPT_NO_AEON
     }
-    if (this.aeonUrl && this.isOnsite && !this.findingAid) {
-      return ONSITE_AEON
+
+    // Catch-alls:
+    if (this.isSpecRequestable) {
+      return AVAILABLE_CLOSED_STACK
     }
-    if (this.isOnsite && this.aeonUrl && this.findingAid) {
-      return ONSITE_AEON_FINDING_AID
+    if (!this.isSpecRequestable) {
+      return AVAILABLE_GENERAL
     }
-    if (this.isOnsite && this.findingAid && !this.aeonUrl) {
-      return ONSITE_FINDING_AID
-    }
-    if (this.isReCAP && this.findingAid && !this.aeonUrl) {
-      return RECAP_FINDING_AID
-    }
-    if (
-      this.isOnsite &&
-      !this.findingAid &&
-      !this.aeonUrl &&
-      this.isSpecRequestable
-    ) {
-      return ONSITE_NO_FINDING_AID_NO_AEON
-    }
-    if (
-      this.isReCAP &&
-      !this.findingAid &&
-      !this.aeonUrl &&
-      this.isSpecRequestable
-    ) {
-      return RECAP_NO_FINDING_AID_NO_AEON
-    } else return EDGE_CASE
   }
 }
 

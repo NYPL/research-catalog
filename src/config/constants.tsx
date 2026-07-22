@@ -208,26 +208,32 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
   },
 }
 
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 export const AVAILABILITY_KEYS = {
-  // anything not covered by the cases below is EDGE_CASE
-  EDGE_CASE: "edgeCase",
-  // there is only one not available case, so availability is assumed as the default
-  NOT_AVAILABLE: "notAvailable",
-  RECAP_GENERAL_COLLECTIONS: "Recap",
-  ONSITE_GENERAL_COLLECTIONS: "Onsite",
-  DESK_AVAILABLE: "deskAvailable",
-  SHELF_AVAILABLE: "shelfAvailable",
-  // special collections availability keys
-  RECAP_AEON: "RecapAeon",
-  AEON: "Aeon",
-  ONSITE_AEON: "OnsiteAeon",
-  ONSITE_AEON_FINDING_AID: "onsiteAeonFindingAid",
-  RECAP_AEON_FINDING_AID: "recapAeonFindingAid",
-  ONSITE_FINDING_AID: "onsiteFindingAid",
-  RECAP_FINDING_AID: "recapFindingAid",
-  ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
-  RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
+  // Not available (all NYPL), if we know due date it will display
+  NOT_AVAILABLE_NYPL: "notAvailable",
+  // Not available, partner item
+  NOT_AVAILABLE_PARTNER: "notAvailablePartner",
+  // Available, general desk reference
+  AVAILABLE_DESK: "availableDeskGeneral",
+  // Available, general shelf reference
+  AVAILABLE_SHELF: "availableShelfGeneral",
+  // Available onsite, special collections, needs appointment, no Aeon link
+  AVAILABLE_ONSITE_APPT_NO_AEON: "availableOnsiteApptNoAeon",
+  // Available onsite, special collections, needs appointment, has Aeon link
+  AVAILABLE_ONSITE_APPT_AEON: "availableOnsiteApptAeon",
+  // NYPL general or special collections, or partner item, but offsite = needs to be requested in advance
+  AVAILABLE_OFFSITE: "availableOffsite",
+  // Available onsite, special collections, in closed stacks, has no barcode
+  AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
+  // Available onsite, general collections
+  AVAILABLE_GENERAL: "availableGeneral",
+  // Available onsite, special collections, has somehow missed all these other conditions
+  AVAILABLE_CLOSED_STACK: "availableClosed",
 }
+
 export const HOLD_PAGE_HEADING = "Request for onsite use"
 export const EDD_PAGE_HEADING = "Request scan"
 

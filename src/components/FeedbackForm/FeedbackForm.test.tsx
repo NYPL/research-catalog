@@ -58,8 +58,8 @@ describe("FeedbackForm props in context", () => {
     isOpen: true,
     onClose: jest.fn(),
     onOpen: jest.fn(),
-    itemMetadata: null,
-    setItemMetadata: jest.fn(),
+    feedbackMetadata: null,
+    setFeedbackMetadata: jest.fn(),
     errorStatus: null,
     setErrorStatus: jest.fn(),
     openFeedbackFormWithError: jest.fn(),
@@ -82,7 +82,7 @@ describe("FeedbackForm props in context", () => {
       <FeedbackContext.Provider
         value={{
           ...baseContext,
-          itemMetadata: { notificationText: "Item metadata notification" },
+          feedbackMetadata: { notificationText: "Item metadata notification" },
         }}
       >
         <FeedbackForm />
@@ -99,7 +99,7 @@ describe("FeedbackForm props in context", () => {
       <FeedbackContext.Provider
         value={{
           ...baseContext,
-          itemMetadata: { callNumber: "QA 1234 .B56" },
+          feedbackMetadata: { callNumber: "QA 1234 .B56" },
         }}
       >
         <FeedbackForm />

@@ -69,13 +69,7 @@ const ItemFilters = ({
     refreshedViaCheckbox = false
   ) => {
     const newFilters = { ...appliedFilters, [field]: selectedFilters }
-    const locationFilterData = filterData.find(
-      (filter) => filter.field === "location"
-    ) as LocationFilterData
-    const itemFilterQuery = buildItemFilterQuery(
-      newFilters,
-      locationFilterData.recapLocations
-    )
+    const itemFilterQuery = buildItemFilterQuery(newFilters)
     await handleFiltersChange(itemFilterQuery, refreshedViaCheckbox)
   }
 
@@ -189,6 +183,7 @@ const ItemFilters = ({
           width={multiSelectWidth}
           closeOnBlur
           mt={{ base: "0", md: "6px" }}
+          sx={{ "div > fieldset": { width: "100%" } }}
         />
       ) : null
     })
