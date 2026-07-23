@@ -104,7 +104,7 @@ export const SEARCH_FORM_OPTIONS = {
         instead, go to <Link href="/browse">Browse the Catalog</Link>.
       </span>
     ),
-    placeholder: "e.g., Ornithology or Greek Architecture",
+    placeholder: `${example} Ornithology or Greek Architecture`,
   },
   cql: {
     text: "Query",
