@@ -172,7 +172,11 @@ const ListDisplay = ({ list }: { list: List }) => {
         >
           {joinedMetadata}
         </Box>
-        {list.description ? (
+        {list.isDefaultList ? (
+          <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">
+            Default list - cannot delete
+          </Box>
+        ) : list.description ? (
           <Box as="span" mt="m">
             <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
             {list.description}
