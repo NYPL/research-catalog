@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Styled default list description to appear permanent [SCC-5461](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5461)
+- Updated browse link in author/contributor search tip [SCC-5508](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5508)
 
 ## [2.1.2] 2026-07-07
 
