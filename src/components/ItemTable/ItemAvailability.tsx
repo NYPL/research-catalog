@@ -9,16 +9,21 @@ interface ItemAvailabilityProps {
 }
 
 const {
-  NOT_AVAILABLE_NYPL,
-  NOT_AVAILABLE_PARTNER,
-  AVAILABLE_SHELF,
   AVAILABLE_DESK,
-  AVAILABLE_ONSITE_APPT_NO_AEON,
-  AVAILABLE_ONSITE_APPT_AEON,
-  AVAILABLE_OFFSITE,
+  NOT_AVAILABLE_DESK,
+  AVAILABLE_SHELF,
+  NOT_AVAILABLE_SHELF,
   AVAILABLE_CLOSED_STACK_NO_BARCODE,
-  AVAILABLE_CLOSED_STACK,
-  AVAILABLE_GENERAL,
+  NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE,
+  AVAILABLE_OFFSITE_PARTNER,
+  NOT_AVAILABLE_OFFSITE_PARTNER,
+  AVAILABLE_OFFSITE_NYPL,
+  NOT_AVAILABLE_OFFSITE_NYPL,
+  AVAILABLE_APPT_AEON,
+  NOT_AVAILABLE_APPT_AEON,
+  AVAILABLE_APPT_NO_AEON,
+  NOT_AVAILABLE_APPT_NO_AEON,
+  AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
 /**
@@ -27,14 +32,19 @@ const {
  */
 const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
-    case NOT_AVAILABLE_NYPL:
+    case NOT_AVAILABLE_DESK:
+    case NOT_AVAILABLE_SHELF:
+    case NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE:
+    case NOT_AVAILABLE_OFFSITE_NYPL:
+    case NOT_AVAILABLE_APPT_AEON:
+    case NOT_AVAILABLE_APPT_NO_AEON:
       return (
         <NotAvailable
           text={"Please contact the division for assistance."}
           dueDate={item.dueDate}
         />
       )
-    case NOT_AVAILABLE_PARTNER:
+    case NOT_AVAILABLE_OFFSITE_PARTNER:
       return <NotAvailablePartner item={item} />
     case AVAILABLE_DESK:
       return (
@@ -58,22 +68,22 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           text={"Please contact the division to request this item."}
         />
       )
-    case AVAILABLE_OFFSITE:
+    case AVAILABLE_OFFSITE_PARTNER:
+    case AVAILABLE_OFFSITE_NYPL:
       return (
         <AvailableText
           text={"Item stored offsite and must be requested in advance."}
         />
       )
-    case AVAILABLE_ONSITE_APPT_NO_AEON:
+    case AVAILABLE_APPT_NO_AEON:
       return (
         <AvailableText
           text={"Please contact the division to schedule an appointment."}
         />
       )
     // No message displays for these cases
-    case AVAILABLE_ONSITE_APPT_AEON:
-    case AVAILABLE_CLOSED_STACK:
-    case AVAILABLE_GENERAL:
+    case AVAILABLE_APPT_AEON:
+    case AVAILABLE_EDGE_CASE:
       return null
   }
 }

@@ -28,12 +28,6 @@ describe("ItemAvailability", () => {
     ).toBeInTheDocument()
   })
 
-  it("renders nothing for an available onsite general item", async () => {
-    const item = new Item(itemAvailableOnsite, parentBib)
-    const { container } = render(<ItemAvailability item={item} />)
-    expect(container).toBeEmptyDOMElement()
-  })
-
   it("renders the correct text for an available shelf reference item", async () => {
     const shelfItem = new Item(shelfItemAvailable, parentBib)
     render(<ItemAvailability item={shelfItem} />)
@@ -78,7 +72,7 @@ describe("ItemAvailability", () => {
 
   it("renders the correct text for available onsite special collections items requiring an appointment", async () => {
     const item = new Item(itemSpecialCollectionsAppt, parentBib)
-    item.availability.key = AVAILABILITY_KEYS.AVAILABLE_ONSITE_APPT_NO_AEON
+    item.availability.key = AVAILABILITY_KEYS.AVAILABLE_APPT_NO_AEON
     render(<ItemAvailability item={item} />)
     expect(
       screen.getByText(
@@ -94,7 +88,7 @@ describe("ItemAvailability", () => {
     expect(container).toBeEmptyDOMElement()
   })
 
-  it("renders the correct text for available closed stack items without barcode", async () => {
+  it("renders the correct text for available general closed stack items without barcode", async () => {
     const noBarcodeItem = {
       ...itemAvailableOnsite,
       idBarcode: undefined,
