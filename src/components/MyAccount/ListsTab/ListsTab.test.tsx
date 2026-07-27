@@ -107,7 +107,7 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "my-special-list"] }
     const listsWithId123 = [
       {
-        ...processedLists[0],
+        ...processedLists[1],
         id: "123",
         listName: "My special list",
         description: "A special description",

@@ -112,7 +112,6 @@ export default class MyAccount {
       const createResult = await createList({
         patronId,
         listName: "My workspace (default list)",
-        description: "Default list - cannot be deleted",
       })
       if (createResult.status === 200 && createResult.list) {
         lists.push(createResult.list)
@@ -132,7 +131,6 @@ export default class MyAccount {
       const defaultListId = candidateLists.reduce((oldest, current) => {
         const currentDate = new Date(current.createdDate).getTime() || 0
         const oldestDate = new Date(oldest.createdDate).getTime() || 0
-        console.log(currentDate, oldestDate)
         return currentDate < oldestDate ? current : oldest
       }).id
 
