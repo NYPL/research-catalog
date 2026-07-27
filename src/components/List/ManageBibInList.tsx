@@ -228,6 +228,7 @@ export const ManageBibInList = ({
           placement="bottom"
           returnFocusOnClose={false}
           initialFocusRef={initialFocusRef}
+          trapFocus={false}
         >
           <DrawerOverlay />
           <ManageBibInListMenu
