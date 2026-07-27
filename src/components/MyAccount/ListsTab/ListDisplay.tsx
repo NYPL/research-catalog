@@ -174,7 +174,7 @@ const ListDisplay = ({ list }: { list: List }) => {
         </Box>
         {list.isDefaultList ? (
           <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">
-            Default list - cannot delete
+            Default list - cannot be deleted
           </Box>
         ) : list.description ? (
           <Box as="span" mt="m">

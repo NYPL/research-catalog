@@ -51,7 +51,7 @@ describe("ListsTab", () => {
       within(rows[1]).getByText("My workspace (default list)")
     ).toBeInTheDocument()
     expect(
-      within(rows[1]).getByText("Default list - cannot delete")
+      within(rows[1]).getByText("Default list - cannot be deleted")
     ).toBeInTheDocument()
     expect(within(rows[1]).getByText("0")).toBeInTheDocument()
 

@@ -119,7 +119,7 @@ const ListsDisplay = () => {
       </Link>,
       list.isDefaultList ? (
         <Box as="span" color="ui.gray.dark" fontStyle="italic">
-          Default list - cannot delete
+          Default list - cannot be deleted
         </Box>
       ) : (
         list.description || (
