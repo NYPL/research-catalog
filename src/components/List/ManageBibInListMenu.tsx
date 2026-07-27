@@ -287,7 +287,7 @@ export const ManageBibInListMenu = ({
   const HeaderWrapper: any = isMobile ? DrawerHeader : PopoverHeader
   const FooterWrapper: any = isMobile ? DrawerFooter : PopoverFooter
 
-  const renderCreateListSection = () => {
+  const CreateListForm = () => {
     if (showCreateForm) {
       return (
         <Form
@@ -387,7 +387,7 @@ export const ManageBibInListMenu = ({
     )
   }
 
-  const renderListsContent = () => {
+  const ListsContent = () => {
     if (lists.length === 0) {
       return (
         <div tabIndex={-1} id={idConstants.listMenuStatusBanner}>
@@ -402,7 +402,7 @@ export const ManageBibInListMenu = ({
 
     return (
       <>
-        {renderCreateListSection()}
+        <CreateListForm />
         <Box
           tabIndex={-1}
           id={idConstants.listMenuStatusBanner}
@@ -492,7 +492,7 @@ export const ManageBibInListMenu = ({
               : {}),
           }}
         >
-          {renderListsContent()}
+          <ListsContent />
         </Box>
         <FooterWrapper
           sx={{ borderTop: "1px solid var(--ui-gray-light-cool, #E9E9E9)" }}
