@@ -7,6 +7,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.3] 2026-07-28
+
+### Updated
+
+- Styled default list description to appear permanent [SCC-5461](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5461)
+- Updated browse link in author/contributor search tip [SCC-5508](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5508)
+- Added list request failure banner to menu [SCC-5485](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5485)
+- Added more focus handling to mobile list menu
+
 ## [2.1.2] 2026-07-07
 
 ### Updated
