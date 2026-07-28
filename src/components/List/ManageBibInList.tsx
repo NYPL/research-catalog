@@ -43,7 +43,7 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus } = useFocusContext()
+  const { setPersistentFocus, activeElementId } = useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const isMobile = !isLargerThanLargeMobile
@@ -66,6 +66,24 @@ export const ManageBibInList = ({
 
   const popoverBaseId = `manage-bib-${recordId}`
   const triggerId = `popover-trigger-${popoverBaseId}`
+
+  const finalFocusRef = useRef<HTMLElement | null>(null)
+
+  useEffect(() => {
+    if (isOpen) {
+      finalFocusRef.current = null
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (
+      activeElementId === triggerId ||
+      activeElementId === idConstants.listStatusBanner ||
+      activeElementId === `${idConstants.listStatusBanner}-${recordId}`
+    ) {
+      finalFocusRef.current = document.getElementById(activeElementId)
+    }
+  }, [activeElementId, triggerId, recordId])
 
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
@@ -226,9 +244,9 @@ export const ManageBibInList = ({
           isOpen={isOpen}
           onClose={onClose}
           placement="bottom"
-          returnFocusOnClose={false}
+          returnFocusOnClose={true}
           initialFocusRef={initialFocusRef}
-          trapFocus={false}
+          finalFocusRef={finalFocusRef}
         >
           <DrawerOverlay />
           <ManageBibInListMenu
@@ -255,8 +273,9 @@ export const ManageBibInList = ({
       isLazy
       strategy="fixed"
       closeOnBlur={true}
-      returnFocusOnClose={false}
+      returnFocusOnClose={true}
       initialFocusRef={initialFocusRef}
+      finalFocusRef={finalFocusRef}
     >
       <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu
