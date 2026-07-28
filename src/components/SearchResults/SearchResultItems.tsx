@@ -1,23 +1,17 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import AvailabilityLinks from "../ItemTable/AvailabilityLinks"
+import type { NoItemsBibTableData } from "../../types/itemTypes"
 
 interface SearchResultItemsProps {
-  itemTableData:
-    | ItemTableData
-    | {
-        tableHeadings: string[]
-        tableData: any[][]
-        inSearchResult: boolean
-        items?: any[]
-      }
+  itemTableData: ItemTableData | NoItemsBibTableData
 }
 
 /**
  * Displays item information for search result card.
  */
 const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
-  const { tableHeadings, tableData, items } = itemTableData
+  const { tableHeadings, tableData } = itemTableData
   return (
     <Box>
       <table
@@ -54,8 +48,8 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           ))}
         </tbody>
       </table>
-      {items && items.length > 0 && (
-        <AvailabilityLinks item={items[0]} mt="20px" />
+      {"items" in itemTableData && itemTableData.items.length > 0 && (
+        <AvailabilityLinks item={itemTableData.items[0]} mt="20px" />
       )}
     </Box>
   )

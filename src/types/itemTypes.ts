@@ -1,3 +1,5 @@
+import type { ReactElement } from "react"
+
 // Item structure coming from the Discovery API search response
 export interface DiscoveryItemResult {
   uri?: string
@@ -57,6 +59,12 @@ export interface ItemMetadata {
   bibId?: string
   volume?: string
   notificationText?: string
+}
+
+export interface NoItemsBibTableData {
+  tableHeadings: string[]
+  tableData: ReactElement[][]
+  inSearchResult: boolean
 }
 
 export interface ItemDateRange {
