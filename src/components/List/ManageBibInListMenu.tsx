@@ -317,6 +317,7 @@ export const ManageBibInListMenu = ({
           </Heading>
         </HeaderWrapper>
         <Box
+          tabIndex={-1}
           sx={{
             fontWeight: "normal",
             maxHeight: "360px",
@@ -326,6 +327,7 @@ export const ManageBibInListMenu = ({
             paddingLeft: "s",
             paddingTop: "xs",
             flex: "1",
+            _focus: { outline: "none" },
             ...(isMobile
               ? {
                   borderTopRadius: "4px !important",
