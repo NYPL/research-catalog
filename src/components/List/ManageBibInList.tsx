@@ -67,11 +67,11 @@ export const ManageBibInList = ({
   const popoverBaseId = `manage-bib-${recordId}`
   const triggerId = `popover-trigger-${popoverBaseId}`
 
-  const finalFocusRef = useRef<HTMLElement | null>(null)
-
+  // Mobile Drawer component needs explicit focus ref- set using the focus context's active element ID
+  const mobileFinalFocusRef = useRef<HTMLElement | null>(null)
   useEffect(() => {
     if (isOpen) {
-      finalFocusRef.current = null
+      mobileFinalFocusRef.current = null
     }
   }, [isOpen])
 
@@ -81,7 +81,7 @@ export const ManageBibInList = ({
       activeElementId === idConstants.listStatusBanner ||
       activeElementId === `${idConstants.listStatusBanner}-${recordId}`
     ) {
-      finalFocusRef.current = document.getElementById(activeElementId)
+      mobileFinalFocusRef.current = document.getElementById(activeElementId)
     }
   }, [activeElementId, triggerId, recordId])
 
@@ -246,7 +246,7 @@ export const ManageBibInList = ({
           placement="bottom"
           returnFocusOnClose={true}
           initialFocusRef={initialFocusRef}
-          finalFocusRef={finalFocusRef}
+          finalFocusRef={mobileFinalFocusRef}
         >
           <DrawerOverlay />
           <ManageBibInListMenu
@@ -275,7 +275,6 @@ export const ManageBibInList = ({
       closeOnBlur={true}
       returnFocusOnClose={true}
       initialFocusRef={initialFocusRef}
-      finalFocusRef={finalFocusRef}
     >
       <PopoverTrigger>{triggerButton}</PopoverTrigger>
       <ManageBibInListMenu
