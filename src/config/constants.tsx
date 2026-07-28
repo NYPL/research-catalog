@@ -208,26 +208,37 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
   },
 }
 
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 export const AVAILABILITY_KEYS = {
-  // anything not covered by the cases below is EDGE_CASE
-  EDGE_CASE: "edgeCase",
-  // there is only one not available case, so availability is assumed as the default
-  NOT_AVAILABLE: "notAvailable",
-  RECAP_GENERAL_COLLECTIONS: "Recap",
-  ONSITE_GENERAL_COLLECTIONS: "Onsite",
-  DESK_AVAILABLE: "deskAvailable",
-  SHELF_AVAILABLE: "shelfAvailable",
-  // special collections availability keys
-  RECAP_AEON: "RecapAeon",
-  AEON: "Aeon",
-  ONSITE_AEON: "OnsiteAeon",
-  ONSITE_AEON_FINDING_AID: "onsiteAeonFindingAid",
-  RECAP_AEON_FINDING_AID: "recapAeonFindingAid",
-  ONSITE_FINDING_AID: "onsiteFindingAid",
-  RECAP_FINDING_AID: "recapFindingAid",
-  ONSITE_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonOnsite",
-  RECAP_NO_FINDING_AID_NO_AEON: "noFindingAidNoAeonRecap",
+  // General
+  AVAILABLE_DESK: "availableDesk",
+  NOT_AVAILABLE_DESK: "notAvailableDesk",
+
+  AVAILABLE_SHELF: "availableShelf",
+  NOT_AVAILABLE_SHELF: "notAvailableShelf",
+
+  AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
+  NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE: "notAvailableNoBarcode",
+
+  // Special
+  AVAILABLE_APPT_NO_AEON: "availableApptNoAeon",
+  NOT_AVAILABLE_APPT_NO_AEON: "notAvailableApptNoAeon",
+
+  AVAILABLE_APPT_AEON: "availableApptAeon",
+  NOT_AVAILABLE_APPT_AEON: "notAvailableApptAeon",
+
+  // Offsite
+  AVAILABLE_OFFSITE_PARTNER: "availableOffsitePartner",
+  NOT_AVAILABLE_OFFSITE_PARTNER: "notAvailableOffsitePartner",
+
+  AVAILABLE_OFFSITE_NYPL: "availableOffsiteNypl",
+  NOT_AVAILABLE_OFFSITE_NYPL: "notAvailableOffsiteNypl",
+
+  AVAILABLE_EDGE_CASE: "availableEdgeCase",
 }
+
 export const HOLD_PAGE_HEADING = "Request for onsite use"
 export const EDD_PAGE_HEADING = "Request scan"
 

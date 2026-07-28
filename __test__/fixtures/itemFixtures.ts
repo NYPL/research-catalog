@@ -533,3 +533,22 @@ export const itemUnavailableDueDate = {
     "@value": "40698952",
   },
 }
+
+export const itemUnavailablePartner = {
+  status: [{ "@id": "status:u", prefLabel: "Not Available" }],
+  idNyplSourceId: { "@type": "RecapCul", "@value": "40698953" },
+}
+
+export const itemSpecialCollectionsAppt = {
+  status: [{ "@id": "status:a", prefLabel: "Available" }],
+  specRequestable: true,
+  idNyplSourceId: { "@type": "SierraNypl", "@value": "40698954" },
+  holdingLocation: [
+    {
+      "@id": "loc:mal92",
+      prefLabel: "Schwarzman Building M2 - General Research Room 315",
+      endpoint: "schwarzman",
+    },
+  ],
+  idBarcode: ["123456789"],
+}

@@ -1,23 +1,24 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
-import StatusLinks from "../ItemTable/AvailabilityLinks"
+import AvailabilityLinks from "../ItemTable/AvailabilityLinks"
+import type { NoItemsBibTableData } from "../../types/itemTypes"
 
 interface SearchResultItemsProps {
-  itemTableData: ItemTableData
+  itemTableData: ItemTableData | NoItemsBibTableData
 }
 
 /**
  * Displays item information for search result card.
  */
 const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
-  const { tableHeadings, tableData, items } = itemTableData
+  const { tableHeadings, tableData } = itemTableData
   return (
     <Box>
       <table
         style={{
           width: "100%",
           paddingTop: "24px",
-          marginBottom: "20px",
+          marginBottom: "0",
           borderCollapse: "separate",
           borderTop: "1px dashed var(--nypl-colors-ui-bg-active)",
         }}
@@ -47,7 +48,9 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           ))}
         </tbody>
       </table>
-      <StatusLinks item={items[0]} />
+      {"items" in itemTableData && itemTableData.items.length > 0 && (
+        <AvailabilityLinks item={itemTableData.items[0]} mt="20px" />
+      )}
     </Box>
   )
 }

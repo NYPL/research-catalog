@@ -8,11 +8,20 @@ interface RequestButtonsProps {
 }
 
 /**
- * The StatusLinks component appears in the Item Table
+ * The AvailabilityLinks component appears in the ItemTable
  * TODO: Pass search keywords to links as ?searchKeywords=${"TODO"}
  */
 const RequestButtons = ({ item }: RequestButtonsProps) => {
   if (item.allLocationsClosed) return null
+
+  if (
+    !item.aeonUrl &&
+    !item.isPhysicallyRequestable &&
+    !item.isEDDRequestable
+  ) {
+    return null
+  }
+
   return (
     <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
       {item.aeonUrl && (
@@ -22,7 +31,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Appointment, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
           target="_self"
         >
           Request appointment
@@ -35,7 +43,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request for onsite use, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
         >
           Request for onsite use
         </Link>
@@ -46,7 +53,6 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           variant={!item.isAvailable ? "buttonDisabled" : "buttonSecondary"}
           aria-label={`Request Scan, ${item.requestButtonAriaLabel}`}
           disabled={!item.isAvailable}
-          mb="s"
         >
           Request scan
         </Link>

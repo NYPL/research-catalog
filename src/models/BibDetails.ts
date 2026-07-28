@@ -13,19 +13,13 @@ import {
   convertToSentenceCase,
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
-import {
-  getFindingAidFromSupplementaryContent,
-  getSeriesSearchUrl,
-} from "../utils/bibUtils"
+import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
-import {
-  getContributorSearchURL,
-  getSubjectSearchURL,
-} from "../utils/browseUtils"
+import { getSubjectSearchURL } from "../utils/browseUtils"
 import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {

@@ -15,7 +15,13 @@ const ItemTableCell = ({ text, url = undefined }) => {
         md: "desktop.body.body2",
       }}
     >
-      {url ? <Link hasVisitedState={false} href={url}>{text}</Link> : text}
+      {url ? (
+        <Link hasVisitedState={false} href={url}>
+          {text}
+        </Link>
+      ) : (
+        text
+      )}
     </Box>
   )
 }

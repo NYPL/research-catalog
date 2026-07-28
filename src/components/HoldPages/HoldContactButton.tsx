@@ -14,10 +14,10 @@ export const HoldContactButton = ({
   item,
   children,
 }: HoldContactButtonProps) => {
-  const { onOpen, setItemMetadata } = useContext(FeedbackContext)
+  const { onOpen, setFeedbackMetadata } = useContext(FeedbackContext)
 
   const onContact = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
+    setFeedbackMetadata(metadata)
     onOpen()
   }
 

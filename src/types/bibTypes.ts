@@ -18,6 +18,7 @@ export interface DiscoveryBibResult {
   collection?: Collection[]
   format?: format[]
   publicationStatement?: string[]
+  shelfMark?: string[]
   dateStartYear?: number
   dateEndYear?: number
   electronicResources?: ElectronicResource[]
@@ -100,4 +101,11 @@ export type SubjectHeading = {
   uuid?: string
   bib_count?: number
   desc_count?: number
+}
+
+export interface BibMetadata {
+  id?: string
+  callNumber?: string
+  title?: string
+  notificationText?: string
 }

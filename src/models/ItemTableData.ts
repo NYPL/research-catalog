@@ -1,5 +1,5 @@
+import React from "react"
 import type { ReactElement } from "react"
-
 import type Item from "./Item"
 import type { ItemTableParams } from "../types/itemTypes"
 import AvailabilityLinks from "../components/ItemTable/AvailabilityLinks"
@@ -13,7 +13,7 @@ import ItemTableCell from "../components/ItemTable/ItemTableCell"
  * the table in a Search Result or a Bib page, and whether we're on a Desktop
  * or Mobile breakpoint.
  *
- * TODO: Remove this class and move functionality to Bib class
+ * TODO: Refactor to separate rendering/data concerns
  */
 export default class ItemTableData {
   items?: Item[]
@@ -33,25 +33,27 @@ export default class ItemTableData {
    */
   getTable(): { [key: string]: ReactElement[] } {
     const callNumberCells = this.items?.map((item) =>
-      ItemTableCell({
+      React.createElement(ItemTableCell, {
         text: item.callNumber ? `${item.callNumber}` : "",
       })
     )
     const volumeCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.volume })
+      React.createElement(ItemTableCell, { text: item.volume })
     )
     const availabilityCells = this.items?.map((item) =>
-      AvailabilityLinks({ item })
+      React.createElement(AvailabilityLinks, { item })
     )
     const accessMessageCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.accessMessage })
+      React.createElement(ItemTableCell, { text: item.accessMessage })
     )
     const locationCells = this.items?.map((item) =>
-      ItemTableCell({ text: item.location?.prefLabel })
+      React.createElement(ItemTableCell, {
+        text: item.location.prefLabel,
+      })
     )
 
     const divisionCells = this.items?.map((item) =>
-      ItemTableCell({
+      React.createElement(ItemTableCell, {
         text: item.collection?.prefLabel,
         url:
           item.collection?.locationsPath &&
@@ -67,13 +69,17 @@ export default class ItemTableData {
       Division: divisionCells,
     }
 
+    const callNumberColumnWrapped = this.showCallNumberColumn() && {
+      "Call number": callNumberCells,
+    }
+
     const useRestrictionsColumnWrapped = this.showUseRestrictionsColumn() && {
       "Use restrictions": accessMessageCells,
     }
 
     return this.inSearchResult
       ? {
-          "Call Number": callNumberCells,
+          ...callNumberColumnWrapped,
           ...volumeColumnWrapped,
           "Item Location": locationCells,
           ...divisionColumnWrapped,
@@ -81,9 +87,9 @@ export default class ItemTableData {
       : {
           Availability: availabilityCells,
           ...volumeColumnWrapped,
-          "Call Number": callNumberCells,
+          ...callNumberColumnWrapped,
           "Item Location": locationCells,
-          Division: divisionCells,
+          ...divisionColumnWrapped,
           ...useRestrictionsColumnWrapped,
         }
   }
@@ -104,6 +110,10 @@ export default class ItemTableData {
       this.items?.some((item) => item.collection?.prefLabel) &&
       this.items?.some((item) => !item.isPartnerReCAP())
     )
+  }
+
+  showCallNumberColumn(): boolean {
+    return this.items?.some((item) => item.callNumber)
   }
 
   showUseRestrictionsColumn(): boolean {

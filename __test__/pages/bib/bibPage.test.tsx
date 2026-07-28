@@ -141,7 +141,7 @@ describe("Bib Page Item Table general", () => {
     const checkboxGroups = screen.getAllByTestId("checkbox-group")
 
     await userEvent.click(checkboxGroups[0].querySelector("input"))
-    expect(mockRouter.asPath).toBe("/bib/b15080796?item_location=loc%3Amak32")
+    expect(mockRouter.asPath).toBe("/bib/b15080796?item_location=ma")
 
     await userEvent.click(
       screen.getByLabelText("remove 1 item selected from Item location")
@@ -233,7 +233,7 @@ describe("Bib Page Item Table general", () => {
     )
 
     expect(mockRouter.asPath).toBe(
-      "/bib/b15080796?item_location=loc%3Amak32&item_date=2005"
+      "/bib/b15080796?item_location=ma&item_date=2005"
     )
     await userEvent.click(screen.getByText("Clear filters"))
 

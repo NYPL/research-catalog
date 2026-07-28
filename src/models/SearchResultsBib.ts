@@ -2,6 +2,8 @@ import type { DiscoveryBibResult } from "../types/bibTypes"
 import Bib from "../models/Bib"
 import ItemTableData from "./ItemTableData"
 import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
+import ItemTableCell from "../components/ItemTable/ItemTableCell"
+import type { Collection } from "../types/itemTypes"
 
 /**
  * The SearchResultsBib class contains the data and getter functions
@@ -10,12 +12,18 @@ import { ITEMS_PER_SEARCH_RESULT } from "../config/constants"
  */
 export default class SearchResultsBib extends Bib {
   publicationStatement?: string
+  callNumber?: string
+  collection?: Collection
 
   constructor(result: DiscoveryBibResult) {
     super(result)
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
+    // Potential bib level fields to check if bib has no items:
+    const hasItems = !!result.items?.length
+    this.callNumber = hasItems ? null : result.shelfMark?.[0] || null
+    this.collection = hasItems ? null : result.collection?.[0] || null
   }
 
   showViewAllItemsLink() {
@@ -39,5 +47,37 @@ export default class SearchResultsBib extends Bib {
     return this.hasPhysicalItems
       ? this.numPhysicalItems
       : this.numElectronicResources
+  }
+
+  // Bibs with no items still display a table with their
+  // call number and division, if they have it
+  get noItemsBibTableData() {
+    const callNumberCell =
+      this.callNumber &&
+      ItemTableCell({
+        text: this.callNumber,
+      })
+
+    const divisionCell =
+      this.collection &&
+      ItemTableCell({
+        text: this.collection.prefLabel,
+        url:
+          this.collection.locationsPath &&
+          `https://nypl.org/${this.collection.locationsPath}`,
+      })
+
+    if (!divisionCell && !callNumberCell) return null
+
+    const tableObject = {
+      ...(callNumberCell && { "Call Number": callNumberCell }),
+      ...(divisionCell && { Division: divisionCell }),
+    }
+
+    return {
+      tableHeadings: Object.keys(tableObject),
+      tableData: [Object.values(tableObject)],
+      inSearchResult: true,
+    }
   }
 }
