@@ -256,26 +256,22 @@ export const ManageBibInListMenu = ({
             : STATIC_STATUS_MESSAGES.listChangesFailure
         )
       }
-      setTimeout(() => {
-        setPersistentFocus(
-          inAccount
-            ? `${idConstants.listStatusBanner}`
-            : `${idConstants.listStatusBanner}-${recordId}`
-        )
-      }, 150)
+      setPersistentFocus(
+        inAccount
+          ? `${idConstants.listStatusBanner}`
+          : `${idConstants.listStatusBanner}-${recordId}`
+      )
     } catch (error) {
       setStatus(
         inAccount
           ? STATIC_STATUS_MESSAGES.accountFailure
           : STATIC_STATUS_MESSAGES.listChangesFailure
       )
-      setTimeout(() => {
-        setPersistentFocus(
-          inAccount
-            ? `${idConstants.listStatusBanner}`
-            : `${idConstants.listStatusBanner}-${recordId}`
-        )
-      }, 150)
+      setPersistentFocus(
+        inAccount
+          ? `${idConstants.listStatusBanner}`
+          : `${idConstants.listStatusBanner}-${recordId}`
+      )
       console.error("Error updating bib in lists:", error)
     } finally {
       setIsSubmitting(false)
@@ -321,6 +317,7 @@ export const ManageBibInListMenu = ({
           </Heading>
         </HeaderWrapper>
         <Box
+          tabIndex={-1}
           sx={{
             fontWeight: "normal",
             maxHeight: "360px",
@@ -330,6 +327,7 @@ export const ManageBibInListMenu = ({
             paddingLeft: "s",
             paddingTop: "xs",
             flex: "1",
+            _focus: { outline: "none" },
             ...(isMobile
               ? {
                   borderTopRadius: "4px !important",
