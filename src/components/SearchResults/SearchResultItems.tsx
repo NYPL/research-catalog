@@ -27,7 +27,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
             <tr key={heading}>
               <td
                 style={{
-                  width: "161px",
+                  width: "151px",
                   minWidth: "60px",
                 }}
               >
@@ -41,7 +41,10 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 </Text>
               </td>
               <td>
-                <Text fontSize="small" paddingLeft="20px">
+                <Text
+                  fontSize="small"
+                  paddingLeft={{ base: "0px", md: "30px" }}
+                >
                   {tableData[0][index]}
                 </Text>
               </td>
