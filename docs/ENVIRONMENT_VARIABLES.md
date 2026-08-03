@@ -108,9 +108,9 @@ This repository contains a limited Terraform configuration used to manage applic
 - **`terraform/qa/`**: Configuration for the QA environment. It calls the `base` module and stores its state remotely in the `nypl-github-actions-builds-qa` S3 bucket.
 - **`terraform/production/`**: Configuration for the production environment. It calls the `base` module and stores its state remotely in the `nypl-github-actions-builds-production` S3 bucket.
 
-Changes to application alarms and monitoring resources should be made through the Terraform configuration in this repository.
+Changes to application alarms should be made through this Terraform configuration.
 
-If changes to environment variables in `.env` or other core AWS infrastructure (ECS configuration, networking, load balancers, etc.) are necessary, DevOps must update them in their Terraform configurations.
+If changes to environment variables in task definitions (`.env`) or other core AWS infrastructure (ECS configuration, load balancing, etc.) are necessary, DevOps must update their Terraform.
 
 ## Encrypting and decrypting
 
