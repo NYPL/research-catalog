@@ -95,9 +95,21 @@ Like Vercel, the Github Actions [environment](https://github.com/NYPL/research-c
 
 ## AWS
 
-Our QA and production deployments run on AWS ECS. The application is deployed as a containerized service, with ECS task definitions and related infrastructure set through Terraform.
+Our QA and production deployments run on AWS ECS, where the ECS task definitions include the values set in `.env`. AWS will deploy with the latest task definition values by default.
 
-The QA and prod task definitions include the values set in `.env`. AWS will deploy with the latest task definition values by default, but if environment variables need to be permanently added, changed, or removed, DevOps must update them in Terraform.
+### Infrastructure as Code (Terraform)
+
+Most AWS infrastructure for Research Catalog is managed by the DevOps team through their Terraform configurations and state.
+
+This repository contains a limited Terraform configuration used to manage application-specific monitoring resources owned by the Research Catalog team, found in the `terraform/` directory:
+
+- **`terraform/base/`**: Contains the shared Terraform module with common monitoring resources (currently CloudWatch metric filter alarms) used across environments.
+- **`terraform/qa/`**: Configuration for the QA environment. It calls the `base` module and stores its state remotely in the `nypl-github-actions-builds-qa` S3 bucket.
+- **`terraform/production/`**: Configuration for the production environment. It calls the `base` module and stores its state remotely in the `nypl-github-actions-builds-production` S3 bucket.
+
+Changes to application alarms and monitoring resources should be made through the Terraform configuration in this repository.
+
+If changes to environment variables in `.env` or other core AWS infrastructure (ECS configuration, networking, load balancers, etc.) are necessary, DevOps must update them in their Terraform configurations.
 
 ## Encrypting and decrypting
 
