@@ -9,7 +9,8 @@
 - [Build time config](#build-time-config)
 - [Vercel](#vercel)
 - [Github Actions](#github-actions)
-- [AWS](#github-actions)
+- [AWS](#aws)
+- [Terraform](#infrastructure-as-code-terraform)
 - [Encrypting and decrypting](#encrypting-and-decrypting)
 
 ## General information and setup
