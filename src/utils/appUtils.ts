@@ -59,6 +59,26 @@ export const convertCamelToShishKabobCase = (str: string) =>
     })
 
 /**
+ * An onCopy handler to prevent extra newlines from being copied between table cells.
+ * If text is copied from one cell but the selection includes another cell, strips the resulting
+ * extra whitespace. Used in SearchResultsItems and ItemTable.
+ */
+export const handleTableCopy = (
+  e: React.ClipboardEvent<HTMLElement>,
+  separator: string
+) => {
+  const selection = window.getSelection()
+  if (!selection) return
+  const text = selection.toString()
+  const segments = text.split(separator)
+  const meaningfulSegments = segments.filter((s) => s.trim() !== "")
+  if (meaningfulSegments.length === 1 && segments.length > 1) {
+    e.clipboardData.setData("text/plain", meaningfulSegments[0])
+    e.preventDefault()
+  }
+}
+
+/**
  * Attempts to instantiate an object using the provided constructor and arguments.
  * If instantiation fails without a flag to ignore failure, throws an error with the given message.
  * Otherwise, returns null.

@@ -1,6 +1,7 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "../ItemTable/StatusLinks"
+import { handleTableCopy } from "../../utils/appUtils"
 
 interface SearchResultItemsProps {
   itemTableData: ItemTableData
@@ -14,6 +15,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
   return (
     <Box>
       <table
+        onCopy={(e) => handleTableCopy(e, "\n")}
         style={{
           width: "100%",
           paddingTop: "24px",
@@ -27,7 +29,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
             <tr key={heading}>
               <td
                 style={{
-                  width: "151px",
+                  width: "181px",
                   minWidth: "60px",
                 }}
               >
@@ -41,12 +43,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 </Text>
               </td>
               <td>
-                <Text
-                  fontSize="small"
-                  paddingLeft={{ base: "0px", md: "30px" }}
-                >
-                  {tableData[0][index]}
-                </Text>
+                <Text fontSize="small">{tableData[0][index]}</Text>
               </td>
             </tr>
           ))}
