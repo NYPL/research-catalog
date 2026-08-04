@@ -58,14 +58,18 @@ describe("appUtils", () => {
   })
   describe("handleTableCopy", () => {
     afterEach(() => jest.restoreAllMocks())
-
-    it("does nothing when selection has multiple segments with text", () => {
+    it("does nothing when selection has multiple segments with text, separated by newline", () => {
       mockSelection("Call number\n*LZR 72182 [Disc]")
       const e = makeEvent()
       handleTableCopy(e as any, "\n")
       expect(e.clipboardData.setData).not.toHaveBeenCalled()
     })
-
+    it("does nothing when selection has multiple segments with text, separated by tab", () => {
+      mockSelection("Call number\t*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\t")
+      expect(e.clipboardData.setData).not.toHaveBeenCalled()
+    })
     it("strips leading newline when only one segment has content", () => {
       mockSelection("\n*LZR 72182 [Disc]")
       const e = makeEvent()
@@ -75,7 +79,15 @@ describe("appUtils", () => {
         "*LZR 72182 [Disc]"
       )
     })
-
+    it("strips leading tab when only one segment has content", () => {
+      mockSelection("\t*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\t")
+      expect(e.clipboardData.setData).toHaveBeenCalledWith(
+        "text/plain",
+        "*LZR 72182 [Disc]"
+      )
+    })
     it("does nothing when selection has only one segment", () => {
       mockSelection("*LZR 72182 [Disc]")
       const e = makeEvent()
