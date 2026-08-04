@@ -53,3 +53,4 @@ node_modules/
 # Terraform
 .terraform
 *.hcl
+*.tfstate

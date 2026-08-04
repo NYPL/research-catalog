@@ -1,11 +1,8 @@
-provider "aws" {
-  region     = "us-east-1"
-}
-
 locals {
   tags = {
-    Project = "Research Catalog"
+    Project      = "Research Catalog"
     BusinessUnit = "LSP"
+    Environment  = var.environment
   }
 }
 
@@ -19,6 +16,3 @@ variable "environment" {
     error_message = "The environment must be 'qa' or 'production'."
   }
 }
-
-
-
