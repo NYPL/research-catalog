@@ -59,9 +59,9 @@ export const convertCamelToShishKabobCase = (str: string) =>
     })
 
 /**
- * An onCopy handler to prevent extra newlines from being copied between table cells.
+ * An onCopy handler to prevent extra newlines/tabs from being copied between table cells.
  * If a copy selection extends into multiple cells but contains text from only one cell,
- * sets the clipboard data to that text without extra whitespace.
+ * sets the clipboard data to that text without the browser-injected separators.
  * Used in SearchResultsItems and ItemTable.
  */
 export const handleTableCopy = (

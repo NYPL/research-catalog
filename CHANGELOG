@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated search results table and item table to remove extra copied whitespace [SCC-5441](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5441)
+- Updated search results table and item table to remove extra copied newlines/tabs [SCC-5441](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5441)
 
 ## [2.1.3] 2026-07-28
 
