@@ -7,8 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added Playwright test for NYQL query search [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
+
 ### Updated
 
+- Fixed Playwright search results heading locator to match NYQL query display format [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
 - Updated search results table row headers to be top-aligned [SCC-5559](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5559)
 
 ### Removed
