@@ -1,5 +1,5 @@
 import type { SyntheticEvent } from "react"
-import { useState, useRef, useEffect } from "react"
+import { useState, useRef } from "react"
 import { useRouter } from "next/router"
 import {
   Heading,
@@ -21,6 +21,7 @@ import {
   getBibQueryString,
   buildItemTableDisplayingString,
   buildBibMetadataTitle,
+  isNyplBibID,
 } from "../../../src/utils/bibUtils"
 import BibDetailsModel from "../../../src/models/BibDetails"
 import BibDetails from "../../../src/components/BibPage/BibDetail"
@@ -268,6 +269,7 @@ export default function BibPage({
           {findingAid && (
             <FindingAid
               findingAidURL={findingAid}
+              isNyplBib={isNyplBibID(bib.id)}
               hasElectronicResources={bib.hasElectronicResources}
             />
           )}

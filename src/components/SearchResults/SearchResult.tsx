@@ -22,6 +22,7 @@ import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useState } from "react"
 import { idConstants } from "../../context/FocusContext"
 import { FeaturePopup } from "../Banners/FeaturePopup"
+import { isNyplBibID } from "../../utils/bibUtils"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -145,6 +146,7 @@ const SearchResult = ({
             {bib.findingAid ? (
               <FindingAid
                 findingAidURL={bib.findingAid}
+                isNyplBib={isNyplBibID(bib.id)}
                 hasElectronicResources={bib.hasElectronicResources}
               />
             ) : null}
