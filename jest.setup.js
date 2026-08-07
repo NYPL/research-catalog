@@ -58,6 +58,7 @@ jest.mock("@nypl/node-utils", () => {
   }
 })
 
+// Mock IntersectionObserver for MultiSelect lazy loading
 const intersectionObserverMock = () => ({
   observe: () => null,
   disconnect: () => null,

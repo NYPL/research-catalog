@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Updated search results table row headers to be top-aligned [SCC-5559](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5559)
+- Updated to DS `v4.4.2`
 
 ### Removed
 
