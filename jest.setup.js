@@ -58,6 +58,15 @@ jest.mock("@nypl/node-utils", () => {
   }
 })
 
+const intersectionObserverMock = () => ({
+  observe: () => null,
+  disconnect: () => null,
+  unobserve: () => null,
+})
+window.IntersectionObserver = jest
+  .fn()
+  .mockImplementation(intersectionObserverMock)
+
 // Related to the useNYPLBreakpoints hook which is used in: ButtonGroup,
 // FeedbackBox, Modal, MultiSelectGroup, and NewsletterSignup.
 import { MatchMedia } from "@nypl/design-system-react-components"
