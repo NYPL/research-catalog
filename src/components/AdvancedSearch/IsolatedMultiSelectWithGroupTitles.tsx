@@ -3,8 +3,10 @@ import MultiSelectWithGroupTitles from "./MultiSelectWithGroupTitles/MultiSelect
 import type { MultiSelectItem } from "@nypl/design-system-react-components"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
 
-interface DivisionSelectProps {
-  collectionOptions: MultiSelectItem[]
+interface IsolatedMultiSelectWithGroupTitlesProps {
+  field: string
+  label: string
+  options: MultiSelectItem[]
   onSelectionChange: (field: string, values: string[]) => void
 }
 
@@ -12,33 +14,35 @@ interface DivisionSelectProps {
  * A component that manages local state for the custom MultiSelectWithGroupTitles
  * component (reduces unnecessary rerenders compared to using a global React state
  * in Advanced Search page).
- * This is specific to the division/collection filter.
  * Updates formStateRef in the Advanced Search page on change.
  */
-const DivisionSelect = ({
-  collectionOptions,
+const IsolatedMultiSelectWithGroupTitles = ({
+  field,
+  label,
+  options,
   onSelectionChange,
-}: DivisionSelectProps) => {
+}: IsolatedMultiSelectWithGroupTitlesProps) => {
   const [selected, setSelected] = useState<string[]>([])
 
   const handleChange = (value: string | null) => {
     setSelected((prev) => {
       const next = getNewSelectedFilters(prev, value)
-      onSelectionChange("collection", next)
+      onSelectionChange(field, next)
       return next
     })
   }
 
   return (
     <MultiSelectWithGroupTitles
-      field={{ value: "collection", label: "Division" }}
-      groupedItems={collectionOptions}
+      field={{ value: field, label: label }}
+      groupedItems={options}
       onChange={(e) => handleChange(e.target.id)}
       onClear={() => handleChange(null)}
-      selectedItems={{ collection: { items: selected } }}
+      selectedItems={{ [field]: { items: selected } }}
     />
   )
 }
-DivisionSelect.displayName = "DivisionSelect"
+IsolatedMultiSelectWithGroupTitles.displayName =
+  "IsolatedMultiSelectWithGroupTitles"
 
-export default DivisionSelect
+export default IsolatedMultiSelectWithGroupTitles

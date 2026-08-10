@@ -31,7 +31,7 @@ import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
-import DivisionSelect from "../../src/components/AdvancedSearch/DivisionSelect"
+import IsolatedMultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/IsolatedMultiSelectWithGroupTitles"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
 
 export const defaultEmptySearchErrorMessage =
@@ -155,24 +155,21 @@ export default function AdvancedSearch({
       options: buildingLocationOptions,
     },
     { value: "language", label: "Language", options: languageOptions },
-    { value: "collection", label: "Collection", options: collectionOptions },
+    { value: "collection", label: "Division", options: collectionOptions },
   ]
 
   const multiselects = fields.map((field) => {
+    const props = {
+      key: `${field.value}-${resetKey}`,
+      field: field.value,
+      label: field.label,
+      options: field.options,
+      onSelectionChange: handleFilterChange,
+    }
     return field.value !== "collection" ? (
-      <IsolatedMultiSelect
-        key={`${field.value}-${resetKey}`}
-        field={field.value}
-        label={field.label}
-        options={field.options}
-        onSelectionChange={handleFilterChange}
-      />
+      <IsolatedMultiSelect {...props} />
     ) : (
-      <DivisionSelect
-        key={`collection-${resetKey}`}
-        collectionOptions={collectionOptions}
-        onSelectionChange={handleFilterChange}
-      />
+      <IsolatedMultiSelectWithGroupTitles {...props} />
     )
   })
 
