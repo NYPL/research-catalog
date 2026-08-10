@@ -31,7 +31,6 @@ import Link from "../../src/components/Link/Link"
 import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
-import IsolatedMultiSelectWithGroupTitles from "../../src/components/AdvancedSearch/IsolatedMultiSelectWithGroupTitles"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
 
 export const defaultEmptySearchErrorMessage =
@@ -159,17 +158,15 @@ export default function AdvancedSearch({
   ]
 
   const multiselects = fields.map((field) => {
-    const props = {
-      key: `${field.value}-${resetKey}`,
-      field: field.value,
-      label: field.label,
-      options: field.options,
-      onSelectionChange: handleFilterChange,
-    }
-    return field.value !== "collection" ? (
-      <IsolatedMultiSelect {...props} />
-    ) : (
-      <IsolatedMultiSelectWithGroupTitles {...props} />
+    return (
+      <IsolatedMultiSelect
+        key={`${field.value}-${resetKey}`}
+        field={field.value}
+        label={field.label}
+        isWithGroupTitles={field.value == "collection"}
+        options={field.options}
+        onSelectionChange={handleFilterChange}
+      />
     )
   })
 
