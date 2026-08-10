@@ -10,11 +10,13 @@ import Link from "../Link/Link"
 
 interface FindingAidProps {
   findingAidURL: string
+  isNyplBib?: boolean
   hasElectronicResources: boolean
 }
 
 const FindingAid = ({
   findingAidURL,
+  isNyplBib,
   hasElectronicResources,
 }: FindingAidProps) => {
   return (
@@ -48,16 +50,20 @@ const FindingAid = ({
               organization and contents of this archival collection.
             </Text>
           </Flex>
-          <Text size="caption" mb="0" ml="24px">
-            Archival collections{" "}
-            <Link
-              isExternal
-              href={"https://libguides.nypl.org/NYPLSpecialCollectionsAccount"}
-            >
-              may require an appointment
-            </Link>{" "}
-            to view and use onsite.
-          </Text>
+          {isNyplBib && (
+            <Text size="caption" mb="0" ml="24px">
+              Archival collections{" "}
+              <Link
+                isExternal
+                href={
+                  "https://libguides.nypl.org/NYPLSpecialCollectionsAccount"
+                }
+              >
+                may require an appointment
+              </Link>{" "}
+              to view and use onsite.
+            </Text>
+          )}
         </Flex>
       </CardContent>
     </Card>
