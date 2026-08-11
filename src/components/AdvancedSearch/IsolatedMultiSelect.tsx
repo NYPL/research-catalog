@@ -15,7 +15,7 @@ interface IsolatedMultiSelectProps {
 /**
  * A component that manages local state for a MultiSelect component (either the
  * Design System MultiSelect component or the custom MultiSelectWithGroupTitles
- * component (reduces unnecessary rerenders compared to using a global React
+ * component) (reduces unnecessary rerenders compared to using a global React
  * state in Advanced Search page).
  * Updates formStateRef in the Advanced Search page on change.
  */
