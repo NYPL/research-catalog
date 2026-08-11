@@ -20,7 +20,6 @@ import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
-import { getDisabledStateStyle } from "../../utils/appUtils"
 
 let fields = [
   { value: "buildingLocation", label: "Item location" },
@@ -91,8 +90,8 @@ const SearchFilters = ({
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
-  const getFieldLoadingStateStyle = (fieldValue) => {
-    return getDisabledStateStyle(focusedFilter && focusedFilter !== fieldValue)
+  const getIsDisabled = (fieldValue) => {
+    return focusedFilter && focusedFilter !== fieldValue
   }
 
   // Do not display Subject filter if there is no query term and a subject filter is applied
@@ -111,10 +110,7 @@ const SearchFilters = ({
         (opt) => opt.value !== lockedFilterValue
       )
       return (
-        <div
-          key={field.value}
-          className={getFieldLoadingStateStyle(field.value)}
-        >
+        <div key={field.value}>
           {!(field.value === "collection") ? (
             <MultiSelect
               sx={{
@@ -141,6 +137,7 @@ const SearchFilters = ({
                   items: appliedFilters[field.value] || [],
                 },
               }}
+              isDisabled={getIsDisabled(field.value)}
               items={filteredOptions
                 .filter((option) => option.label && option.label.trim() !== "")
                 .map((option) => ({
@@ -152,6 +149,7 @@ const SearchFilters = ({
             <MultiSelectWithGroupTitles
               key={field.value}
               isBlockElement
+              isDisabled={getIsDisabled(field.value)}
               field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
               onChange={(e) => {
@@ -211,7 +209,7 @@ const SearchFilters = ({
   })
 
   const dateFilter = (
-    <div key="date" className={getFieldLoadingStateStyle("date")}>
+    <div key="date">
       <Accordion
         data-testid="date-accordion"
         id="date"
@@ -225,6 +223,7 @@ const SearchFilters = ({
         accordionData={[
           {
             variant: "default",
+            isDisabled: getIsDisabled("date"),
             ariaLabel: "Date filter",
             label: "Date",
             panel: (

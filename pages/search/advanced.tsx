@@ -33,7 +33,6 @@ import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
 import useLoading from "../../src/hooks/useLoading"
-import { getDisabledStateStyle } from "../../src/utils/appUtils"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -166,6 +165,7 @@ export default function AdvancedSearch({
         key={`${field.value}-${resetKey}`}
         field={field.value}
         label={field.label}
+        isDisabled={isLoading}
         isWithGroupTitles={field.value == "collection"}
         options={field.options}
         onSelectionChange={handleFilterChange}
@@ -224,6 +224,7 @@ export default function AdvancedSearch({
                     key={`${name}-${resetKey}`}
                     name={name}
                     label={label}
+                    isDisabled={isLoading}
                     onChange={handleTextInputChange}
                   />
                 </FormField>

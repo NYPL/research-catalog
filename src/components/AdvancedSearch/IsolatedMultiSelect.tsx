@@ -7,6 +7,7 @@ import { getNewSelectedFilters } from "../../utils/searchUtils"
 interface IsolatedMultiSelectProps {
   field: string
   label: string
+  isDisabled?: boolean
   options: MultiSelectItem[]
   isWithGroupTitles?: boolean
   onSelectionChange: (field: string, values: string[]) => void
@@ -22,6 +23,7 @@ interface IsolatedMultiSelectProps {
 const IsolatedMultiSelect = ({
   field,
   label,
+  isDisabled = false,
   options,
   isWithGroupTitles = false,
   onSelectionChange,
@@ -39,6 +41,7 @@ const IsolatedMultiSelect = ({
   return isWithGroupTitles ? (
     <MultiSelectWithGroupTitles
       field={{ value: field, label: label }}
+      isDisabled={isDisabled}
       groupedItems={options}
       selectedItems={{ [field]: { items: selected } }}
       onChange={(e) => handleChange(e.target.id)}
@@ -51,6 +54,7 @@ const IsolatedMultiSelect = ({
       buttonText={label}
       isSearchable
       closeOnBlur
+      isDisabled={isDisabled}
       items={options}
       selectedItems={{ [field]: { items: selected } }}
       onChange={(e) => handleChange(e.target.id)}
