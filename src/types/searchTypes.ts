@@ -81,17 +81,6 @@ export interface SearchFormInputField {
   label: string
 }
 
-export type SearchFormActionType =
-  | "input_change"
-  | "filter_change"
-  | "form_reset"
-
-export interface SearchFormAction {
-  type: SearchFormActionType
-  field?: string
-  payload: SearchParams | SearchFilters | string | string[]
-}
-
 export interface AdvancedSearchQueryParams {
   callnumber?: string
   standard_number?: string

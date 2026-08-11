@@ -111,7 +111,24 @@ describe("Applied Filter utils", () => {
         language: [{ value: "lang:alb", count: null, label: "Albanian" }],
       })
     })
+
+    it("takes applied collection filter values without matching field aggregations and adds the right label from searchVocabularies", () => {
+      const appliedFilterValues = {
+        collection: ["mab"],
+      }
+      const parsed = addLabelPropAndParseFilters([], appliedFilterValues)
+      expect(parsed).toStrictEqual({
+        collection: [
+          {
+            value: "mab",
+            count: null,
+            label: "SASB - Art & Architecture Collection",
+          },
+        ],
+      })
+    })
   })
+
   describe("buildAppliedFiltersValueArrayWithTagRemoved", () => {
     it("removes the provided tag", () => {
       const tagToRemove = {

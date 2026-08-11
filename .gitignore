@@ -49,3 +49,8 @@ node_modules/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+
+# Terraform
+.terraform
+*.hcl
+*.tfstate

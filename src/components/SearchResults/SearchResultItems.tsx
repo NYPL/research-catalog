@@ -29,13 +29,14 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 style={{
                   width: "181px",
                   minWidth: "60px",
+                  verticalAlign: "top",
+                  paddingTop: "4px",
                 }}
               >
                 <Text
                   textTransform="uppercase"
                   fontWeight="bold"
                   fontSize="small"
-                  mt="xxs"
                 >
                   {heading}
                 </Text>

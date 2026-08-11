@@ -1,42 +1,39 @@
-import { FormField, TextInput } from "@nypl/design-system-react-components"
+import { TextInput } from "@nypl/design-system-react-components"
 import { useState } from "react"
 
 interface IsolatedTextInputProps {
   name: string
   label: string
   isDisabled?: boolean
-  globalInputChangeHandler: () => void
+  onChange: (name: string, value: string) => void
 }
 
 /**
- * A component that manages state for the Design System TextInput component,
- * separately from the AdvancedSearch component (for performance improvements
- * over maintaining a global state in AdvancedSearch).
- * Input value is obtained through FormData when Advanced Search page form is
- * submitted.
+ * A component that manages local state for the Design System TextInput component
+ * (reduces unnecessary rerenders compared to using a global React state in
+ * Advanced Search page).
+ * Updates formStateRef in the Advanced Search page on change.
  */
 const IsolatedTextInput = ({
   name,
   label,
   isDisabled = false,
-  globalInputChangeHandler,
+  onChange,
 }: IsolatedTextInputProps) => {
   const [value, setValue] = useState("")
 
   return (
-    <FormField>
-      <TextInput
-        id={name}
-        labelText={label}
-        name={name}
-        value={value}
-        isDisabled={isDisabled}
-        onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-          globalInputChangeHandler()
-          setValue(e.target.value)
-        }}
-      />
-    </FormField>
+    <TextInput
+      id={name}
+      labelText={label}
+      name={name}
+      value={value}
+      isDisabled={isDisabled}
+      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+        onChange(name, e.target.value)
+        setValue(e.target.value)
+      }}
+    />
   )
 }
 IsolatedTextInput.displayName = "IsolatedTextInput"
