@@ -90,10 +90,6 @@ const SearchFilters = ({
 
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
-  const getIsDisabled = (fieldValue) => {
-    return focusedFilter && focusedFilter !== fieldValue
-  }
-
   // Do not display Subject filter if there is no query term and a subject filter is applied
   if (
     (router.query?.q === "" || !router.query.q) &&
@@ -110,7 +106,15 @@ const SearchFilters = ({
         (opt) => opt.value !== lockedFilterValue
       )
       return (
-        <div key={field.value}>
+        <div
+          key={field.value}
+          style={{
+            opacity: focusedFilter && focusedFilter !== field.value ? 0.4 : 1,
+            pointerEvents:
+              focusedFilter && focusedFilter !== field.value ? "none" : "unset",
+            transition: "opacity 0.2s ease",
+          }}
+        >
           {!(field.value === "collection") ? (
             <MultiSelect
               sx={{
@@ -137,7 +141,6 @@ const SearchFilters = ({
                   items: appliedFilters[field.value] || [],
                 },
               }}
-              isDisabled={getIsDisabled(field.value)}
               items={filteredOptions
                 .filter((option) => option.label && option.label.trim() !== "")
                 .map((option) => ({
@@ -149,7 +152,6 @@ const SearchFilters = ({
             <MultiSelectWithGroupTitles
               key={field.value}
               isBlockElement
-              isDisabled={getIsDisabled(field.value)}
               field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
               onChange={(e) => {
@@ -209,7 +211,15 @@ const SearchFilters = ({
   })
 
   const dateFilter = (
-    <div key="date">
+    <div
+      key="date"
+      style={{
+        opacity: focusedFilter && focusedFilter !== "date" ? 0.4 : 1,
+        pointerEvents:
+          focusedFilter && focusedFilter !== "date" ? "none" : "unset",
+        transition: "opacity 0.2s ease",
+      }}
+    >
       <Accordion
         data-testid="date-accordion"
         id="date"
@@ -223,7 +233,6 @@ const SearchFilters = ({
         accordionData={[
           {
             variant: "default",
-            isDisabled: getIsDisabled("date"),
             ariaLabel: "Date filter",
             label: "Date",
             panel: (
