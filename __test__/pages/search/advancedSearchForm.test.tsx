@@ -1,5 +1,10 @@
 import React from "react"
-import { fireEvent, render, screen, delay } from "../../../src/utils/testUtils"
+import {
+  fireEvent,
+  render,
+  screen,
+  waitFor,
+} from "../../../src/utils/testUtils"
 import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 
@@ -53,8 +58,6 @@ describe("Advanced search form", () => {
     fireEvent.change(seriesInput, { target: { value: "pasta series" } })
     fireEvent.change(genreInput, { target: { value: "cookbooks" } })
 
-    // without this delay, the input is not updated until after submit is called.
-    await delay(500)
     return [
       keywordInput,
       contributorInput,
@@ -66,10 +69,6 @@ describe("Advanced search form", () => {
       genreInput,
     ]
   }
-  afterEach(async () => {
-    await userEvent.click(screen.getByText("Clear fields"))
-    await delay(200)
-  })
 
   it("displays alert when no fields are submitted", () => {
     submit()
@@ -84,22 +83,24 @@ describe("Advanced search form", () => {
 
   it("can set keyword, contributor, title, subject, genre, and series", async () => {
     await updateAllFields()
-    await delay(500)
     submit()
 
-    expect(mockRouter.asPath).toBe(
-      "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
-    )
+    await waitFor(() => {
+      expect(mockRouter.asPath).toBe(
+        "/search?q=spaghetti&title=il+amore+di+pasta&contributor=strega+nonna&callnumber=12345&standard_number=67890&subject=italian+food&genre=cookbooks&series=pasta+series&searched_from=advanced"
+      )
+    })
   })
 
   it("defaults to call number sort when call number is the only field passed", async () => {
     const callNumberInput = screen.getByLabelText("Call number")
     fireEvent.change(callNumberInput, { target: { value: "1234" } })
-    await delay(500)
     submit()
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&callnumber=1234&sort=callnumber&searched_from=advanced"
-    )
+    await waitFor(() => {
+      expect(mockRouter.asPath).toBe(
+        "/search?q=&callnumber=1234&sort=callnumber&searched_from=advanced"
+      )
+    })
   })
 
   it("can select languages", async () => {
@@ -115,9 +116,11 @@ describe("Advanced search form", () => {
     await userEvent.click(languageFilter)
     submit()
     // expect the label for Afrikaans (afr) to be in url
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
-    )
+    await waitFor(() => {
+      expect(mockRouter.asPath).toBe(
+        "/search?q=&filters%5Blanguage%5D%5B0%5D=lang%3Aafr&searched_from=advanced"
+      )
+    })
   })
   it("can search and select division checkboxes", async () => {
     const divisionMultiselect = screen.getByLabelText(/Division/, {
@@ -143,9 +146,11 @@ describe("Advanced search form", () => {
     )
     submit()
     // expect Jean Blackwell Hutson collection code (scf) in url
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&searched_from=advanced"
-    )
+    await waitFor(() => {
+      expect(mockRouter.asPath).toBe(
+        "/search?q=&filters%5Bcollection%5D%5B0%5D=scf&searched_from=advanced"
+      )
+    })
   })
 
   it("can clear the form", async () => {
@@ -208,9 +213,11 @@ describe("Advanced search form", () => {
 
     submit()
 
-    expect(mockRouter.asPath).toBe(
-      "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&searched_from=advanced"
-    )
+    await waitFor(() => {
+      expect(mockRouter.asPath).toBe(
+        "/search?q=&filters%5BdateTo%5D=2020&filters%5BdateFrom%5D=2000&searched_from=advanced"
+      )
+    })
   })
 
   it("shows date error", async () => {
