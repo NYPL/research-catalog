@@ -32,6 +32,7 @@ import { useDateFilter } from "../../src/hooks/useDateFilter"
 import { idConstants, useFocusContext } from "../../src/context/FocusContext"
 import IsolatedMultiSelect from "../../src/components/AdvancedSearch/IsolatedMultiSelect"
 import IsolatedTextInput from "../../src/components/AdvancedSearch/IsolatedTextInput"
+import useLoading from "../../src/hooks/useLoading"
 
 export const defaultEmptySearchErrorMessage =
   "Error: please enter at least one field to submit an advanced search."
@@ -58,6 +59,7 @@ export default function AdvancedSearch({
   // of isolated components, so incrementation triggers a reset of those components
   const [resetKey, setResetKey] = useState(0)
   const { setPersistentFocus } = useFocusContext()
+  const isLoading = useLoading()
 
   const globalInputChangeHandler = () => {
     alert && setAlert(false)
@@ -163,6 +165,7 @@ export default function AdvancedSearch({
         key={`${field.value}-${resetKey}`}
         field={field.value}
         label={field.label}
+        isDisabled={isLoading}
         isWithGroupTitles={field.value == "collection"}
         options={field.options}
         onSelectionChange={handleFilterChange}
@@ -221,6 +224,7 @@ export default function AdvancedSearch({
                     key={`${name}-${resetKey}`}
                     name={name}
                     label={label}
+                    isDisabled={isLoading}
                     onChange={handleTextInputChange}
                   />
                 </FormField>
@@ -230,6 +234,7 @@ export default function AdvancedSearch({
                   key={resetKey}
                   isAdvancedSearch
                   {...dateFilterProps}
+                  isDisabled={isLoading}
                 />
               </FormField>
             </Flex>
@@ -271,6 +276,7 @@ export default function AdvancedSearch({
               cancelHandler={handleClear}
               cancelLabel="Clear fields"
               submitLabel="Search"
+              disableSubmit={isLoading}
             />
           </Flex>
         </Form>

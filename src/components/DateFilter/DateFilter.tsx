@@ -19,6 +19,7 @@ interface DateFilterPropsType extends DateFilterHookPropsType {
   onApply: (nextValues?: { dateFrom: string; dateTo: string }) => DateErrorState
   onChange: (e: SyntheticEvent) => void
   isAdvancedSearch?: boolean
+  isDisabled?: boolean
 }
 
 // Render date filter fields and, if not in advanced search, Apply button.
@@ -30,6 +31,7 @@ const DateFilter = ({
   onBlur,
   onApply,
   isAdvancedSearch = false,
+  isDisabled = false,
 }: DateFilterPropsType) => {
   // Local state used for validation in advanced search page
   // (advanced search uses a ref to store date values, which does not trigger
@@ -103,6 +105,7 @@ const DateFilter = ({
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
+                isDisabled={isDisabled}
                 aria-describedby="date-from-helperText date-errorText"
               />
               {/* Replicating HelperErrorText without aria-live or aria-invalid */}
@@ -133,6 +136,7 @@ const DateFilter = ({
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
+                isDisabled={isDisabled}
                 aria-describedby="date-to-helperText date-errorText"
               />
               {/* Replicating HelperErrorText without aria-live or aria-invalid */}

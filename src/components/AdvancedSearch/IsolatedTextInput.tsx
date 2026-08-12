@@ -1,9 +1,10 @@
-import { FormField, TextInput } from "@nypl/design-system-react-components"
+import { TextInput } from "@nypl/design-system-react-components"
 import { useState } from "react"
 
 interface IsolatedTextInputProps {
   name: string
   label: string
+  isDisabled?: boolean
   onChange: (name: string, value: string) => void
 }
 
@@ -16,6 +17,7 @@ interface IsolatedTextInputProps {
 const IsolatedTextInput = ({
   name,
   label,
+  isDisabled = false,
   onChange,
 }: IsolatedTextInputProps) => {
   const [value, setValue] = useState("")
@@ -26,6 +28,7 @@ const IsolatedTextInput = ({
       labelText={label}
       name={name}
       value={value}
+      isDisabled={isDisabled}
       onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
         onChange(name, e.target.value)
         setValue(e.target.value)
