@@ -58,6 +58,16 @@ jest.mock("@nypl/node-utils", () => {
   }
 })
 
+// Mock IntersectionObserver for MultiSelect lazy loading
+const intersectionObserverMock = () => ({
+  observe: () => null,
+  disconnect: () => null,
+  unobserve: () => null,
+})
+window.IntersectionObserver = jest
+  .fn()
+  .mockImplementation(intersectionObserverMock)
+
 // Related to the useNYPLBreakpoints hook which is used in: ButtonGroup,
 // FeedbackBox, Modal, MultiSelectGroup, and NewsletterSignup.
 import { MatchMedia } from "@nypl/design-system-react-components"
