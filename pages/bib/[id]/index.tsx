@@ -71,7 +71,7 @@ interface BibPropsType {
  */
 export default function BibPage({
   discoveryBibResult,
-  annotatedMarc,
+  //annotatedMarc,
   isAuthenticated,
   itemPage = 1,
   viewAllItems = false,
@@ -118,7 +118,7 @@ export default function BibPage({
   }
 
   const { topDetails, bottomDetails, holdingsDetails, findingAid } =
-    new BibDetailsModel(discoveryBibResult, annotatedMarc)
+    new BibDetailsModel(discoveryBibResult)
 
   const filtersAreApplied = areFiltersApplied(appliedFilters)
 
@@ -348,6 +348,11 @@ export default function BibPage({
             heading="Holdings"
             key="holdings-details"
             details={holdingsDetails}
+          />
+          <Banner
+            mt="24px"
+            variant="warning"
+            content="No annotated MARC included!"
           />
           <BibDetails
             heading="Details"
