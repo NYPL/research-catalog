@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated search results table row headers to be top-aligned [SCC-5559](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5559)
 - Updated to DS `v4.4.2`
 - Improved advanced search page performance and added loading state [SCC-5167](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5167)
+- Use `waitFor` in place of `delay`s in advanced search unit tests
 
 ### Removed
 
