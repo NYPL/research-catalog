@@ -11,14 +11,15 @@ import type {
   DateErrorState,
   DateFilterHookPropsType,
 } from "../../hooks/useDateFilter"
-import type { SyntheticEvent } from "react"
+import { useState, type SyntheticEvent } from "react"
 
 interface DateFilterPropsType extends DateFilterHookPropsType {
   dateError: DateErrorState
-  onBlur: () => void
-  onApply: () => void
+  onBlur: (nextValues?: { dateFrom: string; dateTo: string }) => void
+  onApply: (nextValues?: { dateFrom: string; dateTo: string }) => DateErrorState
   onChange: (e: SyntheticEvent) => void
   isAdvancedSearch?: boolean
+  isDisabled?: boolean
 }
 
 // Render date filter fields and, if not in advanced search, Apply button.
@@ -30,12 +31,41 @@ const DateFilter = ({
   onBlur,
   onApply,
   isAdvancedSearch = false,
+  isDisabled = false,
 }: DateFilterPropsType) => {
+  // Local state used for validation in advanced search page
+  // (advanced search uses a ref to store date values, which does not trigger
+  // hooks correctly)
+  const [localDateFrom, setLocalDateFrom] = useState(dateFrom)
+  const [localDateTo, setLocalDateTo] = useState(dateTo)
+
   const hasError = Object.values(dateError).some(Boolean)
   const errorText =
     dateError.combined || dateError.from || dateError.to || dateError.range
   const fromError = !!(dateError.from || dateError.range)
   const toError = !!(dateError.to || dateError.range)
+
+  const getCurrentInputValues = () => {
+    return {
+      dateFrom: localDateFrom,
+      dateTo: localDateTo,
+    }
+  }
+
+  const handleFieldChange = (e: SyntheticEvent) => {
+    const target = e.target as HTMLInputElement
+    if (target.name === "dateFrom") {
+      setLocalDateFrom(target.value)
+    } else if (target.name === "dateTo") {
+      setLocalDateTo(target.value)
+    }
+    onChange(e)
+  }
+
+  const handleFieldBlur = () => {
+    onBlur(getCurrentInputValues())
+  }
+
   return (
     <>
       <Fieldset
@@ -67,14 +97,15 @@ const DateFilter = ({
                 labelText="From"
                 name="dateFrom"
                 showHelperInvalidText={false}
-                value={dateFrom || ""}
-                onChange={onChange}
-                onBlur={onBlur}
+                value={localDateFrom}
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 isInvalid={fromError}
                 maxLength={10}
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
+                isDisabled={isDisabled}
                 aria-describedby="date-from-helperText date-errorText"
               />
               {/* Replicating HelperErrorText without aria-live or aria-invalid */}
@@ -97,14 +128,15 @@ const DateFilter = ({
                 labelText="To"
                 name="dateTo"
                 showHelperInvalidText={false}
-                value={dateTo || ""}
-                onChange={onChange}
-                onBlur={onBlur}
+                value={localDateTo}
+                onChange={handleFieldChange}
+                onBlur={handleFieldBlur}
                 isInvalid={!!(dateError.to || dateError.range)}
                 maxLength={10}
                 sx={{
                   label: { fontSize: isAdvancedSearch ? "12px" : undefined },
                 }}
+                isDisabled={isDisabled}
                 aria-describedby="date-to-helperText date-errorText"
               />
               {/* Replicating HelperErrorText without aria-live or aria-invalid */}
@@ -133,9 +165,9 @@ const DateFilter = ({
               id="apply-dates"
               onMouseDown={(e) => {
                 e.preventDefault()
-                onBlur()
+                onBlur(getCurrentInputValues())
               }}
-              onClick={onApply}
+              onClick={() => onApply(getCurrentInputValues())}
               width="100%"
             >
               Apply
