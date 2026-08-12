@@ -22,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - Removed appointment link in finding aid for partner items [SCC-5333](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5333)
+- Removed password period restriction from helper text [SCC-5555](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5555)
 
 ## [2.1.3] 2026-07-28
 
