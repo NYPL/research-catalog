@@ -43,7 +43,6 @@ export const CreateEditListModal = ({
 }) => {
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { patron, lists } = updatedAccountData
 
   const [listName, setListName] = useState(list?.listName || "")
   const [listDescription, setListDescription] = useState(
@@ -105,7 +104,6 @@ export const CreateEditListModal = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          patronId: patron.id.toString(),
           listName: listName.trim(),
           description: listDescription,
           records: isEdit ? undefined : [],
@@ -116,7 +114,7 @@ export const CreateEditListModal = ({
         if (data && data.list) {
           const sortToUse = activeSort || "modified_date_desc"
           const fetchResponse = await fetch(
-            `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${sortToUse}`
+            `${BASE_URL}/api/account/lists?sort=${sortToUse}`
           )
           if (fetchResponse.ok) {
             const listsData = await fetchResponse.json()

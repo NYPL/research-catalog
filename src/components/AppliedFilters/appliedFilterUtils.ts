@@ -8,6 +8,7 @@ import {
   mapCollectionToFilterTag,
   mapLanguageToFilterTag,
 } from "../../utils/advancedSearchUtils"
+import { searchVocabularies } from "../../../data/searchVocabularies"
 
 export const buildAppliedFiltersValueArrayWithTagRemoved = (
   tag: TagSetFilterDataProps,
@@ -69,7 +70,10 @@ export const addLabelPropAndParseFilters = (
         const collectionLabel =
           matchingFieldAggregation?.values.find(
             (option) => option.value === filterValue
-          )?.label ?? filterValue
+          )?.label ??
+          searchVocabularies.collections.find((c) => c.value === filterValue)
+            ?.label ??
+          filterValue
 
         return {
           count: null,

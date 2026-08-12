@@ -24,6 +24,7 @@ import { idConstants } from "../../context/FocusContext"
 import { FeaturePopup } from "../Banners/FeaturePopup"
 import AvailableText from "../ItemTable/ItemAvailability/AvailableText"
 import ContactALibrarian from "../ItemTable/ItemAvailability/ContactALibrarian"
+import { isNyplBibID } from "../../utils/bibUtils"
 
 interface SearchResultProps {
   bib: SearchResultsBib
@@ -147,6 +148,7 @@ const SearchResult = ({
             {bib.findingAid ? (
               <FindingAid
                 findingAidURL={bib.findingAid}
+                isNyplBib={isNyplBibID(bib.id)}
                 hasElectronicResources={bib.hasElectronicResources}
               />
             ) : null}

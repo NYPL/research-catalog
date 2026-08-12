@@ -9,7 +9,11 @@ import {
 import RCHead from "../../src/components/Head/RCHead"
 import Layout from "../../src/components/Layout/Layout"
 import SubjectTable from "../../src/components/BrowseTable/SubjectTable/SubjectTable"
-import { SITE_NAME, BROWSE_RESULTS_PER_PAGE } from "../../src/config/constants"
+import {
+  SITE_NAME,
+  BROWSE_RESULTS_PER_PAGE,
+  LOADING_RESULTS,
+} from "../../src/config/constants"
 import { fetchBrowse } from "../../src/server/api/browse"
 import initializePatronTokenAuth from "../../src/server/auth"
 import type { HTTPStatusCode } from "../../src/types/appTypes"
@@ -182,11 +186,13 @@ export default function Browse({
             aria-live="polite"
             mb={{ base: "m", md: 0 }}
           >
-            {getBrowseIndexHeading(
-              resultsType,
-              browseParams,
-              results.totalResults
-            )}
+            {isLoading
+              ? LOADING_RESULTS
+              : getBrowseIndexHeading(
+                  resultsType,
+                  browseParams,
+                  results.totalResults
+                )}
           </Heading>
           <BrowseResultsSort
             ref={sortMenuRef}

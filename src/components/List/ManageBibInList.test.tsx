@@ -146,7 +146,7 @@ describe("ManageBibInList", () => {
       `${BASE_URL}/api/account/lists/records?uris=b12345678`,
       expect.objectContaining({
         method: "PATCH",
-        body: JSON.stringify({ patronId: "12345", listId: "list-1" }),
+        body: JSON.stringify({ listId: "list-1" }),
       })
     )
 
@@ -176,7 +176,7 @@ describe("ManageBibInList", () => {
       `${BASE_URL}/api/account/lists/records?uris=b12345678`,
       expect.objectContaining({
         method: "DELETE",
-        body: JSON.stringify({ patronId: "12345", listId: "list-1" }),
+        body: JSON.stringify({ listId: "list-1" }),
       })
     )
 

@@ -1,6 +1,7 @@
 import { Box, Table } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import styles from "../../../styles/components/ItemTable.module.scss"
+import { handleTableCopy } from "../../utils/appUtils"
 
 interface ItemTableProps {
   itemTableData: ItemTableData
@@ -16,6 +17,7 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
     // Display as grid to prevent bug where the outer container stretches to the Table's width on mobile
     <Box display="grid">
       <Table
+        onCopy={(e) => handleTableCopy(e, "\t")}
         className={`${styles.itemTable} itemTable`}
         columnHeaders={tableHeadings}
         columnHeadersBackgroundColor={"ui.gray.x-light-cool"}

@@ -1,4 +1,5 @@
 import type { Page, Locator } from "@playwright/test"
+import { LOADING_RESULTS } from "../../src/config/constants"
 
 export class SearchPage {
   readonly page: Page
@@ -28,6 +29,12 @@ export class SearchPage {
     this.searchResults = page.locator("#search-results-list h3 a")
     this.searchResultsTitle = page.locator("#search-results-list a", {
       hasText: this.searchterm,
+    })
+  }
+
+  get loadingSearchResultsHeading() {
+    return this.page.getByRole("heading", {
+      name: LOADING_RESULTS,
     })
   }
 

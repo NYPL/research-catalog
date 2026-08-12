@@ -15,7 +15,7 @@ export class BasePage {
   readonly header_research: Locator
   readonly header_education: Locator
   readonly header_events: Locator
-  readonly header_connect: Locator
+  readonly header_visit: Locator
   readonly header_give: Locator
   readonly header_get_help: Locator
   readonly header_search: Locator
@@ -78,9 +78,9 @@ export class BasePage {
       .getByRole("link", {
         name: "Events",
       })
-    this.header_connect = page
+    this.header_visit = page
       .getByLabel("Header bottom links")
-      .getByRole("link", { name: "Connect" })
+      .getByRole("link", { name: "Visit" })
     this.header_give = page
       .getByLabel("Header bottom links")
       .getByRole("link", { name: "Give" })

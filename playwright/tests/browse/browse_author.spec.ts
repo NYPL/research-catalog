@@ -137,3 +137,14 @@ test.describe("Authors/Contributors sort order", () => {
     }).toPass({ timeout: 5000 })
   })
 })
+test.describe("Authors/Contributors results loading heading", () => {
+  test("Do an author/contributor search and assert that the heading reflects loading state", async () => {
+    await browsePage.searchFor("Jake", "Authors/Contributors containing") // doesn't render heading on first search
+
+    await browsePage.searchFor(searchterm, "Authors/Contributors containing")
+
+    await expect(browsePage.loadingSearchResultsHeading).toBeVisible({
+      timeout: 100,
+    })
+  })
+})

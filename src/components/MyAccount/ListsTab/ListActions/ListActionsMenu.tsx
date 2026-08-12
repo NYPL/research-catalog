@@ -66,7 +66,6 @@ const ListActionsMenu = ({
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ patronId: patron.id.toString() }),
           }
         )
         if (response.status === 200) {

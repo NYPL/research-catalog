@@ -24,6 +24,7 @@ export interface MultiSelectProps {
   /** Boolean value used to control how the MultiSelect component will render
    * within the page and interact with other DOM elements. The default value is false. */
   isBlockElement?: boolean
+  isDisabled?: boolean
   groupedItems: MultiSelectItem[]
   /** The action to perform on the checkbox's onChange function. Note, if using
    * this prop, it must be of the type listed below. */
@@ -39,6 +40,7 @@ export interface MultiSelectProps {
 const MultiSelectWithGroupTitles = ({
   field,
   isBlockElement = false,
+  isDisabled = false,
   groupedItems,
   onChange,
   selectedItems,
@@ -213,6 +215,7 @@ const MultiSelectWithGroupTitles = ({
         accordionData={[
           {
             variant: "default",
+            isDisabled: isDisabled,
             buttonInteractionRef: accordionButtonRef,
             label: accordionLabel,
             panel: accordionPanel,

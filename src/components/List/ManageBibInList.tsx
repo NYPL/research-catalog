@@ -43,7 +43,7 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus } = useFocusContext()
+  const { setPersistentFocus, activeElementId } = useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const isMobile = !isLargerThanLargeMobile
@@ -66,6 +66,24 @@ export const ManageBibInList = ({
 
   const popoverBaseId = `manage-bib-${recordId}`
   const triggerId = `popover-trigger-${popoverBaseId}`
+
+  // Mobile Drawer component needs explicit focus ref- set using the focus context's active element ID
+  const mobileFinalFocusRef = useRef<HTMLElement | null>(null)
+  useEffect(() => {
+    if (isOpen) {
+      mobileFinalFocusRef.current = null
+    }
+  }, [isOpen])
+
+  useEffect(() => {
+    if (
+      activeElementId === triggerId ||
+      activeElementId === idConstants.listStatusBanner ||
+      activeElementId === `${idConstants.listStatusBanner}-${recordId}`
+    ) {
+      mobileFinalFocusRef.current = document.getElementById(activeElementId)
+    }
+  }, [activeElementId, triggerId, recordId])
 
   // Focus the Save button upon returning from the login redirect
   useEffect(() => {
@@ -125,7 +143,6 @@ export const ManageBibInList = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: updatedAccountData?.patron?.id?.toString(),
               listId: defaultListId,
             }),
           }
@@ -227,8 +244,9 @@ export const ManageBibInList = ({
           isOpen={isOpen}
           onClose={onClose}
           placement="bottom"
-          returnFocusOnClose={false}
+          returnFocusOnClose={true}
           initialFocusRef={initialFocusRef}
+          finalFocusRef={mobileFinalFocusRef}
         >
           <DrawerOverlay />
           <ManageBibInListMenu
@@ -255,7 +273,7 @@ export const ManageBibInList = ({
       isLazy
       strategy="fixed"
       closeOnBlur={true}
-      returnFocusOnClose={false}
+      returnFocusOnClose={true}
       initialFocusRef={initialFocusRef}
     >
       <PopoverTrigger>{triggerButton}</PopoverTrigger>

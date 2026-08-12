@@ -51,7 +51,7 @@ describe("ListsTab", () => {
       within(rows[1]).getByText("My workspace (default list)")
     ).toBeInTheDocument()
     expect(
-      within(rows[1]).getByText("Default list - cannot delete")
+      within(rows[1]).getByText("Default list - cannot be deleted")
     ).toBeInTheDocument()
     expect(within(rows[1]).getByText("0")).toBeInTheDocument()
 
@@ -89,7 +89,7 @@ describe("ListsTab", () => {
     await userEvent.click(screen.getByText("List name (A - Z)"))
 
     expect(global.fetch).toHaveBeenCalledWith(
-      `${BASE_URL}/api/account/lists?patronId=${processedPatron.id}&sort=list_name_asc`
+      `${BASE_URL}/api/account/lists?sort=list_name_asc`
     )
 
     // Confirm rows flipped order
@@ -107,7 +107,7 @@ describe("ListsTab", () => {
     mockRouter.query = { index: ["lists", "123", "my-special-list"] }
     const listsWithId123 = [
       {
-        ...processedLists[0],
+        ...processedLists[1],
         id: "123",
         listName: "My special list",
         description: "A special description",

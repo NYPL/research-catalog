@@ -9,7 +9,7 @@ import {
   SimpleGrid,
   Pagination,
 } from "@nypl/design-system-react-components"
-import { RESULTS_PER_PAGE } from "../../config/constants"
+import { LOADING_RESULTS, RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"
 import {
   getSearchResultsHeading,
@@ -165,19 +165,21 @@ const Search = ({
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
-                {getSearchResultsHeading(
-                  searchParams,
-                  totalResults,
+                {isLoading
+                  ? LOADING_RESULTS
+                  : getSearchResultsHeading(
+                      searchParams,
+                      totalResults,
 
-                  slug
-                    ? {
-                        slug,
-                        browseType: resultsType,
-                        role,
-                      }
-                    : undefined,
-                  parsedQuery
-                )}
+                      slug
+                        ? {
+                            slug,
+                            browseType: resultsType,
+                            role,
+                          }
+                        : undefined,
+                      parsedQuery
+                    )}
               </Heading>
               <ResultsSort
                 ref={sortMenuRef}

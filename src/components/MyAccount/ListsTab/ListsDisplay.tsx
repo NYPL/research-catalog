@@ -28,7 +28,7 @@ const ListsDisplay = () => {
   const { setUpdatedAccountData, updatedAccountData } =
     useContext(PatronDataContext)
 
-  const { lists, patron } = updatedAccountData
+  const { lists } = updatedAccountData
   const router = useRouter()
 
   const { setPersistentFocus } = useFocusContext()
@@ -75,7 +75,7 @@ const ListsDisplay = () => {
     setIsLoading(true)
     try {
       const response = await fetch(
-        `${BASE_URL}/api/account/lists?patronId=${patron.id}&sort=${selectedSortOption}`
+        `${BASE_URL}/api/account/lists?sort=${selectedSortOption}`
       )
       if (response.ok) {
         const data = await response.json()
@@ -117,10 +117,16 @@ const ListsDisplay = () => {
       >
         {list.listName}
       </Link>,
-      list.description || (
+      list.isDefaultList ? (
         <Box as="span" color="ui.gray.dark" fontStyle="italic">
-          No description
+          Default list - cannot be deleted
         </Box>
+      ) : (
+        list.description || (
+          <Box as="span" color="ui.gray.dark" fontStyle="italic">
+            No description
+          </Box>
+        )
       ),
       list.recordCount.toString(),
       list.createdDate,

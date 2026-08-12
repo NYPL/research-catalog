@@ -128,7 +128,6 @@ export const ManageBibInListMenu = ({
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          patronId: patron.id.toString(),
           listName,
           description: "",
           records: [],
@@ -200,7 +199,6 @@ export const ManageBibInListMenu = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: patron.id.toString(),
               listId,
             }),
           }).then((res) => {
@@ -218,7 +216,6 @@ export const ManageBibInListMenu = ({
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              patronId: patron.id.toString(),
               listId,
             }),
           }).then((res) => {
@@ -259,26 +256,22 @@ export const ManageBibInListMenu = ({
             : STATIC_STATUS_MESSAGES.listChangesFailure
         )
       }
-      setTimeout(() => {
-        setPersistentFocus(
-          inAccount
-            ? `${idConstants.listStatusBanner}`
-            : `${idConstants.listStatusBanner}-${recordId}`
-        )
-      }, 150)
+      setPersistentFocus(
+        inAccount
+          ? `${idConstants.listStatusBanner}`
+          : `${idConstants.listStatusBanner}-${recordId}`
+      )
     } catch (error) {
       setStatus(
         inAccount
           ? STATIC_STATUS_MESSAGES.accountFailure
           : STATIC_STATUS_MESSAGES.listChangesFailure
       )
-      setTimeout(() => {
-        setPersistentFocus(
-          inAccount
-            ? `${idConstants.listStatusBanner}`
-            : `${idConstants.listStatusBanner}-${recordId}`
-        )
-      }, 150)
+      setPersistentFocus(
+        inAccount
+          ? `${idConstants.listStatusBanner}`
+          : `${idConstants.listStatusBanner}-${recordId}`
+      )
       console.error("Error updating bib in lists:", error)
     } finally {
       setIsSubmitting(false)
@@ -324,6 +317,7 @@ export const ManageBibInListMenu = ({
           </Heading>
         </HeaderWrapper>
         <Box
+          tabIndex={-1}
           sx={{
             fontWeight: "normal",
             maxHeight: "360px",
@@ -333,6 +327,7 @@ export const ManageBibInListMenu = ({
             paddingLeft: "s",
             paddingTop: "xs",
             flex: "1",
+            _focus: { outline: "none" },
             ...(isMobile
               ? {
                   borderTopRadius: "4px !important",
@@ -340,137 +335,157 @@ export const ManageBibInListMenu = ({
               : {}),
           }}
         >
-          {showCreateForm ? (
-            <Form
-              id="create-list-form"
-              sx={{
-                padding: "s",
-                borderRadius: "2px",
-                background: "var(--ui-bg-default, #F5F5F5)",
-                marginBottom: "xs",
-                marginTop: "xs",
-                div: { gap: "s" },
-              }}
-            >
-              <FormField>
-                <TextInput
-                  id={idConstants.createListNameInput}
-                  value={listName}
-                  labelText="List name (required)"
-                  showLabel={true}
-                  placeholder="Enter list name"
-                  helperText={
-                    <>
-                      <Box as="span" aria-hidden="true">
-                        {100 - listName.length} characters remaining
-                      </Box>
-                      <Box
-                        as="span"
-                        sx={{
-                          border: "0",
-                          clip: "rect(0, 0, 0, 0)",
-                          height: "1px",
-                          margin: "-1px",
-                          overflow: "hidden",
-                          padding: "0",
-                          position: "absolute",
-                          whiteSpace: "nowrap",
-                          width: "1px",
-                        }}
-                      >
-                        {100 - debouncedListName.length} characters remaining
-                      </Box>
-                    </>
-                  }
-                  isInvalid={!listName.trim() || listName.length > 100}
-                  invalidText="List name must be 100 characters or less"
-                  onChange={(e: any) => setListName(e.target.value)}
-                  isClearable
-                  isClearableCallback={() => setListName("")}
-                  sx={{ fontWeight: "normal" }}
-                />
-              </FormField>
-
-              <FormField>
-                <Flex width="100%" justifyContent="flex-start" gap="xs">
-                  <Button
-                    id="submit"
-                    isDisabled={
-                      !listName.trim() || listName.length > 100 || isSubmitting
-                    }
-                    onClick={handleCreateSubmit}
-                  >
-                    Create list
-                  </Button>
-                  <Button
-                    id="cancel"
-                    variant="secondary"
-                    onClick={() => {
-                      setShowCreateForm(false)
-                      setPersistentFocus(idConstants.createListButton)
-                    }}
-                    sx={{ background: "white" }}
-                  >
-                    Cancel
-                  </Button>
-                </Flex>
-              </FormField>
-            </Form>
-          ) : (
-            <Button
-              ref={initialFocusRef}
-              id={idConstants.createListButton}
-              variant="text"
-              paddingLeft="xs"
-              marginBottom="xs"
-              onClick={() => {
-                setShowCreateForm(true)
-                setListCreationStatus(null)
-                setPersistentFocus(idConstants.createListNameInput)
-              }}
-            >
-              <Icon name="plus" size="medium" align="left" />
-              Create new list
-            </Button>
-          )}
-
-          <Box
-            tabIndex={-1}
-            id={idConstants.listMenuStatusBanner}
-            sx={{ "&:not(:empty)": { marginTop: "xs", marginBottom: "xs" } }}
-          >
-            {listCreationStatus && (
+          {lists.length === 0 && (
+            <div tabIndex={-1} id={idConstants.listMenuStatusBanner}>
               <StatusBanner
-                type={listCreationStatus.type}
-                message={listCreationStatus.message}
-                isMiniBanner={true}
+                type={STATIC_STATUS_MESSAGES.listFetchFailure.type}
+                message={STATIC_STATUS_MESSAGES.listFetchFailure.message}
+                isDismissible={false}
               />
-            )}
-          </Box>
-          <SearchableCheckboxGroup
-            id="search-lists"
-            searchPlaceholder="Search for a list"
-            label="Recent lists"
-            isSearchable={lists.length > 5}
-            items={
-              lists?.map((list: any) => ({
-                id: list.id,
-                label: list.listName,
-                ...list,
-              })) || []
-            }
-            selectedItems={selectedLists}
-            onChange={listCheckBoxChange}
-            renderRightLabel={(item) =>
-              item.records?.some((record: any) => record.uri === recordId) && (
-                <Icon
-                  size="medium"
-                  name="contentBookmark"
-                  color="ui.gray.dark"
-                />
-              )
-            }
-          />
+            </div>
+          )}
+          {lists.length > 0 && (
+            <>
+              {showCreateForm ? (
+                <Form
+                  id="create-list-form"
+                  sx={{
+                    padding: "s",
+                    borderRadius: "2px",
+                    background: "var(--ui-bg-default, #F5F5F5)",
+                    marginBottom: "xs",
+                    marginTop: "xs",
+                    div: { gap: "s" },
+                  }}
+                >
+                  <FormField>
+                    <TextInput
+                      id={idConstants.createListNameInput}
+                      value={listName}
+                      labelText="List name (required)"
+                      showLabel={true}
+                      placeholder="Enter list name"
+                      helperText={
+                        <>
+                          <Box as="span" aria-hidden="true">
+                            {100 - listName.length} characters remaining
+                          </Box>
+                          <Box
+                            as="span"
+                            sx={{
+                              border: "0",
+                              clip: "rect(0, 0, 0, 0)",
+                              height: "1px",
+                              margin: "-1px",
+                              overflow: "hidden",
+                              padding: "0",
+                              position: "absolute",
+                              whiteSpace: "nowrap",
+                              width: "1px",
+                            }}
+                          >
+                            {100 - debouncedListName.length} characters
+                            remaining
+                          </Box>
+                        </>
+                      }
+                      isInvalid={!listName.trim() || listName.length > 100}
+                      invalidText="List name must be 100 characters or less"
+                      onChange={(e: any) => setListName(e.target.value)}
+                      isClearable
+                      isClearableCallback={() => setListName("")}
+                      sx={{ fontWeight: "normal" }}
+                    />
+                  </FormField>
+
+                  <FormField>
+                    <Flex width="100%" justifyContent="flex-start" gap="xs">
+                      <Button
+                        id="submit"
+                        isDisabled={
+                          !listName.trim() ||
+                          listName.length > 100 ||
+                          isSubmitting
+                        }
+                        onClick={handleCreateSubmit}
+                      >
+                        Create list
+                      </Button>
+                      <Button
+                        id="cancel"
+                        variant="secondary"
+                        onClick={() => {
+                          setShowCreateForm(false)
+                          setPersistentFocus(idConstants.createListButton)
+                        }}
+                        sx={{ background: "white" }}
+                      >
+                        Cancel
+                      </Button>
+                    </Flex>
+                  </FormField>
+                </Form>
+              ) : (
+                <Button
+                  ref={initialFocusRef}
+                  id={idConstants.createListButton}
+                  variant="text"
+                  paddingLeft="xs"
+                  marginBottom="xs"
+                  onClick={() => {
+                    setShowCreateForm(true)
+                    setListCreationStatus(null)
+                    setPersistentFocus(idConstants.createListNameInput)
+                  }}
+                >
+                  <Icon name="plus" size="medium" align="left" />
+                  Create new list
+                </Button>
+              )}
+
+              <Box
+                tabIndex={-1}
+                id={idConstants.listMenuStatusBanner}
+                sx={{
+                  "&:not(:empty)": { marginTop: "xs", marginBottom: "xs" },
+                }}
+              >
+                {listCreationStatus && (
+                  <StatusBanner
+                    type={listCreationStatus.type}
+                    message={listCreationStatus.message}
+                    isMiniBanner={true}
+                  />
+                )}
+              </Box>
+              <SearchableCheckboxGroup
+                id="search-lists"
+                searchPlaceholder="Search for a list"
+                label="Recent lists"
+                isSearchable={lists.length > 5}
+                items={
+                  lists?.map((list: any) => ({
+                    id: list.id,
+                    label: list.listName,
+                    ...list,
+                  })) || []
+                }
+                selectedItems={selectedLists}
+                onChange={listCheckBoxChange}
+                renderRightLabel={(item) =>
+                  item.records?.some(
+                    (record: any) => record.uri === recordId
+                  ) && (
+                    <Icon
+                      size="medium"
+                      name="contentBookmark"
+                      color="ui.gray.dark"
+                    />
+                  )
+                }
+              />
+            </>
+          )}
         </Box>
         <FooterWrapper
           sx={{ borderTop: "1px solid var(--ui-gray-light-cool, #E9E9E9)" }}

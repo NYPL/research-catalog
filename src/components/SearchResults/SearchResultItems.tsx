@@ -2,6 +2,7 @@ import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import AvailabilityLinks from "../ItemTable/AvailabilityLinks"
 import type { NoItemsBibTableData } from "../../types/itemTypes"
+import { handleTableCopy } from "../../utils/appUtils"
 
 interface SearchResultItemsProps {
   itemTableData: ItemTableData | NoItemsBibTableData
@@ -15,6 +16,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
   return (
     <Box>
       <table
+        onCopy={(e) => handleTableCopy(e, "\n")}
         style={{
           width: "100%",
           paddingTop: "24px",
@@ -30,13 +32,14 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 style={{
                   width: "181px",
                   minWidth: "60px",
+                  verticalAlign: "top",
+                  paddingTop: "4px",
                 }}
               >
                 <Text
                   textTransform="uppercase"
                   fontWeight="bold"
                   fontSize="small"
-                  mt="xxs"
                 >
                   {heading}
                 </Text>

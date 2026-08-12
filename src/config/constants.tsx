@@ -33,6 +33,8 @@ export const PATHS = {
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
 export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse"
 
+export const LOADING_RESULTS = "Loading results..."
+
 // Query params
 export const SOURCE_PARAM = "?source=catalog"
 
@@ -69,8 +71,13 @@ export const SEARCH_FORM_OPTIONS = {
   },
   contributor: {
     text: "Author/Contributor",
-    searchTip:
-      "Enter the name of an author, contributor, or organization. Use Last Name, First Name for more precise results. To browse a list of authors instead, go to Browse the Catalog.",
+    searchTip: (
+      <span>
+        Enter the name of an author, contributor, or organization. Use Last
+        Name, First Name for more precise results. To browse a list of authors
+        instead, go to <Link href="/browse/authors">Browse the Catalog</Link>.
+      </span>
+    ),
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
   journal_title: {
@@ -97,10 +104,10 @@ export const SEARCH_FORM_OPTIONS = {
         instead, go to <Link href="/browse">Browse the Catalog</Link>.
       </span>
     ),
-    placeholder: "e.g., Ornithology or Greek Architecture",
+    placeholder: `${example} Ornithology or Greek Architecture`,
   },
   cql: {
-    text: <span>Query</span>,
+    text: "Query",
     searchTip: (
       <span>
         Read our{" "}

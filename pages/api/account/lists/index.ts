@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import MyAccount from "../../../../src/models/MyAccount"
 import type { ListSort } from "../../../../src/types/listTypes"
+import initializePatronTokenAuth from "../../../../src/server/auth"
 
 export default async function handler(
   req: NextApiRequest,
@@ -10,15 +11,17 @@ export default async function handler(
     return res.status(405).json({ error: "Method not allowed" })
   }
 
-  const { patronId, sort } = req.query
-
-  if (!patronId || typeof patronId !== "string") {
-    return res.status(400).json({ error: "Missing or invalid patronId" })
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const cookiePatronId = patronTokenResponse.decodedPatron?.sub
+  if (!cookiePatronId) {
+    return res.status(403).json({ error: "No authenticated patron" })
   }
 
+  const { sort } = req.query
+
   try {
-    const accountModel = new MyAccount(null, patronId)
-    const lists = await accountModel.getLists(patronId, sort as ListSort)
+    const accountModel = new MyAccount(null, cookiePatronId)
+    const lists = await accountModel.getLists(cookiePatronId, sort as ListSort)
     res.status(200).json({ lists })
   } catch (error) {
     console.error("Error fetching lists:", error)

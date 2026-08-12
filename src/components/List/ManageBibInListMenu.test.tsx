@@ -89,7 +89,10 @@ describe("ManageBibInListMenu", () => {
       }),
     })
 
-    renderWithContext([])
+    renderWithContext([
+      { id: "list-1", listName: "My List 1", records: [] },
+      { id: "list-2", listName: "My List 2", records: [{ uri: "b12345678" }] },
+    ])
 
     await userEvent.click(
       screen.getByRole("button", { name: /Create new list/i })
@@ -105,7 +108,6 @@ describe("ManageBibInListMenu", () => {
       expect.objectContaining({
         method: "POST",
         body: JSON.stringify({
-          patronId: "12345",
           listName: "New list",
           description: "",
           records: [],
@@ -146,5 +148,18 @@ describe("ManageBibInListMenu", () => {
       )
     })
     expect(mockOnClose).toHaveBeenCalled()
+  })
+
+  it("renders error banner when no lists are found", async () => {
+    ;(global.fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({}),
+    })
+
+    renderWithContext([])
+
+    expect(
+      screen.getByText("Lists failed to load. Refresh the page and try again.")
+    ).toBeInTheDocument()
   })
 })
