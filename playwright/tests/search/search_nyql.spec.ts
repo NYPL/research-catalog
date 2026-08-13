@@ -24,7 +24,8 @@ test.describe("Query Search", () => {
   })
 })
 
-const searchTermForFormatting = 'title = "journal of paleontology" and date > 2000 and date encloses 1928'
+const searchTermForFormatting =
+  'title = "journal of paleontology" and date > 2000 and date encloses 1928'
 test.describe("Check for formatting of query search results heading", () => {
   test("Check that the query search results heading is formatted correctly", async ({
     page,
