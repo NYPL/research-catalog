@@ -18,6 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved advanced search page performance and added loading state [SCC-5167](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5167)
 - Use `waitFor` in place of `delay`s in advanced search unit tests
 - Updated search results table and item table to remove extra copied newlines/tabs [SCC-5441](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5441)
+- Updated search requests (`fetchSearchResults`) to use new `include_aggregations` param, removing parallel aggregations request [SCC-5440](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5440)
 
 ### Removed
 

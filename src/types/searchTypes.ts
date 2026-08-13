@@ -62,7 +62,6 @@ export interface SearchResultsResponse {
 }
 
 export interface DiscoveryAggregationResults {
-  totalResults: number
   itemListElement: Aggregation[]
 }
 export interface DiscoverySearchResults {

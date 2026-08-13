@@ -43,71 +43,48 @@ export async function fetchSearchResults(
   if (!queryString.length) {
     queryString = "?"
   }
-  const aggregationQuery = `/aggregations${queryString}`
-  const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}`
-  // Get the following in parallel:
-  //  - search results
-  //  - aggregations
+  const searchQuery = `${queryString}&per_page=${RESULTS_PER_PAGE.toString()}&include_aggregations=true`
+
   try {
     // Failure to build client will throw from this:
     const client = await nyplApiClient()
 
-    const [resultsResponse, aggregationsResponse] = await Promise.allSettled([
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`),
-      client.get(`${DISCOVERY_API_SEARCH_ROUTE}${aggregationQuery}`),
-    ])
-
-    // Handle failed promises
-    if (resultsResponse.status === "rejected") {
-      logServerError("fetchSearchResults", resultsResponse.reason)
-      return {
-        status: 500,
-        name: null,
-        error:
-          resultsResponse.reason instanceof Error
-            ? resultsResponse.reason.message
-            : resultsResponse.reason,
-      }
-    }
-    if (aggregationsResponse.status === "rejected") {
-      logServerError("fetchSearchResults", aggregationsResponse.reason)
-      return {
-        status: 500,
-        name: null,
-        error:
-          aggregationsResponse.reason instanceof Error
-            ? aggregationsResponse.reason.message
-            : aggregationsResponse.reason,
-      }
-    }
-
-    // Assign results values for each response
-    const results = resultsResponse.value
-
-    const aggregations = aggregationsResponse.value
+    const combinedResponse = await client.get(
+      `${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`
+    )
 
     // Handle no results (404)
-    if (results?.totalResults === 0) {
+    if (combinedResponse?.totalResults === 0) {
       return {
         status: 404,
-        error: `No results found for search ${searchQuery}, aggregations ${aggregationQuery}`,
+        error: `No results found for search ${searchQuery}`,
       }
     }
 
     // Handle general error (no status code returned on success)
-    if (results.status) {
+    if (combinedResponse.status) {
       logServerError(
         "fetchSearchResults",
-        `${results.name ? `${results.name} ` : ""}${
-          results.error ? `${results.error} ` : ""
-        }Requests: search ${searchQuery}, aggregations ${aggregationQuery}`
+        `${combinedResponse.name ? `${combinedResponse.name} ` : ""}${
+          combinedResponse.error ? `${combinedResponse.error} ` : ""
+        }Request: search ${searchQuery}`
       )
       return {
-        status: results.status,
-        ...(results.name && { name: results.name }),
-        ...(results.error && { error: results.error }),
+        status: combinedResponse.status,
+        ...(combinedResponse.name && { name: combinedResponse.name }),
+        ...(combinedResponse.error && { error: combinedResponse.error }),
       }
     }
+
+    const { aggregations: rawAggregations, ...results } = combinedResponse
+
+    // When filters are present the API returns aggregations as the itemListElement
+    // array, normalize to DiscoveryAggregationResults in either case.
+    const aggregations = Array.isArray(rawAggregations)
+      ? {
+          itemListElement: rawAggregations,
+        }
+      : rawAggregations
 
     return {
       status: 200,
