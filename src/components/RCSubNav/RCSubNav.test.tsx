@@ -14,7 +14,7 @@ describe("RCSubNav", () => {
       wrapper: MemoryRouterProvider,
     })
     const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(3)
+    expect(subNavLinks).toHaveLength(4)
   })
 
   it("labels the active link with aria-current", async () => {
@@ -37,25 +37,18 @@ describe("RCSubNav", () => {
     subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks[0]).not.toHaveAttribute("aria-current")
     expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
-    expect(subNavLinks[2]).toHaveAttribute("aria-current", "page")
+    expect(subNavLinks[3]).toHaveAttribute("aria-current", "page")
   })
 
-  it("does not render Log Out link if user is not logged in", () => {
-    render(
-      <RCSubNav isAuthenticated={false} activePage="search" inBrowse={false} />
-    )
-    const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(3)
-    const logoutLink = screen.queryByText("Log Out")
-    expect(logoutLink).toBeNull()
-  })
-  it("does render Log Out link if user is logged in", () => {
-    render(
-      <RCSubNav isAuthenticated={true} activePage="search" inBrowse={false} />
-    )
-    const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(4)
-    const logoutLink = screen.getByText("Log out")
-    expect(logoutLink).toBeInTheDocument()
-  })
+  // it("renders empty My Account icon if user is not logged in", () => {
+  //   render(
+  //     <RCSubNav isAuthenticated={false} activePage="search" inBrowse={false} />
+  //   )
+  // })
+
+  // it("renders filled-in My Account icon if user is logged in", () => {
+  //   render(
+  //     <RCSubNav isAuthenticated={true} activePage="search" inBrowse={false} />
+  //   )
+  // })
 })

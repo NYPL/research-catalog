@@ -1,13 +1,15 @@
 import type { RCPage } from "../../types/pageTypes"
 import { useLogoutRedirect } from "../../server/auth"
 import {
+  Box,
   Icon,
   SubNav,
   SubNavLink,
   Text,
+  Tooltip,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
-import { useBrowseContext } from "../../context/BrowseContext"
 
 interface SubNavProps {
   activePage: RCPage
@@ -21,6 +23,8 @@ interface SubNavProps {
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
+  const { isLargerThanSmallMobile, isLargerThanLargeMobile } =
+    useNYPLBreakpoints()
 
   return (
     <SubNav
@@ -47,7 +51,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 : undefined
             }
           >
-            Search the Catalog
+            Search{isLargerThanLargeMobile && " the Catalog"}
           </SubNavLink>
 
           <SubNavLink
@@ -57,21 +61,66 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             isSelected={inBrowse}
             aria-current={inBrowse ? "page" : undefined}
           >
-            Browse the Catalog
+            Browse{isLargerThanLargeMobile && " the Catalog"}
           </SubNavLink>
         </>
       }
       secondaryActions={
         <>
-          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
-            <SubNavLink
-              href={logoutLink}
-              id="subnav-logout"
-              screenreaderOnlyText="of NYPL.org"
-            >
-              Log out
-            </SubNavLink>
-          </div>
+          <Tooltip
+            offset={[0, 4]}
+            content={
+              <Box
+                display="flex"
+                flexDir="column"
+                alignItems="flex-start"
+                paddingY="6px"
+                gap="8px"
+              >
+                <Box>
+                  <Text
+                    as="span"
+                    marginBottom="xxs"
+                    size="body2"
+                    fontWeight="bold"
+                    color="dark.ui.success.secondary"
+                  >
+                    New location!
+                  </Text>{" "}
+                  <Text
+                    as="span"
+                    marginBottom="xxs"
+                    size="body2"
+                    fontWeight="bold"
+                    color="white"
+                  >
+                    User guide
+                  </Text>
+                </Box>
+                <Text
+                  // marginBottom="0"
+                  as="span"
+                  size="body2"
+                  fontWeight="regular"
+                  color="ui.typography.inverse.heading"
+                >
+                  Read our user guide to learn more about using the Research
+                  Catalog and requesting research materials.
+                </Text>
+              </Box>
+            }
+          >
+            {/* <span> needed here for tooltip ref */}
+            <span>
+              <SubNavLink
+                href="https://libguides.nypl.org/researchcatalog/"
+                id="subnav-user-guide"
+              >
+                <Icon name="actionLightbulb" size="medium" />
+                {isLargerThanSmallMobile ? "User guide" : "Guide"}
+              </SubNavLink>
+            </span>
+          </Tooltip>
           <SubNavLink
             href="/account"
             as={NextLink}
@@ -81,17 +130,11 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             aria-current={activePage === "account" ? "page" : undefined}
             screenreaderOnlyText="for NYPL.org"
           >
-            <Icon name="actionIdentityFilled" size="medium" />
-            <Text
-              __css={{
-                display: "none",
-                ["@media screen and (min-width: 600px)"]: {
-                  display: "flex",
-                },
-              }}
-            >
-              My account
-            </Text>
+            <Icon
+              name={isAuthenticated ? "actionIdentityFilled" : "actionIdentity"}
+              size="medium"
+            />
+            {isLargerThanLargeMobile && "My account"}
           </SubNavLink>
         </>
       }
