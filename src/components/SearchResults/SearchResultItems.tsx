@@ -1,6 +1,7 @@
 import { Box, Text } from "@nypl/design-system-react-components"
 import type ItemTableData from "../../models/ItemTableData"
 import StatusLinks from "../ItemTable/StatusLinks"
+import { handleTableCopy } from "../../utils/appUtils"
 
 interface SearchResultItemsProps {
   itemTableData: ItemTableData
@@ -14,6 +15,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
   return (
     <Box>
       <table
+        onCopy={(e) => handleTableCopy(e, "\n")}
         style={{
           width: "100%",
           paddingTop: "24px",
