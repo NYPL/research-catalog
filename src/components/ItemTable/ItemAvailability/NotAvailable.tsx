@@ -1,5 +1,5 @@
 import { Box } from "@nypl/design-system-react-components"
-import ContactALibrarian from "./ContactALibrarian"
+import ContactUs from "./ContactUs"
 import type Item from "../../../models/Item"
 
 const NotAvailable = ({
@@ -23,7 +23,9 @@ const NotAvailable = ({
       </Box>
       {" -"}
       {dueDate && ` - In use until ${dueDate} -`}
-      <ContactALibrarian item={itemMetadata} />
+      {" please "}
+      <ContactUs item={itemMetadata} contactMessage="contact a librarian" />
+      {" for assistance."}
     </>
   )
 }

@@ -8,11 +8,11 @@ import type {
 import type Item from "../../models/Item"
 
 import PatronIneligibilityErrors from "./PatronIneligibilityErrors"
-import { HoldContactButton } from "./HoldContactButton"
 import {
   HOLD_PAGE_ERROR_HEADINGS,
   HOLD_PAGE_CONTACT_PREFIXES,
 } from "../../config/constants"
+import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
 
 interface HoldRequestErrorBannerProps {
   item: Item
@@ -48,8 +48,11 @@ const HoldRequestErrorBanner = ({
             <Text>
               {HOLD_PAGE_CONTACT_PREFIXES?.[errorStatus]}
               {" Please "}
-              <HoldContactButton item={item}>contact us</HoldContactButton> for
-              assistance.
+              <ContactUs
+                item={item}
+                notificationText={`Request failed for call number ${item.callNumber}`}
+              />{" "}
+              for assistance.
             </Text>
           )}
           {(() => {

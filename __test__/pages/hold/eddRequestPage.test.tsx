@@ -325,9 +325,7 @@ describe("EDD Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(
-        screen.getByRole("button", { name: "contact us" })
-      ).toBeInTheDocument()
+      expect(document.getElementById("contact-us")).toBeInTheDocument()
     })
 
     it("shows an error when there is a invalid patron response response from the edd api", async () => {
@@ -356,9 +354,7 @@ describe("EDD Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(
-        screen.getByRole("button", { name: "contact us" })
-      ).toBeInTheDocument()
+      expect(document.getElementById("contact-us")).toBeInTheDocument()
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
@@ -377,7 +373,9 @@ describe("EDD Request page", () => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
 
-      await userEvent.click(screen.getByText("contact us"))
+      const contactUsButton = document.getElementById("contact-us")
+      expect(contactUsButton).toBeInTheDocument()
+      await userEvent.click(contactUsButton as HTMLElement)
 
       await waitFor(() => {
         expect(
@@ -566,30 +564,34 @@ describe("EDD Request page", () => {
     })
   })
   describe("EDD request already completed renders warning banner", () => {
-    // Item ID from bibWithItems
-    sessionStorage.setItem("holdCompleted-i39333697", "true")
-    render(
-      <EDDRequestPage
-        discoveryBibResult={bibWithItems.resource}
-        discoveryItemResult={bibWithItems.resource.items[0]}
-        patronId="123"
-        isAuthenticated={true}
-      />
-    )
-    expect(
-      screen.getByText("You've already requested a scan of this item")
-    ).toBeInTheDocument()
+    it("shows warning when this item was already requested", () => {
+      // Item ID from bibWithItems
+      sessionStorage.setItem("holdCompleted-i39333697", "true")
+      render(
+        <EDDRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText("You've already requested a scan of this item")
+      ).toBeInTheDocument()
+    })
   })
   describe("EDD request not found", () => {
-    render(
-      <EDDRequestPage
-        discoveryBibResult={undefined}
-        discoveryItemResult={undefined}
-        patronId="123"
-        isAuthenticated={true}
-        bibItemErrorStatus={404}
-      />
-    )
-    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+    it("shows a 404 page message", () => {
+      render(
+        <EDDRequestPage
+          discoveryBibResult={undefined}
+          discoveryItemResult={undefined}
+          patronId="123"
+          isAuthenticated={true}
+          bibItemErrorStatus={404}
+        />
+      )
+      expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+    })
   })
 })

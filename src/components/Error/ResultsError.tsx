@@ -4,12 +4,11 @@ import { appConfig } from "../../config/appConfig"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
-import { useContext } from "react"
-import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
+import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -23,7 +22,6 @@ export default function ResultsError({
   errorName,
   page,
 }: ResultsErrorProps) {
-  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
@@ -52,14 +50,8 @@ export default function ResultsError({
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            for more materials, or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            for assistance.
+            for more materials, or <ContactUs errorStatus={errorStatus} /> for
+            assistance.
           </Text>
         </>
       )
@@ -82,13 +74,7 @@ export default function ResultsError({
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
+            Try refreshing the page or <ContactUs errorStatus={errorStatus} />{" "}
             if the error persists.
           </Text>
         </>
@@ -122,13 +108,7 @@ export default function ResultsError({
                 Query Guide
               </Link>{" "}
               to learn how to construct queries or{" "}
-              <Link
-                onClick={() => openFeedbackFormWithError(errorStatus)}
-                id="feedback-link"
-              >
-                contact us
-              </Link>{" "}
-              for assistance.
+              <ContactUs errorStatus={errorStatus} /> for assistance.
             </Text>
           </>
         )
@@ -153,13 +133,7 @@ export default function ResultsError({
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
+            Try again later or <ContactUs errorStatus={errorStatus} />
             if the error persists.
           </Text>
         </>

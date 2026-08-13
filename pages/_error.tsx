@@ -1,13 +1,12 @@
-import { Heading, Text, Flex, Link } from "@nypl/design-system-react-components"
+import { Heading, Text, Flex } from "@nypl/design-system-react-components"
 import Layout from "../src/components/Layout/Layout"
 import { SITE_NAME } from "../src/config/constants"
 import RCHead from "../src/components/Head/RCHead"
 import type { RCPage } from "../src/types/pageTypes"
 import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
-import { useContext } from "react"
-import { FeedbackContext } from "../src/context/FeedbackContext"
 import type { HTTPStatusCode } from "../src/types/appTypes"
+import ContactUs from "../src/components/ItemTable/ItemAvailability/ContactUs"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -17,7 +16,6 @@ type ErrorPageProps = {
 // Global catch-all for unhandled errors.
 function Error({ activePage, statusCode }: ErrorPageProps) {
   const metadataTitle = `Error | ${SITE_NAME}`
-  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -46,14 +44,8 @@ function Error({ activePage, statusCode }: ErrorPageProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(statusCode)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            if the error persists.
+            Try refreshing the page or <ContactUs errorStatus={statusCode} /> if
+            the error persists.
           </Text>
         </Flex>
       </Layout>

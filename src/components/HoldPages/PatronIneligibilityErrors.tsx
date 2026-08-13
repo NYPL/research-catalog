@@ -4,10 +4,10 @@ import type { PatronEligibilityStatus } from "../../types/holdPageTypes"
 import type Item from "../../models/Item"
 
 import Link from "../Link/Link"
-import { HoldContactButton } from "./HoldContactButton"
 
 import { PATHS } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
+import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
 
 interface PatronIneligibilityErrorsProps {
   patronEligibilityStatus: PatronEligibilityStatus
@@ -64,15 +64,22 @@ const PatronIneligibilityErrors = ({
         <>
           <List variant="ul" margin={0} listItems={ineligibilityReasons} />
           <Text mt="xs">
-            Please <HoldContactButton item={item}>contact us</HoldContactButton>{" "}
+            Please{" "}
+            <ContactUs
+              item={item}
+              notificationText={`Request failed for call number ${item.callNumber}`}
+            />{" "}
             for assistance if required.
           </Text>
         </>
       ) : (
         <>
           {ineligibilityReasons.map((reason) => reason)} Please{" "}
-          <HoldContactButton item={item}>contact us</HoldContactButton> for
-          assistance.
+          <ContactUs
+            item={item}
+            notificationText={`Request failed for call number ${item.callNumber}`}
+          />{" "}
+          for assistance.
         </>
       )}
     </Box>

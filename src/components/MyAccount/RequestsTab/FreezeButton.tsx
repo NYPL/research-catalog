@@ -9,6 +9,7 @@ import {
   ProgressIndicator,
 } from "@nypl/design-system-react-components"
 import styles from "../../../../styles/components/MyAccount.module.scss"
+import ContactUs from "../../ItemTable/ItemAvailability/ContactUs"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
@@ -22,7 +23,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       <Box className={styles.modalBody}>
         <Text>
           We were unable to freeze your hold on this item. Please try again or
-          contact us for assistance.
+          <ContactUs /> for assistance.
         </Text>
       </Box>
     ),

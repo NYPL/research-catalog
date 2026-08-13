@@ -11,7 +11,7 @@ import type { Checkout, Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import styles from "../../../../styles/components/MyAccount.module.scss"
 import { PatronDataContext } from "../../../context/PatronDataContext"
-import Link from "../../Link/Link"
+import ContactUs from "../../ItemTable/ItemAvailability/ContactUs"
 
 const RenewButton = ({
   checkout,
@@ -65,10 +65,7 @@ const RenewButton = ({
     bodyContent: (
       <Box className={styles.modalBody}>
         <Text>
-          We were unable to renew this item. Please try again or{" "}
-          <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-            contact us
-          </Link>{" "}
+          We were unable to renew this item. Please try again or <ContactUs />{" "}
           for assistance.
         </Text>
       </Box>
