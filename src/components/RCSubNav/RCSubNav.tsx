@@ -109,7 +109,8 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               name={isAuthenticated ? "actionIdentityFilled" : "actionIdentity"}
               size="medium"
             />
-            {isLargerThanLargeMobile && "My account"}
+            {isLargerThanLargeMobile &&
+              (isAuthenticated ? "My account" : "Log in")}
           </SubNavLink>
         </>
       }
