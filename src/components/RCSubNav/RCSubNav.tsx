@@ -73,7 +73,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               display="inline-flex"
               sx={{
                 bottom: "100%",
-                left: "50%",
+                left: "65%",
                 transform: "translateX(-50%)",
                 zIndex: "100",
                 textWrap: "wrap",
