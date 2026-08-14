@@ -81,7 +81,8 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             >
               <FeaturePopup
                 id="userGuidePopup"
-                title="User guide"
+                titleNew="New location!"
+                titleUpdate="User guide"
                 content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
               />
             </Box>

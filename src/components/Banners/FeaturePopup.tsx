@@ -3,12 +3,14 @@ import { useState, useEffect } from "react"
 
 export const FeaturePopup = ({
   id,
-  title,
+  titleNew = "New!",
+  titleUpdate,
   content,
   pointerRight = "150px",
 }: {
   id: string
-  title: string
+  titleNew?: string
+  titleUpdate: string
   content: string
   pointerRight?: string
 }) => {
@@ -67,9 +69,9 @@ export const FeaturePopup = ({
           fontWeight="bold"
           color="dark.ui.success.secondary"
         >
-          New!
+          {titleNew}
         </Text>{" "}
-        {title}
+        {titleUpdate}
       </Text>
       <Text
         marginBottom="0"

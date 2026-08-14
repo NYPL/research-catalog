@@ -25,7 +25,7 @@ const ProfileContainer = ({ tabsPath }) => {
         >
           <FeaturePopup
             id="listAccountPopup"
-            title="Save to lists"
+            titleUpdate="Save to lists"
             content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
             pointerRight="50px"
           />

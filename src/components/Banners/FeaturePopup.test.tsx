@@ -8,7 +8,7 @@ describe("FeaturePopup", () => {
     document.cookie = "seenTestId=; expires=Thu, 01 Jan 1970 00:00:00 UTC;"
   })
   const component = (
-    <FeaturePopup id="TestId" title="Test title" content="Test content" />
+    <FeaturePopup id="TestId" titleUpdate="Test title" content="Test content" />
   )
 
   it("renders when the cookie is absent", () => {
