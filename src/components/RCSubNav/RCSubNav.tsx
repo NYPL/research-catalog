@@ -5,11 +5,11 @@ import {
   Icon,
   SubNav,
   SubNavLink,
-  Text,
-  Tooltip,
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
+import Link from "../Link/Link"
+import { FeaturePopup } from "../Banners/FeaturePopup"
 
 interface SubNavProps {
   activePage: RCPage
@@ -51,7 +51,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 : undefined
             }
           >
-            Search{isLargerThanLargeMobile && " the Catalog"}
+            Search{isLargerThanSmallMobile && " the Catalog"}
           </SubNavLink>
 
           <SubNavLink
@@ -61,66 +61,40 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             isSelected={inBrowse}
             aria-current={inBrowse ? "page" : undefined}
           >
-            Browse{isLargerThanLargeMobile && " the Catalog"}
+            Browse{isLargerThanSmallMobile && " the Catalog"}
           </SubNavLink>
         </>
       }
       secondaryActions={
         <>
-          <Tooltip
-            offset={[0, 4]}
-            content={
-              <Box
-                display="flex"
-                flexDir="column"
-                alignItems="flex-start"
-                paddingY="6px"
-                gap="8px"
-              >
-                <Box>
-                  <Text
-                    as="span"
-                    marginBottom="xxs"
-                    size="body2"
-                    fontWeight="bold"
-                    color="dark.ui.success.secondary"
-                  >
-                    New location!
-                  </Text>{" "}
-                  <Text
-                    as="span"
-                    marginBottom="xxs"
-                    size="body2"
-                    fontWeight="bold"
-                    color="white"
-                  >
-                    User guide
-                  </Text>
-                </Box>
-                <Text
-                  // marginBottom="0"
-                  as="span"
-                  size="body2"
-                  fontWeight="regular"
-                  color="ui.typography.inverse.heading"
-                >
-                  Read our user guide to learn more about using the Research
-                  Catalog and requesting research materials.
-                </Text>
-              </Box>
-            }
-          >
-            {/* <span> needed here for tooltip ref */}
-            <span>
-              <SubNavLink
-                href="https://libguides.nypl.org/researchcatalog/"
-                id="subnav-user-guide"
-              >
-                <Icon name="actionLightbulb" size="medium" />
-                {isLargerThanSmallMobile ? "User guide" : "Guide"}
-              </SubNavLink>
-            </span>
-          </Tooltip>
+          <Box position="relative">
+            <Box
+              position="absolute"
+              display="inline-flex"
+              sx={{
+                bottom: "100%",
+                left: "50%",
+                transform: "translateX(-50%)",
+                zIndex: "100",
+                textWrap: "wrap",
+              }}
+            >
+              <FeaturePopup
+                id="userGuidePopup"
+                title="User guide"
+                content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
+              />
+            </Box>
+            <Link
+              href="https://libguides.nypl.org/researchcatalog/"
+              id="subnav-user-guide"
+              isExternal
+              borderRadius="6px"
+            >
+              <Icon name="actionLightbulb" size="medium" />
+              {isLargerThanSmallMobile ? "User guide" : "Guide"}
+            </Link>
+          </Box>
           <SubNavLink
             href="/account"
             as={NextLink}
