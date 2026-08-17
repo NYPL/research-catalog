@@ -1,7 +1,6 @@
 import { Link, Text } from "@nypl/design-system-react-components"
 import type { StatusBannerState } from "../components/MyAccount/Settings/StatusBanner"
 import { BASE_URL } from "../config/constants"
-import ContactUs from "../components/ItemTable/ItemAvailability/ContactUs"
 
 export type StaticStatusKey =
   | "duplicateListSuccess"
@@ -231,7 +230,14 @@ export const DYNAMIC_STATUS_MESSAGES: Record<
     type: "failure",
     message: (
       <Text marginBottom={0}>
-        {message} Please try again or <ContactUs /> for assistance.
+        {message} Please try again or{" "}
+        <Link
+          hasVisitedState={false}
+          href="https://www.nypl.org/get-help/contact-us"
+        >
+          contact us
+        </Link>{" "}
+        for assistance.
       </Text>
     ),
   }),

@@ -5,17 +5,31 @@ import type { ItemMetadata } from "../../../types/itemTypes"
 import type Item from "../../../models/Item"
 import type { HTTPStatusCode } from "../../../types/appTypes"
 
+type BaseProps = {
+  contactMessage?: string
+}
+
+type ContactUsWithItemProps = BaseProps & {
+  item: Pick<Item, "id" | "barcode" | "callNumber" | "bibId" | "volume">
+  notificationText?: string
+  errorStatus?: never
+}
+
+type ContactUsWithErrorProps = BaseProps & {
+  item?: never
+  notificationText?: never
+  errorStatus: HTTPStatusCode
+}
+
+// Either the item or errorStatus prop should be provided
+type ContactUsProps = ContactUsWithItemProps | ContactUsWithErrorProps
+
 const ContactUs = ({
   item,
   notificationText,
   errorStatus,
   contactMessage = "contact us",
-}: {
-  item?: Pick<Item, "id" | "barcode" | "callNumber" | "bibId" | "volume">
-  notificationText?: string
-  errorStatus?: HTTPStatusCode
-  contactMessage?: string
-}) => {
+}: ContactUsProps) => {
   const { onOpen, setItemMetadata, openFeedbackFormWithError } =
     useContext(FeedbackContext)
 
@@ -27,30 +41,24 @@ const ContactUs = ({
     openFeedbackFormWithError(errorStatus)
   }
 
-  const linkProps = {
-    id: "contact-us",
-  }
-  if (item || errorStatus)
-    linkProps["onClick"] = () => {
-      item
-        ? onContactWithItem({
-            id: item.id,
-            barcode: item.barcode,
-            callNumber: item.callNumber,
-            volume: item.volume,
-            bibId: item.bibId,
-            ...(notificationText && { notificationText }),
-          })
-        : onContactWithErrorStatus(errorStatus)
-    }
-  else {
-    linkProps["href"] = "https://www.nypl.org/get-help/contact-us"
-    linkProps["isExternal"] = true
-  }
   return (
-    <>
-      <Link {...linkProps}>{contactMessage}</Link>
-    </>
+    <Link
+      id="contact-us"
+      onClick={() =>
+        item
+          ? onContactWithItem({
+              id: item.id,
+              barcode: item.barcode,
+              callNumber: item.callNumber,
+              volume: item.volume,
+              bibId: item.bibId,
+              ...(notificationText && { notificationText }),
+            })
+          : onContactWithErrorStatus(errorStatus)
+      }
+    >
+      {contactMessage}
+    </Link>
   )
 }
 

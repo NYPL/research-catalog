@@ -1,4 +1,3 @@
-import ContactUs from "../components/ItemTable/ItemAvailability/ContactUs"
 import Link from "../components/Link/Link"
 import type { BrowseType } from "../types/browseTypes"
 import { getSeriesSearchUrl } from "../utils/bibUtils"
@@ -118,7 +117,9 @@ export const SEARCH_FORM_OPTIONS = {
         >
           Query Guide
         </Link>{" "}
-        to learn how to construct queries or <ContactUs /> for assistance.
+        to learn how to construct queries or{" "}
+        <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
+        for assistance.
       </span>
     ),
     placeholder:
