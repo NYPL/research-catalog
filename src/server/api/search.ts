@@ -49,12 +49,12 @@ export async function fetchSearchResults(
     // Failure to build client will throw from this:
     const client = await nyplApiClient()
 
-    const combinedResponse = await client.get(
+    const searchAndAggregationsResponse = await client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`
     )
 
     // Handle no results (404)
-    if (combinedResponse?.totalResults === 0) {
+    if (searchAndAggregationsResponse?.totalResults === 0) {
       return {
         status: 404,
         error: `No results found for search ${searchQuery}`,
@@ -62,21 +62,32 @@ export async function fetchSearchResults(
     }
 
     // Handle general error (no status code returned on success)
-    if (combinedResponse.status) {
+    if (searchAndAggregationsResponse.status) {
       logServerError(
         "fetchSearchResults",
-        `${combinedResponse.name ? `${combinedResponse.name} ` : ""}${
-          combinedResponse.error ? `${combinedResponse.error} ` : ""
+        `${
+          searchAndAggregationsResponse.name
+            ? `${searchAndAggregationsResponse.name} `
+            : ""
+        }${
+          searchAndAggregationsResponse.error
+            ? `${searchAndAggregationsResponse.error} `
+            : ""
         }Request: search ${searchQuery}`
       )
       return {
-        status: combinedResponse.status,
-        ...(combinedResponse.name && { name: combinedResponse.name }),
-        ...(combinedResponse.error && { error: combinedResponse.error }),
+        status: searchAndAggregationsResponse.status,
+        ...(searchAndAggregationsResponse.name && {
+          name: searchAndAggregationsResponse.name,
+        }),
+        ...(searchAndAggregationsResponse.error && {
+          error: searchAndAggregationsResponse.error,
+        }),
       }
     }
 
-    const { aggregations: rawAggregations, ...results } = combinedResponse
+    const { aggregations: rawAggregations, ...results } =
+      searchAndAggregationsResponse
 
     // When filters are present the API returns aggregations as the itemListElement
     // array, normalize to DiscoveryAggregationResults in either case.
