@@ -40,15 +40,11 @@ describe("RCSubNav", () => {
     expect(subNavLinks[3]).toHaveAttribute("aria-current", "page")
   })
 
-  // it("renders empty My Account icon if user is not logged in", () => {
-  //   render(
-  //     <RCSubNav isAuthenticated={false} activePage="search" inBrowse={false} />
-  //   )
-  // })
-
-  // it("renders filled-in My Account icon if user is logged in", () => {
-  //   render(
-  //     <RCSubNav isAuthenticated={true} activePage="search" inBrowse={false} />
-  //   )
-  // })
+  it("renders the user guide link", async () => {
+    render(<RCSubNav activePage="search" inBrowse={false} />, {
+      wrapper: MemoryRouterProvider,
+    })
+    const userGuideLink = screen.queryByRole("link", { name: /guide/i })
+    expect(userGuideLink).toBeInTheDocument()
+  })
 })
