@@ -48,7 +48,7 @@ const PatronIneligibilityErrors = ({
         ]
       : []),
     ...(ptypeDisallowsHolds
-      ? [<>Your card does not permit placing holds on ReCAP materials.</>]
+      ? [<>Your card does not permit placing holds on research materials.</>]
       : []),
     ...(reachedHoldLimit
       ? [<>You have reached the allowed number of holds.</>]
