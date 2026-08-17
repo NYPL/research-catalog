@@ -133,8 +133,8 @@ export default function ResultsError({
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or <ContactUs errorStatus={errorStatus} />
-            if the error persists.
+            Try again later or <ContactUs errorStatus={errorStatus} /> if the
+            error persists.
           </Text>
         </>
       )
