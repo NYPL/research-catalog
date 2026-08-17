@@ -1,5 +1,6 @@
-import { config, logger } from "@nypl/node-utils"
+import { config, logger, NyplSourceMapper } from "@nypl/node-utils"
 import configJson from "../config/vercel-config.json"
+
 let initialized = false
 
 export async function bootstrapConfig() {
@@ -10,6 +11,7 @@ export async function bootstrapConfig() {
   } else {
     await config.loadConfig(process.env.NEXT_PUBLIC_APP_ENV || "development")
   }
+  await NyplSourceMapper.loadInstance()
 
   logger.initialize({
     level: config.getConfig().LOG_LEVEL || "info",
