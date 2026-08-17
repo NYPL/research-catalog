@@ -394,7 +394,7 @@ describe("Hold Request page", () => {
 
       expect(
         screen.getByText(
-          "Your card does not permit placing holds on ReCAP materials.",
+          "Your card does not permit placing holds on research materials.",
           {
             exact: false,
           }
