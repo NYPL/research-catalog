@@ -73,7 +73,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               display="inline-flex"
               sx={{
                 bottom: "100%",
-                left: "65%",
+                left: { base: "0%", sm: "10%", md: "65%" },
                 transform: "translateX(-50%)",
                 zIndex: "100",
                 textWrap: "wrap",
@@ -84,6 +84,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 titleNew="New location!"
                 titleUpdate="User guide"
                 content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
+                pointerRight={{ base: "90px", sm: "75px", md: "150px" }}
               />
             </Box>
             <Link

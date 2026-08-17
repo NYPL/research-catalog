@@ -12,7 +12,7 @@ export const FeaturePopup = ({
   titleNew?: string
   titleUpdate: string
   content: string
-  pointerRight?: string
+  pointerRight?: string | { [breakpoint: string]: string }
 }) => {
   const [isVisible, setIsVisible] = useState(false)
 
