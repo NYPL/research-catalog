@@ -41,7 +41,7 @@ jest.mock("jose", () => ({
 jest.mock("@nypl/node-utils", () => {
   const mockLogger = {
     info: jest.fn(),
-    warning: jest.fn(),
+    warn: jest.fn(),
     error: jest.fn(),
     debug: jest.fn(),
     initialize: jest.fn(),

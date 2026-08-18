@@ -7,6 +7,8 @@ export const logServerError = (location: string, message: string): void => {
 }
 
 export const logServerWarn = (location: string, message: string): void => {
+  console.log("****")
+  console.log(logger)
   logger.warn(`Warning in ${location}: ${message}`)
 }
 
