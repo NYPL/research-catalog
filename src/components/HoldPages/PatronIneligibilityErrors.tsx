@@ -7,7 +7,7 @@ import Link from "../Link/Link"
 
 import { PATHS } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
-import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
+import ContactUs from "../ContactUs/ContactUs"
 
 interface PatronIneligibilityErrorsProps {
   patronEligibilityStatus: PatronEligibilityStatus

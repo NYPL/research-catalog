@@ -6,7 +6,7 @@ import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
 import { appConfig } from "../../src/config/appConfig"
 import Link from "../../src/components/Link/Link"
-import ContactUs from "../../src/components/ItemTable/ItemAvailability/ContactUs"
+import ContactUs from "../../src/components/ContactUs/ContactUs"
 
 export default function Redirect404() {
   const metadataTitle = `Page not found | ${SITE_NAME}`

@@ -1,5 +1,5 @@
 import { Box } from "@nypl/design-system-react-components"
-import ContactUs from "./ContactUs"
+import ContactUs from "../../ContactUs/ContactUs"
 import type Item from "../../../models/Item"
 
 const NotAvailable = ({

@@ -1,9 +1,9 @@
 import { Link } from "@nypl/design-system-react-components"
 import { useContext } from "react"
-import { FeedbackContext } from "../../../context/FeedbackContext"
-import type { ItemMetadata } from "../../../types/itemTypes"
-import type Item from "../../../models/Item"
-import type { HTTPStatusCode } from "../../../types/appTypes"
+import { FeedbackContext } from "../../context/FeedbackContext"
+import type { ItemMetadata } from "../../types/itemTypes"
+import type Item from "../../models/Item"
+import type { HTTPStatusCode } from "../../types/appTypes"
 
 type BaseProps = {
   contactMessage?: string

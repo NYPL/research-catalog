@@ -7,7 +7,7 @@ import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
-import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
+import ContactUs from "../ContactUs/ContactUs"
 
 type PageErrorProps = {
   page: RCPage

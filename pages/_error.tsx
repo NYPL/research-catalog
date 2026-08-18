@@ -6,7 +6,7 @@ import type { RCPage } from "../src/types/pageTypes"
 import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
 import type { HTTPStatusCode } from "../src/types/appTypes"
-import ContactUs from "../src/components/ItemTable/ItemAvailability/ContactUs"
+import ContactUs from "../src/components/ContactUs/ContactUs"
 
 type ErrorPageProps = {
   activePage: RCPage

@@ -11,7 +11,7 @@ import {
 import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
-import ContactUs from "./ItemAvailability/ContactUs"
+import ContactUs from "../ContactUs/ContactUs"
 import Link from "../Link/Link"
 
 interface ItemAvailabilityProps {

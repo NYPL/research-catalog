@@ -12,7 +12,7 @@ import {
   HOLD_PAGE_ERROR_HEADINGS,
   HOLD_PAGE_CONTACT_PREFIXES,
 } from "../../config/constants"
-import ContactUs from "../ItemTable/ItemAvailability/ContactUs"
+import ContactUs from "../ContactUs/ContactUs"
 
 interface HoldRequestErrorBannerProps {
   item: Item
