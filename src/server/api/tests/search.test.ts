@@ -23,16 +23,14 @@ beforeEach(() => {
 })
 
 describe("fetchSearchResults", () => {
-  it("fetches valid search and aggregation results", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        itemListElement: [{}, {}, {}, {}],
-        totalResults: 4,
-      })
-      .mockResolvedValueOnce({
+  it("fetches valid search and aggregation results (no filters)", async () => {
+    mockClient.get.mockResolvedValueOnce({
+      itemListElement: [{}, {}, {}, {}],
+      totalResults: 4,
+      aggregations: {
         itemListElement: [{}, {}, {}, {}, {}, {}, {}, {}, {}, {}],
-        totalResults: 4,
-      })
+      },
+    })
 
     const response = (await fetchSearchResults({
       q: "cat",
@@ -43,17 +41,28 @@ describe("fetchSearchResults", () => {
     expect(response.aggregations.itemListElement.length).toBe(10)
   })
 
-  it("returns 500 if search results API call fails", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        status: 500,
-        name: "IndexConnectionError",
-        error: "No connection",
-      })
-      .mockResolvedValueOnce({
-        itemListElement: [],
-        totalResults: 0,
-      })
+  it("normalizes aggregations when returned as array (with filters)", async () => {
+    const aggsArray = [{}, {}, {}, {}, {}]
+    mockClient.get.mockResolvedValueOnce({
+      itemListElement: [{}, {}],
+      totalResults: 2,
+      aggregations: aggsArray,
+    })
+
+    const response = (await fetchSearchResults({
+      q: "cat",
+      filters: { language: ["lang:eng"] },
+    })) as SearchResultsResponse
+
+    expect(response.aggregations.itemListElement).toEqual(aggsArray)
+  })
+
+  it("returns 500 if the API call fails", async () => {
+    mockClient.get.mockResolvedValueOnce({
+      status: 500,
+      name: "IndexConnectionError",
+      error: "No connection",
+    })
 
     const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({
@@ -62,21 +71,16 @@ describe("fetchSearchResults", () => {
       error: expect.stringContaining("No connection"),
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: IndexConnectionError No connection Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+      "Error in fetchSearchResults: IndexConnectionError No connection Request: search ?q=cat&per_page=50&include_aggregations=true"
     )
   })
 
   it("returns 422 query syntax error", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        status: 422,
-        name: "InvalidQuerySyntaxError",
-        error: "Unknown parsing or whatever",
-      })
-      .mockResolvedValueOnce({
-        itemListElement: [],
-        totalResults: 0,
-      })
+    mockClient.get.mockResolvedValueOnce({
+      status: 422,
+      name: "InvalidQuerySyntaxError",
+      error: "Unknown parsing or whatever",
+    })
 
     const response = await fetchSearchResults({ q: "cat" })
     expect(response).toEqual({
@@ -85,32 +89,15 @@ describe("fetchSearchResults", () => {
       error: "Unknown parsing or whatever",
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: InvalidQuerySyntaxError Unknown parsing or whatever Requests: search ?q=cat&per_page=50, aggregations /aggregations?q=cat"
+      "Error in fetchSearchResults: InvalidQuerySyntaxError Unknown parsing or whatever Request: search ?q=cat&per_page=50&include_aggregations=true"
     )
   })
 
-  it("returns 200 if only aggregations API call fails", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        itemListElement: [{}, {}, {}, {}],
-        totalResults: 4,
-      })
-      .mockResolvedValueOnce({ status: 500, error: "No aggs" })
-
-    const response = await fetchSearchResults({ q: "cat" })
-    expect(response.status).toEqual(200)
-  })
-
   it("handles 422 response from results", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        status: 422,
-        error: "Invalid query",
-      })
-      .mockResolvedValueOnce({
-        itemListElement: [],
-        totalResults: 0,
-      })
+    mockClient.get.mockResolvedValueOnce({
+      status: 422,
+      error: "Invalid query",
+    })
 
     const response = await fetchSearchResults({ q: "!!!" })
     expect(response).toEqual({
@@ -118,26 +105,22 @@ describe("fetchSearchResults", () => {
       error: "Invalid query",
     })
     expect(logger.error).toHaveBeenCalledWith(
-      "Error in fetchSearchResults: Invalid query Requests: search ?q=!!!&per_page=50, aggregations /aggregations?q=!!!"
+      "Error in fetchSearchResults: Invalid query Request: search ?q=!!!&per_page=50&include_aggregations=true"
     )
   })
 
   it("handles valid response but no results", async () => {
-    mockClient.get
-      .mockResolvedValueOnce({
-        totalResults: 0,
-        itemListElement: [],
-      })
-      .mockResolvedValueOnce({
-        totalResults: 0,
-        itemListElement: [],
-      })
+    mockClient.get.mockResolvedValueOnce({
+      totalResults: 0,
+      itemListElement: [],
+      aggregations: { itemListElement: [] },
+    })
 
     const response = await fetchSearchResults({ q: "empty" })
     expect(response).toEqual({
       status: 404,
       error:
-        "No results found for search ?q=empty&per_page=50, aggregations /aggregations?q=empty",
+        "No results found for search ?q=empty&per_page=50&include_aggregations=true",
     })
   })
 })
