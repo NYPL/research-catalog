@@ -3,12 +3,11 @@ import type { HTTPStatusCode } from "../../types/appTypes"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
-import { useContext } from "react"
-import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
+import ContactUs from "../ContactUs/ContactUs"
 
 type PageErrorProps = {
   page: RCPage
@@ -17,18 +16,10 @@ type PageErrorProps = {
 
 /* Display error state that replaces entire page contents. */
 export default function PageError({ errorStatus, page }: PageErrorProps) {
-  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
-  const contactUsLink = (
-    <Link
-      onClick={() => openFeedbackFormWithError(errorStatus)}
-      id="feedback-link"
-    >
-      contact us
-    </Link>
-  )
+  const contactUsLink = <ContactUs errorStatus={errorStatus} />
 
   switch (errorStatus) {
     case 404:
@@ -60,8 +51,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or {contactUsLink}
-            if the error persists.
+            Try refreshing the page or {contactUsLink} if the error persists.
           </Text>
         </>
       )
@@ -78,8 +68,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or {contactUsLink}
-            if the error persists.
+            Try again later or {contactUsLink} if the error persists.
           </Text>
         </>
       )
