@@ -325,7 +325,7 @@ describe("EDD Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(document.getElementById("contact-us")).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("shows an error when there is a invalid patron response response from the edd api", async () => {
@@ -354,7 +354,7 @@ describe("EDD Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(document.getElementById("contact-us")).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
@@ -373,9 +373,9 @@ describe("EDD Request page", () => {
         expect(screen.getByTestId("hold-request-error")).toBeInTheDocument()
       })
 
-      const contactUsButton = document.getElementById("contact-us")
-      expect(contactUsButton).toBeInTheDocument()
-      await userEvent.click(contactUsButton as HTMLElement)
+      const contactUsLink = screen.getByText("contact us")
+      expect(contactUsLink).toBeInTheDocument()
+      await userEvent.click(contactUsLink as HTMLElement)
 
       await waitFor(() => {
         expect(
