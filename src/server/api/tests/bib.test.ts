@@ -4,15 +4,7 @@ import type { BibResponse } from "../../../types/bibTypes"
 jest.mock("../../nyplApiClient")
 import nyplApiClient from "../../nyplApiClient"
 
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
 import { logger } from "@nypl/node-utils"
-
 const mockClient = {
   get: jest.fn(),
 }

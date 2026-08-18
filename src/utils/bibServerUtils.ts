@@ -1,7 +1,8 @@
 import { NyplSourceMapper } from "@nypl/node-utils"
 
 export function isValidBibId(bibId: string): boolean {
-  const { type, nyplSource, id } = NyplSourceMapper.splitIdentifier(bibId)
+  const { type, nyplSource, id } =
+    NyplSourceMapper.instance().splitIdentifier(bibId)
   return !!type && !!nyplSource && !!id
 }
 

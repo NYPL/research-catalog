@@ -53,6 +53,12 @@ jest.mock("@nypl/node-utils", () => {
   }
 
   return {
+    NyplSourceMapper: {
+      instance: () => ({
+        splitIdentifier: () => ({ type: true, id: true, nyplSource: true }),
+      }),
+      loadInstance: async () => "spaghetti",
+    },
     logger: mockLogger,
     config: mockConfig,
   }
