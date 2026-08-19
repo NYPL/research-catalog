@@ -43,11 +43,10 @@ export default defineConfig({
     },
   ],
 
-  // Skip booting a local dev server when BASE_URL points at a remote environment (e.g. QA)
   webServer: {
     command: process.env.CI ? "npm run start" : "npm run dev",
     url: "http://local.nypl.org:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,
-      },
+  },
 })
