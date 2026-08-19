@@ -116,37 +116,7 @@
   }
 }
 
-.accountItemsTable {
-  thead > tr > th,
-  thead > tr > th:last-of-type {
-    vertical-align: top;
-    text-transform: unset;
-    font-weight: var(--nypl-fontWeights-bold);
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-    font-size: 16px;
-  }
-  tbody > tr > td,
-  tbody > tr > td:last-of-type {
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-    width: var(--nypl-space-52);
-  }
-  tbody > tr > td:first-of-type {
-    width: var(--nypl-space-96);
-  }
-  tbody > tr > td:last-of-type {
-    width: var(--nypl-sizes-40);
-  }
-  @media only screen and (max-width: 600px) {
-    tbody > tr > td:first-of-type,
-    tbody > tr > td,
-    tbody > tr > td:last-of-type {
-      width: auto;
-      margin-left: 0;
-    }
-  }
-}
-
-.listsTable {
+.accountTable {
   font-size: 14px;
   vertical-align: center;
   thead > tr > th,
@@ -169,18 +139,9 @@
     border-right: unset !important;
     text-transform: unset !important;
   }
-
   thead > tr > th:last-of-type,
   tbody > tr > td:last-of-type {
     text-align: right;
-  }
-  tbody > tr > td:last-of-type {
-    padding-top: 12px;
-    padding-right: 32px;
-    padding-bottom: 12px;
-  }
-  thead > tr > th:last-of-type {
-    padding-right: 24px;
   }
 
   @media only screen and (max-width: 600px) {
@@ -193,27 +154,24 @@
   }
 }
 
-.listTable {
-  font-size: 14px;
-  vertical-align: center;
-  thead > tr > th,
-  thead > tr > th:last-of-type {
-    vertical-align: top;
-    font-weight: var(--nypl-fontWeights-bold);
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-    font-size: 14px;
-    text-transform: uppercase;
+.listsTable {
+  @extend .accountTable;
+  tbody > tr > td:last-of-type {
+    padding-top: 12px;
+    padding-right: 32px;
+    padding-bottom: 12px;
   }
+  thead > tr > th:last-of-type {
+    padding-right: 24px;
+  }
+}
+
+.listTable {
+  @extend .accountTable;
   tbody > tr > td,
   tbody > tr > td:last-of-type,
   tbody > tr > th {
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-    font-weight: normal;
-    text-align: left;
-  }
-  thead > tr > th:last-of-type,
-  tbody > tr > td:last-of-type {
-    text-align: right;
+    align-content: normal;
   }
   tbody > tr > td:last-of-type {
     padding-top: 8px;
@@ -222,15 +180,6 @@
   }
   thead > tr > th:last-of-type {
     padding-right: 24px;
-  }
-
-  @media only screen and (max-width: 600px) {
-    tbody > tr > td:first-of-type,
-    tbody > tr > td,
-    tbody > tr > td:last-of-type,
-    tbody > tr > th {
-      width: auto;
-    }
   }
 }
 
@@ -262,26 +211,18 @@
 }
 
 .feesTable {
+  @extend .accountTable;
   margin-top: var(--nypl-space-m);
-  thead > tr > th,
-  thead > tr > th:last-of-type {
-    font-weight: 700;
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-  }
-  tbody > tr > td,
-  tbody > tr > td:last-of-type {
-    border-color: var(--nypl-colors-ui-gray-light-cool);
-  }
   @media only screen and (min-width: 600px) {
     tr > th:last-of-type {
-      padding-right: var(--nypl-space-l);
+      padding-right: var(--nypl-space-m);
       text-align: right;
     }
   }
   @media only screen and (min-width: 600px) {
     tr > td:last-of-type {
       text-align: right;
-      padding-right: var(--nypl-space-s);
+      padding-right: var(--nypl-space-m);
     }
   }
   th:first-of-type {
@@ -291,8 +232,10 @@
   th:last-of-type {
     width: var(--nypl-space-52);
   }
-  tbody > tr:last-of-type {
+  tbody > tr:last-of-type > td,
+  tbody > tr:last-of-type > th {
     font-weight: var(--nypl-fontWeights-bold);
+    color: var(--nypl-colors-ui-error-primary);
   }
 }
 

@@ -1,4 +1,4 @@
-import { Box, List, Heading, Flex } from "@nypl/design-system-react-components"
+import { Box, List, Heading } from "@nypl/design-system-react-components"
 import Barcode from "react-barcode"
 
 import styles from "../../../styles/components/MyAccount.module.scss"

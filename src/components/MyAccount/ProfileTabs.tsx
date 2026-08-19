@@ -89,7 +89,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       tabsData={tabsData}
       sx={{
         "div[role=tabpanel]": { padding: 0 },
-        marginBottom: "xxl",
+        marginBottom: "l",
       }}
     />
   )
