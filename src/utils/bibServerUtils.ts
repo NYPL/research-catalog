@@ -1,9 +1,14 @@
 import { NyplSourceMapper } from "@nypl/node-utils"
 
 export function isValidBibId(bibId: string): boolean {
-  const { type, nyplSource, id } =
-    NyplSourceMapper.instance().splitIdentifier(bibId)
-  return !!type && !!nyplSource && !!id
+  try {
+    const { type, nyplSource, id } =
+      NyplSourceMapper.instance().splitIdentifier(bibId)
+    return !!type && !!nyplSource && !!id
+  } catch (e) {
+    // if some invalid input causes an explosion, we will assume the id is invalid
+    return false
+  }
 }
 
 /**

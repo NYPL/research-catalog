@@ -1,6 +1,43 @@
 import { standardizeBibId, isValidBibId } from "../bibServerUtils"
 
+const mockSplitId = jest.fn()
+
+jest.mock("@nypl/node-utils", () => {
+  return {
+    NyplSourceMapper: {
+      instance: () => ({
+        splitIdentifier: mockSplitId,
+      }),
+      loadInstance: async () => "spaghetti",
+    },
+  }
+})
+
 describe("bibServerUtils", () => {
+  describe("isValidBibId", () => {
+    it("returns true when identifier splits properly", () => {
+      mockSplitId.mockReturnValueOnce({
+        type: true,
+        id: true,
+        nyplSource: true,
+      })
+      expect(isValidBibId("b1234")).toBe(true)
+    })
+    it("returns false when identifier does not split", () => {
+      mockSplitId.mockReturnValueOnce({
+        type: null,
+        id: true,
+        nyplSource: null,
+      })
+      expect(isValidBibId("b1234")).toBe(false)
+    })
+    it("returns false when error is thrown", () => {
+      mockSplitId.mockImplementationOnce(() => {
+        throw new Error("spaghetti")
+      })
+      expect(isValidBibId("b1234")).toBe(false)
+    })
+  })
   describe("standardizeBibId", () => {
     it("doesn't mess with kosher id", () => {
       expect(standardizeBibId("b12345678")).toBe("b12345678")
