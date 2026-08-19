@@ -13,7 +13,14 @@ export async function fetchBib(
   itemId?: string
 ): Promise<BibResponse | APIError> {
   const validBibId = isValidBibId(id)
-  if (!validBibId) throw new Error("Invalid bib id provided")
+  if (!validBibId) {
+    logServerWarn("fetchBib", `Invalid bib id provided: ${id}`)
+    return {
+      status: 404,
+      name: "InvalidParameterError",
+      error: "Invalid bib id",
+    }
+  }
   const standardizedId = standardizeBibId(id)
   // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {
