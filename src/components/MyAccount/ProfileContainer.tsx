@@ -10,11 +10,13 @@ const ProfileContainer = ({ tabsPath }) => {
   const { updatedAccountData } = useContext(PatronDataContext)
   return (
     <>
-      <Flex gap="s" flexDir="column" mb="m">
+      <Flex gap="s" flexDir="column" mb={{ base: "m", md: "l" }}>
         {updatedAccountData.fines?.total > 0 && <FeesBanner />}
         <UserGuideBanner />
       </Flex>
-      <Heading level="h3">My account</Heading>
+      <Heading level="h3" mb={{ md: "xs" }}>
+        My account
+      </Heading>
       <Box position="relative" display="inline-block">
         <Box
           position="absolute"

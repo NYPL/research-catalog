@@ -206,7 +206,6 @@ const ContactInputForm = ({
           />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "xs", lg: "unset" }}
             flexDir="column"
             width="-webkit-fill-available"
@@ -262,11 +261,7 @@ const ContactInputForm = ({
             </Flex>
           </Flex>
         ) : tempInputs.length !== 0 ? (
-          <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
-            flexDir="row"
-            alignItems="flex-start"
-          >
+          <Flex flexDir="row" alignItems="flex-start">
             <Flex flexDir="column" alignItems="flex-start">
               {tempInputs.map((input, index) => (
                 <Text
@@ -274,7 +269,6 @@ const ContactInputForm = ({
                   sx={{
                     width: { base: "200px", sm: "256px" },
                     marginBottom: "xs",
-                    marginTop: { base: "xs", lg: "unset" },
                   }}
                 >
                   {input}{" "}

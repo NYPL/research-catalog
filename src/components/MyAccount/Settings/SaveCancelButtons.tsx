@@ -24,7 +24,7 @@ const SaveCancelButtons = ({
       display="flex"
       flexDir={{ base: "column-reverse", lg: "row" }}
       justifySelf={{ base: "unset", lg: "flex-end" }}
-      marginLeft={{ base: "unset", md: "l", lg: "auto" }}
+      marginLeft={{ base: "unset", lg: "auto" }}
       marginTop={{ base: "s", lg: "unset" }}
     >
       <Button

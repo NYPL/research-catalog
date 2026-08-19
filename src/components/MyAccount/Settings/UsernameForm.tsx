@@ -165,8 +165,7 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
             size="body1"
             sx={{
               marginBottom: 0,
-              width: { base: "l", sm: "256px" },
-              marginLeft: { base: "m", lg: "unset" },
+              width: { base: "200px", sm: "256px" },
             }}
           >
             {usernameInSierra}

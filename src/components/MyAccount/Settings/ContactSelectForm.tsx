@@ -158,7 +158,6 @@ const ContactSelectForm = ({
           />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "s", md: "unset" }}
             flexDir="column"
             alignItems="flex-start"
@@ -190,11 +189,10 @@ const ContactSelectForm = ({
           </Flex>
         ) : (
           <Flex flexDir="column">
-            <Flex marginLeft={{ base: "m", lg: "unset" }}>
+            <Flex>
               <Flex flexDir="column">
                 <Text
                   sx={{
-                    marginTop: { base: "xs", lg: "unset" },
                     width: { base: "200px", sm: "256px" },
                     marginBottom: 0,
                   }}
@@ -230,7 +228,6 @@ const ContactSelectForm = ({
                 <Banner
                   sx={{
                     width: { base: "80%", sm: "320px" },
-                    marginLeft: { base: "m", lg: "unset" },
                     marginTop: "-xxs",
                   }}
                   content="Please set a phone number or email address to choose a notification preference."

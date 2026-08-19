@@ -152,7 +152,7 @@ const ProfileTab = () => {
         variant="dl"
         sx={{
           border: "none",
-          marginY: "l",
+          marginBottom: { base: "m", md: "l" },
         }}
       >
         {accountDetailsData}
@@ -166,9 +166,6 @@ const ProfileTab = () => {
           borderTop: "1px",
           borderColor: "ui.border.default",
           borderBottom: "none",
-          h4: {
-            marginTop: "l",
-          },
         }}
       >
         {contactDetailsData}

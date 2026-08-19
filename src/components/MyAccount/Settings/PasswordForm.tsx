@@ -35,12 +35,11 @@ const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
           width: { base: "100%", md: "300px" },
         }}
         ref={ref}
-        marginLeft={{ base: "m", lg: 0 }}
         id={name}
         name={name}
         type="password"
         isRequired
-        showLabel={false}
+        showLabel={true}
         showRequiredLabel={false}
         labelText={label}
         onChange={handler}
@@ -152,7 +151,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
   }
 
   return (
-    <>
+    <Flex width="100%">
       {isLoading ? (
         <SkeletonLoader
           sx={{ "> div": { marginTop: "-s" } }}
@@ -161,8 +160,12 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
           headingSize={0}
         />
       ) : isEditing ? (
-        <>
-          <Flex alignItems="flex-start" flexDir={{ base: "column", lg: "row" }}>
+        <Flex alignItems="flex-start" flexDir="column">
+          <Flex
+            alignItems="flex-start"
+            flexDir={{ base: "column", lg: "row" }}
+            width="100%"
+          >
             <Flex
               sx={{
                 flexDir: "column",
@@ -171,17 +174,17 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
             >
               <PasswordFormField
                 ref={inputRef}
-                label="Enter current pin/password"
+                label="Enter current PIN/password"
                 name="currentPassword"
                 handler={handleInputChange}
               />
               <PasswordFormField
-                label="Enter new pin/password"
+                label="Enter new PIN/password"
                 name="newPassword"
                 handler={handleInputChange}
               />
               <PasswordFormField
-                label="Re-enter new pin/password"
+                label="Re-enter new PIN/password"
                 name="confirmPassword"
                 handler={handleInputChange}
                 isInvalid={!formData.passwordsMatch}
@@ -195,7 +198,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
             />
           </Flex>
           <Banner
-            sx={{ marginTop: "s", width: { base: "unset", lg: "50%" } }}
+            sx={{ marginTop: "s", width: { base: "unset", md: "64%" } }}
             content={
               <>
                 <Text
@@ -222,13 +225,12 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
               </>
             }
           />
-        </>
+        </Flex>
       ) : (
         <Flex>
           <Text
             sx={{
               width: { base: "200px", sm: "256px" },
-              marginLeft: { base: "m", lg: "unset" },
               marginBottom: 0,
             }}
           >
@@ -250,7 +252,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
           )}
         </Flex>
       )}
-    </>
+    </Flex>
   )
 }
 
