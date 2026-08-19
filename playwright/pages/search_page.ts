@@ -39,11 +39,11 @@ export class SearchPage {
   }
 
   get searchResultsHeading() {
-    // Query (CQL) searches render as "for query: <raw query>" instead of
-    // the usual quoted format ("for keyword \"cats\"") used by other search types.
+    // Query (CQL) searches render the parsed/reformatted query, not the raw
+    // input, so only match the "query:" prefix rather than the full search term.
     const queryDisplayString =
       this.searchType === "Query"
-        ? `query: ${this.searchterm}`
+        ? "query:"
         : `${this.searchType}s? "${this.searchterm}"`
 
     return this.page.getByRole("heading", {
