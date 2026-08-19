@@ -8,7 +8,6 @@ import {
   Text,
   TextInput,
 } from "@nypl/design-system-react-components"
-import SettingsLabel from "./SettingsLabel"
 import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
@@ -17,7 +16,7 @@ import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface PasswordFormProps {
-  patronData: Patron
+  patron: Patron
   settingsState
 }
 
@@ -31,38 +30,31 @@ interface PasswordFormFieldProps {
 const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
   ({ label, handler, name, isInvalid }: PasswordFormFieldProps, ref) => {
     return (
-      <Flex
-        flexDir={{ base: "column", lg: "row" }}
-        alignItems="flex-start"
-        gap={{ base: "xs", lg: "unset" }}
-      >
-        <SettingsLabel icon="actionLockClosed" text={label} />
-        <TextInput
-          sx={{
-            width: { base: "100%", md: "300px" },
-          }}
-          ref={ref}
-          marginLeft={{ base: "m", lg: 0 }}
-          id={name}
-          name={name}
-          type="password"
-          isRequired
-          showLabel={false}
-          showRequiredLabel={false}
-          labelText={label}
-          onChange={handler}
-          invalidText="Pin/passwords do not match."
-          isInvalid={isInvalid}
-          isClearable
-        />
-      </Flex>
+      <TextInput
+        sx={{
+          width: { base: "100%", md: "300px" },
+        }}
+        ref={ref}
+        marginLeft={{ base: "m", lg: 0 }}
+        id={name}
+        name={name}
+        type="password"
+        isRequired
+        showLabel={false}
+        showRequiredLabel={false}
+        labelText={label}
+        onChange={handler}
+        invalidText="PIN/passwords do not match."
+        isInvalid={isInvalid}
+        isClearable
+      />
     )
   }
 )
 
 PasswordFormField.displayName = "PasswordFormField"
 
-const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
+const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -122,7 +114,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     setStatus(null)
     try {
       const response = await fetch(
-        `${BASE_URL}/api/account/update-pin/${patronData.id}`,
+        `${BASE_URL}/api/account/update-pin/${patron.id}`,
         {
           method: "PUT",
           headers: {
@@ -131,7 +123,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
           body: JSON.stringify({
             oldPin: formData.currentPassword,
             newPin: formData.newPassword,
-            barcode: patronData.barcode,
+            barcode: patron.barcode,
           }),
         }
       )
@@ -162,19 +154,12 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
   return (
     <>
       {isLoading ? (
-        <Flex
-          flexDir={{ base: "column", lg: "row" }}
-          alignItems="flex-start"
-          width="100%"
-        >
-          <SettingsLabel icon="actionLockClosed" text="Pin/password" />
-          <SkeletonLoader
-            sx={{ "> div": { marginTop: "-s" } }}
-            contentSize={2}
-            showImage={false}
-            headingSize={0}
-          />
-        </Flex>
+        <SkeletonLoader
+          sx={{ "> div": { marginTop: "-s" } }}
+          contentSize={2}
+          showImage={false}
+          headingSize={0}
+        />
       ) : isEditing ? (
         <>
           <Flex alignItems="flex-start" flexDir={{ base: "column", lg: "row" }}>
@@ -239,38 +224,30 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
           />
         </>
       ) : (
-        <Flex
-          flexDir={{ base: "column", lg: "row" }}
-          alignItems="flex-start"
-          width="100%"
-        >
-          <SettingsLabel icon="actionLockClosed" text="Pin/password" />
-          <Flex>
-            <Text
-              sx={{
-                width: { base: "200px", sm: "250px" },
-                marginTop: "xs",
-                marginLeft: { base: "m", lg: "unset" },
-                marginBottom: 0,
+        <Flex>
+          <Text
+            sx={{
+              width: { base: "200px", sm: "256px" },
+              marginLeft: { base: "m", lg: "unset" },
+              marginBottom: 0,
+            }}
+          >
+            ****
+          </Text>
+          {editingField === "" && (
+            <EditButton
+              ref={editingRef}
+              buttonLabel="Edit password"
+              buttonId="edit-password-button"
+              onClick={() => {
+                setIsEditing(true)
+                setEditingField("password")
+                setTimeout(() => {
+                  inputRef.current?.focus()
+                }, 0)
               }}
-            >
-              ****
-            </Text>
-            {editingField === "" && (
-              <EditButton
-                ref={editingRef}
-                buttonLabel="Edit password"
-                buttonId="edit-password-button"
-                onClick={() => {
-                  setIsEditing(true)
-                  setEditingField("password")
-                  setTimeout(() => {
-                    inputRef.current?.focus()
-                  }, 0)
-                }}
-              />
-            )}
-          </Flex>
+            />
+          )}
         </Flex>
       )}
     </>

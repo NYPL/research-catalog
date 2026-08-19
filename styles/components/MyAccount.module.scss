@@ -6,13 +6,22 @@
 }
 
 .myAccountList {
-  border: none;
   dl > dt,
   dl > dd {
     border: none;
   }
-  h2 {
+  dl > dt:first-of-type,
+  dl > dd:first-of-type {
+    padding-top: 0;
+  }
+  dl > dt:last-of-type,
+  dl > dd:last-of-type {
+    padding-bottom: 0;
+  }
+  h4 {
     border: none;
+    padding-top: 0;
+    margin-bottom: var(--nypl-space-l);
   }
   .iconDd {
     @media (max-width: 600px) {

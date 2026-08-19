@@ -1,10 +1,9 @@
 import { useContext } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import FeesBanner from "./FeesBanner"
-import ProfileHeader from "./ProfileHeader"
 import ProfileTabs from "./ProfileTabs"
 import UserGuideBanner from "../Banners/UserGuideBanner"
-import { Box, Flex } from "@nypl/design-system-react-components"
+import { Box, Flex, Heading } from "@nypl/design-system-react-components"
 import { FeaturePopup } from "../Banners/FeaturePopup"
 
 const ProfileContainer = ({ tabsPath }) => {
@@ -15,7 +14,7 @@ const ProfileContainer = ({ tabsPath }) => {
         {updatedAccountData.fines?.total > 0 && <FeesBanner />}
         <UserGuideBanner />
       </Flex>
-      <ProfileHeader patron={updatedAccountData.patron} />
+      <Heading level="h3">My account</Heading>
       <Box position="relative" display="inline-block">
         <Box
           position="absolute"

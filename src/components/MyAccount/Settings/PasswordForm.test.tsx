@@ -26,7 +26,7 @@ const component = (
       }}
     >
       <PasswordForm
-        patronData={processedPatron}
+        patron={processedPatron}
         settingsState={mockSettingsState}
       />
     </PatronDataProvider>

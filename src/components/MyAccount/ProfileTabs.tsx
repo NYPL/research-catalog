@@ -6,8 +6,8 @@ import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { useContext } from "react"
-import AccountSettingsTab from "./Settings/AccountSettingsTab"
 import ListsTab from "./ListsTab/ListsTab"
+import ProfileTab from "./ProfileTab"
 
 interface ProfileTabsPropsType {
   activePath: string
@@ -17,8 +17,15 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
   const {
     updatedAccountData: { checkouts, holds, fines, lists },
   } = useContext(PatronDataContext)
-  // tabsData conditionally includes fines– only when user has total fines more than $0.
   const tabsData = [
+    {
+      label: "Profile",
+      content: (
+        <>
+          <ProfileTab />
+        </>
+      ),
+    },
     {
       label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),
       content: checkouts ? (
@@ -41,20 +48,6 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       ),
       urlPath: "requests",
     },
-    ...(fines?.total > 0
-      ? [
-          {
-            label: `Fees ($${fines.total.toFixed(2)})`,
-            content: <FeesTab fines={fines} />,
-            urlPath: "overdues",
-          },
-        ]
-      : []),
-    {
-      label: "Account settings",
-      content: <AccountSettingsTab />,
-      urlPath: "settings",
-    },
     {
       label: "Lists" + (lists ? ` (${lists.length})` : ""),
       content: lists ? (
@@ -64,11 +57,18 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       ),
       urlPath: "lists",
     },
+    {
+      label: `Fees ($${fines ? fines.total.toFixed(2) : "$0.00"})`,
+      content:
+        fines?.total > 0 ? (
+          <FeesTab fines={fines} />
+        ) : (
+          <Text sx={{ mt: "m" }}>You have no fees due at this time.</Text>
+        ),
+      urlPath: "overdues",
+    },
   ]
-  const tabsDict =
-    fines?.total > 0
-      ? { items: 0, requests: 1, overdues: 2, settings: 3, lists: 4 }
-      : { items: 0, requests: 1, settings: 2, lists: 3 }
+  const tabsDict = { items: 1, requests: 2, lists: 3, overdues: 4 }
 
   const router = useRouter()
 
@@ -84,7 +84,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
       id="tabs-id"
       onChange={(index) => {
         // Update path when tab changes.
-        updatePath(tabsData[index].urlPath)
+        updatePath(tabsData[index].urlPath ?? "")
       }}
       tabsData={tabsData}
       sx={{
