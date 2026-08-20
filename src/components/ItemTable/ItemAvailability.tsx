@@ -11,7 +11,7 @@ import {
 import AvailableOnsite from "./ItemAvailability/AvailableOnsite"
 import NotAvailable from "./ItemAvailability/NotAvailable"
 import FindingAid from "./ItemAvailability/FindingAid"
-import ContactALibrarian from "./ItemAvailability/ContactALibrarian"
+import ContactUs from "../ContactUs/ContactUs"
 import Link from "../Link/Link"
 
 interface ItemAvailabilityProps {
@@ -61,7 +61,13 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         </Link>
       )
     case EDGE_CASE:
-      message = <ContactALibrarian item={itemMetadata} />
+      message = (
+        <Text>
+          Please{" "}
+          <ContactUs item={itemMetadata} contactMessage="contact a librarian" />{" "}
+          for assistance.
+        </Text>
+      )
       break
     case RECAP_AEON:
     case RECAP_AEON_FINDING_AID:
@@ -104,7 +110,11 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       message = (
         <>
           <AvailableByAppointment displayPeriod />
-          <ContactALibrarian item={item} />
+          <Text>
+            Please{" "}
+            <ContactUs item={item} contactMessage="contact a librarian" /> for
+            assistance.
+          </Text>
         </>
       )
       break
@@ -113,7 +123,14 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
         <>
           <AvailableByAppointment />
           <AvailableAt location={item.location} />
-          <ContactALibrarian item={itemMetadata} />
+          <Text>
+            Please{" "}
+            <ContactUs
+              item={itemMetadata}
+              contactMessage="contact a librarian"
+            />{" "}
+            for assistance.
+          </Text>
         </>
       )
       break
