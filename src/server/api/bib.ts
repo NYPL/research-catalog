@@ -18,7 +18,6 @@ export async function fetchBib(
     logServerWarn("fetchBib", `Invalid bib id provided: ${id}`)
     return {
       status: 404,
-      name: "InvalidParameterError",
       error: "Invalid bib id",
     }
   }
