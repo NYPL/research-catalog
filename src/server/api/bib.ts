@@ -1,9 +1,6 @@
 import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
-import {
-  isNyplBibID,
-  getBibQueryString,
-  standardizeBibId,
-} from "../../utils/bibUtils"
+import { isNyplBibID, getBibQueryString } from "../../utils/bibUtils"
+import { standardizeBibId, isValidBibId } from "../../utils/bibServerUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
@@ -16,6 +13,15 @@ export async function fetchBib(
   itemId?: string
 ): Promise<BibResponse | APIError> {
   const standardizedId = standardizeBibId(id)
+  const validBibId = await isValidBibId(standardizedId)
+  if (!validBibId) {
+    logServerWarn("fetchBib", `Invalid bib id provided: ${id}`)
+    return {
+      status: 404,
+      name: "InvalidParameterError",
+      error: "Invalid bib id",
+    }
+  }
   // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {
     return {
