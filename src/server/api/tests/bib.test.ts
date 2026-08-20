@@ -91,7 +91,7 @@ describe("fetchBib", () => {
 
   it("responds with 404 if bibId is found to be invalid", async () => {
     ;(utils.isValidBibId as jest.Mock).mockReturnValueOnce(false)
-    const bibResponse = await fetchBib(null)
+    const bibResponse = await fetchBib("null")
     expect(bibResponse.status).toBe(404)
   })
 

@@ -54,7 +54,7 @@ jest.mock("@nypl/node-utils", () => {
 
   return {
     NyplSourceMapper: {
-      instance: () => ({
+      instance: async () => ({
         splitIdentifier: () => ({ type: true, id: true, nyplSource: true }),
       }),
     },
