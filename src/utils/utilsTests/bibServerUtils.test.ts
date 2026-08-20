@@ -5,37 +5,37 @@ const mockSplitId = jest.fn()
 jest.mock("@nypl/node-utils", () => {
   return {
     NyplSourceMapper: {
-      instance: () => ({
+      instance: async () => ({
         splitIdentifier: mockSplitId,
       }),
-      loadInstance: async () => "spaghetti",
     },
   }
 })
 
 describe("bibServerUtils", () => {
   describe("isValidBibId", () => {
-    it("returns true when identifier splits properly", () => {
+    it("returns true when identifier splits properly", async () => {
       mockSplitId.mockReturnValueOnce({
         type: true,
         id: true,
         nyplSource: true,
       })
-      expect(isValidBibId("b1234")).toBe(true)
+      const result = await isValidBibId("b1234")
+      expect(result).toBe(true)
     })
-    it("returns false when identifier does not split", () => {
+    it("returns false when identifier does not split", async () => {
       mockSplitId.mockReturnValueOnce({
         type: null,
         id: true,
         nyplSource: null,
       })
-      expect(isValidBibId("b1234")).toBe(false)
+      const result = await isValidBibId("b1234")
+      expect(result).toBe(false)
     })
-    it("returns false when error is thrown", () => {
-      mockSplitId.mockImplementationOnce(() => {
-        throw new Error("spaghetti")
-      })
-      expect(isValidBibId("b1234")).toBe(false)
+    it("returns false when error is thrown", async () => {
+      mockSplitId.mockImplementationOnce(() => new Error("spaghetti"))
+      const result = await isValidBibId("b1234")
+      expect(result).toBe(false)
     })
   })
   describe("standardizeBibId", () => {

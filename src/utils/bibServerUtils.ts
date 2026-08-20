@@ -1,4 +1,4 @@
-import { NyplSourceMapper } from "../../../../utils/node-utils/dist/esm/index.mjs"
+import { NyplSourceMapper } from "@nypl/node-utils"
 
 export async function isValidBibId(bibId: string): Promise<boolean> {
   try {
