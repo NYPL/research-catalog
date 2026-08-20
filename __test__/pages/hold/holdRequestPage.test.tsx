@@ -257,7 +257,7 @@ describe("Hold Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(document.getElementById("contact-us")).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("shows an error when there is a invalid patron response response from the hold api", async () => {
@@ -288,7 +288,7 @@ describe("Hold Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(document.getElementById("contact-us")).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
