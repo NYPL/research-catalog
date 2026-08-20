@@ -13,6 +13,7 @@ const cardNumber = appConfig.testUser.cardNumber[appConfig.environment]
 test.describe.serial("Account page", () => {
   // Start on home, navigate to login, and wait for redirect to return to account page
   test.beforeAll(async ({ browser }: { browser: Browser }) => {
+    console.log(username, name, appConfig)
     const context = await browser.newContext()
     page = await context.newPage()
 
