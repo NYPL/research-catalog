@@ -1,9 +1,10 @@
-import { NyplSourceMapper } from "@nypl/node-utils"
+import { NyplSourceMapper } from "../../../../utils/node-utils/dist/esm/index.mjs"
 
-export function isValidBibId(bibId: string): boolean {
+export async function isValidBibId(bibId: string): Promise<boolean> {
   try {
+    const nyplSourceMapperInstance = await NyplSourceMapper.instance()
     const { type, nyplSource, id } =
-      NyplSourceMapper.instance().splitIdentifier(bibId)
+      nyplSourceMapperInstance.splitIdentifier(bibId)
     return !!type && !!nyplSource && !!id
   } catch (e) {
     // if some invalid input causes an explosion, we will assume the id is invalid

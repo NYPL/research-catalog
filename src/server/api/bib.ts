@@ -12,7 +12,9 @@ export async function fetchBib(
   bibQuery?: BibQueryParams,
   itemId?: string
 ): Promise<BibResponse | APIError> {
-  const validBibId = isValidBibId(id)
+<<<<<<< Updated upstream
+=======
+  const validBibId = await isValidBibId(id)
   if (!validBibId) {
     logServerWarn("fetchBib", `Invalid bib id provided: ${id}`)
     return {
@@ -21,6 +23,7 @@ export async function fetchBib(
       error: "Invalid bib id",
     }
   }
+>>>>>>> Stashed changes
   const standardizedId = standardizeBibId(id)
   // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {
