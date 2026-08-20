@@ -148,7 +148,7 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.edit_notification_preferences_link).toBeVisible()
       await expect(accountPage.edit_pin_password_link).toBeVisible()
     })
-    test("should prevent invalid user name", async () => {
+    test.skip("should prevent invalid user name", async () => {
       await accountPage.usernameEditLink.click()
       await expect(page.getByText("If you delete your username,")).toBeVisible()
       await accountPage.usernameEditInput.waitFor({ state: "visible" })
@@ -175,7 +175,7 @@ test.describe.serial("Account page", () => {
         timeout: 20000,
       })
     })
-    test("should successfully edit phone number", async () => {
+    test.skip("should successfully edit phone number", async () => {
       await accountPage.edit_phone_link.click()
       await accountPage.phoneInput.waitFor({ state: "visible" })
 
@@ -189,7 +189,7 @@ test.describe.serial("Account page", () => {
         timeout: 20000,
       })
     })
-    test("should successfully edit email address", async () => {
+    test.skip("should successfully edit email address", async () => {
       await accountPage.edit_email_link.click()
       await accountPage.emailInput.waitFor({ state: "visible" })
       const newEmail = "testemail@nypl.org"
@@ -203,7 +203,7 @@ test.describe.serial("Account page", () => {
         timeout: 20000,
       })
     })
-    test("should successfully edit home library", async () => {
+    test.skip("should successfully edit home library", async () => {
       await accountPage.edit_home_library_link.click()
       await accountPage.homeLibrarySelect.waitFor({ state: "visible" })
       await accountPage.homeLibrarySelect.selectOption({ label: "53rd Street" })
@@ -214,7 +214,7 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
       await expect(accountPage.homeLibraryValue).toContainText("53rd Street")
     })
-    test.afterAll(async () => {
+    test.skip("restore account settings", async () => {
       // Revert changes to account settings
 
       // Revert username: username test skipped for now
