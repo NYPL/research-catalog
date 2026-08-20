@@ -257,9 +257,7 @@ describe("Hold Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(
-        screen.getByRole("button", { name: "contact us" })
-      ).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("shows an error when there is a invalid patron response response from the hold api", async () => {
@@ -290,9 +288,7 @@ describe("Hold Request page", () => {
         )
       ).toBeInTheDocument()
 
-      expect(
-        screen.getByRole("button", { name: "contact us" })
-      ).toBeInTheDocument()
+      expect(screen.getByText("contact us")).toBeInTheDocument()
     })
 
     it("populates the feedback form with the call number and appropriate copy when the request fails", async () => {
@@ -398,7 +394,7 @@ describe("Hold Request page", () => {
 
       expect(
         screen.getByText(
-          "Your card does not permit placing holds on ReCAP materials.",
+          "Your card does not permit placing holds on research materials.",
           {
             exact: false,
           }
@@ -416,42 +412,46 @@ describe("Hold Request page", () => {
   })
 
   describe("Hold request not found", () => {
-    render(
-      <HoldRequestPage
-        discoveryBibResult={undefined}
-        discoveryItemResult={undefined}
-        patronId="123"
-        deliveryLocations={undefined}
-        isAuthenticated={true}
-        bibItemErrorStatus={404}
-      />
-    )
-    expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+    it("shows a 404 page message", () => {
+      render(
+        <HoldRequestPage
+          discoveryBibResult={undefined}
+          discoveryItemResult={undefined}
+          patronId="123"
+          deliveryLocations={undefined}
+          isAuthenticated={true}
+          bibItemErrorStatus={404}
+        />
+      )
+      expect(screen.getByText("We couldn't find that page")).toBeInTheDocument()
+    })
   })
   describe("Hold request already completed renders warning banner", () => {
-    // Item ID from bibWithItems
-    sessionStorage.setItem("holdCompleted-i39333697", "true")
-    render(
-      <HoldRequestPage
-        discoveryBibResult={bibWithItems.resource}
-        discoveryItemResult={bibWithItems.resource.items[0]}
-        patronId="123"
-        deliveryLocations={[
-          {
-            key: "schwarzman",
-            label: "Schwarzman",
-            value: "loc:mal17",
-            address: NYPL_LOCATIONS["schwarzman"].address,
-          },
-        ]}
-        isAuthenticated={true}
-      />
-    )
-    expect(
-      screen.getByText("You've already requested this item")
-    ).toBeInTheDocument()
-    const banner = screen.getByTestId("hold-request-completed")
-    const accountLink = within(banner).getByText("patron account")
-    expect(accountLink).toHaveAttribute("href", "/account")
+    it("shows warning when this item was already requested", () => {
+      // Item ID from bibWithItems
+      sessionStorage.setItem("holdCompleted-i39333697", "true")
+      render(
+        <HoldRequestPage
+          discoveryBibResult={bibWithItems.resource}
+          discoveryItemResult={bibWithItems.resource.items[0]}
+          patronId="123"
+          deliveryLocations={[
+            {
+              key: "schwarzman",
+              label: "Schwarzman",
+              value: "loc:mal17",
+              address: NYPL_LOCATIONS["schwarzman"].address,
+            },
+          ]}
+          isAuthenticated={true}
+        />
+      )
+      expect(
+        screen.getByText("You've already requested this item")
+      ).toBeInTheDocument()
+      const banner = screen.getByTestId("hold-request-completed")
+      const accountLink = within(banner).getByText("patron account")
+      expect(accountLink).toHaveAttribute("href", "/account")
+    })
   })
 })

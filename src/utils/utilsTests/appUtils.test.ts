@@ -3,7 +3,18 @@ import {
   getPaginationOffsetStrings,
   convertToSentenceCase,
   tryInstantiate,
+  handleTableCopy,
 } from "../appUtils"
+
+const makeEvent = () => ({
+  clipboardData: { setData: jest.fn() },
+  preventDefault: jest.fn(),
+})
+
+const mockSelection = (text: string) =>
+  jest.spyOn(window, "getSelection").mockReturnValue({
+    toString: () => text,
+  } as Selection)
 
 describe("appUtils", () => {
   describe("encodeHTML", () => {
@@ -43,6 +54,45 @@ describe("appUtils", () => {
     })
     it("returns the string that is passed in if it's a single word, to avoid sentence-casing acronyms", () => {
       expect(convertToSentenceCase("ISSN")).toEqual("ISSN")
+    })
+  })
+  describe("handleTableCopy", () => {
+    afterEach(() => jest.restoreAllMocks())
+    it("does nothing when selection has multiple segments with text, separated by newline", () => {
+      mockSelection("Call number\n*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\n")
+      expect(e.clipboardData.setData).not.toHaveBeenCalled()
+    })
+    it("does nothing when selection has multiple segments with text, separated by tab", () => {
+      mockSelection("Call number\t*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\t")
+      expect(e.clipboardData.setData).not.toHaveBeenCalled()
+    })
+    it("strips leading newline when only one segment has content", () => {
+      mockSelection("\n*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\n")
+      expect(e.clipboardData.setData).toHaveBeenCalledWith(
+        "text/plain",
+        "*LZR 72182 [Disc]"
+      )
+    })
+    it("strips leading tab when only one segment has content", () => {
+      mockSelection("\t*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\t")
+      expect(e.clipboardData.setData).toHaveBeenCalledWith(
+        "text/plain",
+        "*LZR 72182 [Disc]"
+      )
+    })
+    it("does nothing when selection has only one segment", () => {
+      mockSelection("*LZR 72182 [Disc]")
+      const e = makeEvent()
+      handleTableCopy(e as any, "\n")
+      expect(e.clipboardData.setData).not.toHaveBeenCalled()
     })
   })
   class TestClass {

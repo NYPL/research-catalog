@@ -228,13 +228,11 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
                   to 32 characters long. <br /> <br /> You can create a
                   PIN/PASSWORD that includes upper or lower case characters
                   (a-z, A-Z), numbers (0-9), and/or special characters limited
-                  to the following: ~ ! ? @ # $ % ^ & * ( ) <br /> <br />
+                  to the following: ~ . ! ? @ # $ % ^ & * ( ) <br /> <br />
                   PINs or PASSWORDS must not contain common patterns, for
                   example: a character that is repeated 3 or more times (0001,
                   aaaa, aaaatf54, x7gp3333), or four characters repeated two or
-                  more times (1212, abab, abcabc, ababx7gp, x7gp3434). <br />{" "}
-                  <br />
-                  PINs and PASSWORDS must NOT contain a period.
+                  more times (1212, abab, abcabc, ababx7gp, x7gp3434).
                 </Text>
               </>
             }

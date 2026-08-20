@@ -62,7 +62,6 @@ export interface SearchResultsResponse {
 }
 
 export interface DiscoveryAggregationResults {
-  totalResults: number
   itemListElement: Aggregation[]
 }
 export interface DiscoverySearchResults {
@@ -79,17 +78,6 @@ export interface DiscoverySearchResultsElement {
 export interface SearchFormInputField {
   name: string
   label: string
-}
-
-export type SearchFormActionType =
-  | "input_change"
-  | "filter_change"
-  | "form_reset"
-
-export interface SearchFormAction {
-  type: SearchFormActionType
-  field?: string
-  payload: SearchParams | SearchFilters | string | string[]
 }
 
 export interface AdvancedSearchQueryParams {
