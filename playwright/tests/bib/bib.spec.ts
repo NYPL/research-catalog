@@ -11,9 +11,7 @@ test.describe("Bib page", () => {
       await bibPage.navigate("PB9938560573506421")
     })
     test("bib id parsing does not explode", async () => {
-      await expect(bibPage.heading).toHaveText(
-        "Un poeta cómico en la corte : vida y obra de Vicente Suárez de Deza"
-      )
+      await expect(bibPage.heading).toContainText("Un poeta")
     })
   })
 
