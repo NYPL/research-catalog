@@ -9,7 +9,7 @@ const ProfileContainer = ({ tabsPath }) => {
   const { updatedAccountData } = useContext(PatronDataContext)
   return (
     <>
-      <Flex gap="s" flexDir="column" mb={{ base: "m", md: "l" }}>
+      <Flex gap="s" flexDir="column" mb="xs">
         {updatedAccountData.fines?.total > 0 && <FeesBanner />}
       </Flex>
       <Heading level="h3" mb={{ md: "xs" }}>
@@ -19,8 +19,8 @@ const ProfileContainer = ({ tabsPath }) => {
         <Box
           position="absolute"
           sx={{
-            bottom: "100%",
-            left: { base: 100, sm: 200, md: 350, lg: 400 },
+            bottom: "-250px",
+            left: { base: 42, sm: 200, md: 325, lg: 370 },
             zIndex: "100",
           }}
         >
@@ -28,7 +28,8 @@ const ProfileContainer = ({ tabsPath }) => {
             id="listAccountPopup"
             titleUpdate="Save to lists"
             content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
-            pointerRight="50px"
+            pointerDirection="up"
+            pointerRight={{ base: "10px", sm: "50px", md: "150px" }}
           />
         </Box>
       </Box>
