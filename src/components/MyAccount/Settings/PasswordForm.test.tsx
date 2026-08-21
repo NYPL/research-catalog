@@ -44,7 +44,7 @@ describe("Pin/password form", () => {
     fireEvent.click(screen.getByRole("button", { name: /edit/i }))
 
     await waitFor(() =>
-      expect(screen.getByLabelText("Enter current pin/password")).toHaveFocus()
+      expect(screen.getByLabelText("Enter current PIN/password")).toHaveFocus()
     )
 
     fireEvent.click(screen.getByRole("button", { name: /cancel/i }))
@@ -61,8 +61,8 @@ describe("Pin/password form", () => {
 
     const submitButton = getByText("Save changes")
 
-    const newPasswordField = getByLabelText("Enter new pin/password")
-    const confirmPasswordField = getByLabelText("Re-enter new pin/password")
+    const newPasswordField = getByLabelText("Enter new PIN/password")
+    const confirmPasswordField = getByLabelText("Re-enter new PIN/password")
 
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })
     fireEvent.change(confirmPasswordField, {
@@ -77,9 +77,9 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const oldPasswordField = getByLabelText("Enter current pin/password")
-    const newPasswordField = getByLabelText("Enter new pin/password")
-    const confirmPasswordField = getByLabelText("Re-enter new pin/password")
+    const oldPasswordField = getByLabelText("Enter current PIN/password")
+    const newPasswordField = getByLabelText("Enter new PIN/password")
+    const confirmPasswordField = getByLabelText("Re-enter new PIN/password")
 
     fireEvent.change(oldPasswordField, { target: { value: "oldPassword" } })
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })
@@ -102,9 +102,9 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const currentPasswordField = getByLabelText("Enter current pin/password")
-    const newPasswordField = getByLabelText("Enter new pin/password")
-    const confirmPasswordField = getByLabelText("Re-enter new pin/password")
+    const currentPasswordField = getByLabelText("Enter current PIN/password")
+    const newPasswordField = getByLabelText("Enter new PIN/password")
+    const confirmPasswordField = getByLabelText("Re-enter new PIN/password")
 
     fireEvent.change(currentPasswordField, {
       target: { value: "wrongPassword" },
@@ -134,9 +134,9 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const currentPasswordField = getByLabelText("Enter current pin/password")
-    const newPasswordField = getByLabelText("Enter new pin/password")
-    const confirmPasswordField = getByLabelText("Re-enter new pin/password")
+    const currentPasswordField = getByLabelText("Enter current PIN/password")
+    const newPasswordField = getByLabelText("Enter new PIN/password")
+    const confirmPasswordField = getByLabelText("Re-enter new PIN/password")
 
     fireEvent.change(currentPasswordField, {
       target: { value: "wrongPassword" },
@@ -165,9 +165,9 @@ describe("Pin/password form", () => {
     const button = getByText("Edit")
     fireEvent.click(button)
 
-    const currentPasswordField = getByLabelText("Enter current pin/password")
-    const newPasswordField = getByLabelText("Enter new pin/password")
-    const confirmPasswordField = getByLabelText("Re-enter new pin/password")
+    const currentPasswordField = getByLabelText("Enter current PIN/password")
+    const newPasswordField = getByLabelText("Enter new PIN/password")
+    const confirmPasswordField = getByLabelText("Re-enter new PIN/password")
 
     fireEvent.change(currentPasswordField, { target: { value: "oldPassword" } })
     fireEvent.change(newPasswordField, { target: { value: "newPassword" } })

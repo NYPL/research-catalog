@@ -39,13 +39,6 @@ const ProfileTab = () => {
         ),
       },
       {
-        icon: "actionLockClosed",
-        term: "PIN/Password",
-        description: (
-          <PasswordForm patron={patron} settingsState={settingsState} />
-        ),
-      },
-      {
         icon: "actionPayment",
         term: "Library card number",
         description: (
@@ -82,6 +75,13 @@ const ProfileTab = () => {
   )
     .filter((data) => data.description)
     .map(buildListElementsWithIcons)
+
+  // Add PassswordForm (which builds its own list elements) after Username
+  accountDetailsData.splice(
+    2,
+    0,
+    <PasswordForm patron={patron} settingsState={settingsState} />
+  )
 
   const contactDetailsData = (
     [
