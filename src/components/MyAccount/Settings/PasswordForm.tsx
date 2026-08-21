@@ -267,29 +267,35 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
         {
           term: "PIN/password",
           description: (
-            <Flex>
-              <Text
-                sx={{
-                  width: { base: "200px", sm: "256px" },
-                  marginBottom: 0,
-                }}
-              >
-                ****
-              </Text>
-              {editingField === "" && (
-                <EditButton
-                  ref={editingRef}
-                  buttonLabel="Edit password"
-                  buttonId="edit-password-button"
-                  onClick={() => {
-                    setIsEditing(true)
-                    setEditingField("password")
-                    setTimeout(() => {
-                      inputRef.current?.focus()
-                    }, 0)
+            <Flex
+              flexDir={{ base: "column", lg: "row" }}
+              alignItems="flex-start"
+              width="100%"
+            >
+              <Flex>
+                <Text
+                  sx={{
+                    width: { base: "200px", sm: "256px" },
+                    marginBottom: 0,
                   }}
-                />
-              )}
+                >
+                  ****
+                </Text>
+                {editingField === "" && (
+                  <EditButton
+                    ref={editingRef}
+                    buttonLabel="Edit password"
+                    buttonId="edit-password-button"
+                    onClick={() => {
+                      setIsEditing(true)
+                      setEditingField("password")
+                      setTimeout(() => {
+                        inputRef.current?.focus()
+                      }, 0)
+                    }}
+                  />
+                )}
+              </Flex>
             </Flex>
           ),
         },
