@@ -28,26 +28,14 @@ const renderWithPatronDataProvider = (data, path) => {
 }
 describe("ProfileTabs", () => {
   it("renders", () => {
-    renderWithPatronDataProvider(accountData, "checkouts")
+    renderWithPatronDataProvider(accountData, "")
   })
 
-  it("renders correct number of tabs when fines are greater than $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      accountData,
-      "checkouts"
-    )
+  it("renders correct number of tabs", () => {
+    const { getAllByRole } = renderWithPatronDataProvider(accountData, "")
 
     const tabs = getAllByRole("tab")
     expect(tabs.length).toBe(5)
-  })
-
-  it("renders correct number of tabs when fines are $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      { ...accountData, fines: { total: 0, entries: [] } },
-      "checkouts"
-    )
-    const tabs = getAllByRole("tab")
-    expect(tabs.length).toBe(4)
   })
 
   it("calls updatePath when tab is clicked", () => {
@@ -58,7 +46,7 @@ describe("ProfileTabs", () => {
   it("displays error message when checkouts or holds are null", () => {
     renderWithPatronDataProvider(
       { ...accountData, checkouts: null, holds: null },
-      "checkouts"
+      "items"
     )
     const errorMessage = screen.getByText(
       "There was an error accessing your checkouts."

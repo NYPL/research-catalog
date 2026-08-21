@@ -12,24 +12,23 @@ import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { useContext, useEffect, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import SaveCancelButtons from "./SaveCancelButtons"
-import SettingsLabel from "./SettingsLabel"
 import type { Patron } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import AddButton from "./AddButton"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
-interface SettingsInputFormProps {
+interface ContactInputFormProps {
   patronData: Patron
   settingsState
   inputType: "phones" | "emails"
 }
 
-const SettingsInputForm = ({
+const ContactInputForm = ({
   patronData,
   settingsState,
   inputType,
-}: SettingsInputFormProps) => {
+}: ContactInputFormProps) => {
   const isEmail = inputType === "emails"
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [inputs, setInputs] = useState(
@@ -77,7 +76,6 @@ const SettingsInputForm = ({
       isEmail ? "email address" : "phone number"
     }.`,
     formId: `${isEmail ? "email" : "phone"}-form`,
-    icon: `communication${isEmail ? "Email" : "Call"}`,
     inputLabel: isEmail ? "Email" : "Phone",
   }
 
@@ -199,7 +197,6 @@ const SettingsInputForm = ({
         alignItems="flex-start"
         width="100%"
       >
-        <SettingsLabel icon={formUtils.icon} text={formUtils.inputLabel} />
         {isLoading ? (
           <SkeletonLoader
             sx={{ "> div": { marginTop: "-s" } }}
@@ -209,7 +206,6 @@ const SettingsInputForm = ({
           />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "xs", lg: "unset" }}
             flexDir="column"
             width="-webkit-fill-available"
@@ -265,19 +261,14 @@ const SettingsInputForm = ({
             </Flex>
           </Flex>
         ) : tempInputs.length !== 0 ? (
-          <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
-            flexDir="row"
-            alignItems="flex-start"
-          >
+          <Flex flexDir="row" alignItems="flex-start">
             <Flex flexDir="column" alignItems="flex-start">
               {tempInputs.map((input, index) => (
                 <Text
                   key={index}
                   sx={{
-                    width: { base: "200px", sm: "250px" },
+                    width: { base: "200px", sm: "256px" },
                     marginBottom: "xs",
-                    marginTop: { base: "xs", lg: "unset" },
                   }}
                 >
                   {input}{" "}
@@ -339,4 +330,4 @@ const SettingsInputForm = ({
   )
 }
 
-export default SettingsInputForm
+export default ContactInputForm

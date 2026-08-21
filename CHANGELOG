@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
+- Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
 
 ## [2.1.4] 2026-08-20
 

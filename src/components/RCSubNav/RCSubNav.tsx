@@ -67,6 +67,15 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
       }
       secondaryActions={
         <>
+          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
+            <SubNavLink
+              href={logoutLink}
+              id="subnav-logout"
+              screenreaderOnlyText="of NYPL.org"
+            >
+              Log out
+            </SubNavLink>
+          </div>
           <Box position="relative">
             <Box
               position="absolute"

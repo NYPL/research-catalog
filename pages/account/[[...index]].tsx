@@ -104,17 +104,8 @@ export async function getServerSideProps({ req, res, query = {} }: any) {
 
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
-      const allowedPaths = [
-        "items",
-        "requests",
-        "overdues",
-        "settings",
-        "lists",
-      ]
-      if (
-        !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-        (tabsPath === "overdues" && fines?.total === 0)
-      ) {
+      const allowedPaths = ["items", "requests", "overdues", "lists"]
+      if (!allowedPaths.some((path) => tabsPath.startsWith(path))) {
         return {
           redirect: {
             destination: "/account",

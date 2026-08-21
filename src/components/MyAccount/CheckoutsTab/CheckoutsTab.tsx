@@ -38,7 +38,7 @@ const CheckoutsTab = () => {
     "Barcode",
     "Call number",
     "Due back by",
-    "Manage checkout",
+    "Action",
   ]
   const [checkoutToRenew, setCheckoutToRenew] = useState<string>(null)
   const tableStyling = checkoutsHeaders.map((_, index) => {
