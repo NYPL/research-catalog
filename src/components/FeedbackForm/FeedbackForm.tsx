@@ -18,7 +18,6 @@ const FeedbackForm = () => {
     setItemMetadata,
     errorStatus,
     setErrorStatus,
-    openFeedbackFormWithError,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {

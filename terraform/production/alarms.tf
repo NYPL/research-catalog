@@ -27,9 +27,9 @@ resource "aws_cloudwatch_metric_alarm" "research_catalog_error" {
   comparison_operator = "GreaterThanThreshold"
 
   alarm_actions = [
-    "arn:aws:sns:us-east-1:946183545209:ResearchCatalogError-production"
+    "arn:aws:sns:us-east-1:946183545209:ResearchCatalogErrorAlarm"
   ]
   datapoints_to_alarm = 1
 
-  treat_missing_data = "missing"
+  treat_missing_data = "notBreaching"
 }

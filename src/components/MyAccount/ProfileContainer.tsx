@@ -2,7 +2,6 @@ import { useContext } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import FeesBanner from "./FeesBanner"
 import ProfileTabs from "./ProfileTabs"
-import UserGuideBanner from "../Banners/UserGuideBanner"
 import { Box, Flex, Heading } from "@nypl/design-system-react-components"
 import { FeaturePopup } from "../Banners/FeaturePopup"
 
@@ -12,7 +11,6 @@ const ProfileContainer = ({ tabsPath }) => {
     <>
       <Flex gap="s" flexDir="column" mb={{ base: "m", md: "l" }}>
         {updatedAccountData.fines?.total > 0 && <FeesBanner />}
-        <UserGuideBanner />
       </Flex>
       <Heading level="h3" mb={{ md: "xs" }}>
         My account
@@ -28,7 +26,7 @@ const ProfileContainer = ({ tabsPath }) => {
         >
           <FeaturePopup
             id="listAccountPopup"
-            title="Save to lists"
+            titleUpdate="Save to lists"
             content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
             pointerRight="50px"
           />
