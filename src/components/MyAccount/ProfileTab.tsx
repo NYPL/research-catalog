@@ -80,7 +80,11 @@ const ProfileTab = () => {
   accountDetailsData.splice(
     2,
     0,
-    <PasswordForm patron={patron} settingsState={settingsState} />
+    <PasswordForm
+      key="password-form"
+      patron={patron}
+      settingsState={settingsState}
+    />
   )
 
   const contactDetailsData = (
