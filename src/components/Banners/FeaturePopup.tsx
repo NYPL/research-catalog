@@ -1,16 +1,18 @@
-import { Text, Box, Link, Flex } from "@nypl/design-system-react-components"
+import { Text, Box, Flex } from "@nypl/design-system-react-components"
 import { useState, useEffect } from "react"
 
 export const FeaturePopup = ({
   id,
-  title,
+  titleNew = "New!",
+  titleUpdate,
   content,
   pointerRight = "150px",
 }: {
   id: string
-  title: string
+  titleNew?: string
+  titleUpdate: string
   content: string
-  pointerRight?: string
+  pointerRight?: string | { [breakpoint: string]: string }
 }) => {
   const [isVisible, setIsVisible] = useState(false)
 
@@ -21,6 +23,14 @@ export const FeaturePopup = ({
   }, [])
 
   if (!isVisible) return null
+
+  const closeHandler = () => {
+    setIsVisible(false)
+    const expirationDate = new Date(
+      new Date().setFullYear(new Date().getFullYear() + 1)
+    ).toUTCString()
+    document.cookie = `seen${id}=true; expires=${expirationDate}; `
+  }
 
   return (
     <Box
@@ -59,9 +69,9 @@ export const FeaturePopup = ({
           fontWeight="bold"
           color="dark.ui.success.secondary"
         >
-          New!
+          {titleNew}
         </Text>{" "}
-        {title}
+        {titleUpdate}
       </Text>
       <Text
         marginBottom="0"
@@ -72,27 +82,33 @@ export const FeaturePopup = ({
         {content}
       </Text>
       <Flex flexDir="row" justifyContent="flex-end" mt="s">
-        <Link
-          href="#"
-          color="ui.typography.inverse.heading !important"
-          isUnderlined
-          fontSize="14px"
-          fontWeight="bold"
-          onClick={(e) => {
-            e.preventDefault()
-            setIsVisible(false)
-            const expirationDate = new Date(
-              new Date().setFullYear(new Date().getFullYear() + 1)
-            ).toUTCString()
-            document.cookie = `seen${id}=true; expires=${expirationDate}; `
+        {/* span avoids SubNav's a and button style rules which use !important.
+            This is specific to the User Guide popup, and after that is removed,
+            this span should be changed back to a link or button  */}
+        <span
+          role="button"
+          tabIndex={0}
+          style={{
+            cursor: "pointer",
           }}
-          sx={{
-            textDecoration: "underline solid 1px !important",
-            textUnderlineOffset: "2px",
+          onClick={closeHandler}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" || e.key === " ") {
+              e.preventDefault()
+              closeHandler()
+            }
           }}
         >
-          Got it
-        </Link>
+          <Text
+            color="ui.typography.inverse.heading"
+            fontSize="14px"
+            fontWeight="bold"
+            textDecoration="underline solid 1px"
+            textUnderlineOffset="2px"
+          >
+            Got it
+          </Text>
+        </span>
       </Flex>
     </Box>
   )

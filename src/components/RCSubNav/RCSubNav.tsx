@@ -1,13 +1,15 @@
 import type { RCPage } from "../../types/pageTypes"
 import { useLogoutRedirect } from "../../server/auth"
 import {
+  Box,
   Icon,
   SubNav,
   SubNavLink,
-  Text,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
-import { useBrowseContext } from "../../context/BrowseContext"
+import Link from "../Link/Link"
+import { FeaturePopup } from "../Banners/FeaturePopup"
 
 interface SubNavProps {
   activePage: RCPage
@@ -21,6 +23,8 @@ interface SubNavProps {
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
+  const { isLargerThanSmallMobile, isLargerThanLargeMobile } =
+    useNYPLBreakpoints()
 
   return (
     <SubNav
@@ -47,7 +51,7 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 : undefined
             }
           >
-            Search the Catalog
+            Search{isLargerThanSmallMobile && " the Catalog"}
           </SubNavLink>
 
           <SubNavLink
@@ -57,21 +61,42 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             isSelected={inBrowse}
             aria-current={inBrowse ? "page" : undefined}
           >
-            Browse the Catalog
+            Browse{isLargerThanSmallMobile && " the Catalog"}
           </SubNavLink>
         </>
       }
       secondaryActions={
         <>
-          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
-            <SubNavLink
-              href={logoutLink}
-              id="subnav-logout"
-              screenreaderOnlyText="of NYPL.org"
+          <Box position="relative">
+            <Box
+              position="absolute"
+              display="inline-flex"
+              sx={{
+                bottom: "100%",
+                left: { base: "0%", sm: "10%", md: "65%" },
+                transform: "translateX(-50%)",
+                zIndex: "100",
+                textWrap: "wrap",
+              }}
             >
-              Log out
-            </SubNavLink>
-          </div>
+              <FeaturePopup
+                id="userGuidePopup"
+                titleNew="New location!"
+                titleUpdate="User guide"
+                content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
+                pointerRight={{ base: "90px", sm: "75px", md: "150px" }}
+              />
+            </Box>
+            <Link
+              href="https://libguides.nypl.org/researchcatalog/"
+              id="subnav-user-guide"
+              isExternal
+              borderRadius="6px"
+            >
+              <Icon name="actionLightbulb" size="medium" />
+              {isLargerThanSmallMobile ? "User guide" : "Guide"}
+            </Link>
+          </Box>
           <SubNavLink
             href="/account"
             as={NextLink}
@@ -81,17 +106,12 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             aria-current={activePage === "account" ? "page" : undefined}
             screenreaderOnlyText="for NYPL.org"
           >
-            <Icon name="actionIdentityFilled" size="medium" />
-            <Text
-              __css={{
-                display: "none",
-                ["@media screen and (min-width: 600px)"]: {
-                  display: "flex",
-                },
-              }}
-            >
-              My account
-            </Text>
+            <Icon
+              name={isAuthenticated ? "actionIdentityFilled" : "actionIdentity"}
+              size="medium"
+            />
+            {isLargerThanLargeMobile &&
+              (isAuthenticated ? "My account" : "Log in")}
           </SubNavLink>
         </>
       }

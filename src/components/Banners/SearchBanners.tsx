@@ -1,7 +1,6 @@
 import { Banner, Flex } from "@nypl/design-system-react-components"
 import EDSBanner from "./EDSBanner"
 import styles from "../../../styles/components/Layout.module.scss"
-import UserGuideBanner from "./UserGuideBanner"
 
 const SearchBanners = ({
   showNotification,
@@ -30,7 +29,6 @@ const SearchBanners = ({
         />
       )}
       <EDSBanner />
-      <UserGuideBanner />
     </Flex>
   )
 }
