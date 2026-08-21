@@ -31,7 +31,7 @@ describe("ProfileTabs", () => {
     renderWithPatronDataProvider(accountData, "")
   })
 
-  it("renders correct number of tabs when fines are greater than $0", () => {
+  it("renders correct number of tabs", () => {
     const { getAllByRole } = renderWithPatronDataProvider(accountData, "")
 
     const tabs = getAllByRole("tab")
