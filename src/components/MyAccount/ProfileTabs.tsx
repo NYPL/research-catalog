@@ -20,11 +20,7 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
   const tabsData = [
     {
       label: "Profile",
-      content: (
-        <>
-          <ProfileTab />
-        </>
-      ),
+      content: <ProfileTab />,
     },
     {
       label: "Checkouts" + (checkouts ? ` (${checkouts.length})` : ""),

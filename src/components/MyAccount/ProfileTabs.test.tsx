@@ -39,7 +39,7 @@ describe("ProfileTabs", () => {
   })
 
   it("calls updatePath when tab is clicked", () => {
-    const { getByText } = renderWithPatronDataProvider(accountData, "checkouts")
+    const { getByText } = renderWithPatronDataProvider(accountData, "items")
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })

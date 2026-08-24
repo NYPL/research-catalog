@@ -303,10 +303,10 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
 
   const listElements = listItemsWithoutIcons
     .map(
-      (element) =>
+      (item) =>
         ({
           icon: "actionLockClosed",
-          ...element,
+          ...item,
         } as IconListElementPropType)
     )
     .map(buildListElementsWithIcons)
