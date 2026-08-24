@@ -263,7 +263,8 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
           ),
         },
       ]
-    : [
+    : // !isEditing
+      [
         {
           term: "PIN/password",
           description: (
