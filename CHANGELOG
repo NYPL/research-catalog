@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Playwright test for NYQL query search and fixed Playwright search results heading locator to match NYQL query display format [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
 - Set up Terraform and initial metric filter, alarm [SCC-5526](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5526)
+- NyplSourceMapper check to validate bib ids [SCC-5500](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5500)
 
 ### Updated
 
