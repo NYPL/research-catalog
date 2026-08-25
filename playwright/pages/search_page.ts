@@ -39,9 +39,16 @@ export class SearchPage {
   }
 
   get searchResultsHeading() {
+    // Query (CQL) searches render the parsed/reformatted query, not the raw
+    // input, so only match the "query:" prefix rather than the full search term.
+    const queryDisplayString =
+      this.searchType === "Query"
+        ? "query:"
+        : `${this.searchType}s? "${this.searchterm}"`
+
     return this.page.getByRole("heading", {
       name: new RegExp(
-        `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${this.searchType}s? "${this.searchterm}"`,
+        `Displaying (\\d+-\\d+|\\d+) of (over )?\\d{1,3}(,\\d{3})* results for ${queryDisplayString}`,
         "i"
       ),
     })
