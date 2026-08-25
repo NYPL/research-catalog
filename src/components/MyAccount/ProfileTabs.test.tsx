@@ -1,6 +1,6 @@
 import React from "react"
 import { render, fireEvent, screen } from "../../utils/testUtils"
-import ProfileTabs from "./ProfileTabs"
+import MyAccountTabs from "./MyAccountTabs"
 import {
   filteredPickupLocations,
   processedCheckouts,
@@ -22,11 +22,11 @@ const accountData = {
 const renderWithPatronDataProvider = (data, path) => {
   return render(
     <PatronDataProvider value={{ ...data }}>
-      <ProfileTabs activePath={path} />
+      <MyAccountTabs activePath={path} />
     </PatronDataProvider>
   )
 }
-describe("ProfileTabs", () => {
+describe("MyAccountTabs", () => {
   it("renders", () => {
     renderWithPatronDataProvider(accountData, "")
   })

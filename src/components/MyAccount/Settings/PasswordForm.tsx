@@ -1,6 +1,7 @@
 import { forwardRef, useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { Box } from "@nypl/design-system-react-components"
 import { useNYPLBreakpoints } from "@nypl/design-system-react-components"
 import {
   Banner,
@@ -158,7 +159,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
   const listItemsWithoutIcons = isLoading
     ? [
         {
-          term: "PIN/Password",
+          term: "PIN/password",
           description: (
             <SkeletonLoader
               sx={{ "> div": { marginTop: "-s" } }}
@@ -181,14 +182,6 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
                 name="currentPassword"
                 handler={handleInputChange}
               />
-              {isLargerThanSmallTablet && (
-                <SaveCancelButtons
-                  inputType="password"
-                  onCancel={cancelEditing}
-                  isDisabled={!validateForm}
-                  onSave={submitForm}
-                />
-              )}
             </Flex>
           ),
         },
@@ -212,17 +205,22 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
                 handler={handleInputChange}
                 isInvalid={!formData.passwordsMatch}
               />
-              {!isLargerThanSmallTablet && (
+              <Box
+                sx={{
+                  marginTop: { lg: "-185px" },
+                  right: { lg: 0 },
+                }}
+              >
                 <SaveCancelButtons
                   inputType="password"
                   onCancel={cancelEditing}
                   isDisabled={!validateForm}
                   onSave={submitForm}
                 />
-              )}
+              </Box>
               <Banner
                 sx={{
-                  marginTop: "s",
+                  marginTop: { base: "s", lg: "170px" },
                   width: { base: "unset", lg: "64%" },
                   marginLeft: { md: "-272px" },
                   display: "inline-block",

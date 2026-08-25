@@ -6,6 +6,7 @@ import {
   Button,
   SkeletonLoader,
   Banner,
+  Box,
 } from "@nypl/design-system-react-components"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { useContext, useRef, useState } from "react"
@@ -186,19 +187,21 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
           )}
         </>
       ) : (
-        <AddButton
-          ref={editingRef}
-          label="+ Add username"
-          onClick={() => {
-            setIsEditing(true)
-            setEditingField("username")
-            setTempUsername("")
-            setError(true)
-            setTimeout(() => {
-              inputRef?.current?.focus()
-            }, 0)
-          }}
-        />
+        <Box sx={{ marginTop: { base: "unset", md: "-s" } }}>
+          <AddButton
+            ref={editingRef}
+            label="+ Add username"
+            onClick={() => {
+              setIsEditing(true)
+              setEditingField("username")
+              setTempUsername("")
+              setError(true)
+              setTimeout(() => {
+                inputRef?.current?.focus()
+              }, 0)
+            }}
+          />
+        </Box>
       )}
     </Flex>
   )

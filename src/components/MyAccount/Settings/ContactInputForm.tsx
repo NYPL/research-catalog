@@ -303,7 +303,7 @@ const ContactInputForm = ({
           </Flex>
         ) : (
           // User has no phone or email.
-          <Box sx={{ marginTop: { base: "unset", lg: "-xs" } }}>
+          <Box sx={{ marginTop: { base: "unset", md: "-s" } }}>
             <AddButton
               isDisabled={editingField !== ""}
               inputType={inputType}

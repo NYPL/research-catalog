@@ -1,16 +1,21 @@
 import { useContext } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import FeesBanner from "./FeesBanner"
-import ProfileTabs from "./ProfileTabs"
+import MyAccountTabs from "./MyAccountTabs"
 import { Box, Flex, Heading } from "@nypl/design-system-react-components"
 import { FeaturePopup } from "../Banners/FeaturePopup"
 
 const ProfileContainer = ({ tabsPath }) => {
   const { updatedAccountData } = useContext(PatronDataContext)
+  const hasFines = updatedAccountData.fines?.total > 0
   return (
     <>
-      <Flex gap="s" flexDir="column" mb="xs">
-        {updatedAccountData.fines?.total > 0 && <FeesBanner />}
+      <Flex
+        gap="s"
+        flexDir="column"
+        mb={hasFines ? { base: "m", md: "l" } : "xs"}
+      >
+        {hasFines && <FeesBanner />}
       </Flex>
       <Heading level="h3" mb={{ md: "xs" }}>
         My account
@@ -33,7 +38,7 @@ const ProfileContainer = ({ tabsPath }) => {
           />
         </Box>
       </Box>
-      <ProfileTabs activePath={tabsPath} />
+      <MyAccountTabs activePath={tabsPath} />
     </>
   )
 }

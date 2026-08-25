@@ -9,11 +9,11 @@ import { useContext } from "react"
 import ListsTab from "./ListsTab/ListsTab"
 import ProfileTab from "./ProfileTab"
 
-interface ProfileTabsPropsType {
+interface MyAccountTabsPropsType {
   activePath: string
 }
 
-const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
+const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
   const {
     updatedAccountData: { checkouts, holds, fines, lists },
   } = useContext(PatronDataContext)
@@ -91,4 +91,4 @@ const ProfileTabs = ({ activePath }: ProfileTabsPropsType) => {
   )
 }
 
-export default ProfileTabs
+export default MyAccountTabs
