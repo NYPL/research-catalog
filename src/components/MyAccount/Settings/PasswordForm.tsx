@@ -2,7 +2,6 @@ import { forwardRef, useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { Box } from "@nypl/design-system-react-components"
-import { useNYPLBreakpoints } from "@nypl/design-system-react-components"
 import {
   Banner,
   Flex,
@@ -60,7 +59,6 @@ PasswordFormField.displayName = "PasswordFormField"
 // Returns IconListElements to be used in the ProfileTab list
 const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
-  const { isLargerThanSmallTablet } = useNYPLBreakpoints()
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [formData, setFormData] = useState({
