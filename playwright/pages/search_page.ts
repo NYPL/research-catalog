@@ -38,6 +38,18 @@ export class SearchPage {
     })
   }
 
+  get invalidQueryHeading() {
+    return this.page.getByRole("heading", {
+      name: "Invalid query",
+    })
+  }
+
+  get noResultsHeading() {
+    return this.page.getByRole("heading", {
+      name: "No results found",
+    })
+  }
+
   get searchResultsHeading() {
     // Query (CQL) searches render the parsed/reformatted query, not the raw
     // input, so only match the "query:" prefix rather than the full search term.
