@@ -7,26 +7,25 @@ import {
   SkeletonLoader,
   Text,
 } from "@nypl/design-system-react-components"
-import SettingsLabel from "./SettingsLabel"
 import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron, SierraCodeName } from "../../../types/myAccountTypes"
 import EditButton from "./EditButton"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { useFocusContext, idConstants } from "../../../context/FocusContext"
 
-interface SettingsSelectFormProps {
+interface ContactSelectFormProps {
   type: "library" | "notification"
   patronData: Patron
   settingsState
   pickupLocations: SierraCodeName[]
 }
 
-const SettingsSelectForm = ({
+const ContactSelectForm = ({
   type,
   patronData,
   settingsState,
   pickupLocations,
-}: SettingsSelectFormProps) => {
+}: ContactSelectFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -64,7 +63,6 @@ const SettingsSelectForm = ({
       (pref) => pref.code === patronData.notificationPreference
     )?.name,
     options: notificationPreferenceMap,
-    icon: "communicationChatBubble",
     label: "Notification preference",
     selectorId: "notification-preference-selector",
   }
@@ -72,7 +70,6 @@ const SettingsSelectForm = ({
   const libraryFormUtils = {
     initialState: patronData.homeLibrary.name,
     options: sortedPickupLocations,
-    icon: "actionHome",
     label: "Home library",
     selectorId: "update-home-library-selector",
   }
@@ -152,7 +149,6 @@ const SettingsSelectForm = ({
         alignItems="flex-start"
         width="100%"
       >
-        <SettingsLabel icon={formUtils.icon} text={formUtils.label} />
         {isLoading ? (
           <SkeletonLoader
             sx={{ "> div": { marginTop: "-s" } }}
@@ -162,7 +158,6 @@ const SettingsSelectForm = ({
           />
         ) : isEditing ? (
           <Flex
-            marginLeft={{ base: "m", lg: "unset" }}
             marginTop={{ base: "s", md: "unset" }}
             flexDir="column"
             alignItems="flex-start"
@@ -194,12 +189,11 @@ const SettingsSelectForm = ({
           </Flex>
         ) : (
           <Flex flexDir="column">
-            <Flex marginLeft={{ base: "m", lg: "unset" }}>
+            <Flex>
               <Flex flexDir="column">
                 <Text
                   sx={{
-                    marginTop: { base: "xs", lg: "unset" },
-                    width: { base: "200px", sm: "250px" },
+                    width: { base: "200px", sm: "256px" },
                     marginBottom: 0,
                   }}
                 >
@@ -234,7 +228,6 @@ const SettingsSelectForm = ({
                 <Banner
                   sx={{
                     width: { base: "80%", sm: "320px" },
-                    marginLeft: { base: "m", lg: "unset" },
                     marginTop: "-xxs",
                   }}
                   content="Please set a phone number or email address to choose a notification preference."
@@ -255,4 +248,4 @@ const SettingsSelectForm = ({
   )
 }
 
-export default SettingsSelectForm
+export default ContactSelectForm

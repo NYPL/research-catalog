@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import SettingsInputForm from "./SettingsInputForm"
+import SettingsInputForm from "./ContactInputForm"
 import { FocusProvider } from "../../../context/FocusContext"
 
 describe("phone form", () => {

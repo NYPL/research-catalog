@@ -146,30 +146,6 @@ describe("MyAccount page", () => {
     expect(screen.getByText("We are unable to display", { exact: false }))
   })
 
-  it("redirects /overdues to /account if user has no fees", async () => {
-    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      pickupLocations: filteredPickupLocations,
-      checkouts: processedCheckouts,
-      patron: processedPatron,
-      fines: { total: 0, entries: [] },
-      holds: processedHolds,
-    })
-
-    const req = {
-      ...mockReq,
-      url: "/account/overdues",
-    }
-
-    const result = await getServerSideProps({
-      req,
-      res: mockRes,
-      query: { index: ["overdues"] },
-    })
-    expect(result).toStrictEqual({
-      redirect: { destination: "/account", permanent: false },
-    })
-  })
-
   it("redirects invalid paths to /account", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
       pickupLocations: filteredPickupLocations,
@@ -194,7 +170,7 @@ describe("MyAccount page", () => {
     })
   })
 
-  it("corrects invalid path to correct path, ex. /account/settings", async () => {
+  it("corrects invalid path to correct path, ex. /account/requests", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
       checkouts: processedCheckouts,
       patron: processedPatron,
@@ -204,38 +180,17 @@ describe("MyAccount page", () => {
 
     const req = {
       ...mockReq,
-      url: "/account/settings/spaghetti",
+      url: "/account/requests/spaghetti",
     }
 
     const result = await getServerSideProps({
       req: req,
       res: mockRes,
-      query: { index: ["settings", "spaghetti"] },
+      query: { index: ["requests", "spaghetti"] },
     })
     expect(result).toStrictEqual({
-      redirect: { destination: "/account/settings", permanent: false },
+      redirect: { destination: "/account/requests", permanent: false },
     })
-  })
-
-  it("allows valid path to /account/settings", async () => {
-    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: processedCheckouts,
-      patron: processedPatron,
-      fines: processedFines,
-      holds: processedHolds,
-    })
-
-    const req = {
-      ...mockReq,
-      url: "/account/settings",
-    }
-
-    const result = await getServerSideProps({
-      req: req,
-      res: mockRes,
-      query: { index: ["settings"] },
-    })
-    expect(result.props.tabsPath).toBe("settings")
   })
 
   it("allows valid path to /account/overdues", async () => {

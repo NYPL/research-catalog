@@ -3,7 +3,7 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import SettingsSelectForm from "./SettingsSelectForm"
+import SettingsSelectForm from "./ContactSelectForm"
 import type { Patron } from "../../../types/myAccountTypes"
 import { FocusProvider } from "../../../context/FocusContext"
 

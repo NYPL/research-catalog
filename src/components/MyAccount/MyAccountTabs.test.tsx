@@ -1,6 +1,6 @@
 import React from "react"
 import { render, fireEvent, screen } from "../../utils/testUtils"
-import ProfileTabs from "./ProfileTabs"
+import MyAccountTabs from "./MyAccountTabs"
 import {
   filteredPickupLocations,
   processedCheckouts,
@@ -22,43 +22,31 @@ const accountData = {
 const renderWithPatronDataProvider = (data, path) => {
   return render(
     <PatronDataProvider value={{ ...data }}>
-      <ProfileTabs activePath={path} />
+      <MyAccountTabs activePath={path} />
     </PatronDataProvider>
   )
 }
-describe("ProfileTabs", () => {
+describe("MyAccountTabs", () => {
   it("renders", () => {
-    renderWithPatronDataProvider(accountData, "checkouts")
+    renderWithPatronDataProvider(accountData, "")
   })
 
-  it("renders correct number of tabs when fines are greater than $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      accountData,
-      "checkouts"
-    )
+  it("renders correct number of tabs", () => {
+    const { getAllByRole } = renderWithPatronDataProvider(accountData, "")
 
     const tabs = getAllByRole("tab")
     expect(tabs.length).toBe(5)
   })
 
-  it("renders correct number of tabs when fines are $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      { ...accountData, fines: { total: 0, entries: [] } },
-      "checkouts"
-    )
-    const tabs = getAllByRole("tab")
-    expect(tabs.length).toBe(4)
-  })
-
   it("calls updatePath when tab is clicked", () => {
-    const { getByText } = renderWithPatronDataProvider(accountData, "checkouts")
+    const { getByText } = renderWithPatronDataProvider(accountData, "items")
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
   it("displays error message when checkouts or holds are null", () => {
     renderWithPatronDataProvider(
       { ...accountData, checkouts: null, holds: null },
-      "checkouts"
+      "items"
     )
     const errorMessage = screen.getByText(
       "There was an error accessing your checkouts."

@@ -1,6 +1,7 @@
 import { forwardRef, useContext, useRef, useState } from "react"
 import { PatronDataContext } from "../../../context/PatronDataContext"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
+import { Box } from "@nypl/design-system-react-components"
 import {
   Banner,
   Flex,
@@ -8,16 +9,17 @@ import {
   Text,
   TextInput,
 } from "@nypl/design-system-react-components"
-import SettingsLabel from "./SettingsLabel"
 import SaveCancelButtons from "./SaveCancelButtons"
 import type { Patron } from "../../../types/myAccountTypes"
 import { BASE_URL } from "../../../config/constants"
 import EditButton from "./EditButton"
 import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { idConstants, useFocusContext } from "../../../context/FocusContext"
+import type { IconListElementPropType } from "../IconListElement"
+import { buildListElementsWithIcons } from "../IconListElement"
 
 interface PasswordFormProps {
-  patronData: Patron
+  patron: Patron
   settingsState
 }
 
@@ -31,38 +33,31 @@ interface PasswordFormFieldProps {
 const PasswordFormField = forwardRef<TextInputRefType, PasswordFormFieldProps>(
   ({ label, handler, name, isInvalid }: PasswordFormFieldProps, ref) => {
     return (
-      <Flex
-        flexDir={{ base: "column", lg: "row" }}
-        alignItems="flex-start"
-        gap={{ base: "xs", lg: "unset" }}
-      >
-        <SettingsLabel icon="actionLockClosed" text={label} />
-        <TextInput
-          sx={{
-            width: { base: "100%", md: "300px" },
-          }}
-          ref={ref}
-          marginLeft={{ base: "m", lg: 0 }}
-          id={name}
-          name={name}
-          type="password"
-          isRequired
-          showLabel={false}
-          showRequiredLabel={false}
-          labelText={label}
-          onChange={handler}
-          invalidText="Pin/passwords do not match."
-          isInvalid={isInvalid}
-          isClearable
-        />
-      </Flex>
+      <TextInput
+        sx={{
+          width: { base: "100%", md: "300px" },
+        }}
+        ref={ref}
+        id={name}
+        name={name}
+        type="password"
+        isRequired
+        showLabel={false}
+        showRequiredLabel={false}
+        labelText={label}
+        onChange={handler}
+        invalidText="PIN/passwords do not match."
+        isInvalid={isInvalid}
+        isClearable
+      />
     )
   }
 )
 
 PasswordFormField.displayName = "PasswordFormField"
 
-const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
+// Returns IconListElements to be used in the ProfileTab list
+const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
@@ -122,7 +117,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     setStatus(null)
     try {
       const response = await fetch(
-        `${BASE_URL}/api/account/update-pin/${patronData.id}`,
+        `${BASE_URL}/api/account/update-pin/${patron.id}`,
         {
           method: "PUT",
           headers: {
@@ -131,7 +126,7 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
           body: JSON.stringify({
             oldPin: formData.currentPassword,
             newPin: formData.newPassword,
-            barcode: patronData.barcode,
+            barcode: patron.barcode,
           }),
         }
       )
@@ -159,122 +154,161 @@ const PasswordForm = ({ patronData, settingsState }: PasswordFormProps) => {
     }
   }
 
-  return (
-    <>
-      {isLoading ? (
-        <Flex
-          flexDir={{ base: "column", lg: "row" }}
-          alignItems="flex-start"
-          width="100%"
-        >
-          <SettingsLabel icon="actionLockClosed" text="Pin/password" />
-          <SkeletonLoader
-            sx={{ "> div": { marginTop: "-s" } }}
-            contentSize={2}
-            showImage={false}
-            headingSize={0}
-          />
-        </Flex>
-      ) : isEditing ? (
-        <>
-          <Flex alignItems="flex-start" flexDir={{ base: "column", lg: "row" }}>
-            <Flex
-              sx={{
-                flexDir: "column",
-                gap: "s",
-              }}
-            >
+  const listItemsWithoutIcons = isLoading
+    ? [
+        {
+          term: "PIN/password",
+          description: (
+            <SkeletonLoader
+              sx={{ "> div": { marginTop: "-s" } }}
+              contentSize={2}
+              showImage={false}
+              headingSize={0}
+            />
+          ),
+        },
+      ]
+    : isEditing
+    ? [
+        {
+          term: "Enter current PIN/password",
+          description: (
+            <Flex flexDir={{ base: "column", lg: "row" }}>
               <PasswordFormField
                 ref={inputRef}
-                label="Enter current pin/password"
+                label="Enter current PIN/password"
                 name="currentPassword"
                 handler={handleInputChange}
               />
+            </Flex>
+          ),
+        },
+        {
+          term: "Enter new PIN/password",
+          description: (
+            <PasswordFormField
+              label="Enter new PIN/password"
+              name="newPassword"
+              handler={handleInputChange}
+            />
+          ),
+        },
+        {
+          term: "Re-enter new PIN/password",
+          description: (
+            <>
               <PasswordFormField
-                label="Enter new pin/password"
-                name="newPassword"
-                handler={handleInputChange}
-              />
-              <PasswordFormField
-                label="Re-enter new pin/password"
+                label="Re-enter new PIN/password"
                 name="confirmPassword"
                 handler={handleInputChange}
                 isInvalid={!formData.passwordsMatch}
               />
-            </Flex>
-            <SaveCancelButtons
-              inputType="password"
-              onCancel={cancelEditing}
-              isDisabled={!validateForm}
-              onSave={submitForm}
-            />
-          </Flex>
-          <Banner
-            sx={{ marginTop: "s", width: { base: "unset", lg: "50%" } }}
-            content={
-              <>
+              <Box
+                sx={{
+                  marginTop: { lg: "-185px" },
+                  right: { lg: 0 },
+                }}
+              >
+                <SaveCancelButtons
+                  inputType="password"
+                  onCancel={cancelEditing}
+                  isDisabled={!validateForm}
+                  onSave={submitForm}
+                />
+              </Box>
+              <Banner
+                sx={{
+                  marginTop: { base: "s", lg: "170px" },
+                  width: { base: "unset", lg: "64%" },
+                  marginLeft: { md: "-272px" },
+                  display: "inline-block",
+                }}
+                content={
+                  <>
+                    <Text
+                      size="body1"
+                      sx={{
+                        fontWeight: "500",
+                      }}
+                    >
+                      Use a strong PIN/PASSWORD to protect your security and
+                      identity.
+                    </Text>
+                    <Text>
+                      You have the option of creating a standard PIN (4
+                      characters in length) or the more secure option of
+                      creating a PASSWORD up to 32 characters long. <br />{" "}
+                      <br /> You can create a PIN/PASSWORD that includes upper
+                      or lower case characters (a-z, A-Z), numbers (0-9), and/or
+                      special characters{" "}
+                      <span style={{ fontWeight: "bold" }}>
+                        limited to the following
+                      </span>
+                      :
+                      <br />~ . ! ? @ # $ % ^ & * ( ) <br /> <br />
+                      PINs or PASSWORDS must not contain common patterns, for
+                      example: a character that is repeated 3 or more times
+                      (0001, aaaa, aaaatf54, x7gp3333), or four characters
+                      repeated two or more times (1212, abab, abcabc, ababx7gp,
+                      x7gp3434).
+                    </Text>
+                  </>
+                }
+              />
+            </>
+          ),
+        },
+      ]
+    : // !isEditing
+      [
+        {
+          term: "PIN/password",
+          description: (
+            <Flex
+              flexDir={{ base: "column", lg: "row" }}
+              alignItems="flex-start"
+              width="100%"
+            >
+              <Flex>
                 <Text
-                  size="body1"
                   sx={{
-                    fontWeight: "500",
+                    width: { base: "200px", sm: "256px" },
+                    marginBottom: 0,
                   }}
                 >
-                  Use a strong PIN/PASSWORD to protect your security and
-                  identity.
+                  ****
                 </Text>
-                <Text>
-                  You have the option of creating a standard PIN (4 characters
-                  in length) or the more secure option of creating a PASSWORD up
-                  to 32 characters long. <br /> <br /> You can create a
-                  PIN/PASSWORD that includes upper or lower case characters
-                  (a-z, A-Z), numbers (0-9), and/or special characters limited
-                  to the following: ~ . ! ? @ # $ % ^ & * ( ) <br /> <br />
-                  PINs or PASSWORDS must not contain common patterns, for
-                  example: a character that is repeated 3 or more times (0001,
-                  aaaa, aaaatf54, x7gp3333), or four characters repeated two or
-                  more times (1212, abab, abcabc, ababx7gp, x7gp3434).
-                </Text>
-              </>
-            }
-          />
-        </>
-      ) : (
-        <Flex
-          flexDir={{ base: "column", lg: "row" }}
-          alignItems="flex-start"
-          width="100%"
-        >
-          <SettingsLabel icon="actionLockClosed" text="Pin/password" />
-          <Flex>
-            <Text
-              sx={{
-                width: { base: "200px", sm: "250px" },
-                marginTop: "xs",
-                marginLeft: { base: "m", lg: "unset" },
-                marginBottom: 0,
-              }}
-            >
-              ****
-            </Text>
-            {editingField === "" && (
-              <EditButton
-                ref={editingRef}
-                buttonLabel="Edit password"
-                buttonId="edit-password-button"
-                onClick={() => {
-                  setIsEditing(true)
-                  setEditingField("password")
-                  setTimeout(() => {
-                    inputRef.current?.focus()
-                  }, 0)
-                }}
-              />
-            )}
-          </Flex>
-        </Flex>
-      )}
-    </>
-  )
+                {editingField === "" && (
+                  <EditButton
+                    ref={editingRef}
+                    buttonLabel="Edit password"
+                    buttonId="edit-password-button"
+                    onClick={() => {
+                      setIsEditing(true)
+                      setEditingField("password")
+                      setTimeout(() => {
+                        inputRef.current?.focus()
+                      }, 0)
+                    }}
+                  />
+                )}
+              </Flex>
+            </Flex>
+          ),
+        },
+      ]
+
+  const listElements = listItemsWithoutIcons
+    .map(
+      (item) =>
+        ({
+          icon: "actionLockClosed",
+          ...item,
+        } as IconListElementPropType)
+    )
+    .map(buildListElementsWithIcons)
+
+  return <>{listElements}</>
 }
 
 export default PasswordForm

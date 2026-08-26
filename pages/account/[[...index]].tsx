@@ -104,17 +104,8 @@ export async function getServerSideProps({ req, res, query = {} }: any) {
 
     // Redirecting invalid paths and cleaning extra parts off valid paths.
     if (tabsPath) {
-      const allowedPaths = [
-        "items",
-        "requests",
-        "overdues",
-        "settings",
-        "lists",
-      ]
-      if (
-        !allowedPaths.some((path) => tabsPath.startsWith(path)) ||
-        (tabsPath === "overdues" && fines?.total === 0)
-      ) {
+      const allowedPaths = ["items", "requests", "overdues", "lists"]
+      if (!allowedPaths.some((path) => tabsPath.startsWith(path))) {
         return {
           redirect: {
             destination: "/account",
@@ -142,21 +133,9 @@ export async function getServerSideProps({ req, res, query = {} }: any) {
               const slug = generateListSlug(list.listName)
               const canonicalPath = `lists/${listId}${slug ? `/${slug}` : ""}`
               if (tabsPath !== canonicalPath) {
-                const queryParams = new URLSearchParams()
-                for (const [key, value] of Object.entries(query)) {
-                  if (key === "index") continue
-                  if (Array.isArray(value))
-                    value.forEach((v: string) => queryParams.append(key, v))
-                  else if (value !== undefined)
-                    queryParams.append(key, value as string)
-                }
-                const queryString = queryParams.toString()
-                const formattedQueryString = queryString
-                  ? `?${queryString}`
-                  : ""
                 return {
                   redirect: {
-                    destination: `/account/${canonicalPath}${formattedQueryString}`,
+                    destination: `/account/${canonicalPath}`,
                     permanent: false,
                   },
                 }
