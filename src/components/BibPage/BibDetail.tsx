@@ -105,13 +105,13 @@ export const BrowseLinkDetailElement = ({
               url: `/browse${
                 browseType === "subjects" ? "" : "/authors/"
               }?q=${encodeURIComponentWithPeriods(
-                urlInfo.urlText
+                urlInfo.browseValue
               )}&search_scope=starts_with`,
-              urlText: `[${indexLinkLabel}]`,
+              searchValue: `[${indexLinkLabel}]`,
             },
             "internal",
             true,
-            `${indexLinkLabel} for "${urlInfo.urlText}"`
+            `${indexLinkLabel} for "${urlInfo.browseValue}"`
           )}
         </>
       </li>
@@ -125,12 +125,12 @@ const LinkElement = (
   isBold = false,
   ariaLabel?: string
 ) => {
-  const { text, urlText, url: href } = url
+  const { text, searchValue, browseValue, url: href } = url
 
   if (!text) {
     return (
       <Link
-        dir={rtlOrLtr(url.urlText)}
+        dir={rtlOrLtr(url.searchValue)}
         href={url.url}
         key={url.url}
         isExternal={linkType === "external"}
@@ -138,12 +138,33 @@ const LinkElement = (
         textDecoration="none"
         aria-label={ariaLabel}
       >
-        {url.urlText}
+        {url.searchValue}
       </Link>
     )
   }
 
-  const parts = text.split(urlText)
+  // Exact split, or fuzzy allowing extra punctuation between words (e.g. "John. Smith" matches "John Smith")
+  let parts: string[]
+  let matchedTexts: string[]
+  if (text.includes(searchValue)) {
+    parts = text.split(searchValue)
+    matchedTexts = Array(parts.length - 1).fill(searchValue)
+  } else {
+    const escapedWords = searchValue
+      .split(/\s+/)
+      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+    const fuzzyRegex = new RegExp(escapedWords.join("[^a-zA-Z0-9]*"), "gi")
+    parts = []
+    matchedTexts = []
+    let lastIndex = 0
+    let match: RegExpExecArray | null
+    while ((match = fuzzyRegex.exec(text)) !== null) {
+      parts.push(text.slice(lastIndex, match.index))
+      matchedTexts.push(match[0])
+      lastIndex = match.index + match[0].length
+    }
+    parts.push(text.slice(lastIndex))
+  }
 
   return (
     <>
@@ -152,14 +173,14 @@ const LinkElement = (
           {part}
           {index < parts.length - 1 && (
             <Link
-              dir={rtlOrLtr(urlText)}
+              dir={rtlOrLtr(matchedTexts[index])}
               href={href}
               isExternal={linkType === "external"}
               fontWeight={isBold ? "700" : "400"}
               textDecoration="none"
               aria-label={ariaLabel}
             >
-              {urlText}
+              {matchedTexts[index]}
             </Link>
           )}
         </span>

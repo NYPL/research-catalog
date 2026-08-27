@@ -7,7 +7,7 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
-  DisplayPackedEntry,
+  DisplayComponentsEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -81,15 +81,24 @@ export default class BibDetails {
       url: searchUrl,
     } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
-    const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
+    const displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
-      ({ display, "@value": name }) => ({
-        url: searchUrl(name),
-        urlText: name,
-        text: display,
+      ({ displayLabel, name, nameTitle }) => ({
+        url: searchUrl(nameTitle),
+        searchValue: nameTitle,
+        text: displayLabel,
+        browseValue: name,
       })
     )
 
+    console.dir(
+      {
+        label: displayLabel,
+        link: "internal",
+        value: displayValues,
+      },
+      { depth: null }
+    )
     return displayValues?.length > 0
       ? {
           label: displayLabel,
