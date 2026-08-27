@@ -61,6 +61,11 @@ export const appConfig: AppConfig = {
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
   },
   testUser: {
+    patronId: {
+      development: "9555150",
+      qa: null,
+      production: null,
+    },
     name: {
       development: "PLAYWRIGHT TEST ACCOUNT LOCAL",
       qa: "PLAYWRIGHT TEST ACCOUNT GHA",

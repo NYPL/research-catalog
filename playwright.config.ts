@@ -15,7 +15,6 @@ export default defineConfig({
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : undefined,
   reporter: "html",
-
   use: {
     baseURL: "http://local.nypl.org:8080/research/research-catalog/",
     trace: "on-first-retry",
@@ -24,19 +23,26 @@ export default defineConfig({
 
   projects: [
     {
+      name: "setup",
+      testMatch: "global.setup.ts",
+    },
+    {
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
       },
+      dependencies: ["setup"],
     },
     {
       name: "firefox",
+      dependencies: ["setup"],
       use: {
         ...devices["Desktop Firefox"],
       },
     },
     {
       name: "webkit",
+      dependencies: ["setup"],
       use: {
         ...devices["Desktop Safari"],
       },

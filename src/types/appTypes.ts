@@ -12,6 +12,7 @@ export interface AppConfig {
   libAnswersEmail: string
   newRelicBrowserScript: APIEndpoints
   testUser: {
+    patronId: APIEndpoints
     name: APIEndpoints
     cardNumber: APIEndpoints
     username: APIEndpoints
