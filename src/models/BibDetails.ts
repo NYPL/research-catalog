@@ -84,20 +84,11 @@ export default class BibDetails {
     const displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
       ({ displayLabel, name, nameTitle }) => ({
-        url: searchUrl(nameTitle),
-        searchValue: nameTitle,
+        url: searchUrl(literalField === "series" ? name : nameTitle),
+        searchValue: literalField === "series" ? name : nameTitle,
         text: displayLabel,
         browseValue: name,
       })
-    )
-
-    console.dir(
-      {
-        label: displayLabel,
-        link: "internal",
-        value: displayValues,
-      },
-      { depth: null }
     )
     return displayValues?.length > 0
       ? {
@@ -117,7 +108,7 @@ export default class BibDetails {
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
-          urlText: label,
+          searchValue: label,
         }))
         const detail = this.buildExternalLinkedDetail(
           "Connect to:",
@@ -295,12 +286,12 @@ export default class BibDetails {
           .map((v) =>
             typeof v === "string"
               ? v.trim()
-              : v?.content?.trim() || v?.urlText?.trim()
+              : v?.content?.trim() || v?.searchValue?.trim()
           )
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
-      return [val?.urlText?.trim()]
+      return [val?.searchValue?.trim()]
     }
 
     const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
@@ -409,7 +400,7 @@ export default class BibDetails {
               v
             )}`
         }
-        return { url: internalUrl, urlText: v }
+        return { url: internalUrl, searchValue: v }
       }),
     }
   }
@@ -541,7 +532,7 @@ export default class BibDetails {
       })
       .map((sc) => ({
         url: sc.url,
-        urlText: sc.label,
+        searchValue: sc.label,
       }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
