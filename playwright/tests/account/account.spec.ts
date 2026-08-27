@@ -2,6 +2,7 @@ import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
 import { appConfig } from "../../../src/config/appConfig"
 import { logger } from "@nypl/node-utils"
+import { resetPatronData } from "../utils"
 
 let page: Page
 let accountPage: AccountPage
@@ -35,6 +36,9 @@ test.describe.serial("Account page", () => {
     await page.getByRole("button", { name: /submit/i }).click()
     await page.waitForSelector('h2:has-text("My Account")')
     accountPage = new AccountPage(page)
+  })
+  test.afterAll(async () => {
+    await resetPatronData()
   })
   test.describe("Account info", () => {
     test("should show labels and values", async () => {
