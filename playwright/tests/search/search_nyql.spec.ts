@@ -28,4 +28,20 @@ test.describe("Query Search", () => {
       'results for query: ((title = "journal of paleontology") and (date > 2000)) and (date encloses 1928)'
     )
   })
+  test("Do a NYQL query search with an invalid query and assert the invalid query heading is visible", async () => {
+    const invalidSearchTerm = "paleontology"
+    await searchPage.searchFor(invalidSearchTerm, "Query")
+
+    await expect(searchPage.invalidQueryHeading).toBeVisible({
+      timeout: 15000,
+    })
+  })
+  test("Do a NYQL query search with no results and assert the no results heading is visible", async () => {
+    const noResultsSearchTerm = 'title = "nonexistent journal" and date > 2000'
+    await searchPage.searchFor(noResultsSearchTerm, "Query")
+
+    await expect(searchPage.noResultsHeading).toBeVisible({
+      timeout: 15000,
+    })
+  })
 })
