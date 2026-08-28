@@ -9,7 +9,7 @@ import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 import { BrowseProvider } from "../src/context/BrowseContext"
-import PageError from "../src/components/Error/PageError"
+import NavigationPageError from "../src/components/Error/NavigationPageError"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
@@ -133,7 +133,7 @@ function App({ Component, pageProps }) {
         <FocusProvider>
           <BrowseProvider>
             {hasNavigationError ? (
-              <PageError errorStatus="navigation" />
+              <NavigationPageError />
             ) : (
               <Component {...pageProps} />
             )}
