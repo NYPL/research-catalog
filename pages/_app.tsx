@@ -24,7 +24,6 @@ function App({ Component, pageProps }) {
       if (url?.includes("/_next/data/")) {
         const contentType = response.headers.get("content-type")
         if (!contentType?.includes("application/json")) {
-          console.log(url)
           throw new Error("Non-JSON response for data route")
         }
       }
