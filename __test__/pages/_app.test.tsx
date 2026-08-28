@@ -7,8 +7,10 @@ jest.mock("next/script", () => ({ __esModule: true, default: () => null }))
 
 const MockPage = () => <div>page content</div>
 
-const mockFetchReturning = (contentType: string) =>
+const mockFetchReturning = (contentType: string, redirected = false) =>
   jest.fn().mockResolvedValue({
+    ok: true,
+    redirected,
     headers: {
       get: (key: string) => (key === "content-type" ? contentType : null),
     },
