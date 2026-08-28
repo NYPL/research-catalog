@@ -62,8 +62,8 @@ export default function HoldConfirmationPage({
     }
   }, [])
 
-  if (errorStatus) {
-    return <PageError page="hold" errorStatus={errorStatus} />
+  if (errorStatus || !discoveryBibResult) {
+    return <PageError page="hold" errorStatus={errorStatus || 500} />
   }
 
   const bib = new Bib(discoveryBibResult)
@@ -177,13 +177,13 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     if ("status" in discoveryBib && discoveryBib.status !== 200) {
       return {
-        props: { pageError: discoveryBib.status },
+        props: { errorStatus: discoveryBib.status },
       }
     }
     if (!discoveryItemResult) {
       console.error("Hold confirmation: Item not found")
       return {
-        props: { pageError: discoveryBib.status },
+        props: { errorStatus: 500 },
       }
     }
 

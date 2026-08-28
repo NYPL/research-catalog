@@ -105,13 +105,13 @@ export default function BibPage({
   // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusBannerState | null>(null)
 
-  if (errorStatus) {
+  if (errorStatus || !discoveryBibResult) {
     return (
       <PageError
         page="bib"
         errorStatus={
           // 422 = invalid bnum, which we also display as "Not found"
-          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus || 500
         }
       />
     )
