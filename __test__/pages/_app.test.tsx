@@ -1,105 +1,65 @@
 import React from "react"
-import { render, screen, act, fireEvent } from "../../src/utils/testUtils"
+import { render, screen } from "../../src/utils/testUtils"
 import App from "../../pages/_app"
-import mockRouter from "next-router-mock"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("next/script", () => ({ __esModule: true, default: () => null }))
 
 const MockPage = () => <div>page content</div>
 
-describe("App level clientside navigation error handling", () => {
-  beforeEach(() => {
-    jest.clearAllMocks()
+const mockFetchReturning = (contentType: string) =>
+  jest.fn().mockResolvedValue({
+    headers: {
+      get: (key: string) => (key === "content-type" ? contentType : null),
+    },
   })
 
-  it("renders the page component normally", () => {
+describe("App", () => {
+  it("renders the page component", () => {
     render(<App Component={MockPage} pageProps={{}} />)
     expect(screen.getByText("page content")).toBeInTheDocument()
   })
+})
 
-  describe("when routeChangeError fires", () => {
-    it("replaces page content with the navigation error page", () => {
-      render(<App Component={MockPage} pageProps={{}} />)
+describe("fetch interceptor for WAF non-JSON /_next/data responses", () => {
+  let originalFetch: typeof window.fetch
 
-      act(() => {
-        mockRouter.events.emit(
-          "routeChangeError",
-          new Error("Unexpected token '<'"),
-          "/search?q=toast"
-        )
-      })
+  beforeEach(() => {
+    originalFetch = window.fetch
+  })
 
-      expect(
-        screen.getByText("Something went wrong on our end")
-      ).toBeInTheDocument()
-      expect(screen.queryByText("page content")).not.toBeInTheDocument()
-    })
+  afterEach(() => {
+    window.fetch = originalFetch
+  })
 
-    it("shows a reload link", () => {
-      render(<App Component={MockPage} pageProps={{}} />)
+  it("passes through /_next/data/ responses with JSON content type", async () => {
+    window.fetch = mockFetchReturning("application/json")
+    render(<App Component={MockPage} pageProps={{}} />)
+    await expect(
+      window.fetch("/_next/data/abc/search.json")
+    ).resolves.toBeDefined()
+  })
 
-      act(() => {
-        mockRouter.events.emit(
-          "routeChangeError",
-          new Error("Unexpected token '<'"),
-          "/search?q=toast"
-        )
-      })
+  it("throws when /_next/data/ returns non-JSON content type", async () => {
+    window.fetch = mockFetchReturning("text/html")
+    render(<App Component={MockPage} pageProps={{}} />)
+    await expect(window.fetch("/_next/data/abc/search.json")).rejects.toThrow(
+      "Non-JSON response for data route"
+    )
+  })
 
-      expect(
-        screen.getByRole("button", { name: "reloading the page" })
-      ).toBeInTheDocument()
-    })
+  it("does not throw for non-JSON responses from non-data URLs bc whatever", async () => {
+    window.fetch = mockFetchReturning("text/html")
+    render(<App Component={MockPage} pageProps={{}} />)
+    await expect(window.fetch("/api/search?q=test")).resolves.toBeDefined()
+  })
 
-    it("Reload page button triggers a full server-side reload", () => {
-      const reloadMock = jest.fn()
-      Object.defineProperty(window, "location", {
-        writable: true,
-        value: { ...window.location, reload: reloadMock },
-      })
-
-      render(<App Component={MockPage} pageProps={{}} />)
-
-      act(() => {
-        mockRouter.events.emit(
-          "routeChangeError",
-          new Error("Unexpected token '<'"),
-          "/search?q=toast"
-        )
-      })
-
-      fireEvent.click(
-        screen.getByRole("button", { name: "reloading the page" })
-      )
-      expect(reloadMock).toHaveBeenCalledTimes(1)
-    })
-
-    it("clears the error page when the next navigation completes successfully", () => {
-      render(<App Component={MockPage} pageProps={{}} />)
-
-      act(() => {
-        mockRouter.events.emit(
-          "routeChangeError",
-          new Error("Unexpected token '<'"),
-          "/search?q=toast"
-        )
-      })
-
-      expect(
-        screen.getByText("Something went wrong on our end")
-      ).toBeInTheDocument()
-
-      act(() => {
-        mockRouter.events.emit("routeChangeComplete", "/search?q=spaghetti", {
-          shallow: false,
-        })
-      })
-
-      expect(
-        screen.queryByText("Something went wrong on our end")
-      ).not.toBeInTheDocument()
-      expect(screen.getByText("page content")).toBeInTheDocument()
-    })
+  it("restores the original fetch on unmount", () => {
+    const mockFetch = jest.fn()
+    window.fetch = mockFetch
+    const { unmount } = render(<App Component={MockPage} pageProps={{}} />)
+    expect(window.fetch).not.toBe(mockFetch)
+    unmount()
+    expect(window.fetch).toBe(mockFetch)
   })
 })

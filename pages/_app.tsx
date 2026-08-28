@@ -14,7 +14,7 @@ import { BrowseProvider } from "../src/context/BrowseContext"
 function App({ Component, pageProps }) {
   const router = useRouter()
 
-  // when WAF returns 200+HTML for /_next/data = throw here
+  // If WAF returns 200+HTML for /_next/data requests = throw here
   useEffect(() => {
     const originalFetch = window.fetch
     window.fetch = async (...args) => {
