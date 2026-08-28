@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [hot fix] 2026-08-28
+
+- Added catch for clientside navigation JSON parsing error [SCC-5605](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5605)
+
 ## [2.1.4] 2026-08-20
 
 ## Added
