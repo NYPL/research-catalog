@@ -10,7 +10,7 @@ import errorImage from "../../assets/errorImage.png"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import ContactUs from "../ContactUs/ContactUs"
-import Link from "../Link/Link"
+import FeedbackForm from "../FeedbackForm/FeedbackForm"
 
 /* Display full-page error when client-side navigation fails (like WAF returning non-JSON). */
 export default function NavigationPageError() {
@@ -60,13 +60,10 @@ export default function NavigationPageError() {
             >
               reloading the page
             </Button>{" "}
-            or{" "}
-            <Link isExternal href="https://www.nypl.org/get-help/contact-us">
-              contact us
-            </Link>{" "}
-            if the error persists.
+            or {contactUsLink} if the error persists.
           </Text>
         </Flex>
+        <FeedbackForm />
       </DSProvider>
     </>
   )
