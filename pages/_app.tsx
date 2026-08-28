@@ -1,7 +1,7 @@
 import Head from "next/head"
-import { useEffect, useState } from "react"
+import { useEffect } from "react"
 import Script from "next/script"
-import Router, { useRouter } from "next/router"
+import { useRouter } from "next/router"
 import "@nypl/design-system-react-components/dist/styles.css"
 import "../public/styles/globals.css"
 import { appConfig } from "../src/config/appConfig"
@@ -9,21 +9,29 @@ import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 import { BrowseProvider } from "../src/context/BrowseContext"
-import PageError from "../src/components/Error/PageError"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
-  const [hasNavigationError, setHasNavigationError] = useState(false)
 
+  // when WAF returns 200+HTML for /_next/data = throw here
   useEffect(() => {
-    const onError = () => setHasNavigationError(true)
-    const onComplete = () => setHasNavigationError(false)
-    Router.events.on("routeChangeError", onError)
-    Router.events.on("routeChangeComplete", onComplete)
+    const originalFetch = window.fetch
+    window.fetch = async (...args) => {
+      const response = await originalFetch(...args)
+      const url =
+        typeof args[0] === "string" ? args[0] : (args[0] as Request).url
+      if (url?.includes("/_next/data/")) {
+        const contentType = response.headers.get("content-type")
+        if (!contentType?.includes("application/json")) {
+          console.log(url)
+          throw new Error("Non-JSON response for data route")
+        }
+      }
+      return response
+    }
     return () => {
-      Router.events.off("routeChangeError", onError)
-      Router.events.off("routeChangeComplete", onComplete)
+      window.fetch = originalFetch
     }
   }, [])
 
@@ -132,11 +140,7 @@ function App({ Component, pageProps }) {
       <FeedbackProvider value={null}>
         <FocusProvider>
           <BrowseProvider>
-            {hasNavigationError ? (
-              <PageError errorStatus="navigation" />
-            ) : (
-              <Component {...pageProps} />
-            )}
+            <Component {...pageProps} />
           </BrowseProvider>
         </FocusProvider>
       </FeedbackProvider>

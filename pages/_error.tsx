@@ -7,6 +7,7 @@ import Image from "next/image"
 import errorImage from "../src/assets/errorImage.png"
 import type { HTTPStatusCode } from "../src/types/appTypes"
 import ContactUs from "../src/components/ContactUs/ContactUs"
+import ReloadButton from "../src/components/ReloadButton/ReloadButton"
 
 type ErrorPageProps = {
   activePage: RCPage
@@ -44,7 +45,7 @@ function Error({ activePage, statusCode }: ErrorPageProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or <ContactUs errorStatus={statusCode} /> if
+            Try <ReloadButton /> or <ContactUs errorStatus={statusCode} /> if
             the error persists.
           </Text>
         </Flex>

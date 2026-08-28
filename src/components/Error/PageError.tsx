@@ -1,9 +1,4 @@
-import {
-  Button,
-  Heading,
-  Flex,
-  Text,
-} from "@nypl/design-system-react-components"
+import { Heading, Flex, Text } from "@nypl/design-system-react-components"
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
@@ -13,58 +8,21 @@ import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
 import ContactUs from "../ContactUs/ContactUs"
+import ReloadButton from "../ReloadButton/ReloadButton"
 
 type PageErrorProps = {
-  page?: RCPage
-  errorStatus: HTTPStatusCode | "navigation"
+  page: RCPage
+  errorStatus: HTTPStatusCode
 }
 
 /* Display error state that replaces entire page contents. */
 export default function PageError({ errorStatus, page }: PageErrorProps) {
   let metadataTitle = "Error"
   let errorContent
-  const headingID = page ? `${page}-results-heading` : undefined
-  const contactUsLink =
-    errorStatus !== "navigation" ? (
-      <ContactUs errorStatus={errorStatus} />
-    ) : (
-      <ContactUs errorStatus={500} />
-    )
+  const headingID = `${page}-results-heading`
+  const contactUsLink = <ContactUs errorStatus={errorStatus} />
 
   switch (errorStatus) {
-    case "navigation":
-      errorContent = (
-        <>
-          <Heading level="h3" mb="s">
-            Something went wrong on our end
-          </Heading>
-          <Text>
-            We encountered an error while trying to load the page. <br /> Try{" "}
-            <Button
-              id="navigation-error-reload"
-              onClick={() => window.location.reload()}
-              variant="text"
-              sx={{
-                display: "inline",
-                fontWeight: "inherit",
-                fontSize: "inherit",
-                p: 0,
-                height: "auto",
-                minHeight: "auto",
-                textDecoration: "underline",
-                textDecorationStyle: "dotted",
-                textDecorationThickness: "1px",
-                textUnderlineOffset: "2px",
-              }}
-            >
-              reloading the page
-            </Button>{" "}
-            or {contactUsLink} if the error persists.
-          </Text>
-        </>
-      )
-      break
-
     case 404:
       metadataTitle = "Page not found"
       errorContent = (
@@ -94,7 +52,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or {contactUsLink} if the error persists.
+            Try <ReloadButton /> or {contactUsLink} if the error persists.
           </Text>
         </>
       )
@@ -133,6 +91,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
           textAlign="center"
         >
           <Image
+            unoptimized
             src={errorImage}
             alt="Error image"
             width={96}
