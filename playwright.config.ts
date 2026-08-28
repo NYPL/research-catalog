@@ -32,12 +32,10 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
       },
-      dependencies: ["setup"],
     },
     {
       testMatch: "parallel_tests/**/*.ts",
       name: "firefox",
-      dependencies: ["setup"],
       use: {
         ...devices["Desktop Firefox"],
       },
@@ -45,7 +43,6 @@ export default defineConfig({
     {
       testMatch: "parallel_tests/**/*.ts",
       name: "webkit",
-      dependencies: ["setup"],
       use: {
         ...devices["Desktop Safari"],
       },
