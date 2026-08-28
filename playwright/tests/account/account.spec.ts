@@ -2,7 +2,7 @@ import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
 import { appConfig } from "../../../src/config/appConfig"
 import { logger } from "@nypl/node-utils"
-import { resetPatronData } from "../utils"
+import { setUpTestPatron } from "../utils"
 
 let page: Page
 let accountPage: AccountPage
@@ -38,7 +38,7 @@ test.describe.serial("Account page", () => {
     accountPage = new AccountPage(page)
   })
   test.afterAll(async () => {
-    await resetPatronData()
+    await setUpTestPatron()
   })
   test.describe("Account info", () => {
     test("should show labels and values", async () => {

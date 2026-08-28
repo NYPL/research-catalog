@@ -1,12 +1,13 @@
 import sierraClient from "../../src/server/sierraClient"
 import { appConfig } from "../../src/config/appConfig"
+import { logger } from "@nypl/node-utils"
 
 const username = appConfig.testUser.username[appConfig.environment]
 const name = appConfig.testUser.name[appConfig.environment]
 const cardNumber = appConfig.testUser.cardNumber[appConfig.environment]
 const patronId = appConfig.testUser.patronId[appConfig.environment]
 
-export const resetPatronData = async () => {
+export const setUpTestPatron = async () => {
   console.log("Resetting patron account data")
   if (patronId) {
     const sierra = await sierraClient()
@@ -32,7 +33,8 @@ export const resetPatronData = async () => {
     try {
       await sierra.put(`patrons/${patronId}`, patronData)
     } catch (e) {
-      console.log(e)
+      logger.error("error resetting patron data, skipping account tests.")
+      process.env.SKIP_ACCOUNT_TESTS = "true"
     }
     const patron = await sierra.get(
       `patrons/${patronId}?fields=default,varFields`
