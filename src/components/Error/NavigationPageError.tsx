@@ -21,8 +21,8 @@ export default function NavigationPageError() {
       <DSProvider>
         <Flex
           flexDir="column"
-          marginTop="xxl"
-          marginBottom="xxl"
+          marginTop="96px"
+          marginBottom="96px"
           marginLeft="l"
           marginRight="l"
           alignItems="center"
