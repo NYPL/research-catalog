@@ -1,4 +1,4 @@
-FROM node:20-alpine AS production
+FROM node:25-alpine AS production
 
 #RUN apt-get update
 #RUN apt-get upgrade -y
