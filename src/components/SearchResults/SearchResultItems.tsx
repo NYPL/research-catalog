@@ -43,7 +43,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                   {heading}
                 </Text>
               </td>
-              <td>
+              <td translate="no">
                 <Text fontSize="small">{tableData[0][index]}</Text>
               </td>
             </tr>

@@ -31,6 +31,7 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         variant="filter"
         onClick={onClick}
         tagSetData={tagSetData}
+        translate="no"
       />
     </Box>
   )

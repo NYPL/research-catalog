@@ -60,7 +60,11 @@ const SearchResult = ({
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
-    acc.push(<Text key={i}>{piece}</Text>)
+    acc.push(
+      <Text key={i} translate="no">
+        {piece}
+      </Text>
+    )
     return acc
   }, [])
 
@@ -96,7 +100,9 @@ const SearchResult = ({
                   Finding aid available
                 </StatusBadge>
               )}
-              <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+              <Link href={`${PATHS.BIB}/${bib.id}`} translate="no">
+                {bib.titleDisplay}
+              </Link>
             </Box>
           </CardHeading>
           <Box position="relative">
