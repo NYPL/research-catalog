@@ -86,7 +86,7 @@ export default function MarcPage({
               Go to standard view
             </Text>
           </Link>
-          <Heading level="h2" size="heading3" mt="s">
+          <Heading level="h2" size="heading3" mt="s" translate="no">
             {bib.title}
           </Heading>
           <Heading level="h3" size="heading5" mt="m">

@@ -243,13 +243,9 @@ export const downloadList = async (list: List, sort: ListRecordsSort) => {
         // TO DO: Restore location
         //`"${r.location ? r.location.replace(/"/g, '""') : ""}"`,
         `"${r.addedFormattedDate || ""}"`,
-        // TO DO: Update to catalog.nypl.org link when it handles partner items
         `"${
           r.uri
-            ? `https://nypl.org/research/research-catalog/bib/${r.uri.replace(
-                /"/g,
-                '""'
-              )}`
+            ? `https://catalog.nypl.org/record=${r.uri.replace(/"/g, '""')}`
             : ""
         }"`,
       ]),

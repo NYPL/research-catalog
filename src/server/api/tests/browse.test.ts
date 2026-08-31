@@ -11,13 +11,6 @@ const mockClient = {
   get: jest.fn(),
 }
 
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
 import { logger } from "@nypl/node-utils"
 
 beforeEach(() => {

@@ -32,7 +32,7 @@ const IsolatedMultiSelect = ({
 
   const handleChange = (value: string | null) => {
     setSelected((prev) => {
-      const next = getNewSelectedFilters(prev, value)
+      const next = value === null ? [] : getNewSelectedFilters(prev, value)
       onSelectionChange(field, next)
       return next
     })
@@ -44,7 +44,7 @@ const IsolatedMultiSelect = ({
       isDisabled={isDisabled}
       groupedItems={options}
       selectedItems={{ [field]: { items: selected } }}
-      onChange={(e) => handleChange(e.target.id)}
+      onChange={(itemId) => handleChange(itemId)}
       onClear={() => handleChange(null)}
     />
   ) : (

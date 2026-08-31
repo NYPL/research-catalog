@@ -80,10 +80,10 @@ const Search = ({
     }
   }, [isLoading])
 
-  if (errorStatus) {
+  if (errorStatus || !results) {
     return (
       <ResultsError
-        errorStatus={errorStatus}
+        errorStatus={errorStatus || 500}
         errorName={errorName}
         page="search"
       />

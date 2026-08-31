@@ -4,18 +4,18 @@ import type { BibResponse } from "../../../types/bibTypes"
 jest.mock("../../nyplApiClient")
 import nyplApiClient from "../../nyplApiClient"
 
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
 import { logger } from "@nypl/node-utils"
-
 const mockClient = {
   get: jest.fn(),
 }
+
+jest.mock("../../../utils/bibServerUtils", () => {
+  return {
+    ...jest.requireActual("../../../utils/bibServerUtils"),
+    isValidBibId: jest.fn().mockReturnValue(true),
+  }
+})
+import * as utils from "../../../utils/bibServerUtils"
 
 const mockBibResponse = (overrides = {}) => ({
   items: [{}],
@@ -87,6 +87,12 @@ describe("fetchBib", () => {
     expect(bibResponse.redirectUrl).toBe(
       "https://borrow.nypl.org/search/card?recordId=17418167"
     )
+  })
+
+  it("responds with 404 if bibId is found to be invalid", async () => {
+    ;(utils.isValidBibId as jest.Mock).mockReturnValueOnce(false)
+    const bibResponse = await fetchBib("null")
+    expect(bibResponse.status).toBe(404)
   })
 
   it("responds with 404 when bib not found and Sierra call fails", async () => {

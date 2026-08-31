@@ -1,13 +1,6 @@
 import type { HTTPStatusCode } from "../../types/appTypes"
 import { logSingleFilterNoResults } from "../logUtils"
 
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
 import { logger } from "@nypl/node-utils"
 
 const mock404Result = {

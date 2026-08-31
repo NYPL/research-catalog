@@ -46,7 +46,7 @@ const CancelSubmitButtonGroup = ({
         ) : (
           <Icon name={submitIcon} align="left" size="large" />
         )}
-        {submitLabel}
+        <span>{submitLabel}</span>
       </Button>
       <Button
         data-testid={`clear-${formName}-button`}
@@ -58,7 +58,7 @@ const CancelSubmitButtonGroup = ({
         isDisabled={disableSubmit}
       >
         <Icon name="actionDelete" align="left" size="large" />
-        {cancelLabel}
+        <span>{cancelLabel}</span>
       </Button>
     </ButtonGroup>
   )

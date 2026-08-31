@@ -154,8 +154,8 @@ const SearchFilters = ({
               isBlockElement
               field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
-              onChange={(e) => {
-                handleCheckboxChange(field.value, e.target.id)
+              onChange={(itemId) => {
+                handleCheckboxChange(field.value, itemId)
                 setFocusedFilter(field.value)
               }}
               onClear={() => {

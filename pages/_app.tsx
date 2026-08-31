@@ -1,6 +1,7 @@
 import Head from "next/head"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Script from "next/script"
+import Router, { useRouter } from "next/router"
 import "@nypl/design-system-react-components/dist/styles.css"
 import "../public/styles/globals.css"
 import { appConfig } from "../src/config/appConfig"
@@ -8,11 +9,24 @@ import { BASE_URL, SITE_NAME } from "../src/config/constants"
 import { FeedbackProvider } from "../src/context/FeedbackContext"
 import { FocusProvider } from "../src/context/FocusContext"
 import { BrowseProvider } from "../src/context/BrowseContext"
-import { useRouter } from "next/router"
+import NavigationPageError from "../src/components/Error/NavigationPageError"
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 function App({ Component, pageProps }) {
   const router = useRouter()
+  const [hasNavigationError, setHasNavigationError] = useState(false)
+
+  useEffect(() => {
+    const onError = () => setHasNavigationError(true)
+    const onComplete = () => setHasNavigationError(false)
+    Router.events.on("routeChangeError", onError)
+    Router.events.on("routeChangeComplete", onComplete)
+    return () => {
+      Router.events.off("routeChangeError", onError)
+      Router.events.off("routeChangeComplete", onComplete)
+    }
+  }, [])
+
   if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
 
@@ -118,7 +132,11 @@ function App({ Component, pageProps }) {
       <FeedbackProvider value={null}>
         <FocusProvider>
           <BrowseProvider>
-            <Component {...pageProps} />
+            {hasNavigationError ? (
+              <NavigationPageError />
+            ) : (
+              <Component {...pageProps} />
+            )}
           </BrowseProvider>
         </FocusProvider>
       </FeedbackProvider>

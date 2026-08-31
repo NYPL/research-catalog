@@ -28,7 +28,7 @@ export interface MultiSelectProps {
   groupedItems: MultiSelectItem[]
   /** The action to perform on the checkbox's onChange function. Note, if using
    * this prop, it must be of the type listed below. */
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  onChange: (itemId: string) => void
   /** The selected items state (items that were checked by user). */
   selectedItems: SelectedItems
   onClear: () => void
@@ -147,7 +147,7 @@ const MultiSelectWithGroupTitles = ({
               labelText={item.name}
               name={item.name}
               isChecked={isChecked(field.value, item.id)}
-              onChange={onChange}
+              onChange={() => onChange(item.id)}
             />
           ))}
         </CheckboxGroup>
@@ -189,6 +189,7 @@ const MultiSelectWithGroupTitles = ({
         {searchInput}
       </Box>
       <Box
+        key={selectedItemsCount}
         maxHeight="215px"
         overflowY="auto"
         paddingTop="xxs"
@@ -234,6 +235,7 @@ const MultiSelectWithGroupTitles = ({
       />
       {selectedItemsCount > 0 && (
         <MultiSelectItemsCountButton
+          key={selectedItemsCount}
           id={field.value}
           multiSelectLabelText={field.label}
           isOpen={false}

@@ -7,8 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added Playwright tests for NYQL invalid search and no results [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
+- Added catch for clientside navigation JSON parsing error [SCC-5605](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5605)
+
 ### Updated
 
+- Updated record link to use `catalog.nypl.org` URL in downloaded list [SCC-5597](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5597)
 - Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
 - Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
 
@@ -18,6 +24,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Playwright test for NYQL query search and fixed Playwright search results heading locator to match NYQL query display format [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
 - Set up Terraform and initial metric filter, alarm [SCC-5526](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5526)
+- NyplSourceMapper check to validate bib ids [SCC-5500](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5500)
 
 ### Updated
 
