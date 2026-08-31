@@ -92,7 +92,7 @@ const SearchForm = ({
       >
         <Text size="body2" className={styles.searchTip}>
           <Icon size="medium" name="errorOutline" iconRotation="rotate180" />
-          <Box as="span" className={styles.searchTipText}>
+          <Box as="span" key={searchScope} className={styles.searchTipText}>
             <span className={styles.searchTipTitle}>Search tip: </span>
             {tipText}
           </Box>
