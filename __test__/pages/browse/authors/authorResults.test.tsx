@@ -28,10 +28,10 @@ describe("Browse author/contributor results page", () => {
       />
     )
 
-    const displayingText = screen.queryByText(
+    const displayingText = screen.getByTestId("search-results-heading")
+    expect(displayingText).toHaveTextContent(
       'Displaying 1-50 of 423 results for author/contributor "test"'
     )
-    expect(displayingText).toBeInTheDocument()
 
     const cards = screen.getAllByRole("heading", { level: 3 })
     expect(cards).toHaveLength(50)
@@ -95,10 +95,10 @@ describe("Browse author/contributor results page", () => {
       />
     )
 
-    const displayingText = screen.queryByText(
+    const displayingText = screen.getByTestId("search-results-heading")
+    expect(displayingText).toHaveTextContent(
       'Displaying 1-50 of 423 results for author/contributor "test, performer"'
     )
-    expect(displayingText).toBeInTheDocument()
   })
 })
 

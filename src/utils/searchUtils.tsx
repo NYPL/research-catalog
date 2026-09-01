@@ -43,7 +43,6 @@ export function getSearchResultsHeading(
           : "author/contributor"
       } `}</span>
       <span translate="no">
-        {" "}
         &quot;{browseOptions.slug}
         {browseOptions.role ? `, ${browseOptions.role}` : ""}&quot;
       </span>
@@ -122,8 +121,8 @@ function buildQueryDisplayString(
       } else {
         paramsJSXCollection[param] = (
           <React.Fragment key={param}>
-            {` ${label}${plural} `}
-            <span translate="no"> &quot;{value}&quot; </span>
+            {`${label}${plural} `}
+            <span translate="no">&quot;{value}&quot;</span>
           </React.Fragment>
         )
       }

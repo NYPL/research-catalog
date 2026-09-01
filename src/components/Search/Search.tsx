@@ -168,6 +168,7 @@ const Search = ({
                 {isLoading ? (
                   <span key="loading">{LOADING_RESULTS}</span>
                 ) : (
+                  // Remount to avoid translation nesting error
                   <span
                     key={`${totalResults}-${searchParams.q ?? ""}-${
                       searchParams.field ?? ""
