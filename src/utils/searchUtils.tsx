@@ -1,3 +1,4 @@
+import React, { type ReactElement } from "react"
 import { isArray, isEmpty, mapObject, forEach } from "underscore"
 
 import { textInputFields as advancedSearchFields } from "./advancedSearchUtils"
@@ -27,37 +28,49 @@ export function getSearchResultsHeading(
   totalResults: number,
   browseOptions?: { slug: string; browseType: string; role?: string },
   parsedQuery?: string[]
-): string {
+): ReactElement {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
     totalResults,
     RESULTS_PER_PAGE
   )
 
-  const queryDisplayString = browseOptions
-    ? ` for ${
+  const queryDisplayJSX = browseOptions ? (
+    <>
+      <span>{` for ${
         browseOptions.browseType === "subjects"
           ? "Subject Heading"
           : "author/contributor"
-      } "${browseOptions.slug}${
-        browseOptions.role ? `, ${browseOptions.role}` : ""
-      }"`
-    : buildQueryDisplayString(searchParams, parsedQuery)
+      } `}</span>
+      <span translate="no">
+        {" "}
+        &quot;{browseOptions.slug}
+        {browseOptions.role ? `, ${browseOptions.role}` : ""}&quot;
+      </span>
+    </>
+  ) : (
+    buildQueryDisplayString(searchParams, parsedQuery)
+  )
 
-  return `Displaying ${
-    totalResults > RESULTS_PER_PAGE
-      ? `${resultsStart}-${resultsEnd}`
-      : totalResults.toLocaleString()
-  } of${
-    totalResults === 10000 ? " over" : ""
-  } ${totalResults.toLocaleString()} results${queryDisplayString}`
+  return (
+    <>
+      <span>{`Displaying ${
+        totalResults > RESULTS_PER_PAGE
+          ? `${resultsStart}-${resultsEnd}`
+          : totalResults.toLocaleString()
+      } of${
+        totalResults === 10000 ? " over" : ""
+      } ${totalResults.toLocaleString()} results`}</span>
+      {queryDisplayJSX}
+    </>
+  )
 }
 
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(
   searchParams: SearchParams,
   parsedQuery?: string[]
-): string {
+): ReactElement | null {
   const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
     .map((field) => ({ ...field, label: field.label.toLowerCase() }))
@@ -74,7 +87,7 @@ function buildQueryDisplayString(
       { name: "genre", label: "genre" },
       { name: "series", label: "series" },
     ])
-  const paramsStringCollection = {}
+  const paramsJSXCollection: Record<string, ReactElement> = {}
   const searchParamsObject = {
     ...searchParams,
     ...searchParams.filters,
@@ -96,11 +109,23 @@ function buildQueryDisplayString(
           label = "authors/contributors"
         }
       }
-      paramsStringCollection[param] = `${label}${plural} "${value}"`
       // Special case for CQL (query) formatting
       if (label === "query") {
-        value = parsedQuery ? formatParsedQuery(parsedQuery) : value
-        paramsStringCollection[param] = `${label}: ${value}`
+        const displayValue = parsedQuery
+          ? formatParsedQuery(parsedQuery)
+          : value
+        paramsJSXCollection[param] = (
+          <React.Fragment key={param}>
+            {label}: <span translate="no">{displayValue}</span>
+          </React.Fragment>
+        )
+      } else {
+        paramsJSXCollection[param] = (
+          <React.Fragment key={param}>
+            {` ${label}${plural} `}
+            <span translate="no"> &quot;{value}&quot; </span>
+          </React.Fragment>
+        )
       }
     }
   })
@@ -109,14 +134,25 @@ function buildQueryDisplayString(
   // then use that and remove the keyword from the display string.
   // Note: mapQueryToSearchParams sets the search_scope value in the field property.
   if (searchParamsObject.field) {
-    delete paramsStringCollection["q"]
+    delete paramsJSXCollection["q"]
   }
 
-  const displayStringArray = Object.values(paramsStringCollection)
+  const displayJSXArray = Object.values(paramsJSXCollection)
 
-  return displayStringArray.length
-    ? ` for ${displayStringArray.join(" and ")}`
-    : ""
+  if (!displayJSXArray.length) return null
+
+  const joined = displayJSXArray.reduce<ReactElement[]>((acc, el, i) => {
+    if (i > 0) acc.push(<span key={`sep-${i}`}> and </span>)
+    acc.push(el)
+    return acc
+  }, [])
+
+  return (
+    <React.Fragment>
+      <span> for </span>
+      {joined}
+    </React.Fragment>
+  )
 }
 
 /**

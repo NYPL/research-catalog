@@ -6,6 +6,7 @@ import {
 } from "../searchUtils"
 import { queryParamsEquality } from "../../../__test__/helpers/searchHelpers"
 import type { SearchQueryParams, SearchParams } from "../../types/searchTypes"
+import { render } from "@testing-library/react"
 
 const checkQueryParamsEquality = queryParamsEquality(getSearchQuery)
 
@@ -174,18 +175,29 @@ describe("searchUtils", () => {
         { page: 1, q: "", title: "Strega Nonna" },
         1200
       )
-      expect(heading.toLocaleLowerCase().includes("keyword")).toBe(false)
+      const { container } = render(heading)
+      expect(container.textContent?.toLowerCase().includes("keyword")).toBe(
+        false
+      )
     })
     it("displays the default keyword display string", () => {
       const heading = getSearchResultsHeading({ q: "spaghetti" }, 100)
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 100 results for keyword "spaghetti"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"spaghetti"'
       )
     })
     it("handles the special case for the author search scope", () => {
       const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"spaghetti"'
       )
     })
     it("handles the special case for the contributorLiteral filter", () => {
@@ -193,8 +205,12 @@ describe("searchUtils", () => {
         { filters: { contributorLiteral: ["spaghetti", "pasta"] } },
         100
       )
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 100 results for authors/contributors "spaghetti, pasta"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"spaghetti, pasta"'
       )
     })
     it("displays all of the values from advanced search and nothing else", () => {
@@ -209,9 +225,16 @@ describe("searchUtils", () => {
         },
         100
       )
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
       )
+      const noTranslateSpans = container.querySelectorAll('[translate="no"]')
+      expect(noTranslateSpans).toHaveLength(4)
+      expect(noTranslateSpans[0].textContent).toBe('"spaghetti"')
+      expect(noTranslateSpans[1].textContent).toBe('"ricotta"')
+      expect(noTranslateSpans[2].textContent).toBe('"pasta mama"')
+      expect(noTranslateSpans[3].textContent).toBe('"italian"')
     })
     it("displays the appropriate string for certain values", () => {
       const heading = getSearchResultsHeading(
@@ -223,25 +246,39 @@ describe("searchUtils", () => {
         } as SearchParams,
         100
       )
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 100 results for journal title "spaghetti"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"spaghetti"'
       )
     })
     it("returns the correct heading string for first page", () => {
       const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 1-50 of 1,200 results for keyword "cats"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"cats"'
       )
     })
     it("returns the correct heading string for other pages", () => {
       const heading = getSearchResultsHeading({ page: 5, q: "cats" }, 1200)
-      expect(heading).toEqual(
+      const { container } = render(heading)
+      expect(container.textContent).toBe(
         'Displaying 201-250 of 1,200 results for keyword "cats"'
+      )
+      expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+        '"cats"'
       )
     })
     it("doesn't display the 'for' part of the display text when the q param is absent", () => {
       const heading = getSearchResultsHeading({ page: 5 }, 1200)
-      expect(heading).toEqual("Displaying 201-250 of 1,200 results")
+      const { container } = render(heading)
+      expect(container.textContent).toBe("Displaying 201-250 of 1,200 results")
+      expect(container.querySelector('[translate="no"]')).toBeNull()
     })
 
     describe("identifier searches", () => {
@@ -250,7 +287,13 @@ describe("searchUtils", () => {
           { page: 1, identifiers: { oclc: "1234" } },
           3
         )
-        expect(heading).toEqual('Displaying 3 of 3 results for OCLC "1234"')
+        const { container } = render(heading)
+        expect(container.textContent).toBe(
+          'Displaying 3 of 3 results for OCLC "1234"'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"1234"'
+        )
       })
 
       it("returns the correct heading string for ISBN searches", () => {
@@ -258,7 +301,13 @@ describe("searchUtils", () => {
           { page: 5, identifiers: { isbn: "1234" } },
           3
         )
-        expect(heading).toEqual('Displaying 3 of 3 results for ISBN "1234"')
+        const { container } = render(heading)
+        expect(container.textContent).toBe(
+          'Displaying 3 of 3 results for ISBN "1234"'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"1234"'
+        )
       })
 
       it("returns the correct heading string for ISSN searches", () => {
@@ -266,7 +315,13 @@ describe("searchUtils", () => {
           { page: 5, identifiers: { issn: "1234" } },
           3
         )
-        expect(heading).toEqual('Displaying 3 of 3 results for ISSN "1234"')
+        const { container } = render(heading)
+        expect(container.textContent).toBe(
+          'Displaying 3 of 3 results for ISSN "1234"'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"1234"'
+        )
       })
 
       it("returns the correct heading string for LCCN searches", () => {
@@ -274,7 +329,13 @@ describe("searchUtils", () => {
           { page: 5, identifiers: { lccn: "1234" } },
           3
         )
-        expect(heading).toEqual('Displaying 3 of 3 results for LCCN "1234"')
+        const { container } = render(heading)
+        expect(container.textContent).toBe(
+          'Displaying 3 of 3 results for LCCN "1234"'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"1234"'
+        )
       })
     })
     describe("browse result searches", () => {
@@ -283,8 +344,12 @@ describe("searchUtils", () => {
           slug: "History",
           browseType: "subjects",
         })
-        expect(heading).toContain(
+        const { container } = render(heading)
+        expect(container.textContent).toContain(
           'Displaying 1-50 of 100 results for Subject Heading "History"'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"History"'
         )
       })
 
@@ -294,8 +359,12 @@ describe("searchUtils", () => {
           browseType: "contributors",
           role: "editor.",
         })
-        expect(heading).toContain(
+        const { container } = render(heading)
+        expect(container.textContent).toContain(
           'Displaying 1-50 of 100 results for author/contributor "Sondheim, Stephen, editor."'
+        )
+        expect(container.querySelector('[translate="no"]')?.textContent).toBe(
+          '"Sondheim, Stephen, editor."'
         )
       })
     })
