@@ -23,11 +23,11 @@ export default defineConfig({
 
   projects: [
     {
-      name: "setup",
+      name: "setup-gha",
       testMatch: "global.setup.ts",
     },
     {
-      name: "chromium",
+      name: "chromium-gha",
       testMatch: "parallel_tests/**/*.ts",
       use: {
         ...devices["Desktop Chrome"],
@@ -35,7 +35,7 @@ export default defineConfig({
     },
     {
       testMatch: "parallel_tests/**/*.ts",
-      name: "firefox",
+      name: "firefox-gha",
       use: {
         ...devices["Desktop Firefox"],
       },
@@ -49,7 +49,7 @@ export default defineConfig({
     },
     // Account tests must be run in series with each other or else they are all updating the same user data
     {
-      name: "my account chromium",
+      name: "my account chromium-gha",
       testMatch: "account/account.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
@@ -57,7 +57,7 @@ export default defineConfig({
       dependencies: ["setup"],
     },
     {
-      name: "my account firefox",
+      name: "my account firefox-gha",
       testMatch: "account/account.spec.ts",
 
       dependencies: ["my account chromium"],
