@@ -17,8 +17,8 @@ export const appConfig: AppConfig = {
     },
     nyplHeaderUrl: {
       development:
-        "https://nypl-header-app-git-test-gtranslate-nypl.vercel.app/",
-      qa: "https://nypl-header-app-git-test-gtranslate-nypl.vercel.app/",
+        "https://nypl-header-app-git-implement-gtranslate-nypl.vercel.app/",
+      qa: "https://nypl-header-app-git-implement-gtranslate-nypl.vercel.app/",
       production: "https://ds-header.nypl.org",
     },
     loginUrl: {
