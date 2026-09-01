@@ -54,13 +54,13 @@ export default defineConfig({
       use: {
         ...devices["Desktop Chrome"],
       },
-      dependencies: ["setup"],
+      dependencies: ["setup-gha"],
     },
     {
       name: "my account firefox-gha",
       testMatch: "account/account.spec.ts",
 
-      dependencies: ["my account chromium"],
+      dependencies: ["my account chromium-gha"],
       use: {
         ...devices["Desktop Firefox"],
       },
@@ -68,7 +68,7 @@ export default defineConfig({
     {
       testMatch: "account/account.spec.ts",
       name: "my account webkit",
-      dependencies: ["my account firefox"],
+      dependencies: ["my account firefox-gha"],
       use: {
         ...devices["Desktop Safari"],
       },
