@@ -8,7 +8,7 @@ import type {
   LinkedBibDetail,
   AnyBibDetail,
 } from "../../types/bibDetailsTypes"
-import { rtlOrLtr } from "../../utils/bibUtils"
+import { rtlOrLtr, splitTextByQuery } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
 import type { BrowseType } from "../../types/browseTypes"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
@@ -144,27 +144,7 @@ const LinkElement = (
   }
 
   // Exact split, or fuzzy allowing extra punctuation between words (e.g. "John. Smith" matches "John Smith")
-  let parts: string[]
-  let matchedTexts: string[]
-  if (text.includes(searchValue)) {
-    parts = text.split(searchValue)
-    matchedTexts = Array(parts.length - 1).fill(searchValue)
-  } else {
-    const escapedWords = searchValue
-      .split(/\s+/)
-      .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
-    const fuzzyRegex = new RegExp(escapedWords.join("[^a-zA-Z0-9]*"), "gi")
-    parts = []
-    matchedTexts = []
-    let lastIndex = 0
-    let match: RegExpExecArray | null
-    while ((match = fuzzyRegex.exec(text)) !== null) {
-      parts.push(text.slice(lastIndex, match.index))
-      matchedTexts.push(match[0])
-      lastIndex = match.index + match[0].length
-    }
-    parts.push(text.slice(lastIndex))
-  }
+  const { parts, matchedTexts } = splitTextByQuery(text, searchValue)
 
   return (
     <>

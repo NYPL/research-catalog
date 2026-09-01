@@ -15,17 +15,14 @@ import {
 } from "../utils/appUtils"
 import {
   getFindingAidFromSupplementaryContent,
-  getSeriesSearchUrl,
+  fuzzyIncludes,
 } from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
-import {
-  getContributorSearchURL,
-  getSubjectSearchURL,
-} from "../utils/browseUtils"
+import { getSubjectSearchURL } from "../utils/browseUtils"
 import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {
@@ -318,7 +315,15 @@ export default class BibDetails {
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
       // include subjects, which will be displayed but not linked
-      const overlap = detailValues.some((v) => resourceValuesSet.has(v))
+      const resourceValuesArray = Array.from(resourceValuesSet)
+      const overlap = detailValues.some(
+        (marcVal) =>
+          marcVal &&
+          resourceValuesArray.some(
+            (resVal) =>
+              fuzzyIncludes(marcVal, resVal) || fuzzyIncludes(resVal, marcVal)
+          )
+      )
       if (!overlap) {
         filteredMarc.push(detail)
         // store both values and marc tags in one object per AM label
