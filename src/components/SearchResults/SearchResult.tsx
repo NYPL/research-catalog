@@ -52,16 +52,15 @@ const SearchResult = ({
       </svg>
     </Icon>
   )
-  const metadata = [
-    bib.format,
-    bib.publicationStatement,
-    bib.getNumItemsMessage(),
-  ].filter(Boolean)
+  const numItemsMessage = bib.getNumItemsMessage()
+  const metadata = [bib.format, bib.publicationStatement, numItemsMessage].filter(
+    Boolean
+  )
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
     acc.push(
-      <Text key={i} translate="no">
+      <Text key={i} translate={piece === numItemsMessage ? "yes" : "no"}>
         {piece}
       </Text>
     )
