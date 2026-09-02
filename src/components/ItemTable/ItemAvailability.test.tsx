@@ -93,8 +93,8 @@ describe("ItemAvailability", () => {
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
       expect(
-        screen.getByText("at Schwarzman Building - Main Reading Room 315.")
-      ).toBeInTheDocument()
+        screen.getByTestId("item-availability-message")
+      ).toHaveTextContent("at Schwarzman Building - Main Reading Room 315.")
     })
     it("onsite NO aeon YES finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
@@ -109,11 +109,10 @@ describe("ItemAvailability", () => {
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
       expect(screen.queryByRole("link")).toHaveTextContent("finding aid")
       expect(
-        screen.getByText(
-          "at Schwarzman Building - Main Reading Room 315. See the ",
-          { exact: false }
-        )
-      ).toBeInTheDocument()
+        screen.getByTestId("item-availability-message")
+      ).toHaveTextContent(
+        "at Schwarzman Building - Main Reading Room 315. See the"
+      )
     })
     it("recap NO aeon YES finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
@@ -190,9 +189,13 @@ describe("ItemAvailability", () => {
     expect(
       screen.getByText("- Can be used onsite. Please visit", { exact: false })
     ).toBeInTheDocument()
+    expect(screen.getByRole("link")).toHaveAttribute(
+      "href",
+      "https://www.nypl.org/locations/schwarzman"
+    )
     expect(
       screen.getByText("New York Public Library - Schwarzman Building M2")
-    ).toHaveAttribute("href", "https://www.nypl.org/locations/schwarzman")
+    ).toBeInTheDocument()
     expect(
       screen.getByText("to submit a request in person.", { exact: false })
     ).toBeInTheDocument()

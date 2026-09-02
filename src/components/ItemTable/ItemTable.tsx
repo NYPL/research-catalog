@@ -41,6 +41,17 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         showRowDividers
         my={{ base: 0, md: "s" }}
         data-testid="bib-details-item-table"
+        ref={(el: HTMLTableElement | null) => {
+          // The DS Table only accepts string column headers, so target the
+          // "Call number" <th> directly to keep it out of translation.
+          el
+            ?.querySelectorAll("th")
+            .forEach((th) => {
+              if (th.textContent?.trim() === "Call number") {
+                th.setAttribute("translate", "no")
+              }
+            })
+        }}
       />
     </Box>
   )
