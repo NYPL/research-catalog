@@ -14,11 +14,6 @@ export const setUpTestPatron = async () => {
     const patronData = {
       homeLibraryCode: "al",
       varFields: [
-        {
-          fieldTag: "=",
-          content:
-            "$6$qov2by12Xggy7pdA$ilH6uX2Ly.uwghIY1ikoY1z1tob.xV.xcJUcl3SSUqGUME49VaQRM7x/thkXzjY6JkxG5ZRditVbeKngOZed6/",
-        },
         { fieldTag: "b", content: cardNumber },
         { fieldTag: "u", content: username },
         { fieldTag: "z", content: "chrismulholland@nypl.org" },
