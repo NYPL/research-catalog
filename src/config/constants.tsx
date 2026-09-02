@@ -190,12 +190,12 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
 > = {
   creatorLiteral: {
     label: "Author",
-    displayField: "creatorsDisplay",
+    displayField: "creatorDisplay",
     url: (name) => getContributorSearchURL(name),
   },
   contributorLiteral: {
     label: "Additional authors",
-    displayField: "contributorsDisplay",
+    displayField: "contributorDisplay",
     url: (name) => getContributorSearchURL(name),
   },
   seriesAddedEntry: {

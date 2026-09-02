@@ -101,7 +101,7 @@ export async function getServerSideProps({ req, query, params }) {
   const baseQuery = buildLockedBrowseQuery({
     slug,
     query,
-    field: "contributorLiteral",
+    field: role ? "contributorLiteral" : "contributorNameTitle",
   })
 
   const searchParams = mapQueryToSearchParams(baseQuery)

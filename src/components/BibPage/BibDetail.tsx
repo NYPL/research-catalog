@@ -8,7 +8,7 @@ import type {
   LinkedBibDetail,
   AnyBibDetail,
 } from "../../types/bibDetailsTypes"
-import { rtlOrLtr } from "../../utils/bibUtils"
+import { rtlOrLtr, splitTextByQuery } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
 import type { BrowseType } from "../../types/browseTypes"
 import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
@@ -105,13 +105,13 @@ export const BrowseLinkDetailElement = ({
               url: `/browse${
                 browseType === "subjects" ? "" : "/authors/"
               }?q=${encodeURIComponentWithPeriods(
-                urlInfo.urlText
+                urlInfo.browseValue
               )}&search_scope=starts_with`,
-              urlText: `[${indexLinkLabel}]`,
+              searchValue: `[${indexLinkLabel}]`,
             },
             "internal",
             true,
-            `${indexLinkLabel} for "${urlInfo.urlText}"`
+            `${indexLinkLabel} for "${urlInfo.browseValue}"`
           )}
         </>
       </li>
@@ -125,12 +125,12 @@ const LinkElement = (
   isBold = false,
   ariaLabel?: string
 ) => {
-  const { text, urlText, url: href } = url
+  const { text, searchValue, browseValue, url: href } = url
 
   if (!text) {
     return (
       <Link
-        dir={rtlOrLtr(url.urlText)}
+        dir={rtlOrLtr(url.searchValue)}
         href={url.url}
         key={url.url}
         isExternal={linkType === "external"}
@@ -138,12 +138,13 @@ const LinkElement = (
         textDecoration="none"
         aria-label={ariaLabel}
       >
-        {url.urlText}
+        {url.searchValue}
       </Link>
     )
   }
 
-  const parts = text.split(urlText)
+  // Exact split, or fuzzy allowing extra punctuation between words (e.g. "John. Smith" matches "John Smith")
+  const { parts, matchedTexts } = splitTextByQuery(text, searchValue)
 
   return (
     <>
@@ -152,14 +153,14 @@ const LinkElement = (
           {part}
           {index < parts.length - 1 && (
             <Link
-              dir={rtlOrLtr(urlText)}
+              dir={rtlOrLtr(matchedTexts[index])}
               href={href}
               isExternal={linkType === "external"}
               fontWeight={isBold ? "700" : "400"}
               textDecoration="none"
               aria-label={ariaLabel}
             >
-              {urlText}
+              {matchedTexts[index]}
             </Link>
           )}
         </span>
