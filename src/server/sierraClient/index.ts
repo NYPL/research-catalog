@@ -37,39 +37,48 @@ async function buildClient() {
   })
 
   const get = wrapper.get.bind(wrapper)
+
   wrapper.get = async function (path) {
-    logger.info("Sierra request", {
-      path,
-      method: "GET",
+    return await withTimeout(async () => {
+      logger.info("Sierra request", {
+        path,
+        method: "GET",
+      })
+      return await get(path)
     })
-    return await withTimeout(get(path))
   }
   const post = wrapper.post.bind(wrapper)
   wrapper.post = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "POST",
-      body: JSON.stringify(body),
+    return await withTimeout(async () => {
+      logger.info("Sierra request", {
+        path,
+        method: "POST",
+        body: JSON.stringify(body),
+      })
+      return await post(path, body)
     })
-    return await withTimeout(post(path, body))
   }
   const put = wrapper.put.bind(wrapper)
   wrapper.put = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "PUT",
-      body: JSON.stringify(body),
+    return await withTimeout(async () => {
+      logger.info("Sierra request", {
+        path,
+        method: "PUT",
+        body: JSON.stringify(body),
+      })
+      return await put(path, body)
     })
-    return await withTimeout(put(path, body))
   }
   const deleteRequest = wrapper.deleteRequest.bind(wrapper)
   wrapper.deleteRequest = async function (path, body) {
-    logger.info("Sierra request", {
-      path,
-      method: "DELETE",
-      body: JSON.stringify(body),
+    return await withTimeout(async () => {
+      logger.info("Sierra request", {
+        path,
+        method: "DELETE",
+        body: JSON.stringify(body),
+      })
+      return await deleteRequest(path, body)
     })
-    return await withTimeout(deleteRequest(path, body))
   }
 
   return wrapper
