@@ -20,7 +20,7 @@ import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
 
-let fields = [
+const ALL_FIELDS = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
@@ -90,12 +90,12 @@ const SearchFilters = ({
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
   // Do not display Subject filter if there is no query term and a subject filter is applied
-  if (
+  const hideSubjectFilter =
     (router.query?.q === "" || !router.query.q) &&
     (Object.hasOwn(appliedFilters, "subjectLiteral") || lockedFilterValue)
-  ) {
-    fields = fields.filter((field) => field.label !== "Subject")
-  }
+  const fields = hideSubjectFilter
+    ? ALL_FIELDS.filter((field) => field.label !== "Subject")
+    : ALL_FIELDS
 
   // Division, Item location, and Subject filter contents should not be translated
   const untranslatedFilters = [
