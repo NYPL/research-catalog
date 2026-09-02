@@ -15,7 +15,6 @@ permissions:
 
 env:
   AWS_DEFAULT_REGION: us-east-1
-  LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
 
 jobs:
   test:
@@ -55,6 +54,9 @@ jobs:
       - name: Set deployment environment
         id: set-env
         run: |
+          # Docker tags can't contain "/", sanitize branch name
+          echo "LOCAL_TAG_NAME=research-catalog:${GITHUB_REF_NAME//\//-}-${GITHUB_RUN_NUMBER}" >> $GITHUB_ENV
+
           if [[ "${GITHUB_REF_NAME}" == "SCC-5622/translate-preparedness" || "${GITHUB_REF_NAME}" == "train" ]]; then
             echo "DEPLOY_ENV=train" >> $GITHUB_ENV
             echo "ECR_REF_NAME=train" >> $GITHUB_ENV
