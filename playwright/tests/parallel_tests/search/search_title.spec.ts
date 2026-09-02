@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { SearchPage } from "../../pages/search_page"
+import { SearchPage } from "../../../pages/search_page"
 
 let searchPage: SearchPage
 const searchterm = "It happened in New York"
