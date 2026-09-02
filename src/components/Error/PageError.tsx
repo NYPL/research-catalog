@@ -8,6 +8,7 @@ import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
 import ContactUs from "../ContactUs/ContactUs"
+import ReloadButton from "../ReloadButton/ReloadButton"
 
 type PageErrorProps = {
   page: RCPage
@@ -51,7 +52,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or {contactUsLink} if the error persists.
+            Try <ReloadButton /> or {contactUsLink} if the error persists.
           </Text>
         </>
       )
@@ -90,6 +91,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
           textAlign="center"
         >
           <Image
+            unoptimized
             src={errorImage}
             alt="Error image"
             width={96}

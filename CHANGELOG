@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added Playwright tests for NYQL invalid search and no results [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
 - Added catch for clientside navigation JSON parsing error [SCC-5605](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5605)
+- Added translation blocks across app [SCC-5622](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5622)
 
 ### Updated
 
