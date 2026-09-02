@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Updated contributor linked fields to use name and title [SCC-5474](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5474)
+
 ### Added
 
 - Added Playwright tests for NYQL invalid search and no results [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
