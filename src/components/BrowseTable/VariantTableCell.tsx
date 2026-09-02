@@ -15,7 +15,7 @@ const VariantTableCell = ({ record }: { record: Variant }) => {
 
   return (
     <Flex flexDir="column" gap="xs">
-      <Text>{record.termLabel}</Text>
+      <Text translate="no">{record.termLabel}</Text>
       <List
         sx={{ "li::before": { color: "ui.black" } }}
         variant="ul"
