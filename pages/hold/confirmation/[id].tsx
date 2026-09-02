@@ -86,7 +86,9 @@ export default function HoldConfirmationPage({
             <Text mt="xs">
               You&apos;re all set! We have received your {isEDD ? "scan " : ""}
               request for{" "}
-              <Link href={`${PATHS.BIB}/${item.bibId}`}>{item.bibTitle}</Link>
+              <Link translate="no" href={`${PATHS.BIB}/${item.bibId}`}>
+                {item.bibTitle}
+              </Link>
             </Text>
           }
         />
