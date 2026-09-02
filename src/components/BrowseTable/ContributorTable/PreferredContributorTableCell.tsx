@@ -13,7 +13,10 @@ const PreferredContributorTableCell = ({
 }) => {
   const contributorRoleLink = (role: ContributorRole) => (
     <span key={role.roleLabel}>
-      <a href={`${BASE_URL}${role.url}`}>{role.roleLabel}</a> ({role.count})
+      <a translate="no" href={`${BASE_URL}${role.url}`}>
+        {role.roleLabel}
+      </a>{" "}
+      ({role.count})
     </span>
   )
 
