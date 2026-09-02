@@ -29,8 +29,7 @@ export interface MultiSelectProps {
   groupedItems?: MultiSelectItem[]
   /** Use for a flat checkbox list with no groups. Provide either this or `groupedItems`, not both. */
   items?: MultiSelectItem[]
-  /** Set to false to render a flat checkbox list with no group title text.
-   * Defaults to true. */
+  /** Set to false to render a flat checkbox list with no group titles. Defaults to true. */
   showGroupTitles?: boolean
   /** Set to false to hide the search input. Defaults to true. */
   showSearch?: boolean
@@ -38,10 +37,10 @@ export interface MultiSelectProps {
   isDefaultOpen?: boolean
   /** Label text for the search input. Defaults to "Search divisions". */
   searchLabelText?: string
-  /** Value for the root element's data-testid attribute. Defaults to "ds-multiSelect". */
+  /** Value for the root element's data-testid attribute. Defaults to "ds-multiSelect" to match
+   * DS test expectations. */
   dataTestId?: string
-  /** The action to perform on the checkbox's onChange function. Note, if using
-   * this prop, it must be of the type listed below. */
+  /** The action to perform on the checkbox's onChange function */
   onChange: (itemId: string) => void
   /** The selected items state (items that were checked by user). */
   selectedItems: SelectedItems
@@ -68,7 +67,6 @@ const CustomMultiselect = ({
   translate = true,
 }: MultiSelectProps) => {
   const mainId = field.value
-  // A flat `items` list is treated as a single untitled group internally.
   const groups = groupedItems ?? [
     { id: field.value, name: "", children: items ?? [] },
   ]
