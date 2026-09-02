@@ -31,11 +31,11 @@ export const setUpTestPatron = async () => {
       logger.error("error resetting patron data, skipping account tests.")
       process.env.SKIP_ACCOUNT_TESTS = "true"
     }
-    const patron = await sierra.get(
+    const updatedPatron = await sierra.get(
       `patrons/${patronId}?fields=default,varFields`
     )
-    const varFieldsMatching = patron.varFields.map((field) => {
-      const match = patronData.varFields.find((innerField) => {
+    const varFieldsMatching = patronData.varFields.map((field) => {
+      const match = updatedPatron.varFields.find((innerField) => {
         return (
           innerField.fieldTag === field.fieldTag &&
           innerField.content === field.content
