@@ -32,6 +32,12 @@ const ActiveFilters = ({ filterName, onClick, tagSetData }) => {
         onClick={onClick}
         tagSetData={tagSetData}
         translate="no"
+        ref={(el: HTMLDivElement | null) => {
+          // Override the translate="no" so the "Clear filters"
+          // button is still translated.
+          const clearAllButton = el?.querySelector("#tagSetFilter-clear-all")
+          clearAllButton?.setAttribute("translate", "yes")
+        }}
       />
     </Box>
   )

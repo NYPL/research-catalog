@@ -250,7 +250,7 @@ export default function BibPage({
           )}
         </div>
         {findingAid && (
-          <StatusBadge mb="s" variant="informative">
+          <StatusBadge mb="s" variant="informative" translate="no">
             Finding aid available
           </StatusBadge>
         )}

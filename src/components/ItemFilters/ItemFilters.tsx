@@ -168,7 +168,7 @@ const ItemFilters = ({
   }
 
   // function passed to filterElements map callback for generating renderMultiSelect prop of MultiSelectGroup
-  const renderMultiSelect = ({ isBlockElement }) =>
+  const renderMultiSelect = ({ isBlockElement, multiSelectWidth }) =>
     filterData.map((itemFilterData: ItemFilterData) => {
       const checkboxGroup = itemFilterData.formattedFilterData
       return checkboxGroup?.items.length ? (
@@ -187,6 +187,8 @@ const ItemFilters = ({
           }}
           isBlockElement={isBlockElement}
           onClear={() => handleClearFilterGroup(checkboxGroup.id)}
+          translate={checkboxGroup.id === "location" ? false : true}
+          width={multiSelectWidth}
         />
       ) : null
     })

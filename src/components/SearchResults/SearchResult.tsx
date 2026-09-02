@@ -97,7 +97,7 @@ const SearchResult = ({
           >
             <Box>
               {bib.findingAid && (
-                <StatusBadge variant="informative" mb="s">
+                <StatusBadge variant="informative" mb="s" translate="no">
                   Finding aid available
                 </StatusBadge>
               )}

@@ -47,6 +47,8 @@ export interface MultiSelectProps {
   onClear: () => void
   /* Whether to translate the CheckboxGroup content. Defaults to true. */
   translate?: boolean
+  /** Value used to set the width for the MultiSelect component. Defaults to "full". */
+  width?: "fitContent" | "full"
 }
 
 /* Reservoir Multiselect modified to accept items with an optional grouping title. */
@@ -65,6 +67,7 @@ const CustomMultiselect = ({
   selectedItems,
   onClear,
   translate = true,
+  width = "full",
 }: MultiSelectProps) => {
   const mainId = field.value
   const groups = groupedItems ?? [
@@ -237,6 +240,7 @@ const CustomMultiselect = ({
       data-testid={dataTestId}
       id={mainId}
       ref={containerRef}
+      width={width === "full" ? "100%" : "fit-content"}
       __css={styles.base}
     >
       <Accordion
