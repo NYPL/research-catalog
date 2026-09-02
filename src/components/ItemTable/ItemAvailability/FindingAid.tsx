@@ -3,11 +3,11 @@ import Link from "../../Link/Link"
 const FindingAid = ({ url }: { url: string }) => {
   return (
     <>
-      {" See the "}
+      {" See the\u00A0"}
       <Link isExternal href={url} translate="no">
         {"finding aid"}
       </Link>
-      {" for details."}
+      {"\u00A0for details."}
     </>
   )
 }
