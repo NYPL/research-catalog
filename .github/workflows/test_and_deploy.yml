@@ -58,7 +58,7 @@ jobs:
           if [[ "${GITHUB_REF_NAME}" == "SCC-5622/translate-preparedness" || "${GITHUB_REF_NAME}" == "train" ]]; then
             echo "DEPLOY_ENV=train" >> $GITHUB_ENV
             echo "ECR_REF_NAME=train" >> $GITHUB_ENV
-            echo "APP_ENV=qa" >> $GITHUB_ENV  # Use qa env for train and status messaging branch
+            echo "APP_ENV=production" >> $GITHUB_ENV  # Use production env for train
           else
             echo "DEPLOY_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
             echo "ECR_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
