@@ -53,9 +53,11 @@ const SearchResult = ({
     </Icon>
   )
   const numItemsMessage = bib.getNumItemsMessage()
-  const metadata = [bib.format, bib.publicationStatement, numItemsMessage].filter(
-    Boolean
-  )
+  const metadata = [
+    bib.format,
+    bib.publicationStatement,
+    numItemsMessage,
+  ].filter(Boolean)
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))

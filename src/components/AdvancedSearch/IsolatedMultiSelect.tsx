@@ -1,7 +1,6 @@
 import { useState } from "react"
-import MultiSelectWithGroupTitles from "./MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import CustomMultiselect from "./CustomMultiselect/CustomMultiselect"
 import type { MultiSelectItem } from "@nypl/design-system-react-components"
-import { MultiSelect } from "@nypl/design-system-react-components"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
 
 interface IsolatedMultiSelectProps {
@@ -11,13 +10,13 @@ interface IsolatedMultiSelectProps {
   options: MultiSelectItem[]
   isWithGroupTitles?: boolean
   onSelectionChange: (field: string, values: string[]) => void
+  translate?: boolean
 }
 
 /**
- * A component that manages local state for a MultiSelect component (either the
- * Design System MultiSelect component or the custom MultiSelectWithGroupTitles
- * component) (reduces unnecessary rerenders compared to using a global React
- * state in Advanced Search page).
+ * A component that manages local state for the CustomMultiselect component
+ * (reduces unnecessary rerenders compared to using a global React state in
+ * Advanced Search page).
  * Updates formStateRef in the Advanced Search page on change.
  */
 const IsolatedMultiSelect = ({
@@ -27,6 +26,7 @@ const IsolatedMultiSelect = ({
   options,
   isWithGroupTitles = false,
   onSelectionChange,
+  translate = true,
 }: IsolatedMultiSelectProps) => {
   const [selected, setSelected] = useState<string[]>([])
 
@@ -38,28 +38,27 @@ const IsolatedMultiSelect = ({
     })
   }
 
-  return isWithGroupTitles ? (
-    <MultiSelectWithGroupTitles
-      field={{ value: field, label: label }}
-      isDisabled={isDisabled}
-      groupedItems={options}
-      selectedItems={{ [field]: { items: selected } }}
-      onChange={(itemId) => handleChange(itemId)}
-      onClear={() => handleChange(null)}
-    />
-  ) : (
-    <MultiSelect
-      sx={{ "div > div > button": { height: "40px" }, mb: "25.5px" }}
-      id={field}
-      buttonText={label}
-      isSearchable
-      closeOnBlur
-      isDisabled={isDisabled}
-      items={options}
-      selectedItems={{ [field]: { items: selected } }}
-      onChange={(e) => handleChange(e.target.id)}
-      onClear={() => handleChange(null)}
-    />
+  // Flat options are passed as `items`, grouped options as `groupedItems`.
+  return (
+    <div
+      style={{
+        marginBottom: "25.5px",
+      }}
+    >
+      <CustomMultiselect
+        field={{ value: field, label: label }}
+        isDisabled={isDisabled}
+        showGroupTitles={isWithGroupTitles}
+        searchLabelText={isWithGroupTitles ? undefined : `Search ${label}`}
+        {...(isWithGroupTitles
+          ? { groupedItems: options }
+          : { items: options })}
+        selectedItems={{ [field]: { items: selected } }}
+        onChange={(itemId) => handleChange(itemId)}
+        onClear={() => handleChange(null)}
+        translate={translate}
+      />
+    </div>
   )
 }
 IsolatedMultiSelect.displayName = "IsolatedMultiSelect"
