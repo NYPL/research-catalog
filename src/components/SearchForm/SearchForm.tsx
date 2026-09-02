@@ -109,9 +109,9 @@ const SearchForm = ({
             ref={(el: HTMLDivElement | null) => {
               // Prevent browser translation from mutating the submit button's
               // text node, which crashes React's reconciler on re-render
-              el
-                ?.querySelectorAll("button")
-                .forEach((button) => button.setAttribute("translate", "no"))
+              el?.querySelectorAll("button").forEach((button) =>
+                button.setAttribute("translate", "no")
+              )
             }}
             selectProps={{
               value: searchScope,
