@@ -37,15 +37,14 @@ export function getSearchResultsHeading(
 
   const queryDisplayJSX = browseOptions ? (
     <>
-      <span>{` for ${
+      <span>{`\u00A0for ${
         browseOptions.browseType === "subjects"
           ? "Subject Heading"
           : "author/contributor"
-      } `}</span>
-      <span translate="no">
-        &quot;{browseOptions.slug}
-        {browseOptions.role ? `, ${browseOptions.role}` : ""}&quot;
-      </span>
+      }\u00A0`}</span>
+      <span translate="no">{`"${browseOptions.slug}${
+        browseOptions.role ? `, ${browseOptions.role}` : ""
+      }"`}</span>
     </>
   ) : (
     buildQueryDisplayString(searchParams, parsedQuery)
@@ -115,14 +114,15 @@ function buildQueryDisplayString(
           : value
         paramsJSXCollection[param] = (
           <React.Fragment key={param}>
-            {label}: <span translate="no">{displayValue}</span>
+            <span>{`${label}:\u00A0`}</span>
+            <span translate="no">{displayValue}</span>
           </React.Fragment>
         )
       } else {
         paramsJSXCollection[param] = (
           <React.Fragment key={param}>
-            {`${label}${plural} `}
-            <span translate="no">&quot;{value}&quot;</span>
+            <span>{`${label}${plural}\u00A0`}</span>
+            <span translate="no">{`"${value}"`}</span>
           </React.Fragment>
         )
       }
@@ -141,14 +141,14 @@ function buildQueryDisplayString(
   if (!displayJSXArray.length) return null
 
   const joined = displayJSXArray.reduce<ReactElement[]>((acc, el, i) => {
-    if (i > 0) acc.push(<span key={`sep-${i}`}> and </span>)
+    if (i > 0) acc.push(<span key={`sep-${i}`}>{"\u00A0and\u00A0"}</span>)
     acc.push(el)
     return acc
   }, [])
 
   return (
     <React.Fragment>
-      <span> for </span>
+      <span>{"\u00A0for\u00A0"}</span>
       {joined}
     </React.Fragment>
   )

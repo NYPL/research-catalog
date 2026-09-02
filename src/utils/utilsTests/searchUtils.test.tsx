@@ -184,7 +184,7 @@ describe("searchUtils", () => {
       const heading = getSearchResultsHeading({ q: "spaghetti" }, 100)
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 100 results for keyword "spaghetti"'
+        'Displaying 1-50 of 100 results\u00A0for\u00A0keyword\u00A0"spaghetti"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"spaghetti"'
@@ -194,7 +194,7 @@ describe("searchUtils", () => {
       const heading = getSearchResultsHeading({ contributor: "spaghetti" }, 100)
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 100 results for author/contributor "spaghetti"'
+        'Displaying 1-50 of 100 results\u00A0for\u00A0author/contributor\u00A0"spaghetti"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"spaghetti"'
@@ -207,7 +207,7 @@ describe("searchUtils", () => {
       )
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 100 results for authors/contributors "spaghetti, pasta"'
+        'Displaying 1-50 of 100 results\u00A0for\u00A0authors/contributors\u00A0"spaghetti, pasta"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"spaghetti, pasta"'
@@ -227,7 +227,7 @@ describe("searchUtils", () => {
       )
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 100 results for keyword "spaghetti" and title "ricotta" and author/contributor "pasta mama" and subject "italian"'
+        'Displaying 1-50 of 100 results\u00A0for\u00A0keyword\u00A0"spaghetti"\u00A0and\u00A0title\u00A0"ricotta"\u00A0and\u00A0author/contributor\u00A0"pasta mama"\u00A0and\u00A0subject\u00A0"italian"'
       )
       const noTranslateSpans = container.querySelectorAll('[translate="no"]')
       expect(noTranslateSpans).toHaveLength(4)
@@ -248,7 +248,7 @@ describe("searchUtils", () => {
       )
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 100 results for journal title "spaghetti"'
+        'Displaying 1-50 of 100 results\u00A0for\u00A0journal title\u00A0"spaghetti"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"spaghetti"'
@@ -258,7 +258,7 @@ describe("searchUtils", () => {
       const heading = getSearchResultsHeading({ page: 1, q: "cats" }, 1200)
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 1-50 of 1,200 results for keyword "cats"'
+        'Displaying 1-50 of 1,200 results\u00A0for\u00A0keyword\u00A0"cats"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"cats"'
@@ -268,7 +268,7 @@ describe("searchUtils", () => {
       const heading = getSearchResultsHeading({ page: 5, q: "cats" }, 1200)
       const { container } = render(heading)
       expect(container.textContent).toBe(
-        'Displaying 201-250 of 1,200 results for keyword "cats"'
+        'Displaying 201-250 of 1,200 results\u00A0for\u00A0keyword\u00A0"cats"'
       )
       expect(container.querySelector('[translate="no"]')?.textContent).toBe(
         '"cats"'
@@ -289,7 +289,7 @@ describe("searchUtils", () => {
         )
         const { container } = render(heading)
         expect(container.textContent).toBe(
-          'Displaying 3 of 3 results for OCLC "1234"'
+          'Displaying 3 of 3 results\u00A0for\u00A0OCLC\u00A0"1234"'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"1234"'
@@ -303,7 +303,7 @@ describe("searchUtils", () => {
         )
         const { container } = render(heading)
         expect(container.textContent).toBe(
-          'Displaying 3 of 3 results for ISBN "1234"'
+          'Displaying 3 of 3 results\u00A0for\u00A0ISBN\u00A0"1234"'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"1234"'
@@ -317,7 +317,7 @@ describe("searchUtils", () => {
         )
         const { container } = render(heading)
         expect(container.textContent).toBe(
-          'Displaying 3 of 3 results for ISSN "1234"'
+          'Displaying 3 of 3 results\u00A0for\u00A0ISSN\u00A0"1234"'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"1234"'
@@ -331,7 +331,7 @@ describe("searchUtils", () => {
         )
         const { container } = render(heading)
         expect(container.textContent).toBe(
-          'Displaying 3 of 3 results for LCCN "1234"'
+          'Displaying 3 of 3 results\u00A0for\u00A0LCCN\u00A0"1234"'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"1234"'
@@ -346,7 +346,7 @@ describe("searchUtils", () => {
         })
         const { container } = render(heading)
         expect(container.textContent).toContain(
-          'Displaying 1-50 of 100 results for Subject Heading "History"'
+          'Displaying 1-50 of 100 results\u00A0for Subject Heading\u00A0"History"'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"History"'
@@ -361,7 +361,7 @@ describe("searchUtils", () => {
         })
         const { container } = render(heading)
         expect(container.textContent).toContain(
-          'Displaying 1-50 of 100 results for author/contributor "Sondheim, Stephen, editor."'
+          'Displaying 1-50 of 100 results\u00A0for author/contributor\u00A0"Sondheim, Stephen, editor."'
         )
         expect(container.querySelector('[translate="no"]')?.textContent).toBe(
           '"Sondheim, Stephen, editor."'
