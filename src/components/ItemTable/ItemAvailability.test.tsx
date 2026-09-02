@@ -92,9 +92,9 @@ describe("ItemAvailability", () => {
       render(<ItemAvailability item={item} />)
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
       expect(screen.queryByRole("link")).not.toBeInTheDocument()
-      expect(
-        screen.getByTestId("item-availability-message")
-      ).toHaveTextContent("at Schwarzman Building - Main Reading Room 315.")
+      expect(screen.getByTestId("item-availability-message")).toHaveTextContent(
+        "at Schwarzman Building - Main Reading Room 315."
+      )
     })
     it("onsite NO aeon YES finding aid", () => {
       const item = new Item(itemPhysicallyRequestable, parentBib)
@@ -108,9 +108,7 @@ describe("ItemAvailability", () => {
       render(<ItemAvailability item={item} />)
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
       expect(screen.queryByRole("link")).toHaveTextContent("finding aid")
-      expect(
-        screen.getByTestId("item-availability-message")
-      ).toHaveTextContent(
+      expect(screen.getByTestId("item-availability-message")).toHaveTextContent(
         "at Schwarzman Building - Main Reading Room 315. See the"
       )
     })
