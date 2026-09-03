@@ -9,6 +9,7 @@ import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
 import ContactUs from "../ContactUs/ContactUs"
+import ReloadButton from "../ReloadButton/ReloadButton"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -31,13 +32,6 @@ export default function ResultsError({
       metadataTitle = "Results not found"
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             No results found
           </Heading>
@@ -60,13 +54,6 @@ export default function ResultsError({
     case 500:
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             Something went wrong on our end
           </Heading>
@@ -74,8 +61,8 @@ export default function ResultsError({
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or <ContactUs errorStatus={errorStatus} />{" "}
-            if the error persists.
+            Try <ReloadButton /> or <ContactUs errorStatus={errorStatus} /> if
+            the error persists.
           </Text>
         </>
       )
@@ -84,13 +71,6 @@ export default function ResultsError({
       if (errorName === "InvalidQuerySyntaxError") {
         errorContent = (
           <>
-            <Image
-              src={errorImage}
-              alt="Error image"
-              width={96}
-              height={64}
-              style={{ marginBottom: "48px" }}
-            />
             <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
               Invalid query
             </Heading>
@@ -119,13 +99,6 @@ export default function ResultsError({
     default:
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             There was an unexpected error
           </Heading>
@@ -155,6 +128,14 @@ export default function ResultsError({
           justifyContent="center"
           textAlign="center"
         >
+          <Image
+            unoptimized
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           {errorContent}
         </Flex>
       </Layout>

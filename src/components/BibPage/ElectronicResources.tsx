@@ -61,6 +61,7 @@ const ElectronicResources = ({
       </CardHeading>
       <CardContent aria-expanded={!showMore}>
         <List
+          translate="no"
           variant="ul"
           mb="0"
           noStyling

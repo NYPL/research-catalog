@@ -105,13 +105,13 @@ export default function BibPage({
   // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusBannerState | null>(null)
 
-  if (errorStatus) {
+  if (errorStatus || !discoveryBibResult) {
     return (
       <PageError
         page="bib"
         errorStatus={
           // 422 = invalid bnum, which we also display as "Not found"
-          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus || 500
         }
       />
     )
@@ -250,12 +250,12 @@ export default function BibPage({
           )}
         </div>
         {findingAid && (
-          <StatusBadge mb="s" variant="informative">
+          <StatusBadge mb="s" variant="informative" translate="no">
             Finding aid available
           </StatusBadge>
         )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Heading level="h2" size="heading3" mr="s">
+          <Heading level="h2" size="heading3" mr="s" translate="no">
             {bib.title}
           </Heading>
           <ManageBibInList

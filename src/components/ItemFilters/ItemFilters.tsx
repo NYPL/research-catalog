@@ -3,12 +3,12 @@ import React from "react"
 import {
   FilterBarInline,
   MultiSelectGroup,
-  MultiSelect,
   SearchBar,
   Box,
   Label,
   type TagSetFilterDataProps,
 } from "@nypl/design-system-react-components"
+import CustomMultiselect from "../AdvancedSearch/CustomMultiselect/CustomMultiselect"
 import type {
   Aggregation,
   ItemFilterQueryParams,
@@ -172,23 +172,23 @@ const ItemFilters = ({
     filterData.map((itemFilterData: ItemFilterData) => {
       const checkboxGroup = itemFilterData.formattedFilterData
       return checkboxGroup?.items.length ? (
-        <MultiSelect
-          buttonText={checkboxGroup.name}
-          id={`${checkboxGroup.id}`}
-          data-testid={`${checkboxGroup.id}-multi-select`}
-          items={checkboxGroup.items}
+        <CustomMultiselect
           key={checkboxGroup.id}
-          onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-            await handleMultiSelectChange(e.target.id, checkboxGroup.id)
+          field={{ value: checkboxGroup.id, label: checkboxGroup.name }}
+          dataTestId={`${checkboxGroup.id}-multi-select`}
+          showGroupTitles={false}
+          searchLabelText={`Search ${checkboxGroup.name.toLowerCase()}`}
+          items={checkboxGroup.items}
+          onChange={(itemId) => {
+            handleMultiSelectChange(itemId, checkboxGroup.id)
           }}
           selectedItems={{
             [checkboxGroup.id]: { items: appliedFilters[checkboxGroup.id] },
           }}
           isBlockElement={isBlockElement}
           onClear={() => handleClearFilterGroup(checkboxGroup.id)}
+          translate={checkboxGroup.id === "location" ? false : true}
           width={multiSelectWidth}
-          closeOnBlur
-          mt={{ base: "0", md: "6px" }}
         />
       ) : null
     })

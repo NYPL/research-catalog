@@ -159,6 +159,9 @@ export default function AdvancedSearch({
     { value: "collection", label: "Division", options: collectionOptions },
   ]
 
+  // Division and item Location filter contents should not be translated
+  const untranslatedFilters = ["buildingLocation", "collection"]
+
   const multiselects = fields.map((field) => {
     return (
       <IsolatedMultiSelect
@@ -169,6 +172,7 @@ export default function AdvancedSearch({
         isWithGroupTitles={field.value == "collection"}
         options={field.options}
         onSelectionChange={handleFilterChange}
+        translate={!untranslatedFilters.includes(field.value)}
       />
     )
   })
