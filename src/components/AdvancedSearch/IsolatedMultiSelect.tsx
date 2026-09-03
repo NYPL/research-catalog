@@ -32,7 +32,7 @@ const IsolatedMultiSelect = ({
 
   const handleChange = (value: string | null) => {
     setSelected((prev) => {
-      const next = getNewSelectedFilters(prev, value)
+      const next = value === null ? [] : getNewSelectedFilters(prev, value)
       onSelectionChange(field, next)
       return next
     })
