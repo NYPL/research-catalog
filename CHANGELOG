@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.5] 2026-09-02
+
 ### Added
 
 - Added Playwright tests for NYQL invalid search and no results [SCC-5420](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5420)
