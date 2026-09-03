@@ -24,7 +24,8 @@ test.describe("Query Search", () => {
     }).toPass({ timeout: 10000 })
 
     const headingText = await searchPage.searchResultsHeading.textContent()
-    expect(headingText).toContain(
+    const cleanHeadingText = headingText.replace(/\u00a0/g, " ") // replace non-breaking spaces
+    expect(cleanHeadingText).toContain(
       'results for query: ((title = "journal of paleontology") and (date > 2000)) and (date encloses 1928)'
     )
   })
