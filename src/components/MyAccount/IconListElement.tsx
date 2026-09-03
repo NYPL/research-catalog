@@ -22,7 +22,11 @@ export const IconListElement = ({
         {icon && <Icon size="large" name={icon} />}
         {term}
       </dt>
-      <dd data-testid={term} className={styles.iconDd}>
+      <dd
+        data-testid={term}
+        className={styles.iconDd}
+        translate={term === "Expiration date" ? "yes" : "no"}
+      >
         {description}
       </dd>
     </>

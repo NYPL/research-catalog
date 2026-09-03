@@ -54,8 +54,8 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
 
 const DetailElement = (label: string, listChildren: ReactNode[]) => (
   <Fragment key={kebabCase(label)}>
-    <dt>{label}</dt>
-    <dd>
+    <dt translate={label === "Call number" ? "no" : "yes"}>{label}</dt>
+    <dd translate={label === "Format" ? "yes" : "no"}>
       <List noStyling data-testid={kebabCase(label)} variant="ol">
         {listChildren}
       </List>
@@ -111,7 +111,8 @@ export const BrowseLinkDetailElement = ({
             },
             "internal",
             true,
-            `${indexLinkLabel} for "${urlInfo.urlText}"`
+            `${indexLinkLabel} for "${urlInfo.urlText}"`,
+            "yes"
           )}
         </>
       </li>
@@ -123,7 +124,8 @@ const LinkElement = (
   url: BibDetailURL,
   linkType: "internal" | "external",
   isBold = false,
-  ariaLabel?: string
+  ariaLabel?: string,
+  translate = "no"
 ) => {
   const { text, urlText, url: href } = url
 
@@ -137,6 +139,7 @@ const LinkElement = (
         fontWeight={isBold ? "700" : "400"}
         textDecoration="none"
         aria-label={ariaLabel}
+        translate={translate}
       >
         {url.urlText}
       </Link>

@@ -28,6 +28,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
           {tableHeadings.map((heading, index) => (
             <tr key={heading}>
               <td
+                translate={heading === "Call number" ? "no" : undefined}
                 style={{
                   width: "181px",
                   minWidth: "60px",
@@ -43,7 +44,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                   {heading}
                 </Text>
               </td>
-              <td>
+              <td translate="no">
                 <Text fontSize="small">{tableData[0][index]}</Text>
               </td>
             </tr>

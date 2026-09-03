@@ -71,6 +71,7 @@ export const SearchableCheckboxGroup = ({
         />
       )}
       <CheckboxGroup
+        translate="no"
         id={`${id}-checkboxGroup`}
         layout="column"
         isFullWidth

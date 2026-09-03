@@ -25,28 +25,54 @@ export interface MultiSelectProps {
    * within the page and interact with other DOM elements. The default value is false. */
   isBlockElement?: boolean
   isDisabled?: boolean
-  groupedItems: MultiSelectItem[]
-  /** The action to perform on the checkbox's onChange function. Note, if using
-   * this prop, it must be of the type listed below. */
-  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void
+  /** Use for a checkbox list with group titles. Provide either this or `items`, not both. */
+  groupedItems?: MultiSelectItem[]
+  /** Use for a flat checkbox list with no groups. Provide either this or `groupedItems`, not both. */
+  items?: MultiSelectItem[]
+  /** Set to false to render a flat checkbox list with no group titles. Defaults to true. */
+  showGroupTitles?: boolean
+  /** Set to false to hide the search input. Defaults to true. */
+  showSearch?: boolean
+  /** Whether the accordion panel is open by default. Defaults to false. */
+  isDefaultOpen?: boolean
+  /** Label text for the search input. Defaults to "Search divisions". */
+  searchLabelText?: string
+  /** Value for the root element's data-testid attribute. Defaults to "ds-multiSelect" to match
+   * DS test expectations. */
+  dataTestId?: string
+  /** The action to perform on the checkbox's onChange function */
+  onChange: (itemId: string) => void
   /** The selected items state (items that were checked by user). */
   selectedItems: SelectedItems
   onClear: () => void
+  /* Whether to translate the CheckboxGroup content. Defaults to true. */
+  translate?: boolean
+  /** Value used to set the width for the MultiSelect component. Defaults to "full". */
+  width?: "fitContent" | "full"
 }
 
-/* Reservoir Multiselect modified to accept items with a group title that does not
- ** appear as a checkbox. Used for the Division filter in Advanced Search.
- */
-const MultiSelectWithGroupTitles = ({
+/* Reservoir Multiselect modified to accept items with an optional grouping title. */
+const CustomMultiselect = ({
   field,
   isBlockElement = false,
   isDisabled = false,
   groupedItems,
+  items,
+  showGroupTitles = true,
+  showSearch = true,
+  isDefaultOpen = false,
+  searchLabelText = "Search divisions",
+  dataTestId = "ds-multiSelect",
   onChange,
   selectedItems,
   onClear,
+  translate = true,
+  width = "full",
 }: MultiSelectProps) => {
-  const mainId = "division"
+  const mainId = field.value
+  const groups = groupedItems ?? [
+    { id: field.value, name: "", children: items ?? [] },
+  ]
   const [userClickedOutside, setUserClickedOutside] = useState(false)
   const [searchTerm, setSearchTerm] = useState("")
 
@@ -56,7 +82,7 @@ const MultiSelectWithGroupTitles = ({
   const selectedItemsCount: number =
     selectedItems[field.value]?.items?.length || 0
   const selectedItemsString = `item${selectedItemsCount === 1 ? "" : "s"}`
-  const ariaLabelValue = `${field.label} multiselect, ${selectedItemsCount} ${selectedItemsString} selected`
+  const ariaLabelValue = `${field.label}, ${selectedItemsCount} ${selectedItemsString} currently selected`
 
   const styles = useMultiStyleConfig("MultiSelect", {
     isBlockElement,
@@ -111,7 +137,7 @@ const MultiSelectWithGroupTitles = ({
   }
 
   // Filter by search term without losing grouping.
-  const filteredGroups = groupedItems
+  const filteredGroups = groups
     .map((group) => {
       if (!searchTerm) return group
       const matchingChildren = group.children.filter((child) =>
@@ -127,17 +153,20 @@ const MultiSelectWithGroupTitles = ({
   const renderGroups = (groups: MultiSelectItem[]) =>
     groups.map((group) => (
       <Box key={group.id} mb="xs">
-        <Text size="body2" mb="12px">
-          {group.name}
-        </Text>
+        {showGroupTitles && (
+          <Text size="body2" mb="12px" translate="no">
+            {group.name}
+          </Text>
+        )}
         <CheckboxGroup
-          id={`division-checkboxGroup-${group.id}`}
+          id={`${mainId}-checkboxGroup-${group.id}`}
+          translate={translate ? "yes" : "no"}
           layout="column"
           isFullWidth
           labelText={group.name}
           showLabel={false}
           name={`multi-select-checkbox-group-${group.id}`}
-          marginLeft={isBlockElement ? 0 : "m"}
+          marginLeft={showGroupTitles && !isBlockElement ? "m" : 0}
           mb="0"
         >
           {group.children.map((item) => (
@@ -147,7 +176,7 @@ const MultiSelectWithGroupTitles = ({
               labelText={item.name}
               name={item.name}
               isChecked={isChecked(field.value, item.id)}
-              onChange={onChange}
+              onChange={() => onChange(item.id)}
             />
           ))}
         </CheckboxGroup>
@@ -157,7 +186,7 @@ const MultiSelectWithGroupTitles = ({
   const searchInput = (
     <TextInput
       id={`${mainId}-textInput`}
-      labelText="Search divisions"
+      labelText={searchLabelText}
       isClearable
       isClearableCallback={() => setSearchTerm("")}
       placeholder="Search"
@@ -185,9 +214,11 @@ const MultiSelectWithGroupTitles = ({
 
   const accordionPanel = (
     <Box position="relative">
-      <Box position="sticky" top="0" marginBottom="12px" zIndex="1">
-        {searchInput}
-      </Box>
+      {showSearch && (
+        <Box position="sticky" top="0" marginBottom="12px" zIndex="1">
+          {searchInput}
+        </Box>
+      )}
       <Box
         maxHeight="215px"
         overflowY="auto"
@@ -206,9 +237,10 @@ const MultiSelectWithGroupTitles = ({
 
   return (
     <Box
-      data-testid="ds-multiSelect"
+      data-testid={dataTestId}
       id={mainId}
       ref={containerRef}
+      width={width === "full" ? "100%" : "fit-content"}
       __css={styles.base}
     >
       <Accordion
@@ -223,7 +255,7 @@ const MultiSelectWithGroupTitles = ({
         ]}
         aria-label={ariaLabelValue}
         id={`${mainId}-accordion`}
-        isDefaultOpen={false}
+        isDefaultOpen={isDefaultOpen}
         isAlwaysRendered
         userClickedOutside={userClickedOutside}
         panelMaxHeight="215px"
@@ -234,6 +266,7 @@ const MultiSelectWithGroupTitles = ({
       />
       {selectedItemsCount > 0 && (
         <MultiSelectItemsCountButton
+          key={selectedItemsCount}
           id={field.value}
           multiSelectLabelText={field.label}
           isOpen={false}
@@ -247,5 +280,5 @@ const MultiSelectWithGroupTitles = ({
   )
 }
 
-MultiSelectWithGroupTitles.displayName = "MultiSelectWithGroupTitles"
-export default MultiSelectWithGroupTitles
+CustomMultiselect.displayName = "CustomMultiselect"
+export default CustomMultiselect
