@@ -55,7 +55,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
 const DetailElement = (label: string, listChildren: ReactNode[]) => (
   <Fragment key={kebabCase(label)}>
     <dt translate={label === "Call number" ? "no" : "yes"}>{label}</dt>
-    <dd translate="no">
+    <dd translate={label === "Format" ? "yes" : "no"}>
       <List noStyling data-testid={kebabCase(label)} variant="ol">
         {listChildren}
       </List>
@@ -67,7 +67,7 @@ export const PlainTextElement = ({ label, value }: BibDetail) =>
   DetailElement(
     label,
     value?.map((val, i) => (
-      <li translate="no" dir={rtlOrLtr(val)} key={`${kebabCase(label)}-${i}`}>
+      <li dir={rtlOrLtr(val)} key={`${kebabCase(label)}-${i}`}>
         {val}
       </li>
     ))

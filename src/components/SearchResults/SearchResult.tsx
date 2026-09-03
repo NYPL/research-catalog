@@ -62,7 +62,10 @@ const SearchResult = ({
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
     acc.push(
-      <Text key={i} translate={piece === numItemsMessage ? "yes" : "no"}>
+      <Text
+        key={i}
+        translate={piece === bib.publicationStatement ? "no" : "yes"}
+      >
         {piece}
       </Text>
     )
