@@ -13,7 +13,10 @@ const PreferredContributorTableCell = ({
 }) => {
   const contributorRoleLink = (role: ContributorRole) => (
     <span key={role.roleLabel}>
-      <a href={`${BASE_URL}${role.url}`}>{role.roleLabel}</a> ({role.count})
+      <a translate="no" href={`${BASE_URL}${role.url}`}>
+        {role.roleLabel}
+      </a>{" "}
+      ({role.count})
     </span>
   )
 
@@ -42,7 +45,11 @@ const PreferredContributorTableCell = ({
   return (
     <Flex flexDir="column">
       {/* Using standard link instead of CSR, to trigger back to index button */}
-      <a style={{ marginTop: "xs" }} href={`${BASE_URL}${contributor.url}`}>
+      <a
+        translate="no"
+        style={{ marginTop: "xs" }}
+        href={`${BASE_URL}${contributor.url}`}
+      >
         {contributor.termLabel}
       </a>
       {listItems.length > 0 && (

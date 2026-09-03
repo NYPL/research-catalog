@@ -250,12 +250,12 @@ export default function BibPage({
           )}
         </div>
         {findingAid && (
-          <StatusBadge mb="s" variant="informative">
+          <StatusBadge mb="s" variant="informative" translate="no">
             Finding aid available
           </StatusBadge>
         )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Heading level="h2" size="heading3">
+          <Heading level="h2" size="heading3" translate="no">
             {bib.title}
           </Heading>
           <ManageBibInList

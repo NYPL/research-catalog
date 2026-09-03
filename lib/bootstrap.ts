@@ -1,5 +1,6 @@
-import { config, logger } from "@nypl/node-utils"
+import { config, logger, NyplSourceMapper } from "@nypl/node-utils"
 import configJson from "../config/vercel-config.json"
+
 let initialized = false
 
 export async function bootstrapConfig() {

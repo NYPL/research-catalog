@@ -144,6 +144,8 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
 
   return (
     <Text
+      as="div"
+      data-testid="item-availability-message"
       mb="0"
       fontSize={{
         base: "mobile.body.body2",

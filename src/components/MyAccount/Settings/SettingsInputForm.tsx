@@ -273,6 +273,7 @@ const SettingsInputForm = ({
             <Flex flexDir="column" alignItems="flex-start">
               {tempInputs.map((input, index) => (
                 <Text
+                  translate="no"
                   key={index}
                   sx={{
                     width: { base: "200px", sm: "250px" },

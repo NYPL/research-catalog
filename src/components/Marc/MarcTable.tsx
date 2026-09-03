@@ -91,6 +91,7 @@ const MarcTable = ({ marc }: { marc: Marc }) => {
           marginTop: "32px",
           tableLayout: "fixed",
         }}
+        translate="no"
       >
         <colgroup>
           <col style={{ width: "48px" }} />

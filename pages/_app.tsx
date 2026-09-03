@@ -88,7 +88,7 @@ class ErrorBoundary extends Component<
                 border: "none",
                 cursor: "pointer",
                 textDecoration: "underline",
-                textDecorationThickness: "1.5px",
+                textDecorationThickness: "1px",
                 font: "inherit",
                 padding: 0,
                 color: "inherit",
