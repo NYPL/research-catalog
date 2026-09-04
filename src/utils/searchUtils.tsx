@@ -8,6 +8,7 @@ import type {
   SearchFilters,
   Identifiers,
   DiscoverySearchResultsElement,
+  NestedStringArray,
 } from "../types/searchTypes"
 import SearchResultsBib from "../models/SearchResultsBib"
 import { RESULTS_PER_PAGE } from "../config/constants"
@@ -27,7 +28,7 @@ export function getSearchResultsHeading(
   searchParams: SearchParams,
   totalResults: number,
   browseOptions?: { slug: string; browseType: string; role?: string },
-  parsedQuery?: string[]
+  parsedQuery?: NestedStringArray
 ): ReactElement {
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     searchParams.page,
@@ -67,7 +68,7 @@ export function getSearchResultsHeading(
 // Shows the final part of the search query string (e.g. "for keyword 'cats'")
 function buildQueryDisplayString(
   searchParams: SearchParams,
-  parsedQuery?: string[]
+  parsedQuery?: NestedStringArray
 ): ReactElement | null {
   const searchFields = advancedSearchFields
     // Lowercase the adv search field labels:
@@ -475,7 +476,7 @@ export function filtersObjectLength(obj) {
   return total
 }
 
-export const formatParsedQuery = (node: any): string => {
+export const formatParsedQuery = (node: NestedStringArray): string => {
   if (Array.isArray(node)) {
     return node
       .map((item) =>

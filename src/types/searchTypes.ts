@@ -43,6 +43,7 @@ export interface SearchParams extends AdvancedSearchQueryParams {
   journalTitle?: string
   page?: number
   identifiers?: Identifiers
+  cql?: string
 }
 
 export type SearchFormOption = {
@@ -67,8 +68,10 @@ export interface DiscoveryAggregationResults {
 export interface DiscoverySearchResults {
   totalResults: number
   itemListElement: DiscoverySearchResultsElement[]
-  debug?: { parsed?: string[] }
+  debug?: { parsed?: NestedStringArray }
 }
+
+export type NestedStringArray = string | NestedStringArray[]
 
 export interface DiscoverySearchResultsElement {
   result?: DiscoveryBibResult
