@@ -65,13 +65,14 @@ export interface SearchResultsResponse {
 export interface DiscoveryAggregationResults {
   itemListElement: Aggregation[]
 }
+
+export type NestedStringArray = string | NestedStringArray[]
+
 export interface DiscoverySearchResults {
   totalResults: number
   itemListElement: DiscoverySearchResultsElement[]
   debug?: { parsed?: NestedStringArray }
 }
-
-export type NestedStringArray = string | NestedStringArray[]
 
 export interface DiscoverySearchResultsElement {
   result?: DiscoveryBibResult
