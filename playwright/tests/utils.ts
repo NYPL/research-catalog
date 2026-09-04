@@ -29,6 +29,7 @@ export const setUpTestPatron = async () => {
       await sierra.put(`patrons/${patronId}`, patronData)
     } catch (e) {
       logger.error("error resetting patron data, skipping account tests.")
+      logger.error(e)
       process.env.SKIP_ACCOUNT_TESTS = "true"
     }
     const updatedPatron = await sierra.get(
