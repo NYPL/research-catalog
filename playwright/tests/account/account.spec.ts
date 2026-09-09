@@ -146,6 +146,48 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.successMessage).toBeVisible({ timeout: 20000 })
       await expect(accountPage.homeLibrary).toContainText("53rd Street")
     })
+    test("should use correct focus order in password edit form with empty form", async ({
+      browserName,
+    }) => {
+      await accountPage.passwordEditLink.click()
+      await expect(accountPage.currentPasswordInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.newPasswordInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.confirmPasswordInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      // webkit excludes buttons from default tab order
+      if (browserName !== "webkit") {
+        await expect(accountPage.cancelButton).toBeFocused()
+      }
+      await accountPage.cancelButton.click()
+    })
+    test("should use correct focus order in password edit form with 'correctly' filled form", async ({
+      browserName,
+    }) => {
+      // webkit excludes buttons from default tab order
+      test.skip(browserName === "webkit")
+      await accountPage.passwordEditLink.click()
+      await expect(accountPage.currentPasswordInput).toBeFocused()
+      await accountPage.currentPasswordInput.fill("test")
+      await page.keyboard.press("Tab")
+      await expect(accountPage.currentPasswordClearInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.newPasswordInput).toBeFocused()
+      await accountPage.newPasswordInput.fill("test2")
+      await page.keyboard.press("Tab")
+      await expect(accountPage.newPasswordClearInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.confirmPasswordInput).toBeFocused()
+      await accountPage.confirmPasswordInput.fill("test2")
+      await page.keyboard.press("Tab")
+      await expect(accountPage.confirmPasswordClearInput).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.cancelButton).toBeFocused()
+      await page.keyboard.press("Tab")
+      await expect(accountPage.saveChangesButton).toBeFocused()
+      await accountPage.cancelButton.click()
+    })
   })
 
   test.describe("Other tabs", () => {

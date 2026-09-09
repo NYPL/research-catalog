@@ -2,19 +2,26 @@ import type { Page, Locator } from "@playwright/test"
 import { BasePage } from "./base_page"
 
 export class AccountPage extends BasePage {
-  readonly usernameInput: Locator
-  readonly usernameEditInput: Locator
-  readonly passwordInput: Locator
+  readonly usernameLoginInput: Locator
+  readonly passwordLoginInput: Locator
   readonly submitButton: Locator
   readonly accountHeader: Locator
+
   readonly nameLabel: Locator
   readonly name: Locator
   readonly usernameLabel: Locator
   readonly username: Locator
   readonly usernameEditLink: Locator
+  readonly usernameEditInput: Locator
   readonly passwordLabel: Locator
   readonly passwordText: Locator
   readonly passwordEditLink: Locator
+  readonly currentPasswordInput: Locator
+  readonly newPasswordInput: Locator
+  readonly confirmPasswordInput: Locator
+  readonly currentPasswordClearInput: Locator
+  readonly newPasswordClearInput: Locator
+  readonly confirmPasswordClearInput: Locator
   readonly cardNumberLabel: Locator
   readonly cardNumber: Locator
   readonly barcode: Locator
@@ -56,8 +63,8 @@ export class AccountPage extends BasePage {
 
   constructor(page: Page) {
     super(page)
-    this.usernameInput = page.getByLabel("Barcode or Username")
-    this.passwordInput = page.getByLabel("PIN/ Password")
+    this.usernameLoginInput = page.getByLabel("Barcode or Username")
+    this.passwordLoginInput = page.getByLabel("PIN/ Password")
     this.submitButton = page.getByRole("button", { name: /submit/i })
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
 
@@ -67,10 +74,29 @@ export class AccountPage extends BasePage {
     this.usernameLabel = page.getByText("Username").first()
     this.username = page.getByTestId("Username").getByTestId("ds-text")
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
-    this.usernameEditInput = page.locator("#username-input")
+    this.usernameEditInput = page.getByRole("textbox", { name: "Username" })
     this.passwordLabel = page.locator("dt", { hasText: "PIN/password" })
     this.passwordText = page.getByTestId("PIN/password").getByTestId("ds-text")
     this.passwordEditLink = page.getByRole("button", { name: /edit password/i })
+    this.currentPasswordInput = page.getByRole("textbox", {
+      name: "Enter current PIN/password",
+    })
+    this.currentPasswordClearInput = page.getByRole("button", {
+      name: "Clear Enter current PIN/",
+    })
+    this.newPasswordInput = page.getByRole("textbox", {
+      name: "Enter new PIN/password",
+      exact: true,
+    })
+    this.newPasswordClearInput = page.getByRole("button", {
+      name: "Clear Enter new PIN/",
+    })
+    this.confirmPasswordInput = page.getByRole("textbox", {
+      name: "Re-enter new PIN/password",
+    })
+    this.confirmPasswordClearInput = page.getByRole("button", {
+      name: "Clear Re-enter new PIN/",
+    })
     this.cardNumberLabel = page.locator("dt", {
       hasText: "Library card number",
     })
@@ -145,8 +171,8 @@ export class AccountPage extends BasePage {
   }
 
   async login(username: string, password: string) {
-    await this.usernameInput.fill(username)
-    await this.passwordInput.fill(password)
+    await this.usernameLoginInput.fill(username)
+    await this.passwordLoginInput.fill(password)
     await this.submitButton.click()
   }
 }
