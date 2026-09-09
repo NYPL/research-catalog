@@ -173,14 +173,12 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
         {
           term: "Enter current PIN/password",
           description: (
-            <Flex flexDir={{ base: "column", lg: "row" }}>
-              <PasswordFormField
-                ref={inputRef}
-                label="Enter current PIN/password"
-                name="currentPassword"
-                handler={handleInputChange}
-              />
-            </Flex>
+            <PasswordFormField
+              ref={inputRef}
+              label="Enter current PIN/password"
+              name="currentPassword"
+              handler={handleInputChange}
+            />
           ),
         },
         {
@@ -218,7 +216,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
               </Box>
               <Banner
                 sx={{
-                  marginTop: { base: "s", lg: "170px" },
+                  marginTop: { base: "s", lg: "185px" },
                   width: { base: "unset", lg: "64%" },
                   marginLeft: { md: "-272px" },
                   display: "inline-block",
