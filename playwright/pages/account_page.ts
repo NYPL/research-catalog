@@ -12,37 +12,47 @@ export class AccountPage extends BasePage {
   readonly usernameLabel: Locator
   readonly username: Locator
   readonly usernameEditLink: Locator
-  readonly cardnumberLabel: Locator
-  readonly cardnumber: Locator
+  readonly passwordLabel: Locator
+  readonly passwordText: Locator
+  readonly passwordEditLink: Locator
+  readonly cardNumberLabel: Locator
+  readonly cardNumber: Locator
   readonly barcode: Locator
   readonly expirationLabel: Locator
   readonly expiration: Locator
-  readonly tab_checkouts: Locator
-  readonly tab_requests: Locator
-  readonly tab_fees: Locator
-  readonly tab_account_settings: Locator
-  readonly circulating_catalog_alert: Locator
-  readonly account_items_table_header_title: Locator
-  readonly account_items_table_header_barcode: Locator
-  readonly account_items_table_header_callnumber: Locator
-  readonly account_items_table_header_due_date: Locator
-  readonly account_items_table_header_manage: Locator
-  readonly edit_phone_link: Locator
-  readonly removePhoneIcon: Locator
-  readonly edit_email_link: Locator
-  readonly edit_home_library_link: Locator
-  readonly edit_notification_preferences_link: Locator
-  readonly edit_pin_password_link: Locator
-  readonly cancelButton: Locator
 
+  readonly phone: Locator
+  readonly phoneLabel: Locator
+  readonly phoneEditLink: Locator
+  readonly removePhoneIcon: Locator
   readonly phoneInput: Locator
+  readonly email: Locator
+  readonly emailLabel: Locator
+  readonly emailEditLink: Locator
   readonly emailInput: Locator
+  readonly homeLibrary: Locator
+  readonly homeLibraryLabel: Locator
+  readonly homeLibraryEditLink: Locator
   readonly homeLibrarySelect: Locator
+  readonly notificationPreference: Locator
+  readonly notificationPreferenceLabel: Locator
+  readonly notificationPreferenceEditLink: Locator
+
+  readonly toolTipGotIt: Locator
+  readonly cancelButton: Locator
   readonly saveChangesButton: Locator
   readonly successMessage: Locator
-  readonly phoneValue: Locator
-  readonly emailValue: Locator
-  readonly homeLibraryValue: Locator
+
+  readonly tabCheckouts: Locator
+  readonly tabRequests: Locator
+  readonly tabFees: Locator
+  readonly tabLists: Locator
+  readonly circulatingCatalogAlert: Locator
+  readonly accountItemsTableHeaderTitle: Locator
+  readonly accountItemsTableHeaderBarcode: Locator
+  readonly accountItemsTableHeaderCallNumber: Locator
+  readonly accountItemsTableHeaderDueDate: Locator
+  readonly accountItemsTableHeaderAction: Locator
 
   constructor(page: Page) {
     super(page)
@@ -50,69 +60,88 @@ export class AccountPage extends BasePage {
     this.passwordInput = page.getByLabel("PIN/ Password")
     this.submitButton = page.getByRole("button", { name: /submit/i })
     this.accountHeader = page.getByRole("heading", { name: /my account/i })
+
+    // Account details
     this.nameLabel = page.getByText("Name").first()
     this.name = page.getByTestId("Name")
     this.usernameLabel = page.getByText("Username").first()
     this.username = page.getByTestId("Username").getByTestId("ds-text")
     this.usernameEditLink = page.getByRole("button", { name: /edit username/i })
     this.usernameEditInput = page.locator("#username-input")
-    this.cardnumberLabel = page.locator("dt", { hasText: "Card number" })
-    this.cardnumber = page.getByTestId("Card number")
+    this.passwordLabel = page.locator("dt", { hasText: "PIN/password" })
+    this.passwordText = page.getByTestId("PIN/password").getByTestId("ds-text")
+    this.passwordEditLink = page.getByRole("button", { name: /edit password/i })
+    this.cardNumberLabel = page.locator("dt", {
+      hasText: "Library card number",
+    })
+    this.cardNumber = page.getByTestId("Library card number")
     this.barcode = page.getByLabel("barcode")
     this.expirationLabel = page.locator("dt", { hasText: "Expiration date" })
     this.expiration = page.getByTestId("Expiration date")
-    this.tab_checkouts = page.getByRole("tab", { name: /^Checkouts/ })
-    this.tab_requests = page.getByRole("tab", { name: /^Requests/ })
-    this.tab_fees = page.getByRole("tab").filter({ hasText: /^Fees/i })
-    this.tab_account_settings = page.getByRole("tab", {
-      name: /^Account settings/,
-    })
-    this.circulating_catalog_alert = page.getByText(
-      "See eBooks and eAudiobooks checked out by you"
-    )
-    this.account_items_table_header_title = page.getByRole("columnheader", {
-      name: "Title",
-    })
-    this.account_items_table_header_barcode = page.getByRole("columnheader", {
-      name: "Barcode",
-    })
-    this.account_items_table_header_callnumber = page.getByRole(
-      "columnheader",
-      { name: "Call number" }
-    )
-    this.account_items_table_header_due_date = page.getByRole("columnheader", {
-      name: "Due back by",
-    })
-    this.account_items_table_header_manage = page.getByRole("columnheader", {
-      name: "Manage checkout",
-    })
-    this.edit_phone_link = page.locator("#edit-phones-button")
-    this.removePhoneIcon = page.getByRole("button", { name: /^Remove phone/i })
-    this.edit_email_link = page.locator("#edit-emails-button")
-    this.edit_home_library_link = page.locator("#edit-library-button")
-    this.edit_notification_preferences_link = page.locator(
-      "#edit-notification-button"
-    )
-    this.edit_pin_password_link = page.locator("#edit-password-button")
-    this.cancelButton = page.getByRole("button", { name: /cancel/i })
+
+    // Contact details and preferences
+    this.phone = page.getByTestId("Phone").getByTestId("ds-text")
+    this.phoneLabel = page.locator("dt", { hasText: "Phone" })
+    this.phoneEditLink = page.locator("#edit-phones-button")
     this.phoneInput = page.getByRole("textbox", {
       name: "Update primary phone number",
     })
+    this.removePhoneIcon = page.getByRole("button", { name: /^Remove phone/i })
+
+    this.email = page.getByTestId("Email").getByTestId("ds-text")
+    this.emailLabel = page.locator("dt", { hasText: "Email" })
+    this.emailEditLink = page.locator("#edit-emails-button")
     this.emailInput = page.getByRole("textbox", {
       name: "Update primary email address",
     })
+
+    this.homeLibrary = page.getByTestId("Home library").getByTestId("ds-text")
+    this.homeLibraryLabel = page.locator("dt", { hasText: "Home library" })
+    this.homeLibraryEditLink = page.locator("#edit-library-button")
     this.homeLibrarySelect = page.getByLabel("Update home library")
+
+    this.notificationPreference = page
+      .getByTestId("Notification preference")
+      .getByTestId("ds-text")
+    this.notificationPreferenceLabel = page.locator("dt", {
+      hasText: "Notification preference",
+    })
+    this.notificationPreferenceEditLink = page.locator(
+      "#edit-notification-button"
+    )
+
+    this.toolTipGotIt = page.getByRole("button", { name: /got it/i })
+    this.cancelButton = page.getByRole("button", { name: /cancel/i })
     this.saveChangesButton = page.getByRole("button", {
       name: /save changes/i,
     })
     this.successMessage = page.getByText(/your changes were saved/i)
 
-    this.phoneValue = page
-      .locator("p", { hasText: /phone/i })
-      .locator("xpath=following::div[1]")
-    this.homeLibraryValue = page
-      .locator("p", { hasText: /home library/i })
-      .locator("xpath=following::div[1]/div")
+    // Tabs
+    this.tabCheckouts = page.getByRole("tab", { name: /^Checkouts/ })
+    this.tabRequests = page.getByRole("tab", { name: /^Requests/ })
+    this.tabFees = page.getByRole("tab").filter({ hasText: /^Fees/i })
+    this.tabLists = page.getByRole("tab", {
+      name: /^Lists/,
+    })
+    this.circulatingCatalogAlert = page.getByText(
+      "See eBooks and eAudiobooks checked out by you"
+    )
+    this.accountItemsTableHeaderTitle = page.getByRole("columnheader", {
+      name: "Title",
+    })
+    this.accountItemsTableHeaderBarcode = page.getByRole("columnheader", {
+      name: "Barcode",
+    })
+    this.accountItemsTableHeaderCallNumber = page.getByRole("columnheader", {
+      name: "Call number",
+    })
+    this.accountItemsTableHeaderDueDate = page.getByRole("columnheader", {
+      name: "Due back by",
+    })
+    this.accountItemsTableHeaderAction = page.getByRole("columnheader", {
+      name: "Action",
+    })
   }
 
   async login(username: string, password: string) {
