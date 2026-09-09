@@ -61,6 +61,7 @@ const HoldRequestForm = ({
           isRequired
           showLabel={false}
           mb="xs"
+          translate="no"
         >
           {deliveryLocations.map((location: DeliveryLocation, index) => (
             <Radio

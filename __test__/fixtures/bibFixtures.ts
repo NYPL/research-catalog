@@ -11,19 +11,21 @@ export const physicalDescriptionBib = {
     },
   ],
   contributorLiteral: ["Kavenoki, Severin"],
-  contributorsDisplay: [
+  contributorDisplay: [
     {
-      display: "Kavenoki, Severin",
-      "@value": "Kavenoki, Severin",
+      displayLabel: "Kavenoki, Severin",
+      name: "Kavenoki, Severin",
+      nameTitle: "Kavenoki, Severin",
     },
   ],
   createdString: ["1935"],
   createdYear: 1935,
   creatorLiteral: ["Copley, Richard"],
-  creatorsDisplay: [
+  creatorDisplay: [
     {
-      display: "Copley, Richard",
-      "@value": "Copley, Richard",
+      displayLabel: "Copley, Richard",
+      name: "Copley, Richard",
+      nameTitle: "Copley, Richard",
     },
   ],
   dateEndString: ["1939"],
@@ -269,19 +271,21 @@ export const princetonRecord = {
     },
   ],
   contributorLiteral: ["Brown, David, journalist, joint author."],
-  contributorsDisplay: [
+  contributorDisplay: [
     {
-      display: "Brown, David, journalist, joint author.",
-      "@value": "Brown, David",
+      displayLabel: "Brown, David, journalist, joint author.",
+      name: "Brown, David",
+      nameTitle: "Brown, David",
     },
   ],
   createdString: ["1943"],
   createdYear: 1943,
   creatorLiteral: ["Wagg, Alfred."],
-  creatorsDisplay: [
+  creatorDisplay: [
     {
-      display: "Wagg, Alfred.",
-      "@value": "Wagg, Alfred.",
+      displayLabel: "Wagg, Alfred.",
+      name: "Wagg, Alfred.",
+      nameTitle: "Wagg, Alfred.",
     },
   ],
   dateStartYear: 1943,
@@ -1245,19 +1249,21 @@ export const bibWithSeries = {
       },
     ],
     contributorLiteral: ["Spada, Pietro, 1935-"],
-    contributorsDisplay: [
+    contributorDisplay: [
       {
-        display: "Spada, Pietro, 1935-, editor",
-        "@value": "Spada, Pietro, 1935-",
+        displayLabel: "Spada, Pietro, 1935-, editor",
+        name: "Spada, Pietro, 1935-",
+        nameTitle: "Spada, Pietro, 1935-",
       },
     ],
     createdString: ["2006"],
     createdYear: 2006,
     creatorLiteral: ["Rossini, Gioacchino, 1792-1868"],
-    creatorsDisplay: [
+    creatorDisplay: [
       {
-        display: "Rossini, Gioacchino, 1792-1868",
-        "@value": "Rossini, Gioacchino, 1792-1868",
+        displayLabel: "Rossini, Gioacchino, 1792-1868",
+        name: "Rossini, Gioacchino, 1792-1868",
+        nameTitle: "Rossini, Gioacchino, 1792-1868",
       },
     ],
     dateStartYear: 2006,
@@ -1464,9 +1470,9 @@ export const bibWithSeries = {
     numItemsTotal: 1,
     nyplSource: ["sierra-nypl"],
     parallelContributorLiteral: [null],
-    parallelContributorsDisplay: [],
+    parallelContributorDisplay: [],
     parallelCreatorLiteral: [null],
-    parallelCreatorsDisplay: [],
+    parallelCreatorDisplay: [],
     parallelSeriesAddedEntry: [],
     parallelSeriesAddedEntryDisplay: [],
     parallelSubjectLiteral: [],
@@ -1480,8 +1486,9 @@ export const bibWithSeries = {
     series: ["Inediti e rarità rossiniane ;"],
     seriesDisplay: [
       {
-        display: "Inediti e rarità rossiniane ; 12",
-        "@value": "Inediti e rarità rossiniane ;",
+        displayLabel: "Inediti e rarità rossiniane ; 12",
+        name: "Inediti e rarità rossiniane ;",
+        nameTitle: "Inediti e rarità rossiniane ;",
       },
     ],
     seriesUniformTitle: [
@@ -1489,9 +1496,10 @@ export const bibWithSeries = {
     ],
     seriesUniformTitleDisplay: [
       {
-        display:
+        displayLabel:
           "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ; 12.",
-        "@value":
+        name: "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;",
+        nameTitle:
           "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;",
       },
     ],
@@ -9471,18 +9479,20 @@ export const noParallels = {
     createdString: ["2005"],
     createdYear: 2005,
     creatorLiteral: ["Cortanze, Gérard de."],
-    creatorsDisplay: [
+    creatorDisplay: [
       {
-        display:
+        displayLabel:
           "Cortanze, Gérard de., arranger of music, composer, conductor.",
-        "@value": "Cortanze, Gérard de.",
+        name: "Cortanze, Gérard de.",
+        nameTitle: "Cortanze, Gérard de.",
       },
     ],
     contributorLiteral: ["Smith, John"],
-    contributorsDisplay: [
+    contributorDisplay: [
       {
-        display: "Smith, John, ballet dancer.",
-        "@value": "Smith, John",
+        displayLabel: "Smith, John, ballet dancer.",
+        name: "Smith, John",
+        nameTitle: "Smith, John",
       },
     ],
     dateStartYear: 2005,
@@ -9642,7 +9652,13 @@ export const noParallels = {
     publicationStatement: ["[Paris, France] : Gallimard, c2005."],
     publisherLiteral: ["Gallimard,"],
     series: ["Childhood"],
-    seriesDisplay: [{ display: "Childhood", "@value": "Childhood" }],
+    seriesDisplay: [
+      {
+        displayLabel: "Childhood",
+        name: "Childhood",
+        nameTitle: "Childhood",
+      },
+    ],
     shelfMark: ["JFC 06-438"],
     subjectLiteral: [
       "Authors, French -- 20th century -- Biography.",
@@ -9954,10 +9970,11 @@ export const yiddishBib = {
       },
     ],
     contributorLiteral: ["Sztokfisz, David."],
-    contributorsDisplay: [
+    contributorDisplay: [
       {
-        display: "Sztokfisz, David.",
-        "@value": "Sztokfisz, David.",
+        displayLabel: "Sztokfisz, David.",
+        name: "Sztokfisz, David.",
+        nameTitle: "Sztokfisz, David.",
       },
     ],
     createdString: ["1968"],
@@ -10740,10 +10757,11 @@ export const bibManyEResources = {
       },
     ],
     contributorLiteral: ["Société de gens de lettres."],
-    contributorsDisplay: [
+    contributorDisplay: [
       {
-        display: "Société de gens de lettres.",
-        "@value": "Société de gens de lettres.",
+        displayLabel: "Société de gens de lettres.",
+        name: "Société de gens de lettres.",
+        nameTitle: "Société de gens de lettres.",
       },
     ],
     createdString: ["17uu"],
@@ -13792,10 +13810,11 @@ export const bibWithSingleAeonItem = {
       },
     ],
     contributorLiteral: ["Street & Smith, publisher."],
-    contributorsDisplay: [
+    contributorDisplay: [
       {
-        display: "Street & Smith, publisher.",
-        "@value": "Street & Smith, publisher.",
+        displayLabel: "Street & Smith, publisher.",
+        name: "Street & Smith",
+        nameTitle: "Street & Smith",
       },
     ],
     createdString: [1939],

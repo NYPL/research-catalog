@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { BibPage } from "../../pages/bib_page"
+import { BibPage } from "../../../pages/bib_page"
 
 test.describe("Bib page", () => {
   let bibPage: BibPage

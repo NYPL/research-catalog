@@ -62,8 +62,8 @@ export default function HoldConfirmationPage({
     }
   }, [])
 
-  if (errorStatus) {
-    return <PageError page="hold" errorStatus={errorStatus} />
+  if (errorStatus || !discoveryBibResult) {
+    return <PageError page="hold" errorStatus={errorStatus || 500} />
   }
 
   const bib = new Bib(discoveryBibResult)
@@ -86,7 +86,9 @@ export default function HoldConfirmationPage({
             <Text mt="xs">
               You&apos;re all set! We have received your {isEDD ? "scan " : ""}
               request for{" "}
-              <Link href={`${PATHS.BIB}/${item.bibId}`}>{item.bibTitle}</Link>
+              <Link translate="no" href={`${PATHS.BIB}/${item.bibId}`}>
+                {item.bibTitle}
+              </Link>
             </Text>
           }
         />
@@ -177,13 +179,13 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     if ("status" in discoveryBib && discoveryBib.status !== 200) {
       return {
-        props: { pageError: discoveryBib.status },
+        props: { errorStatus: discoveryBib.status },
       }
     }
     if (!discoveryItemResult) {
       console.error("Hold confirmation: Item not found")
       return {
-        props: { pageError: discoveryBib.status },
+        props: { errorStatus: 500 },
       }
     }
 

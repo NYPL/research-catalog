@@ -164,6 +164,7 @@ const ContactSelectForm = ({
             width="-webkit-fill-available"
           >
             <Select
+              translate={formUtils.label === "Home library" ? "no" : "yes"}
               ref={selectRef}
               width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
@@ -192,6 +193,7 @@ const ContactSelectForm = ({
             <Flex>
               <Flex flexDir="column">
                 <Text
+                  translate={formUtils.label === "Home library" ? "no" : "yes"}
                   sx={{
                     width: { base: "200px", sm: "256px" },
                     marginBottom: 0,

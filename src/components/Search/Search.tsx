@@ -165,9 +165,16 @@ const Search = ({
                 ref={searchResultsHeadingRef}
                 aria-live="polite"
               >
-                {isLoading
-                  ? LOADING_RESULTS
-                  : getSearchResultsHeading(
+                {isLoading ? (
+                  <span key="loading">{LOADING_RESULTS}</span>
+                ) : (
+                  // Remount to avoid translation nesting error
+                  <span
+                    key={`${totalResults}-${searchParams.q ?? ""}-${
+                      searchParams.field ?? ""
+                    }-${slug ?? ""}`}
+                  >
+                    {getSearchResultsHeading(
                       searchParams,
                       totalResults,
 
@@ -180,6 +187,8 @@ const Search = ({
                         : undefined,
                       parsedQuery
                     )}
+                  </span>
+                )}
               </Heading>
               <ResultsSort
                 ref={sortMenuRef}

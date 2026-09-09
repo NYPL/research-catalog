@@ -97,6 +97,7 @@ const ListsDisplay = () => {
     const listUrl = `/account/lists/${list.id}${slug ? `/${slug}` : ""}`
     return [
       <Link
+        translate="no"
         isUnderlined={true}
         href={listUrl}
         key={list.id}
@@ -118,19 +119,31 @@ const ListsDisplay = () => {
         {list.listName}
       </Link>,
       list.isDefaultList ? (
-        <Box as="span" color="ui.gray.dark" fontStyle="italic">
+        <span
+          translate="yes"
+          style={{
+            color: "var(--nypl-colors-ui-gray-dark)",
+            fontStyle: "italic",
+          }}
+        >
           Default list - cannot be deleted
-        </Box>
+        </span>
+      ) : list.description ? (
+        <span translate="no">{list.description}</span>
       ) : (
-        list.description || (
-          <Box as="span" color="ui.gray.dark" fontStyle="italic">
-            No description
-          </Box>
-        )
+        <span
+          translate="yes"
+          style={{
+            color: "var(--nypl-colors-ui-gray-dark)",
+            fontStyle: "italic",
+          }}
+        >
+          No description
+        </span>
       ),
-      list.recordCount.toString(),
-      list.createdDate,
-      list.modifiedDate,
+      <span key={`${list.id}-recordCount`}>{list.recordCount.toString()}</span>,
+      <span key={`${list.id}-createdDate`}>{list.createdDate}</span>,
+      <span key={`${list.id}-modifiedDate`}>{list.modifiedDate}</span>,
       <ListActionsMenu
         key={list.id}
         list={list}

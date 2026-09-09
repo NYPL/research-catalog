@@ -110,6 +110,46 @@ export function getFindingAidFromSupplementaryContent(
 export const getSeriesSearchUrl = (name: string) =>
   `/search?filters[series][0]=${encodeURIComponentWithPeriods(name)}`
 
+function buildFuzzyRegex(query: string): RegExp {
+  const escapedWords = query
+    .split(/\s+/)
+    .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  return new RegExp(escapedWords.join("[^a-zA-Z0-9]*"), "gi")
+}
+
+/** Returns true if query appears in text, allowing non-alphanumeric chars between words. */
+export function fuzzyIncludes(text: string, query: string): boolean {
+  if (!text || !query) return false
+  if (text.includes(query)) return true
+  return buildFuzzyRegex(query).test(text)
+}
+
+/** Splits text around fuzzy occurrences of query, returning parts and matched segments for link rendering. */
+export function splitTextByQuery(
+  text: string,
+  query: string
+): { parts: string[]; matchedTexts: string[] } {
+  if (text.includes(query)) {
+    const splitParts = text.split(query)
+    return {
+      parts: splitParts,
+      matchedTexts: Array(splitParts.length - 1).fill(query),
+    }
+  }
+  const fuzzyRegex = buildFuzzyRegex(query)
+  const parts: string[] = []
+  const matchedTexts: string[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = fuzzyRegex.exec(text)) !== null) {
+    parts.push(text.slice(lastIndex, match.index))
+    matchedTexts.push(match[0])
+    lastIndex = match.index + match[0].length
+  }
+  parts.push(text.slice(lastIndex))
+  return { parts, matchedTexts }
+}
+
 export function buildBibMetadataTitle({
   bibTitle,
   marc = false,

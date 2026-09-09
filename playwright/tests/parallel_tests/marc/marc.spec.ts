@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { MarcPage } from "../../pages/marc_page"
+import { MarcPage } from "../../../pages/marc_page"
 
 let marcPage: MarcPage
 

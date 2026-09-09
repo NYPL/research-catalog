@@ -3,6 +3,7 @@ import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import { screen, render, waitFor } from "../../utils/testUtils"
 import Search from "../../../pages/search/index"
+import SubjectHeadingResults from "../../../pages/browse/subjects/[slug]"
 import {
   aggregationsResults as aggregations,
   results,
@@ -177,7 +178,13 @@ describe("SearchFilters", () => {
       mockRouter.push(
         "/browse/subjects/Southern%20States%20--%20Social%20conditions."
       )
-      render(component)
+      render(
+        <SubjectHeadingResults
+          isAuthenticated={true}
+          results={{ page: 1, aggregations, results, status: 200 }}
+          slug="Southern States -- Social conditions."
+        />
+      )
       const subjectMultiselect = screen.queryByLabelText(/Subject/, {
         selector: "button",
       })

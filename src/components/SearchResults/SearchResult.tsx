@@ -52,16 +52,20 @@ const SearchResult = ({
       </svg>
     </Icon>
   )
+  const numItemsMessage = bib.getNumItemsMessage()
   const metadata = [
     bib.format,
     bib.publicationStatement,
-    bib.getNumItemsMessage(),
+    numItemsMessage,
   ].filter(Boolean)
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
     acc.push(
-      <Text key={i} translate="no">
+      <Text
+        key={i}
+        translate={piece === bib.publicationStatement ? "no" : "yes"}
+      >
         {piece}
       </Text>
     )
@@ -96,7 +100,7 @@ const SearchResult = ({
           >
             <Box>
               {bib.findingAid && (
-                <StatusBadge variant="informative" mb="s">
+                <StatusBadge variant="informative" mb="s" translate="no">
                   Finding aid available
                 </StatusBadge>
               )}
