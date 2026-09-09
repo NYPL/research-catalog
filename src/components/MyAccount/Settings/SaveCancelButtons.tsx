@@ -32,6 +32,7 @@ const SaveCancelButtons = ({
         id={`cancel-${inputType}-button`}
         variant="secondary"
         onClick={onCancel}
+        translate="yes"
       >
         Cancel
       </Button>
@@ -41,6 +42,7 @@ const SaveCancelButtons = ({
         variant="primary"
         minWidth={"123px"}
         onClick={onSave}
+        translate="yes"
       >
         Save changes
       </Button>

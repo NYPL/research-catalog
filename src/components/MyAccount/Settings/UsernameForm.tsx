@@ -131,6 +131,7 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
           onChange={handleInputChange}
           isClearable
           isClearableCallback={() => setError(true)}
+          translate="yes"
         />
         <Button
           aria-label="Delete username from your account"
@@ -154,6 +155,7 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
         sx={{ marginTop: "xs", width: "fill" }}
         content="If you delete your username, you will have to use your barcode to log in to your account in the future."
         variant="warning"
+        translate="yes"
       />
     </>
   )

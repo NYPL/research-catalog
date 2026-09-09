@@ -215,6 +215,7 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
                 />
               </Box>
               <Banner
+                translate="yes"
                 sx={{
                   marginTop: { base: "s", lg: "185px" },
                   width: { base: "unset", lg: "64%" },
