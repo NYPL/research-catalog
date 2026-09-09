@@ -41,6 +41,18 @@ const ItemTable = ({ itemTableData }: ItemTableProps) => {
         showRowDividers
         my={{ base: 0, md: "s" }}
         data-testid="bib-details-item-table"
+        ref={(el: HTMLTableElement | null) => {
+          // Do not translate "call number" column header
+          el?.querySelectorAll("th").forEach((th) => {
+            if (th.textContent?.trim() === "Call number") {
+              th.setAttribute("translate", "no")
+            }
+          })
+          // Do not translate any cells except the status (first) column
+          el?.querySelectorAll("tbody td:not(:first-child)").forEach((td) =>
+            td.setAttribute("translate", "no")
+          )
+        }}
       />
     </Box>
   )

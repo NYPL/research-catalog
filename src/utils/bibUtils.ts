@@ -9,27 +9,6 @@ import {
   getPaginationOffsetStrings,
 } from "./appUtils"
 
-/**
- * standardizeBibId
- * Transforms bib id to have lower case prefix (b, hb, cb, pb) and trim check digit
- */
-export function standardizeBibId(bibId: string): string {
-  // nypl bib ids could have a 9th digit, a check digit which can be 0-9 or x.
-  const nypl = bibId.match(/^([bB])(\d{8})[\dxX]?$/)
-  const princeton = bibId.match(/^([pP][bB])(\d{6,16})$/)
-  const columbia = bibId.match(/^([cC][bB])(\d{6,9})$/)
-  const harvard = bibId.match(/^([hH][bB])(\d{6,18})$/)
-  const matches = [nypl, princeton, columbia, harvard].find(
-    (match) => match?.length === 3
-  )
-  if (matches) {
-    const prefix = matches[1].toLowerCase()
-    const number = matches[2]
-    return prefix + number
-  }
-  return bibId
-}
-
 export const rtlOrLtr = (value: string) => {
   return isRtl(value) ? "rtl" : "ltr"
 }
@@ -130,6 +109,46 @@ export function getFindingAidFromSupplementaryContent(
 
 export const getSeriesSearchUrl = (name: string) =>
   `/search?filters[series][0]=${encodeURIComponentWithPeriods(name)}`
+
+function buildFuzzyRegex(query: string): RegExp {
+  const escapedWords = query
+    .split(/\s+/)
+    .map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, "\\$&"))
+  return new RegExp(escapedWords.join("[^a-zA-Z0-9]*"), "gi")
+}
+
+/** Returns true if query appears in text, allowing non-alphanumeric chars between words. */
+export function fuzzyIncludes(text: string, query: string): boolean {
+  if (!text || !query) return false
+  if (text.includes(query)) return true
+  return buildFuzzyRegex(query).test(text)
+}
+
+/** Splits text around fuzzy occurrences of query, returning parts and matched segments for link rendering. */
+export function splitTextByQuery(
+  text: string,
+  query: string
+): { parts: string[]; matchedTexts: string[] } {
+  if (text.includes(query)) {
+    const splitParts = text.split(query)
+    return {
+      parts: splitParts,
+      matchedTexts: Array(splitParts.length - 1).fill(query),
+    }
+  }
+  const fuzzyRegex = buildFuzzyRegex(query)
+  const parts: string[] = []
+  const matchedTexts: string[] = []
+  let lastIndex = 0
+  let match: RegExpExecArray | null
+  while ((match = fuzzyRegex.exec(text)) !== null) {
+    parts.push(text.slice(lastIndex, match.index))
+    matchedTexts.push(match[0])
+    lastIndex = match.index + match[0].length
+  }
+  parts.push(text.slice(lastIndex))
+  return { parts, matchedTexts }
+}
 
 export function buildBibMetadataTitle({
   bibTitle,

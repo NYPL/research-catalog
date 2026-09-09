@@ -2,7 +2,7 @@ import type {
   SearchParams,
   SearchResultsResponse,
 } from "../../types/searchTypes"
-import { standardizeBibId } from "../../utils/bibUtils"
+import { standardizeBibId } from "../../utils/bibServerUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import {
   DISCOVERY_API_SEARCH_ROUTE,

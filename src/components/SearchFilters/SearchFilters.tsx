@@ -3,7 +3,6 @@ import {
   Card,
   CardContent,
   Flex,
-  MultiSelect,
 } from "@nypl/design-system-react-components"
 import SearchResultsFilters from "../../models/SearchResultsFilters"
 import { useRouter } from "next/router"
@@ -15,13 +14,13 @@ import {
 } from "../../utils/refineSearchUtils"
 import type { Aggregation } from "../../types/filterTypes"
 import { useFocusContext, idConstants } from "../../context/FocusContext"
-import MultiSelectWithGroupTitles from "../AdvancedSearch/MultiSelectWithGroupTitles/MultiSelectWithGroupTitles"
+import CustomMultiselect from "../AdvancedSearch/CustomMultiselect/CustomMultiselect"
 import { mapCollectionsIntoLocations } from "../../utils/advancedSearchUtils"
 import DateFilter from "../DateFilter/DateFilter"
 import { useDateFilter } from "../../hooks/useDateFilter"
 import { getNewSelectedFilters } from "../../utils/searchUtils"
 
-let fields = [
+const ALL_FIELDS = [
   { value: "buildingLocation", label: "Item location" },
   { value: "format", label: "Format" },
   { value: "language", label: "Language" },
@@ -91,12 +90,19 @@ const SearchFilters = ({
   const [focusedFilter, setFocusedFilter] = useState<string | null>(null)
 
   // Do not display Subject filter if there is no query term and a subject filter is applied
-  if (
+  const hideSubjectFilter =
     (router.query?.q === "" || !router.query.q) &&
     (Object.hasOwn(appliedFilters, "subjectLiteral") || lockedFilterValue)
-  ) {
-    fields = fields.filter((field) => field.label !== "Subject")
-  }
+  const fields = hideSubjectFilter
+    ? ALL_FIELDS.filter((field) => field.label !== "Subject")
+    : ALL_FIELDS
+
+  // Division, Item location, and Subject filter contents should not be translated
+  const untranslatedFilters = [
+    "subjectLiteral",
+    "buildingLocation",
+    "collection",
+  ]
 
   const filters = fields.map((field) => {
     const filterData = new SearchResultsFilters(aggregations, field)
@@ -105,6 +111,7 @@ const SearchFilters = ({
       const filteredOptions = filterData.options.filter(
         (opt) => opt.value !== lockedFilterValue
       )
+
       return (
         <div
           key={field.value}
@@ -115,47 +122,15 @@ const SearchFilters = ({
             transition: "opacity 0.2s ease",
           }}
         >
-          {!(field.value === "collection") ? (
-            <MultiSelect
-              sx={{
-                "div > div > button": {
-                  height: "40px",
-                },
-              }}
-              isDefaultOpen={field.value !== "subjectLiteral"}
-              defaultItemsVisible={1}
-              isBlockElement
-              isSearchable={field.value !== "buildingLocation"}
-              id={field.value}
-              buttonText={field.label}
-              onClear={() => {
-                handleFilterClear(field.value)
-                setFocusedFilter(field.value)
-              }}
-              onChange={async (e: React.ChangeEvent<HTMLInputElement>) => {
-                handleCheckboxChange(field.value, e.target.id)
-                setFocusedFilter(field.value)
-              }}
-              selectedItems={{
-                [field.value]: {
-                  items: appliedFilters[field.value] || [],
-                },
-              }}
-              items={filteredOptions
-                .filter((option) => option.label && option.label.trim() !== "")
-                .map((option) => ({
-                  id: option.value,
-                  name: `${option.label} (${option.count.toLocaleString()})`,
-                }))}
-            />
-          ) : (
-            <MultiSelectWithGroupTitles
+          {field.value === "collection" ? (
+            <CustomMultiselect
               key={field.value}
               isBlockElement
               field={{ value: field.value, label: "Division" }}
               groupedItems={mapCollectionsIntoLocations(filteredOptions)}
-              onChange={(e) => {
-                handleCheckboxChange(field.value, e.target.id)
+              translate={!untranslatedFilters.includes(field.value)}
+              onChange={(itemId) => {
+                handleCheckboxChange(field.value, itemId)
                 setFocusedFilter(field.value)
               }}
               onClear={() => {
@@ -167,6 +142,36 @@ const SearchFilters = ({
                   items: appliedFilters[field.value],
                 },
               }}
+            />
+          ) : (
+            <CustomMultiselect
+              key={field.value}
+              isBlockElement
+              isDefaultOpen={field.value !== "subjectLiteral"}
+              showGroupTitles={false}
+              showSearch={field.value !== "buildingLocation"}
+              searchLabelText={`Search ${field.label}`}
+              field={field}
+              items={filteredOptions
+                .filter((option) => option.label && option.label.trim() !== "")
+                .map((option) => ({
+                  id: option.value,
+                  name: `${option.label} (${option.count.toLocaleString()})`,
+                }))}
+              onChange={(itemId) => {
+                handleCheckboxChange(field.value, itemId)
+                setFocusedFilter(field.value)
+              }}
+              onClear={() => {
+                handleFilterClear(field.value)
+                setFocusedFilter(field.value)
+              }}
+              selectedItems={{
+                [field.value]: {
+                  items: appliedFilters[field.value] || [],
+                },
+              }}
+              translate={!untranslatedFilters.includes(field.value)}
             />
           )}
         </div>

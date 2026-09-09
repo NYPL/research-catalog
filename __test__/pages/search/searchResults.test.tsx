@@ -17,10 +17,10 @@ describe("Search Results page", () => {
         <SearchPage isAuthenticated={true} results={{ results, status: 200 }} />
       )
 
-      const displayingText = screen.getByText(
+      const displayingText = screen.getByTestId("search-results-heading")
+      expect(displayingText).toHaveTextContent(
         `Displaying 1-50 of ${results.totalResults} results for keyword "${query}"`
       )
-      expect(displayingText).toBeInTheDocument()
 
       const cards = screen.getAllByRole("heading", { level: 3 })
       expect(cards).toHaveLength(50)

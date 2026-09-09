@@ -35,7 +35,7 @@ export default class ItemTableData {
       ...(this.showStatusColumn() ? ["Status"] : []),
       ...(this.showVolumeColumn() ? [this.volumeColumnHeading()] : []),
       ...(this.showAccessColumn() ? ["Access"] : []),
-      "Call number",
+      ...(this.showCallNumberColumn() ? ["Call number"] : []),
       "Item location",
     ]
   }
@@ -50,13 +50,17 @@ export default class ItemTableData {
         ...(this.showAccessColumn()
           ? [ItemTableCell({ children: item.accessMessage })]
           : []),
-        ItemTableCell({
-          children: item.callNumber
-            ? `${item.callNumber}${
-                item.volume && !this.showVolumeColumn() ? ` ${item.volume}` : ""
-              }`
-            : "",
-        }),
+        ...(this.showCallNumberColumn()
+          ? [
+              ItemTableCell({
+                children: `${item.callNumber}${
+                  item.volume && !this.showVolumeColumn()
+                    ? ` ${item.volume}`
+                    : ""
+                }`,
+              }),
+            ]
+          : []),
         ItemTableCell({ children: item.location.prefLabel }),
       ]
     })
@@ -72,6 +76,10 @@ export default class ItemTableData {
 
   showAccessColumn(): boolean {
     return !this.inSearchResult
+  }
+
+  showCallNumberColumn(): boolean {
+    return this.items?.some((item) => item.callNumber)
   }
 
   volumeColumnHeading(): string {

@@ -52,6 +52,7 @@ const MultiSelectItemsCountButton = forwardRef<
       aria-label={selectedItemsAriaLabel}
       data-testid="ds-multiSelectItemsCountButton"
       id={`${id}-count-button`}
+      translate="no"
       onClick={() => {
         onClear && onClear()
         // Set focus on the Accordion Button when close the

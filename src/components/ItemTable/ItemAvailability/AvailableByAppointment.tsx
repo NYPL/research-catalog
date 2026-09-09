@@ -14,9 +14,13 @@ const AvailableAtLink = ({ location }) => {
   if (!location?.endpoint) return null
   return (
     <>
-      {" at "}
-      <Link isExternal href={`${appConfig.urls.locations}${location.endpoint}`}>
-        {location.prefLabel + "."}
+      <span>{"\u00A0at\u00A0"}</span>
+      <Link
+        translate="no"
+        isExternal
+        href={`${appConfig.urls.locations}${location.endpoint}`}
+      >
+        <span translate="no">{`${location.prefLabel}.`}</span>
       </Link>
     </>
   )
@@ -24,7 +28,13 @@ const AvailableAtLink = ({ location }) => {
 
 const AvailableAt = ({ location }) => {
   if (!location?.endpoint) return null
-  return <> {` at ${location.prefLabel}. `}</>
+  return (
+    <>
+      <span>{"\u00A0at\u00A0"}</span>
+      <span translate="no">{`${location.prefLabel}.`}</span>
+      <span>{"\u00A0"}</span>
+    </>
+  )
 }
 
 export { AvailableByAppointment, AvailableAtLink, AvailableAt }

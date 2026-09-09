@@ -169,6 +169,7 @@ const SettingsSelectForm = ({
             width="-webkit-fill-available"
           >
             <Select
+              translate={formUtils.label === "Home library" ? "no" : "yes"}
               ref={selectRef}
               width={{ base: "100%", md: "max-content" }}
               name={`select-${type}`}
@@ -197,6 +198,7 @@ const SettingsSelectForm = ({
             <Flex marginLeft={{ base: "m", lg: "unset" }}>
               <Flex flexDir="column">
                 <Text
+                  translate={formUtils.label === "Home library" ? "no" : "yes"}
                   sx={{
                     marginTop: { base: "xs", lg: "unset" },
                     width: { base: "200px", sm: "250px" },

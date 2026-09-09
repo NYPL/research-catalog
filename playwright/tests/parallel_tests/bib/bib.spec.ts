@@ -1,8 +1,19 @@
 import { test, expect } from "@playwright/test"
-import { BibPage } from "../../pages/bib_page"
+import { BibPage } from "../../../pages/bib_page"
 
 test.describe("Bib page", () => {
   let bibPage: BibPage
+
+  // Bib validation requires loading data, and is a little finicky in conjunction with the existing bib id parsing
+  test.describe("Bib id validation/standardization", () => {
+    test.beforeEach(async ({ page }) => {
+      bibPage = new BibPage(page)
+      await bibPage.navigate("PB9938560573506421")
+    })
+    test("bib id parsing does not explode", async () => {
+      await expect(bibPage.heading).toContainText("Un poeta")
+    })
+  })
 
   test.describe("Bib page elements", () => {
     test.beforeEach(async ({ page }) => {
