@@ -218,33 +218,40 @@ const PasswordForm = ({ patron, settingsState }: PasswordFormProps) => {
                 translate="yes"
                 sx={{
                   marginTop: { base: "s", lg: "185px" },
-                  width: { base: "unset", lg: "64%" },
+                  width: { base: "unset", md: "574px" },
                   marginLeft: { md: "-272px" },
-                  display: "inline-block",
                 }}
+                // heading={
+
+                // }
                 content={
                   <>
                     <Text
-                      size="body1"
                       sx={{
-                        fontWeight: "500",
+                        fontWeight: "bold",
+                        mt: "xxs",
                       }}
                     >
                       Use a strong PIN/PASSWORD to protect your security and
                       identity.
                     </Text>
-                    <Text>
+                    {/* Using separate Text elements to prevent gtranslate from stripping line breaks */}
+                    <Text mt="s">
                       You have the option of creating a standard PIN (4
                       characters in length) or the more secure option of
-                      creating a PASSWORD up to 32 characters long. <br />{" "}
-                      <br /> You can create a PIN/PASSWORD that includes upper
-                      or lower case characters (a-z, A-Z), numbers (0-9), and/or
-                      special characters{" "}
+                      creating a PASSWORD up to 32 characters long.
+                    </Text>
+                    <Text mt="s">
+                      You can create a PIN/PASSWORD that includes upper or lower
+                      case characters (a-z, A-Z), numbers (0-9), and/or special
+                      characters{" "}
                       <span style={{ fontWeight: "bold" }}>
                         limited to the following
                       </span>
                       :
-                      <br />~ . ! ? @ # $ % ^ & * ( ) <br /> <br />
+                    </Text>
+                    <Text>~ . ! ? @ # $ % ^ & * ( )</Text>
+                    <Text mt="s">
                       PINs or PASSWORDS must not contain common patterns, for
                       example: a character that is repeated 3 or more times
                       (0001, aaaa, aaaatf54, x7gp3333), or four characters
