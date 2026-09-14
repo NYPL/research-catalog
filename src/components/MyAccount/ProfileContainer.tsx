@@ -17,7 +17,7 @@ const ProfileContainer = ({ tabsPath }) => {
       >
         {hasFines && <FeesBanner />}
       </Flex>
-      <Heading level="h3" mb={{ md: "xs" }}>
+      <Heading level="h2" size="heading3" mb={{ md: "xs" }}>
         My account
       </Heading>
       <Box position="relative" display="inline-block">

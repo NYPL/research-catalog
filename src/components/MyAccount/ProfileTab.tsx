@@ -152,7 +152,11 @@ const ProfileTab = () => {
       <List
         className={styles.myAccountList}
         id="my-account-account-details"
-        title={<Heading level="h4">Account details</Heading>}
+        title={
+          <Heading level="h3" size="heading4">
+            Account details
+          </Heading>
+        }
         variant="dl"
         sx={{
           border: "none",
@@ -164,7 +168,11 @@ const ProfileTab = () => {
       <List
         className={styles.myAccountList}
         id="my-account-contact-details"
-        title={<Heading level="h4">Contact details and preferences</Heading>}
+        title={
+          <Heading level="h3" size="heading4">
+            Contact details and preferences
+          </Heading>
+        }
         variant="dl"
         sx={{
           borderTop: "1px",
