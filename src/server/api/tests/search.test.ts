@@ -116,4 +116,21 @@ describe("fetchSearchResults", () => {
         "No results found for search ?q=empty&per_page=50&include_aggregations=true",
     })
   })
+
+  it("passes journal_title search scope directly without converting to title or adding issuance filter", async () => {
+    mockClient.get.mockResolvedValueOnce({
+      totalResults: 1,
+      itemListElement: [{}],
+      aggregations: { itemListElement: [] },
+    })
+
+    await fetchSearchResults({
+      q: "nature",
+      field: "journal_title",
+    })
+
+    expect(mockClient.get).toHaveBeenCalledWith(
+      "/search?q=nature&search_scope=journal_title&per_page=50&include_aggregations=true"
+    )
+  })
 })
