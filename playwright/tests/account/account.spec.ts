@@ -34,7 +34,7 @@ test.describe.serial("Account page", () => {
     await page.getByLabel(/barcode/i).fill(username)
     await page.getByLabel(/pin/i).fill(password)
     await page.getByRole("button", { name: /submit/i }).click()
-    await page.waitForSelector('h3:has-text("My Account")')
+    await page.waitForSelector('h2:has-text("My account")')
     accountPage = new AccountPage(page)
   })
   test.afterAll(async () => {
