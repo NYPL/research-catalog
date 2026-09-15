@@ -130,7 +130,7 @@ describe("fetchSearchResults", () => {
     })
 
     expect(mockClient.get).toHaveBeenCalledWith(
-      "/search?q=nature&search_scope=journal_title&per_page=50&include_aggregations=true"
+      "/discovery/resources?q=nature&search_scope=journal_title&per_page=50&include_aggregations=true"
     )
   })
 })
