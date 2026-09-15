@@ -18,8 +18,9 @@ const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
         aria-label={buttonLabel}
         variant="text"
         onClick={onClick}
+        translate="yes"
         sx={{
-          marginTop: { base: "unset", lg: "-xs" },
+          marginTop: { base: "unset", md: "-xs" },
           paddingTop: "0",
           paddingBottom: "0",
           paddingLeft: "xs",

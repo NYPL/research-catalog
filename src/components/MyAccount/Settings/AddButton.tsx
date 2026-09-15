@@ -26,6 +26,7 @@ const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
           paddingBottom: "xs",
           paddingRight: "xs",
         }}
+        translate="yes"
       >
         {label}
       </Button>

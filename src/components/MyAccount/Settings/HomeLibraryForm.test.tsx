@@ -3,7 +3,7 @@ import { filteredPickupLocations } from "../../../../__test__/fixtures/processed
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
-import HomeLibraryNotificationForm from "./SettingsSelectForm"
+import ContactSelectForm from "./ContactSelectForm"
 import { FocusProvider } from "../../../context/FocusContext"
 
 describe("home library form", () => {
@@ -21,7 +21,7 @@ describe("home library form", () => {
           pickupLocations: filteredPickupLocations,
         }}
       >
-        <HomeLibraryNotificationForm
+        <ContactSelectForm
           patronData={processedPatron}
           settingsState={mockSettingsState}
           pickupLocations={pickupLocations}

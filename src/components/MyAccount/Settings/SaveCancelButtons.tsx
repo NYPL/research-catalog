@@ -24,7 +24,7 @@ const SaveCancelButtons = ({
       display="flex"
       flexDir={{ base: "column-reverse", lg: "row" }}
       justifySelf={{ base: "unset", lg: "flex-end" }}
-      marginLeft={{ base: "unset", md: "l", lg: "auto" }}
+      marginLeft={{ base: "unset", lg: "auto" }}
       marginTop={{ base: "s", lg: "unset" }}
     >
       <Button
@@ -32,6 +32,7 @@ const SaveCancelButtons = ({
         id={`cancel-${inputType}-button`}
         variant="secondary"
         onClick={onCancel}
+        translate="yes"
       >
         Cancel
       </Button>
@@ -41,6 +42,7 @@ const SaveCancelButtons = ({
         variant="primary"
         minWidth={"123px"}
         onClick={onSave}
+        translate="yes"
       >
         Save changes
       </Button>
