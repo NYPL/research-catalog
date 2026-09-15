@@ -1,11 +1,11 @@
 import sierraClient from "../../src/server/sierraClient"
-import { appConfig } from "../../src/config/appConfig"
+import { testPatron } from "../config/testPatrons"
 import { logger } from "@nypl/node-utils"
 
-const username = appConfig.testUser.username[appConfig.environment]
-const name = appConfig.testUser.name[appConfig.environment]
-const cardNumber = appConfig.testUser.cardNumber[appConfig.environment]
-const patronId = appConfig.testUser.patronId[appConfig.environment]
+const username = testPatron.username
+const name = testPatron.name
+const cardNumber = testPatron.cardNumber
+const patronId = testPatron.patronId
 
 export const setUpTestPatron = async () => {
   console.log("Resetting patron account data")
