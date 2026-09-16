@@ -35,7 +35,15 @@ const ContactUs = ({
   }
 
   return (
-    <Link id="contact-us" onClick={onOpenForm}>
+    <Link
+      id="contact-us"
+      onClick={onOpenForm}
+      onKeyDown={(e) => {
+        e.preventDefault()
+        if (e.key === "Enter" || e.key === " ") onOpenForm()
+      }}
+      tabIndex={0}
+    >
       {contactMessage}
     </Link>
   )
