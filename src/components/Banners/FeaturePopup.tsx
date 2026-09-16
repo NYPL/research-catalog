@@ -6,12 +6,14 @@ export const FeaturePopup = ({
   titleNew = "New!",
   titleUpdate,
   content,
+  pointerDirection = "down",
   pointerRight = "150px",
 }: {
   id: string
   titleNew?: string
   titleUpdate: string
   content: string
+  pointerDirection?: "down" | "up"
   pointerRight?: string | { [breakpoint: string]: string }
 }) => {
   const [isVisible, setIsVisible] = useState(false)
@@ -47,12 +49,20 @@ export const FeaturePopup = ({
         _before: {
           content: '""',
           position: "absolute",
-          bottom: "-7px",
+          ...(pointerDirection === "up"
+            ? {
+                top: "-7px",
+                borderBottom: "8px solid",
+                borderBottomColor: "ui.gray.xx-dark",
+              }
+            : {
+                bottom: "-7px",
+                borderTop: "8px solid",
+                borderTopColor: "ui.gray.xx-dark",
+              }),
           right: pointerRight,
           borderLeft: "8px solid transparent",
           borderRight: "8px solid transparent",
-          borderTop: "8px solid",
-          borderTopColor: "ui.gray.xx-dark",
         },
       }}
     >

@@ -5,7 +5,6 @@ import {
   Icon,
   SubNav,
   SubNavLink,
-  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
 import Link from "../Link/Link"
@@ -23,8 +22,6 @@ interface SubNavProps {
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
   const logoutLink = useLogoutRedirect()
-  const { isLargerThanSmallMobile, isLargerThanLargeMobile } =
-    useNYPLBreakpoints()
 
   return (
     <SubNav
@@ -51,7 +48,12 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 : undefined
             }
           >
-            Search{isLargerThanSmallMobile && " the Catalog"}
+            <Box as="span">
+              Search{" "}
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                {"the Catalog"}
+              </Box>
+            </Box>
           </SubNavLink>
 
           <SubNavLink
@@ -61,12 +63,26 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             isSelected={inBrowse}
             aria-current={inBrowse ? "page" : undefined}
           >
-            Browse{isLargerThanSmallMobile && " the Catalog"}
+            <Box as="span">
+              Browse{" "}
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                {"the Catalog"}
+              </Box>
+            </Box>
           </SubNavLink>
         </>
       }
       secondaryActions={
         <>
+          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
+            <SubNavLink
+              href={logoutLink}
+              id="subnav-logout"
+              screenreaderOnlyText="of NYPL.org"
+            >
+              Log out
+            </SubNavLink>
+          </div>
           <Box position="relative">
             <Box
               position="absolute"
@@ -94,7 +110,12 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               borderRadius="6px"
             >
               <Icon name="actionLightbulb" size="medium" />
-              {isLargerThanSmallMobile ? "User guide" : "Guide"}
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                User guide
+              </Box>
+              <Box as="span" display={{ base: "inline", sm: "none" }}>
+                Guide
+              </Box>
             </Link>
           </Box>
           <SubNavLink
@@ -110,8 +131,9 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               name={isAuthenticated ? "actionIdentityFilled" : "actionIdentity"}
               size="medium"
             />
-            {isLargerThanLargeMobile &&
-              (isAuthenticated ? "My account" : "Log in")}
+            <Box as="span" display={{ base: "none", md: "inline" }}>
+              {isAuthenticated ? "My account" : "Log in"}
+            </Box>
           </SubNavLink>
         </>
       }
