@@ -143,7 +143,11 @@ describe("MyAccount page", () => {
         isAuthenticated={true}
       />
     )
-    expect(screen.getByText("We are unable to display", { exact: false }))
+    expect(
+      screen.getByText("Your account details could not be loaded", {
+        exact: false,
+      })
+    )
   })
 
   it("redirects invalid paths to /account", async () => {
