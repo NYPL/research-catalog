@@ -1,4 +1,4 @@
-const patrons = {
+const TEST_PATRONS = {
   local: {
     patronId: "9555150",
     name: "PLAYWRIGHT TEST ACCOUNT LOCAL",
@@ -13,14 +13,14 @@ const patrons = {
   },
 }
 
-const which = process.env.TEST_PATRON || "local"
-const patron = patrons[which as keyof typeof patrons]
+const patronKey = process.env.TEST_PATRON || "local"
+const selectedPatron = TEST_PATRONS[patronKey as keyof typeof TEST_PATRONS]
 
-if (!patron) {
-  throw new Error(`Unknown TEST_PATRON: "${which}". Use "local" or "gha".`)
+if (!selectedPatron) {
+  throw new Error(`Unknown TEST_PATRON: "${patronKey}". Use "local" or "gha".`)
 }
 
 export const testPatron = {
-  ...patron,
+  ...selectedPatron,
   password: process.env.QA_PASSWORD,
 }
