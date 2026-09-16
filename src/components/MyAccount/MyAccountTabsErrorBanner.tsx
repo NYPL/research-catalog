@@ -12,7 +12,7 @@ export const MyAccountTabsErrorBanner = ({
     <Banner
       variant="negative"
       isDismissible={false}
-      sx={{ mt: "m" }}
+      sx={{ mt: "l" }}
       content={
         <>
           Your {tabLabel} could not be loaded. Try again later or <ContactUs />{" "}
