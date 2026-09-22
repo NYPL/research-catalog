@@ -1,4 +1,5 @@
 import { Link } from "@nypl/design-system-react-components"
+import type { MouseEvent } from "react"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
 import type Item from "../../models/Item"
@@ -20,7 +21,8 @@ const ContactUs = ({
   const { onOpen, setItemMetadata, setErrorStatus } =
     useContext(FeedbackContext)
 
-  const onOpenForm = () => {
+  const onOpenForm = (e: MouseEvent) => {
+    e.preventDefault()
     if (item)
       setItemMetadata({
         id: item.id,
@@ -35,15 +37,7 @@ const ContactUs = ({
   }
 
   return (
-    <Link
-      id="contact-us"
-      onClick={onOpenForm}
-      onKeyDown={(e) => {
-        e.preventDefault()
-        if (e.key === "Enter" || e.key === " ") onOpenForm()
-      }}
-      tabIndex={0}
-    >
+    <Link id="contact-us" href="" onClick={onOpenForm}>
       {contactMessage}
     </Link>
   )
