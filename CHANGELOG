@@ -9,6 +9,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
+
 - Updated contributor linked fields to use name and title [SCC-5474](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5474)
 - Replaced non-breaking spaces in playwright test
 - Updated cql search types
