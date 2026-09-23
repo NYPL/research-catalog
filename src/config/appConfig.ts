@@ -6,8 +6,8 @@ export const appConfig: AppConfig = {
     (process.env.NEXT_PUBLIC_APP_ENV as Environment) || "development",
   apiEndpoints: {
     platform: {
-      development: "https://qa-platform.nypl.org/api",
-      qa: "https://qa-platform.nypl.org/api",
+      development: "http://localhost:8082/api",
+      qa: "http://localhost:8082/api",
       production: "https://platform.nypl.org/api",
     },
     domain: {
