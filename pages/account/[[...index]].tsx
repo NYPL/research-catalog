@@ -1,4 +1,4 @@
-import { Text } from "@nypl/design-system-react-components"
+import { Banner } from "@nypl/design-system-react-components"
 import Layout from "../../src/components/Layout/Layout"
 import initializePatronTokenAuth, {
   doRedirectBasedOnNyplAccountRedirects,
@@ -12,6 +12,7 @@ import RCHead from "../../src/components/Head/RCHead"
 import TimedLogoutModal from "../../src/components/MyAccount/TimedLogoutModal"
 import { bootstrapConfig } from "../../lib/bootstrap"
 import { generateListSlug } from "../../src/utils/listUtils"
+import ContactUs from "../../src/components/ContactUs/ContactUs"
 
 interface MyAccountPropsType {
   accountData: MyAccountPatronData
@@ -29,17 +30,28 @@ export default function MyAccount({
   const errorRetrievingPatronData = !accountData?.patron
 
   const serverError = (
-    <Text>
-      We are unable to display your account information at this time. Please
-      contact gethelp@nypl.org for assistance.
-    </Text>
+    <Banner
+      variant="negative"
+      isDismissible={false}
+      content={
+        <>
+          Your account details could not be loaded. Try again later or{" "}
+          <ContactUs /> for assistance.
+        </>
+      }
+    />
   )
   const authError = (
-    <Text>
-      We are unable to display your account information at this time due an
-      error with our authentication server. Please contact gethelp@nypl.org for
-      assistance.
-    </Text>
+    <Banner
+      variant="negative"
+      isDismissible={false}
+      content={
+        <>
+          Your account details could not be loaded due to an authentication
+          error. Try again later or <ContactUs /> for assistance.
+        </>
+      }
+    />
   )
 
   try {

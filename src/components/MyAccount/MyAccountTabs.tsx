@@ -8,6 +8,7 @@ import { PatronDataContext } from "../../context/PatronDataContext"
 import { useContext } from "react"
 import ListsTab from "./ListsTab/ListsTab"
 import ProfileTab from "./ProfileTab"
+import { MyAccountTabsErrorBanner } from "./MyAccountTabsErrorBanner"
 
 interface MyAccountTabsPropsType {
   activePath: string
@@ -27,9 +28,7 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
       content: checkouts ? (
         <CheckoutsTab />
       ) : (
-        <Text sx={{ mt: "m" }}>
-          There was an error accessing your checkouts.
-        </Text>
+        <MyAccountTabsErrorBanner tabLabel="checkouts" />
       ),
       urlPath: "items",
     },
@@ -38,9 +37,7 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
       content: holds ? (
         <RequestsTab />
       ) : (
-        <Text sx={{ mt: "m" }}>
-          There was an error accessing your requests.
-        </Text>
+        <MyAccountTabsErrorBanner tabLabel="requests" />
       ),
       urlPath: "requests",
     },
@@ -49,7 +46,7 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
       content: lists ? (
         <ListsTab />
       ) : (
-        <Text sx={{ mt: "m" }}>There was an error accessing your lists.</Text>
+        <MyAccountTabsErrorBanner tabLabel="lists" />
       ),
       urlPath: "lists",
     },

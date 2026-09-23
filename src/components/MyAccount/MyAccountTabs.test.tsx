@@ -43,14 +43,19 @@ describe("MyAccountTabs", () => {
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
-  it("displays error message when checkouts or holds are null", () => {
+  it("displays error banner when checkouts or holds are null", async () => {
     renderWithPatronDataProvider(
       { ...accountData, checkouts: null, holds: null },
       "items"
     )
     const errorMessage = screen.getByText(
-      "There was an error accessing your checkouts."
+      "Your checkouts could not be loaded.",
+      { exact: false }
     )
     expect(errorMessage).toBeInTheDocument()
+    expect(screen.getByRole("complementary")).toHaveAttribute(
+      "data-variant",
+      "negative"
+    )
   })
 })

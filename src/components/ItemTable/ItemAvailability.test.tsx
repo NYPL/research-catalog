@@ -28,7 +28,11 @@ describe("ItemAvailability", () => {
       expect(
         screen.queryByText("Available by appointment")
       ).not.toBeInTheDocument()
-      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(
+        screen.queryByRole("link", {
+          name: (name) => name !== "contact a librarian",
+        })
+      ).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315")
       ).not.toBeInTheDocument()
@@ -141,7 +145,12 @@ describe("ItemAvailability", () => {
       })
       render(<ItemAvailability item={item} />)
       expect(screen.getByText("Available by appointment.")).toBeInTheDocument()
-      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+      expect(
+        screen.queryByRole("link", {
+          name: (name) => name !== "contact a librarian",
+        })
+      ).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315", {
           exact: false,
@@ -160,7 +169,12 @@ describe("ItemAvailability", () => {
       })
       render(<ItemAvailability item={item} />)
       expect(screen.getByText("Available by appointment")).toBeInTheDocument()
-      expect(screen.queryByRole("link")).not.toBeInTheDocument()
+      expect(screen.getByText("contact a librarian")).toBeInTheDocument()
+      expect(
+        screen.queryByRole("link", {
+          name: (name) => name !== "contact a librarian",
+        })
+      ).not.toBeInTheDocument()
       expect(
         screen.queryByText("Schwarzman Building - Main Reading Room 315.", {
           exact: false,
