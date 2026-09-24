@@ -249,7 +249,7 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(additionalAuthors.link).toBe("internal")
       expect(additionalAuthors.value[0].text).toContain("ballet dancer")
-      expect(additionalAuthors.value[0].url).toContain("/browse/authors/")
+      expect(additionalAuthors.value[0].url).toContain("/browse/author-title/")
     })
 
     it("creates subjects with correct internal urls", () => {

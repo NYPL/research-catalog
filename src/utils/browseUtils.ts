@@ -152,6 +152,13 @@ export function getContributorSearchURL(term: string) {
   return `/browse/authors/${contributor}`
 }
 
+// Used for bib page author/contributor links, which link to a name + title combo with
+// contributorNameTitle
+export function getContributorNameTitleSearchURL(nameTitle: string) {
+  const contributor = encodeURIComponentWithPeriods(nameTitle)
+  return `/browse/author-title/${contributor}`
+}
+
 export function getContributorRoleSearchURL(contributor: string, role: string) {
   const contributorWithRole = `${encodeURIComponentWithPeriods(
     contributor

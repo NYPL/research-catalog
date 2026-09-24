@@ -106,5 +106,7 @@ export function tryInstantiate<T>({
 }
 
 export function getBrowseTypeFromPath(path): BrowseType {
-  return path.includes("/authors") ? "contributors" : "subjects"
+  return path.includes("/authors") || path.includes("/author-title")
+    ? "contributors"
+    : "subjects"
 }

@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.6] 2026-09-24
+
+### Added
+
+- Added `author-title` route for name + title results
+
 ### Updated
 
 - Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
