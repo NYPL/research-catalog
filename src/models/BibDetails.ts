@@ -405,7 +405,9 @@ export default class BibDetails {
               v
             )}`
         }
-        return { url: internalUrl, searchValue: v }
+        return field === "subjectLiteral"
+          ? { url: internalUrl, searchValue: v, browseValue: v }
+          : { url: internalUrl, searchValue: v }
       }),
     }
   }
