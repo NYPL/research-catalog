@@ -15,26 +15,14 @@ import type { APIError } from "../../types/appTypes"
 export async function fetchSearchResults(
   searchParams: SearchParams
 ): Promise<SearchResultsResponse | APIError> {
-  const { q, field, filters } = searchParams
+  const { q, field } = searchParams
 
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
   const keywordsOrBibId = field === "standard_number" ? standardizeBibId(q) : q
 
-  // If user is making a search for periodicals,
-  // add an issuance filter on the serial field and
-  // switch field from "journal_title" to "title"
-  const journalParams: SearchParams =
-    field === "journal_title"
-      ? {
-          field: "title",
-          filters: { ...filters, issuance: ["urn:biblevel:s"] },
-        }
-      : {}
-
   const modifiedSearchParams = {
     ...searchParams,
-    ...journalParams,
     q: keywordsOrBibId,
   }
   let queryString = getSearchQuery(modifiedSearchParams)

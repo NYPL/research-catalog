@@ -9,11 +9,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Updated contributor linked fields to use name and title [SCC-5474](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5474)
-- Replace non-breaking spaces in playwright test
 - Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
 - Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
 - Updated account error display [SCC-5494](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5494)
+
+## [2.1.6] 2026-09-24
+
+### Added
+
+- Added `author-title` route for name + title results
+
+### Updated
+
+- Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
+
+- Updated contributor linked fields to use name and title [SCC-5474](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5474)
+- Replaced non-breaking spaces in playwright test
+- Updated cql search types
+- Updated search scope handling to remove journal title parsing [SCC-4401](https://newyorkpubliclibrary.atlassian.net/browse/SCC-4401)
+- Updated to Node 24 [SCC-5577](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5577)
 
 ## [2.1.5] 2026-09-02
 

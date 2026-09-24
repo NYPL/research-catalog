@@ -48,8 +48,7 @@ export const appConfig: AppConfig = {
   searchNotification: {
     development: "",
     qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
-    production:
-      "Please note that all NYPL locations will be closed Saturday, September 5 through Monday, September 7, 2026. Offsite materials requested on Friday, September 4 will be delivered on Tuesday, September 8. You can check the status of your requests by logging into your patron account.",
+    production: "",
   },
   urls: {
     circulatingCatalog: "https://borrow.nypl.org",
@@ -60,29 +59,6 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
-  },
-  testUser: {
-    patronId: {
-      development: "9555150",
-      qa: "9529135",
-      production: null,
-    },
-    name: {
-      development: "PLAYWRIGHT TEST ACCOUNT LOCAL",
-      qa: "PLAYWRIGHT TEST ACCOUNT GHA",
-      production: "PLAYWRIGHT TEST ACCOUNT GHA",
-    },
-    cardNumber: {
-      development: "2 5555 01278 5809",
-      qa: "2 3333 12428 7325",
-      production: "2 3333 12428 7325",
-    },
-    username: {
-      development: "playwrightlocal",
-      qa: "playwrightgha",
-      production: "playwrightgha",
-    },
-    password: process.env.QA_PASSWORD,
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],

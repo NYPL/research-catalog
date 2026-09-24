@@ -249,7 +249,7 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(additionalAuthors.link).toBe("internal")
       expect(additionalAuthors.value[0].text).toContain("ballet dancer")
-      expect(additionalAuthors.value[0].url).toContain("/browse/authors/")
+      expect(additionalAuthors.value[0].url).toContain("/browse/author-title/")
     })
 
     it("creates subjects with correct internal urls", () => {
@@ -258,6 +258,14 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(subjects.link).toBe("internal")
       expect(subjects.value[0].url).toContain("/browse/subjects/")
+    })
+    it("sets browseValue on subjects for use in the subject index browse link", () => {
+      const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
+        (d) => d.label === "Subject"
+      ) as LinkedBibDetail
+      expect(subjects.value[0].browseValue).toEqual(
+        subjects.value[0].searchValue
+      )
     })
     it("creates series fields and merges series uniform title into series added entry", () => {
       const series = bibWithSeriesModel.bottomDetails.find(
