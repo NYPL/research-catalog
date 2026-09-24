@@ -10,12 +10,11 @@ export default defineConfig({
   timeout: 30 * 1000,
   globalTimeout: 20 * 30 * 1000,
   testDir: "./playwright",
-  fullyParallel: true,
+  // fullyParallel: true,
   forbidOnly: !!process.env.CI,
   retries: process.env.CI ? 1 : 0,
   workers: process.env.CI ? 2 : undefined,
   reporter: "html",
-
   use: {
     baseURL: "http://local.nypl.org:8080/research/research-catalog/",
     trace: "on-first-retry",
@@ -24,19 +23,52 @@ export default defineConfig({
 
   projects: [
     {
-      name: "chromium",
+      name: "setup-gha",
+      testMatch: "global.setup.ts",
+    },
+    {
+      name: "chromium-gha",
+      testMatch: "parallel_tests/**/*.ts",
       use: {
         ...devices["Desktop Chrome"],
       },
     },
     {
-      name: "firefox",
+      testMatch: "parallel_tests/**/*.ts",
+      name: "firefox-gha",
       use: {
         ...devices["Desktop Firefox"],
       },
     },
     {
+      testMatch: "parallel_tests/**/*.ts",
       name: "webkit",
+      use: {
+        ...devices["Desktop Safari"],
+      },
+    },
+    // Account tests must be run in series with each other or else they are all updating the same user data
+    {
+      name: "my account chromium-gha",
+      testMatch: "account/account.spec.ts",
+      use: {
+        ...devices["Desktop Chrome"],
+      },
+      dependencies: ["setup-gha"],
+    },
+    {
+      name: "my account firefox-gha",
+      testMatch: "account/account.spec.ts",
+
+      dependencies: ["my account chromium-gha"],
+      use: {
+        ...devices["Desktop Firefox"],
+      },
+    },
+    {
+      testMatch: "account/account.spec.ts",
+      name: "my account webkit",
+      dependencies: ["my account firefox-gha"],
       use: {
         ...devices["Desktop Safari"],
       },
@@ -48,5 +80,6 @@ export default defineConfig({
     url: "http://local.nypl.org:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,
+    stdout: process.env.CI ? "ignore" : "pipe",
   },
 })

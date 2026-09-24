@@ -1,19 +1,11 @@
-import { SITE_NAME } from "../../../src/config/constants"
-import { fetchSearchResults } from "../../../src/server/api/search"
-import initializePatronTokenAuth from "../../../src/server/auth"
-import {
-  mapQueryToSearchParams,
-  checkForRedirectOnMatch,
-} from "../../../src/utils/searchUtils"
+import { mapQueryToSearchParams } from "../../../src/utils/searchUtils"
 import type { SearchResultsResponse } from "../../../src/types/searchTypes"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import Search from "../../../src/components/Search/Search"
 import { useRouter } from "next/router"
 import { idConstants, useFocusContext } from "../../../src/context/FocusContext"
-import { buildLockedBrowseQuery } from "../../../src/utils/browseUtils"
-import { logSingleFilterNoResults } from "../../../src/utils/logUtils"
 import { PatronDataProvider } from "../../../src/context/PatronDataContext"
-import MyAccount from "../../../src/models/MyAccount"
+import { getContributorResultsProps } from "../../../src/server/getContributorResultsProps"
 
 interface ContributorResultsProps {
   bannerNotification?: string
@@ -92,57 +84,6 @@ export default function ContributorResults({
   )
 }
 
-export async function getServerSideProps({ req, query, params }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
-  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
-  const slug: string = params.slug as string
-  const role = typeof query.role === "string" ? query.role : null
-
-  const baseQuery = buildLockedBrowseQuery({
-    slug,
-    query,
-    field: "contributorLiteral",
-  })
-
-  const searchParams = mapQueryToSearchParams(baseQuery)
-
-  const results = await fetchSearchResults(searchParams)
-
-  logSingleFilterNoResults(
-    "browse authors gSSP",
-    results,
-    searchParams,
-    req.headers?.referer
-  )
-
-  if (results.status !== 200) {
-    return { props: { errorStatus: results.status } }
-  }
-
-  const redirect = checkForRedirectOnMatch(results, query)
-  if (redirect) return { redirect }
-
-  const isAuthenticated = patronTokenResponse.isTokenValid
-
-  let accountData = null
-  if (isAuthenticated) {
-    const patronId = patronTokenResponse.decodedPatron.sub
-    const accountModel = new MyAccount(null, patronId)
-    const lists = await accountModel.getLists(patronId)
-
-    accountData = { patron: { id: patronId }, lists }
-  }
-
-  return {
-    props: {
-      bannerNotification,
-      results,
-      isAuthenticated,
-      metadataTitle: `Search | ${SITE_NAME}`,
-      activePage: "browse-results",
-      slug,
-      ...(role ? { role } : {}),
-      accountData,
-    },
-  }
+export async function getServerSideProps(context) {
+  return getContributorResultsProps(context, "contributorLiteral")
 }

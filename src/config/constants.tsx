@@ -1,7 +1,7 @@
 import Link from "../components/Link/Link"
 import type { BrowseType } from "../types/browseTypes"
 import { getSeriesSearchUrl } from "../utils/bibUtils"
-import { getContributorSearchURL } from "../utils/browseUtils"
+import { getContributorNameTitleSearchURL } from "../utils/browseUtils"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -190,13 +190,13 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
 > = {
   creatorLiteral: {
     label: "Author",
-    displayField: "creatorsDisplay",
-    url: (name) => getContributorSearchURL(name),
+    displayField: "creatorDisplay",
+    url: (name) => getContributorNameTitleSearchURL(name),
   },
   contributorLiteral: {
     label: "Additional authors",
-    displayField: "contributorsDisplay",
-    url: (name) => getContributorSearchURL(name),
+    displayField: "contributorDisplay",
+    url: (name) => getContributorNameTitleSearchURL(name),
   },
   seriesAddedEntry: {
     label: "Series added entry",

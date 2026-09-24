@@ -7,7 +7,7 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
-  DisplayPackedEntry,
+  DisplayComponentsEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -15,17 +15,14 @@ import {
 } from "../utils/appUtils"
 import {
   getFindingAidFromSupplementaryContent,
-  getSeriesSearchUrl,
+  fuzzyIncludes,
 } from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
   MarcDetail,
 } from "../types/marcTypes"
-import {
-  getContributorSearchURL,
-  getSubjectSearchURL,
-} from "../utils/browseUtils"
+import { getSubjectSearchURL } from "../utils/browseUtils"
 import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {
@@ -81,15 +78,15 @@ export default class BibDetails {
       url: searchUrl,
     } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
-    const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
+    const displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
     const displayValues: BibDetailURL[] = displayData.map(
-      ({ display, "@value": name }) => ({
-        url: searchUrl(name),
-        urlText: name,
-        text: display,
+      ({ displayLabel, name, nameTitle }) => ({
+        url: searchUrl(literalField === "series" ? name : nameTitle),
+        searchValue: literalField === "series" ? name : nameTitle,
+        text: displayLabel,
+        browseValue: name,
       })
     )
-
     return displayValues?.length > 0
       ? {
           label: displayLabel,
@@ -108,7 +105,7 @@ export default class BibDetails {
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
-          urlText: label,
+          searchValue: label,
         }))
         const detail = this.buildExternalLinkedDetail(
           "Connect to:",
@@ -286,12 +283,12 @@ export default class BibDetails {
           .map((v) =>
             typeof v === "string"
               ? v.trim()
-              : v?.content?.trim() || v?.urlText?.trim()
+              : v?.content?.trim() || v?.searchValue?.trim()
           )
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
-      return [val?.urlText?.trim()]
+      return [val?.searchValue?.trim()]
     }
 
     const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
@@ -318,7 +315,15 @@ export default class BibDetails {
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
       // include subjects, which will be displayed but not linked
-      const overlap = detailValues.some((v) => resourceValuesSet.has(v))
+      const resourceValuesArray = Array.from(resourceValuesSet)
+      const overlap = detailValues.some(
+        (marcVal) =>
+          marcVal &&
+          resourceValuesArray.some(
+            (resVal) =>
+              fuzzyIncludes(marcVal, resVal) || fuzzyIncludes(resVal, marcVal)
+          )
+      )
       if (!overlap) {
         filteredMarc.push(detail)
         // store both values and marc tags in one object per AM label
@@ -400,7 +405,7 @@ export default class BibDetails {
               v
             )}`
         }
-        return { url: internalUrl, urlText: v }
+        return { url: internalUrl, searchValue: v }
       }),
     }
   }
@@ -532,7 +537,7 @@ export default class BibDetails {
       })
       .map((sc) => ({
         url: sc.url,
-        urlText: sc.label,
+        searchValue: sc.label,
       }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }
