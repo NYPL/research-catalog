@@ -259,6 +259,14 @@ describe("Bib Details model", () => {
       expect(subjects.link).toBe("internal")
       expect(subjects.value[0].url).toContain("/browse/subjects/")
     })
+    it("sets browseValue on subjects for use in the subject index browse link", () => {
+      const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
+        (d) => d.label === "Subject"
+      ) as LinkedBibDetail
+      expect(subjects.value[0].browseValue).toEqual(
+        subjects.value[0].searchValue
+      )
+    })
     it("creates series fields and merges series uniform title into series added entry", () => {
       const series = bibWithSeriesModel.bottomDetails.find(
         (d) => d.label === "Series"
