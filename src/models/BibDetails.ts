@@ -516,11 +516,29 @@ export default class BibDetails {
           const match = key.match(/parallel(.)(.*)/)
           return match && `${match[1].toLowerCase()}${match[2]}`
         })()
-      const paralleledValues = paralleledField && bib[paralleledField]
+      let paralleledValues = paralleledField && bib[paralleledField]
+      let keyValues = bib[key]
+      // creator is sometimes also listed as a contributor (on either or both
+      // of the primary/parallel sides)
+      if (paralleledField === "contributorDisplay" && paralleledValues) {
+        const creatorNameTitles = (bib.creatorDisplay || []).map(
+          (creator) => creator.nameTitle
+        )
+        paralleledValues = paralleledValues.filter(
+          (contributor) => !creatorNameTitles.includes(contributor.nameTitle)
+        )
+        const parallelCreatorNameTitles = (
+          bib["parallelCreatorsDisplay"] || []
+        ).map((creator) => creator.nameTitle)
+        keyValues = (keyValues || []).filter(
+          (contributor) =>
+            !parallelCreatorNameTitles.includes(contributor?.nameTitle)
+        )
+      }
       return (
         paralleledValues && {
           [paralleledField]: this.interleaveParallelAndPrimaryValues(
-            bib[key],
+            keyValues,
             paralleledValues
           ),
         }

@@ -343,6 +343,123 @@ describe("Bib Details model", () => {
         "Tolstoy, Leo, 1828-1910",
       ])
     })
+    it("excludes the creator's duplicate entry from contributorDisplay so parallels stay aligned", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Liu, Li, 1953 December 12-", "Liu, Li, 2"],
+        creatorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Liu, Li, 2",
+            name: "Liu, Li, 2",
+            nameTitle: "Liu, Li, 2",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+        ],
+        contributorLiteral: ["Chen, Xingcan"],
+        // Contributor list redundantly repeats the creator, but its parallel
+        // (translated) value is never repeated in parallelContributorsDisplay
+        contributorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Liu, Li, 2",
+            name: "Liu, Li, 2",
+            nameTitle: "Liu, Li, 2",
+          },
+          {
+            displayLabel: "Chen, Xingcan, author",
+            name: "Chen, Xingcan",
+            nameTitle: "Chen, Xingcan",
+          },
+        ],
+        // @ts-ignore
+        parallelContributorsDisplay: [
+          {
+            displayLabel: "陈星灿, author",
+            name: "陈星灿",
+            nameTitle: "陈星灿",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "陈星灿, author",
+        "Chen, Xingcan, author",
+      ])
+    })
+    it("excludes the creator duplicate entry from parallelContributorsDisplay too", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Liu, Li, 1953 December 12-"],
+        creatorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+        ],
+        contributorLiteral: ["Chen, Xingcan"],
+        // Creator is repeated on both the primary and parallel
+        // contributor sides
+        contributorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Chen, Xingcan, author",
+            name: "Chen, Xingcan",
+            nameTitle: "Chen, Xingcan",
+          },
+        ],
+        // @ts-ignore
+        parallelContributorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+          {
+            displayLabel: "陈星灿, author",
+            name: "陈星灿",
+            nameTitle: "陈星灿",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "陈星灿, author",
+        "Chen, Xingcan, author",
+      ])
+    })
   })
   describe("annotated marc fields", () => {
     const details = bibWithSupContentModel.annotatedMarcDetails
