@@ -460,6 +460,38 @@ describe("Bib Details model", () => {
         "Chen, Xingcan, author",
       ])
     })
+    it("excludes the creator from contributorDisplay even when there are no parallels", () => {
+      const model = new BibDetailsModel({
+        ...noParallels.resources,
+        creatorLiteral: ["Copley, Richard"],
+        creatorDisplay: [
+          {
+            displayLabel: "Copley, Richard, author",
+            name: "Copley, Richard",
+            nameTitle: "Copley, Richard",
+          },
+        ],
+        contributorLiteral: ["Copley, Richard", "Kavenoki, Severin"],
+        contributorDisplay: [
+          {
+            displayLabel: "Copley, Richard, author",
+            name: "Copley, Richard",
+            nameTitle: "Copley, Richard",
+          },
+          {
+            displayLabel: "Kavenoki, Severin, translator",
+            name: "Kavenoki, Severin",
+            nameTitle: "Kavenoki, Severin",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "Kavenoki, Severin, translator",
+      ])
+    })
   })
   describe("annotated marc fields", () => {
     const details = bibWithSupContentModel.annotatedMarcDetails

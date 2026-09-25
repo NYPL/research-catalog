@@ -78,7 +78,16 @@ export default class BibDetails {
       url: searchUrl,
     } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
-    const displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
+    let displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
+    // the creator is sometimes redundantly also listed as a contributor
+    if (literalField === "contributorLiteral") {
+      const creatorNameTitles = (this.bib.creatorDisplay || []).map(
+        (creator) => creator.nameTitle
+      )
+      displayData = displayData.filter(
+        ({ nameTitle }) => !creatorNameTitles.includes(nameTitle)
+      )
+    }
     const displayValues: BibDetailURL[] = displayData.map(
       ({ displayLabel, name, nameTitle }) => ({
         url: searchUrl(literalField === "series" ? name : nameTitle),
