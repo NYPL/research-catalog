@@ -315,6 +315,34 @@ describe("Bib Details model", () => {
       const model = bibWithNoParallelsModel
       expect(model.groupedNotes).toBeUndefined
     })
+    it("combines parallel author display text with the primary display object", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Tolstoy, Leo, 1828-1910"],
+        creatorDisplay: [
+          {
+            displayLabel: "Tolstoy, Leo, 1828-1910",
+            name: "Tolstoy, Leo, 1828-1910",
+            nameTitle: "Tolstoy, Leo, 1828-1910",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "Толстой, Лев Николаевич, 1828-1910",
+            name: "Толстой, Лев Николаевич, 1828-1910",
+            nameTitle: "Толстой, Лев Николаевич, 1828-1910",
+          },
+        ],
+      })
+      const author = model.topDetails.find(
+        (detail) => detail.label === "Author"
+      ) as LinkedBibDetail
+      expect(author.value.map((v) => v.text)).toEqual([
+        "Толстой, Лев Николаевич, 1828-1910",
+        "Tolstoy, Leo, 1828-1910",
+      ])
+    })
   })
   describe("annotated marc fields", () => {
     const details = bibWithSupContentModel.annotatedMarcDetails

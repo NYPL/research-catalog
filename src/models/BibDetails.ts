@@ -472,16 +472,19 @@ export default class BibDetails {
    * Assumes that arr2 is at least as long as arr1.
    */
   interleaveParallelAndPrimaryValues(
-    primaries: string[],
-    parallels: string[] | Note[]
+    primaries: string[] | DisplayComponentsEntry[],
+    parallels: string[] | Note[] | DisplayComponentsEntry[]
   ) {
     const interleavedValues = []
     parallels.forEach((parallelValue, i) => {
       if (primaries[i]) {
-        const value =
-          parallelValue && parallelValue["noteType"]
-            ? this.combineMatchingNotes(primaries[i], parallelValue)
-            : primaries[i]
+        let value: string | Note | DisplayComponentsEntry = primaries[i]
+        if (parallelValue && parallelValue["noteType"]) {
+          value = this.combineMatchingNotes(
+            primaries[i] as string,
+            parallelValue
+          )
+        }
         interleavedValues.push(value)
       }
       if (parallelValue) {
@@ -498,12 +501,21 @@ export default class BibDetails {
    * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
+    // These parallel fields are irregularly pluralized
+    const irregularParallelFields = {
+      parallelCreatorsDisplay: "creatorDisplay",
+      parallelContributorsDisplay: "contributorDisplay",
+    }
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null
       }
-      const match = key.match(/parallel(.)(.*)/)
-      const paralleledField = match && `${match[1].toLowerCase()}${match[2]}`
+      const paralleledField =
+        irregularParallelFields[key] ||
+        (() => {
+          const match = key.match(/parallel(.)(.*)/)
+          return match && `${match[1].toLowerCase()}${match[2]}`
+        })()
       const paralleledValues = paralleledField && bib[paralleledField]
       return (
         paralleledValues && {
