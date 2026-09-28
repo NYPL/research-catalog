@@ -30,14 +30,21 @@ describe("RCSubNav", () => {
     expect(subNavLinks[0]).toHaveAttribute("aria-current", "page")
     expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
     expect(subNavLinks[2]).not.toHaveAttribute("aria-current")
+    expect(subNavLinks[3]).not.toHaveAttribute("aria-current")
 
-    rerender(<RCSubNav activePage="account" inBrowse={false} />)
-    // We expect the third link, "My account", to be active and
-    // have the aria-current attribute set to "page"
+    rerender(
+      <RCSubNav activePage="account" isAuthenticated={true} inBrowse={false} />
+    )
+
     subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks[0]).not.toHaveAttribute("aria-current")
     expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
-    expect(subNavLinks[3]).toHaveAttribute("aria-current", "page")
+    expect(subNavLinks[2]).not.toHaveAttribute("aria-current")
+
+    // We expect the "My account" button to be active (if authenticated) and
+    // have the aria-current attribute set to "page"
+    const myAccountButton = screen.getByRole("button", { name: "My account" })
+    expect(myAccountButton).toHaveAttribute("aria-current", "page")
   })
 
   it("renders the user guide link", async () => {

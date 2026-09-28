@@ -27,6 +27,10 @@ const renderWithPatronDataProvider = (data, path) => {
   )
 }
 describe("MyAccountTabs", () => {
+  beforeEach(() => {
+    mockRouter.setCurrentUrl("/")
+  })
+
   it("renders", () => {
     renderWithPatronDataProvider(accountData, "")
   })
