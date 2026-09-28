@@ -1,5 +1,4 @@
 import type { RCPage } from "../../types/pageTypes"
-import { useLogoutRedirect } from "../../server/auth"
 import {
   Box,
   Icon,
@@ -9,6 +8,7 @@ import {
 import NextLink from "next/link"
 import Link from "../Link/Link"
 import { FeaturePopup } from "../Banners/FeaturePopup"
+import MyAccountMenu from "./MyAccountMenu"
 
 interface SubNavProps {
   activePage: RCPage
@@ -21,8 +21,6 @@ interface SubNavProps {
  * and passes the active prop to the correct link based on the route.
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
-  const logoutLink = useLogoutRedirect()
-
   return (
     <SubNav
       className="no-print"
@@ -74,15 +72,6 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
       }
       secondaryActions={
         <>
-          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
-            <SubNavLink
-              href={logoutLink}
-              id="subnav-logout"
-              screenreaderOnlyText="of NYPL.org"
-            >
-              Log out
-            </SubNavLink>
-          </div>
           <Box position="relative">
             <Box
               position="absolute"
@@ -118,23 +107,22 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               </Box>
             </Link>
           </Box>
-          <SubNavLink
-            href="/account"
-            as={NextLink}
-            id="subnav-account"
-            isOutlined
-            isSelected={activePage === "account"}
-            aria-current={activePage === "account" ? "page" : undefined}
-            screenreaderOnlyText="for NYPL.org"
-          >
-            <Icon
-              name={isAuthenticated ? "actionIdentityFilled" : "actionIdentity"}
-              size="medium"
-            />
-            <Box as="span" display={{ base: "none", md: "inline" }}>
-              {isAuthenticated ? "My account" : "Log in"}
-            </Box>
-          </SubNavLink>
+          {isAuthenticated ? (
+            <MyAccountMenu activePage={activePage} />
+          ) : (
+            <SubNavLink
+              href="/account"
+              as={NextLink}
+              id="subnav-log-in"
+              isOutlined
+              screenreaderOnlyText="to NYPL.org"
+            >
+              <Icon name="actionIdentity" size="medium" />
+              <Box as="span" display={{ base: "none", md: "inline" }}>
+                {"Log in"}
+              </Box>
+            </SubNavLink>
+          )}
         </>
       }
     />

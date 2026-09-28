@@ -61,9 +61,10 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
       urlPath: "overdues",
     },
   ]
-  const tabsDict = { items: 1, requests: 2, lists: 3, overdues: 4 }
+  const tabsDict = { profile: 0, items: 1, requests: 2, lists: 3, overdues: 4 }
 
   const router = useRouter()
+  const currentPath = router.asPath.split("/")[2] ?? activePath ?? "profile"
 
   const updatePath = (newPath) => {
     router.push(`/account/${newPath}`, undefined, {
@@ -73,7 +74,8 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
 
   return (
     <Tabs
-      defaultIndex={tabsDict[activePath] || 0}
+      key={currentPath} // forces remount when tabs path changes
+      defaultIndex={tabsDict[currentPath]}
       id="tabs-id"
       onChange={(index) => {
         // Update path when tab changes.
