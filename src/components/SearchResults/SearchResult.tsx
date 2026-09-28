@@ -91,23 +91,26 @@ const SearchResult = ({
       }}
     >
       <CardContent data-testid="card-content">
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+        {bib.findingAid && (
+          <StatusBadge variant="informative" mb="s" translate="no">
+            Finding aid available
+          </StatusBadge>
+        )}
+        <Flex
+          flexDir="row"
+          justifyContent="space-between"
+          alignItems="center"
+          gap="l"
+        >
           <CardHeading
             level="h3"
             size="heading5"
             mb="xs"
             sx={{ a: { textDecoration: "none" } }}
           >
-            <Box>
-              {bib.findingAid && (
-                <StatusBadge variant="informative" mb="s" translate="no">
-                  Finding aid available
-                </StatusBadge>
-              )}
-              <Link href={`${PATHS.BIB}/${bib.id}`} translate="no">
-                {bib.titleDisplay}
-              </Link>
-            </Box>
+            <Link href={`${PATHS.BIB}/${bib.id}`} translate="no">
+              {bib.titleDisplay}
+            </Link>
           </CardHeading>
           <Box position="relative">
             {isFirstResult && (
