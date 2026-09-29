@@ -4,8 +4,10 @@ import {
   Icon,
   SearchBar,
   Text,
+  type AutoCompleteValues,
 } from "@nypl/design-system-react-components"
 import { useRouter } from "next/router"
+import router from "next/router"
 import {
   type Dispatch,
   type SetStateAction,
@@ -22,6 +24,51 @@ import type { Aggregation } from "../../types/filterTypes"
 import { collapseMultiValueQueryParams } from "../../utils/refineSearchUtils"
 import { getSearchQuery } from "../../utils/searchUtils"
 import Link from "../Link/Link"
+import SearchAutocomplete from "./SearchAutocomplete"
+import { useSearchAutocomplete } from "../../hooks/useSearchAutocomplete"
+
+export type TextInputProps = {
+  /** The starting value of the input field. */
+  defaultValue?: string
+  /** ID that other components can cross reference for accessibility purposes */
+  id: string
+  /** Adds a button to clear existing text in the input field. */
+  isClearable?: boolean
+  /** The callback function that is called when the clear button is clicked. */
+  isClearableCallback?: () => void
+  /** Provides text for a `Label` component if `showLabel` is set to true;
+   * populates an `aria-label` attribute if `showLabel` is set to false. */
+  labelText: string
+  /** Used to reference the input element in forms. */
+  name?: string
+  /** The action to perform on the `input`/`textarea`'s onChange function  */
+  onChange?: (
+    event:
+      | React.ChangeEvent<HTMLInputElement>
+      | React.ChangeEvent<HTMLTextAreaElement>
+  ) => void
+  /** Regex to query the user input against. */
+  pattern?: string
+  /** Populates the placeholder for the input/textarea elements */
+  placeholder?: string
+  /** Populates the value of the input/textarea elements */
+  value?: string
+  /** Sets the HTML autocomplete attribute on the input. Pass "off" to suppress browser suggestions. */
+  autoComplete?: AutoCompleteValues
+  /** Keyboard handler forwarded to the underlying <input>. Runs before the default Enter-to-submit. */
+  onKeyDown?: React.KeyboardEventHandler<HTMLInputElement>
+  /** Additional aria/role attributes forwarded directly to the underlying <input> element. */
+  additionalInputProps?: Pick<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    | "role"
+    | "aria-expanded"
+    | "aria-autocomplete"
+    | "aria-controls"
+    | "aria-activedescendant"
+    | "aria-haspopup"
+  >
+}
+
 const SearchForm = ({
   aggregations,
   searchResultsCount,
@@ -81,6 +128,28 @@ const SearchForm = ({
     })
   }
 
+  const LISTBOX_ID = "suggest-box"
+  const {
+    suggestions,
+    activeIndex,
+    isOpen,
+    isTouch,
+    wrapperRef,
+    closeAutocomplete,
+    returnFocusToInput,
+    handleKeyDown,
+    handleWrapperBlur,
+    statusMessage,
+  } = useSearchAutocomplete({
+    q: searchTerm,
+    listboxId: LISTBOX_ID,
+    searchScope,
+  })
+
+  const handleAutocompleteSelect = (query) => {
+    router.push(`${PATHS.SEARCH}?${query}`)
+  }
+
   return (
     <div className={`${styles.searchContainer} no-print`}>
       <Box
@@ -98,7 +167,8 @@ const SearchForm = ({
           </Box>
         </Text>
 
-        <Box position="relative">
+        {statusMessage}
+        <Box position="relative" ref={wrapperRef} onBlur={handleWrapperBlur}>
           <SearchBar
             id="mainContent"
             action={PATHS.SEARCH}
@@ -128,8 +198,24 @@ const SearchForm = ({
               name: "q",
               placeholder,
               labelText: tipText,
+              onKeyDown: handleKeyDown,
+              autoComplete: false,
             }}
           />
+          {isOpen && (
+            <SearchAutocomplete
+              suggestions={suggestions}
+              onSelect={handleAutocompleteSelect}
+              listboxId={LISTBOX_ID}
+              onClose={() => {
+                closeAutocomplete()
+                returnFocusToInput()
+              }}
+              activeIndex={activeIndex}
+              isTouch={isTouch}
+              searchScope={searchScope}
+            />
+          )}
         </Box>
         <Flex
           direction="column"
