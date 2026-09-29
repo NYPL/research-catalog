@@ -11,8 +11,6 @@ interface UseSearchAutocompleteOptions {
   searchScope: string
 }
 
-
-
 export interface UseSearchAutocompleteReturn {
   suggestions: AutocompleteResult[]
   activeIndex: number
