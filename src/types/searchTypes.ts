@@ -71,6 +71,7 @@ export type NestedStringArray = string | NestedStringArray[]
 export interface DiscoverySearchResults {
   totalResults: number
   itemListElement: DiscoverySearchResultsElement[]
+  suggest: any[]
   debug?: { parsed?: NestedStringArray }
 }
 
@@ -103,4 +104,14 @@ export interface SearchQueryParams
   search_scope?: string
   page?: string
   role?: string
+}
+
+export interface AutocompleteResults {
+  entries: AutocompleteResult[]
+}
+
+export interface AutocompleteResult {
+  label: string
+  scope: string
+  params: any
 }

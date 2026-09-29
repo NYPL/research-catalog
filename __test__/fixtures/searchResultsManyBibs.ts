@@ -9248,5 +9248,6 @@ export const aggregationsResults = {
       ],
     },
   ],
+  suggest: [],
   totalResults: 424,
 }

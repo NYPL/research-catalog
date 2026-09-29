@@ -198,8 +198,7 @@ const SearchForm = ({
               name: "q",
               placeholder,
               labelText: tipText,
-              onKeyDown: handleKeyDown,
-              autoComplete: false,
+              // onKeyDown: handleKeyDown,
             }}
           />
           {isOpen && (

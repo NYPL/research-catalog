@@ -1,15 +1,7 @@
 "use client"
 import React from "react"
 import { Box, Text, Button } from "@nypl/design-system-react-components"
-
-export type AutocompleteResult = {
-  label: string
-  scope: string
-  params: {
-    q: string
-    search_scope: string
-  }
-}
+import type { AutocompleteResult } from "../../types/searchTypes"
 
 interface SearchAutocompleteProps {
   suggestions: AutocompleteResult[]

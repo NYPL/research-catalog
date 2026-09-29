@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react"
-import type { AutocompleteResult } from "@/src/components/search/searchAutocomplete"
+import type { AutocompleteResult } from "../types/searchTypes"
 import { BASE_URL } from "../config/constants"
 
 const MIN_SUGGEST_CHARS = 3
@@ -11,6 +11,8 @@ interface UseSearchAutocompleteOptions {
   searchScope: string
 }
 
+
+
 export interface UseSearchAutocompleteReturn {
   suggestions: AutocompleteResult[]
   activeIndex: number
@@ -18,7 +20,7 @@ export interface UseSearchAutocompleteReturn {
   isOpen: boolean
   isTouch: boolean
   wrapperRef: React.RefObject<HTMLDivElement>
-  closeAutcomplete: () => void
+  closeAutocomplete: () => void
   returnFocusToInput: () => void
   handleKeyDown: (event: React.KeyboardEvent<HTMLInputElement>) => void
   handleWrapperBlur: (event: React.FocusEvent<HTMLDivElement>) => void
