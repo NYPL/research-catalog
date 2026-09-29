@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Added
+
+- Added Playwright test for advanced search happy path [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+
 ### Updated
 
 - Moved `base_page.spec.ts` and `redirects.spec.ts` into `playwright/tests/parallel_tests` [SCC-5652](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5652)
