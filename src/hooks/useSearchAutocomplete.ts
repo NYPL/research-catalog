@@ -34,7 +34,6 @@ export function useSearchAutocomplete({
   listboxId,
   searchScope,
 }: UseSearchAutocompleteOptions): UseSearchAutocompleteReturn {
-  console.log("using search scope: ", searchScope)
   const [suggestions, setSuggestions] = useState<AutocompleteResult[]>([])
   const [activeIndex, setActiveIndex] = useState(-1)
   const isOpen = suggestions.length > 0
@@ -52,10 +51,8 @@ export function useSearchAutocomplete({
       setSuggestions([])
       return
     }
-    console.log("here...")
     const timer = setTimeout(async () => {
       try {
-        console.log("Querying with search scope: ", searchScope)
         const res = await fetch(
           `${BASE_URL}/api/autocomplete?q=${encodeURIComponent(q)}` +
             (searchScope ? `&search_scope=${searchScope}` : "")
