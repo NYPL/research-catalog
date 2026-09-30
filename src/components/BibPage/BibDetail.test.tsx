@@ -145,7 +145,7 @@ describe("BibDetail component", () => {
       expect(searchLink).toHaveAttribute(
         "href",
         expect.stringContaining(
-          "/browse/authors/Cortanze%2C%20G%C3%A9rard%20de%2E"
+          "/browse/author-title/Cortanze%2C%20G%C3%A9rard%20de%2E"
         )
       )
       const authorTextWithRoles = screen.getByText(
@@ -165,7 +165,7 @@ describe("BibDetail component", () => {
       const searchLink = screen.getByText(/Smith, John/)
       expect(searchLink).toHaveAttribute(
         "href",
-        expect.stringContaining("/browse/authors/Smith")
+        expect.stringContaining("/browse/author-title/Smith")
       )
       const authorTextWithRoles = screen.getByText(/, ballet dancer./)
       expect(authorTextWithRoles).toBeInTheDocument()
