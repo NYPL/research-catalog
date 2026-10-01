@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Updated
 
 - Moved `base_page.spec.ts` and `redirects.spec.ts` into `playwright/tests/parallel_tests` [SCC-5652](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5652)
+- Updated regex matching between bib and AM fields to only strip punctuation for deduping [SCC-5667](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5667)
 
 ## [2.1.6] 2026-09-24
 

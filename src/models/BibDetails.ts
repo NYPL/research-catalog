@@ -15,7 +15,7 @@ import {
 } from "../utils/appUtils"
 import {
   getFindingAidFromSupplementaryContent,
-  fuzzyIncludes,
+  stripPunctuation,
 } from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
@@ -134,7 +134,10 @@ export default class BibDetails {
     value: string[],
     fieldMarcTags?: string[]
   ): BibDetail | MarcDetail {
-    if (!value?.length) return null
+    if (!value?.length) {
+      console.log(`Bib details: dropping "${label}" - empty value`)
+      return null
+    }
 
     const base = { label: convertToSentenceCase(label), value }
 
@@ -278,6 +281,7 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
+    console.log(annotatedMarcDetails)
     // Merge Series added entry and Series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
@@ -306,7 +310,7 @@ export default class BibDetails {
 
     allDetails.forEach((detail) => {
       normalizeValues(detail.value).forEach(
-        (v) => v && resourceValuesSet.add(v)
+        (v) => v && resourceValuesSet.add(stripPunctuation(v))
       )
     })
 
@@ -314,24 +318,26 @@ export default class BibDetails {
     const keptByLabel = {}
 
     annotatedMarcDetails.forEach((detail) => {
-      if (labelsSet.has(detail.label)) return
+      if (labelsSet.has(detail.label)) {
+        console.log(
+          `Bib details: dropping annotated MARC "${detail.label}" - label already present from resource endpoint`
+        )
+        return
+      }
       if (
         detail.label === "Subject" &&
         (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
       ) {
+        console.log(
+          "Bib details: dropping annotated MARC Subject - no subjectLiteral on bib"
+        )
         return
       }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
       // include subjects, which will be displayed but not linked
-      const resourceValuesArray = Array.from(resourceValuesSet)
-      const overlap = detailValues.some(
-        (marcVal) =>
-          marcVal &&
-          resourceValuesArray.some(
-            (resVal) =>
-              fuzzyIncludes(marcVal, resVal) || fuzzyIncludes(resVal, marcVal)
-          )
+      const overlap = detailValues.some((v) =>
+        resourceValuesSet.has(stripPunctuation(v))
       )
       if (!overlap) {
         filteredMarc.push(detail)
@@ -340,6 +346,11 @@ export default class BibDetails {
           values: detailValues.filter(Boolean),
           marcTags: detailMarcTags,
         }
+      } else {
+        console.log(
+          `Bib details: dropping annotated MARC "${detail.label}" - value overlaps with existing field`,
+          JSON.stringify({ detailValues })
+        )
       }
     })
 
