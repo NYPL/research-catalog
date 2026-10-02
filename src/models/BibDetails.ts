@@ -318,24 +318,15 @@ export default class BibDetails {
     const keptByLabel = {}
 
     annotatedMarcDetails.forEach((detail) => {
-      if (labelsSet.has(detail.label)) {
+      // subject checked per-value
+      if (detail.label !== "Subject" && labelsSet.has(detail.label)) {
         console.log(
           `Bib details: dropping annotated MARC "${detail.label}" - label already present from resource endpoint`
         )
         return
       }
-      if (
-        detail.label === "Subject" &&
-        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
-      ) {
-        console.log(
-          "Bib details: dropping annotated MARC Subject - no subjectLiteral on bib"
-        )
-        return
-      }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
-      // include subjects, which will be displayed but not linked
       const overlap = detailValues.some((v) =>
         resourceValuesSet.has(stripPunctuation(v))
       )
