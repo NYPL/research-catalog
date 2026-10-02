@@ -135,7 +135,6 @@ export default class BibDetails {
     fieldMarcTags?: string[]
   ): BibDetail | MarcDetail {
     if (!value?.length) {
-      console.log(`Bib details: dropping "${label}" - empty value`)
       return null
     }
 
@@ -281,7 +280,6 @@ export default class BibDetails {
     resourceEndpointDetails: AnyBibDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
-    console.log(annotatedMarcDetails)
     // Merge Series added entry and Series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
@@ -320,9 +318,6 @@ export default class BibDetails {
     annotatedMarcDetails.forEach((detail) => {
       // subject checked per-value
       if (detail.label !== "Subject" && labelsSet.has(detail.label)) {
-        console.log(
-          `Bib details: dropping annotated MARC "${detail.label}" - label already present from resource endpoint`
-        )
         return
       }
       const detailValues = normalizeValues(detail.value)
@@ -337,11 +332,6 @@ export default class BibDetails {
           values: detailValues.filter(Boolean),
           marcTags: detailMarcTags,
         }
-      } else {
-        console.log(
-          `Bib details: dropping annotated MARC "${detail.label}" - value overlaps with existing field`,
-          JSON.stringify({ detailValues })
-        )
       }
     })
 
