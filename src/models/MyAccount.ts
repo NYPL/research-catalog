@@ -37,16 +37,38 @@ export default class MyAccount {
     this.baseQuery = `patrons/${patronId}`
   }
 
-  async fetchCheckouts() {
-    try {
-      return await this.client.get(`${this.baseQuery}/checkouts?expand=item`)
-    } catch (e) {
-      logger.error("MyAccount#fetchCheckouts error:", e)
-      throw new MyAccountModelError(
-        "MyAccount#fetchCheckouts error: ",
-        e.message
-      )
+  async fetchWithRetries(path: string, operation: string, retries = 3) {
+    let lastError
+    for (let attempt = 1; attempt <= retries; attempt++) {
+      try {
+        const resp = await this.client.get(path)
+        logger.info(`Retry ${attempt} of ${retries}: succeeded`)
+        return resp
+      } catch (e) {
+        lastError = e
+        const delay = Math.pow(3, attempt)
+        logger.warn(
+          `Error on attempt ${attempt}. Retrying after ${delay}ms...`,
+          e.message
+        )
+        await new Promise((resolve) => setTimeout(resolve, delay))
+      }
     }
+    logger.error(
+      `MyAccount#${operation} error after ${retries} retries:`,
+      lastError.message
+    )
+    throw new MyAccountModelError(
+      `MyAccount#${operation} error: `,
+      lastError.message
+    )
+  }
+
+  async fetchCheckouts() {
+    return await this.fetchWithRetries(
+      `${this.baseQuery}/checkouts?expand=item`,
+      "fetchCheckouts"
+    )
   }
 
   async getCheckouts() {
@@ -59,8 +81,9 @@ export default class MyAccount {
   }
 
   async fetchHolds() {
-    return await this.client.get(
-      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`
+    return await this.fetchWithRetries(
+      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`,
+      "fetchHolds"
     )
   }
 
