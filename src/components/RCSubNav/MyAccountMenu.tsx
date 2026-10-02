@@ -8,6 +8,7 @@ import {
   applyFocusAfterRedirect,
   useLogoutRedirect,
 } from "../../hooks/useAuthRedirect"
+import { myAccountTabsData } from "../../utils/myAccountUtils"
 
 interface MyAccountMenuProps {
   activePage: RCPage
@@ -33,6 +34,7 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   const updatePath = (newPath, index) => {
     const tabUrl = `/account${newPath && `/${newPath}`}`
     const searchParams = new URLSearchParams()
+    // Set focus on corresponding tab button
     searchParams.set("focus", `tabs-tabs-id--tab-${index}`)
     router.push(`${tabUrl}?${searchParams.toString()}`)
   }
@@ -40,13 +42,10 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   const currentAccountTab =
     activePage === "account" ? router.asPath.split("/")[2] ?? "" : undefined
 
-  const tabsLabels = [
-    { path: "", label: "Profile" },
-    { path: "items", label: "Checkouts" },
-    { path: "requests", label: "Requests" },
-    { path: "lists", label: "Lists" },
-    { path: "overdues", label: "Fees" },
-  ]
+  const tabsData = myAccountTabsData.map(({ urlPath, label }) => ({
+    urlPath,
+    label,
+  }))
 
   const logoutLink = useLogoutRedirect()
 
@@ -103,13 +102,13 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
             maxHeight: "320px",
           }}
         >
-          {tabsLabels.map(({ path, label }, index) => {
+          {tabsData.map(({ urlPath, label }, index) => {
             return (
               <MenuItem
                 key={label.toLowerCase()}
                 sx={{
                   ...menuItemBaseStyle,
-                  ...(currentAccountTab === path && {
+                  ...(currentAccountTab === urlPath && {
                     fontWeight: "medium",
                     borderLeftColor: "dark.ui.border.default",
                     borderWidth: "0px 0px 0px 2px",
@@ -118,7 +117,7 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
                   }),
                 }}
                 onClick={() => {
-                  updatePath(path, index)
+                  updatePath(urlPath, index)
                 }}
               >
                 {label}
