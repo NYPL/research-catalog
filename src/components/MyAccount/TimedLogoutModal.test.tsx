@@ -11,7 +11,7 @@ jest.mock("next/router", () => ({
 jest.mock("../../utils/cookieUtils", () => ({
   deleteCookie: jest.fn(),
 }))
-jest.mock("../../server/auth", () => ({
+jest.mock("../../hooks/useAuthRedirect", () => ({
   useLogoutRedirect: jest.fn().mockReturnValue("/login"),
 }))
 

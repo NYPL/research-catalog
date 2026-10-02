@@ -8,7 +8,8 @@ import {
 import NextLink from "next/link"
 import Link from "../Link/Link"
 import { FeaturePopup } from "../Banners/FeaturePopup"
-import MyAccountMenu from "./MyAccountMenu"
+import MyAccountMenu, { myAccountMenuButtonId } from "./MyAccountMenu"
+import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
 interface SubNavProps {
   activePage: RCPage
@@ -21,6 +22,7 @@ interface SubNavProps {
  * and passes the active prop to the correct link based on the route.
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
+  const loginRedirect = useLoginRedirect(myAccountMenuButtonId)
   return (
     <SubNav
       className="no-print"
@@ -111,9 +113,8 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             <MyAccountMenu activePage={activePage} />
           ) : (
             <SubNavLink
-              href="/account"
-              as={NextLink}
               id="subnav-log-in"
+              href={loginRedirect}
               isOutlined
               screenreaderOnlyText="to NYPL.org"
             >
