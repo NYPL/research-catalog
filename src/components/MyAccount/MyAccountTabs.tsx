@@ -5,10 +5,12 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
-import { useContext } from "react"
+import { useContext, useEffect } from "react"
 import ListsTab from "./ListsTab/ListsTab"
 import ProfileTab from "./ProfileTab"
 import { MyAccountTabsErrorBanner } from "./MyAccountTabsErrorBanner"
+import { useFocusContext } from "../../context/FocusContext"
+import { applyFocusAfterRedirect } from "../../hooks/useAuthRedirect"
 
 interface MyAccountTabsPropsType {
   activePath: string
@@ -64,7 +66,15 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
   const tabsDict = { profile: 0, items: 1, requests: 2, lists: 3, overdues: 4 }
 
   const router = useRouter()
-  const currentPath = router.asPath.split("/")[2] ?? activePath ?? "profile"
+  // Get tabs path from url without search params (e.g. focus)
+  const currentPath =
+    router.asPath.split("/")[2]?.split(/[?#]/)[0] ?? activePath ?? "profile"
+
+  const { setPersistentFocus } = useFocusContext()
+
+  useEffect(() => {
+    applyFocusAfterRedirect(setPersistentFocus)
+  }, [setPersistentFocus, router.asPath])
 
   const updatePath = (newPath) => {
     router.push(`/account/${newPath}`, undefined, {
@@ -74,7 +84,6 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
 
   return (
     <Tabs
-      key={currentPath} // forces remount when tabs path changes
       defaultIndex={tabsDict[currentPath]}
       id="tabs-id"
       onChange={(index) => {

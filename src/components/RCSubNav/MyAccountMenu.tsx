@@ -1,12 +1,21 @@
 import type { RCPage } from "../../types/pageTypes"
-import { useLogoutRedirect } from "../../server/auth"
 import { Menu, MenuButton, MenuList, MenuItem, Portal } from "@chakra-ui/react"
 import { useRouter } from "next/router"
+import { useEffect } from "react"
 import { Box, Flex, Icon } from "@nypl/design-system-react-components"
+import { useFocusContext } from "../../context/FocusContext"
+import {
+  applyFocusAfterRedirect,
+  useLogoutRedirect,
+} from "../../hooks/useAuthRedirect"
 
 interface MyAccountMenuProps {
   activePage: RCPage
 }
+
+const myAccountMenuId = "my-account-menu"
+// Based on Chakra menu id
+export const myAccountMenuButtonId = `menu-button-${myAccountMenuId}`
 
 /**
  * Renders a dropdown navigation menu for My Account.
@@ -14,9 +23,18 @@ interface MyAccountMenuProps {
  */
 const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   const router = useRouter()
+  const { setPersistentFocus } = useFocusContext()
 
-  const updatePath = (newPath) => {
-    router.push(`/account${newPath && `/${newPath}`}`)
+  // Focus the My Account button upon returning from the login redirect
+  useEffect(() => {
+    applyFocusAfterRedirect(setPersistentFocus, myAccountMenuButtonId)
+  }, [setPersistentFocus])
+
+  const updatePath = (newPath, index) => {
+    const tabUrl = `/account${newPath && `/${newPath}`}`
+    const searchParams = new URLSearchParams()
+    searchParams.set("focus", `tabs-tabs-id--tab-${index}`)
+    router.push(`${tabUrl}?${searchParams.toString()}`)
   }
 
   const currentAccountTab =
@@ -52,9 +70,8 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   }
 
   return (
-    <Menu placement="bottom-end">
+    <Menu placement="bottom-end" id={myAccountMenuId}>
       <MenuButton
-        id="subnav-my-account"
         className={activePage === "account" ? "ds-subNav-selectedItem" : ""}
         aria-current={activePage === "account" ? "page" : undefined}
         sx={{
@@ -86,7 +103,7 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
             maxHeight: "320px",
           }}
         >
-          {tabsLabels.map(({ path, label }) => {
+          {tabsLabels.map(({ path, label }, index) => {
             return (
               <MenuItem
                 key={label.toLowerCase()}
@@ -100,7 +117,9 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
                     textColor: "ui.typography.heading",
                   }),
                 }}
-                onClick={() => updatePath(path)}
+                onClick={() => {
+                  updatePath(path, index)
+                }}
               >
                 {label}
               </MenuItem>

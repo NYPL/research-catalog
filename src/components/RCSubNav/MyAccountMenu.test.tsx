@@ -1,14 +1,14 @@
 import React from "react"
-import { render, screen } from "@testing-library/react"
 import userEvent from "@testing-library/user-event"
 import mockRouter from "next-router-mock"
-import { useLogoutRedirect } from "../../server/auth"
+import { render, screen } from "../../utils/testUtils"
 
 import MyAccountMenu from "./MyAccountMenu"
 import type { RCPage } from "../../types/pageTypes"
+import { useLogoutRedirect } from "../../hooks/useAuthRedirect"
 
 jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-jest.mock("../../server/auth")
+jest.mock("../../hooks/useAuthRedirect")
 
 const renderMenu = (activePage: RCPage = "search") =>
   render(<MyAccountMenu activePage={activePage} />)
@@ -41,13 +41,13 @@ describe("MyAccountMenu", () => {
   it("navigates to the corresponding account tab when a tab is clicked", async () => {
     await userEvent.click(screen.getByRole("menuitem", { name: "Checkouts" }))
 
-    expect(mockRouter.asPath).toBe("/account/items")
+    expect(mockRouter.asPath).toContain("/account/items") // contain because focus param is added to URL
   })
 
   it("navigates to /account when 'Profile' is clicked", async () => {
     await userEvent.click(screen.getByRole("menuitem", { name: "Profile" }))
 
-    expect(mockRouter.asPath).toBe("/account")
+    expect(mockRouter.asPath).toContain("/account")
   })
 
   it("navigates to the logout link when 'Log out' is clicked", async () => {
