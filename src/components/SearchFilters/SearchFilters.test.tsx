@@ -15,7 +15,7 @@ describe("SearchFilters", () => {
   const component = (
     <Search
       isAuthenticated={true}
-      results={{ page: 1, aggregations, results, status: 200 }}
+      results={{ page: 1, aggregations, results, status: 200, suggest: null }}
     />
   )
   describe("with dates in url query params", () => {

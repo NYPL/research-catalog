@@ -41,14 +41,6 @@ export async function fetchSearchResults(
       `${DISCOVERY_API_SEARCH_ROUTE}${searchQuery}`
     )
 
-    // Handle no results (404)
-    if (searchAndAggregationsResponse?.totalResults === 0) {
-      return {
-        status: 404,
-        error: `No results found for search ${searchQuery}`,
-      }
-    }
-
     // Handle general error (no status code returned on success)
     if (searchAndAggregationsResponse.status) {
       logServerError(

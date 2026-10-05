@@ -34,6 +34,7 @@ import type {
 import type { RCPage } from "../../types/pageTypes"
 import { getBrowseTypeFromPath } from "../../utils/appUtils"
 import { useRouter } from "next/router"
+import SearchSuggestions from "../SearchResults//SearchSuggestions"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -91,7 +92,7 @@ const Search = ({
   }
 
   const { itemListElement: searchResultsElements, totalResults } =
-    results.results
+    results.results || {}
   const parsedQuery = results?.results?.debug?.parsed
 
   const aggs = results?.aggregations?.itemListElement
@@ -102,6 +103,9 @@ const Search = ({
 
   const displayFilters = !!aggs?.filter((agg: Aggregation) => agg.values.length)
     .length
+
+  let suggestions = results.results.suggest
+  suggestions = suggestions.length > 0 ? suggestions : null
 
   const searchResultBibs = mapElementsToSearchResultsBibs(searchResultsElements)
   return (
@@ -197,6 +201,7 @@ const Search = ({
                 handleSortChange={handleSortChange}
               />
             </Flex>
+            {suggestions && <SearchSuggestions suggestions={suggestions} />}
             {isLoading ? (
               <Box height="200px">
                 <SkeletonLoader showImage={false} mb="m" />
