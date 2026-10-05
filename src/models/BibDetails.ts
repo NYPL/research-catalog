@@ -78,7 +78,16 @@ export default class BibDetails {
       url: searchUrl,
     } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
-    const displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
+    let displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
+    // the creator is sometimes redundantly also listed as a contributor
+    if (literalField === "contributorLiteral") {
+      const creatorNameTitles = (this.bib.creatorDisplay || []).map(
+        (creator) => creator.nameTitle
+      )
+      displayData = displayData.filter(
+        ({ nameTitle }) => !creatorNameTitles.includes(nameTitle)
+      )
+    }
     const displayValues: BibDetailURL[] = displayData.map(
       ({ displayLabel, name, nameTitle }) => ({
         url: searchUrl(literalField === "series" ? name : nameTitle),
@@ -472,16 +481,19 @@ export default class BibDetails {
    * Assumes that arr2 is at least as long as arr1.
    */
   interleaveParallelAndPrimaryValues(
-    primaries: string[],
-    parallels: string[] | Note[]
+    primaries: string[] | DisplayComponentsEntry[],
+    parallels: string[] | Note[] | DisplayComponentsEntry[]
   ) {
     const interleavedValues = []
     parallels.forEach((parallelValue, i) => {
       if (primaries[i]) {
-        const value =
-          parallelValue && parallelValue["noteType"]
-            ? this.combineMatchingNotes(primaries[i], parallelValue)
-            : primaries[i]
+        let value: string | Note | DisplayComponentsEntry = primaries[i]
+        if (parallelValue && parallelValue["noteType"]) {
+          value = this.combineMatchingNotes(
+            primaries[i] as string,
+            parallelValue
+          )
+        }
         interleavedValues.push(value)
       }
       if (parallelValue) {
@@ -498,17 +510,44 @@ export default class BibDetails {
    * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
+    // These parallel fields are irregularly pluralized
+    const irregularParallelFields = {
+      parallelCreatorsDisplay: "creatorDisplay",
+      parallelContributorsDisplay: "contributorDisplay",
+    }
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null
       }
-      const match = key.match(/parallel(.)(.*)/)
-      const paralleledField = match && `${match[1].toLowerCase()}${match[2]}`
-      const paralleledValues = paralleledField && bib[paralleledField]
+      const paralleledField =
+        irregularParallelFields[key] ||
+        (() => {
+          const match = key.match(/parallel(.)(.*)/)
+          return match && `${match[1].toLowerCase()}${match[2]}`
+        })()
+      let paralleledValues = paralleledField && bib[paralleledField]
+      let keyValues = bib[key]
+      // creator is sometimes also listed as a contributor (on either or both
+      // of the primary/parallel sides)
+      if (paralleledField === "contributorDisplay" && paralleledValues) {
+        const creatorNameTitles = (bib.creatorDisplay || []).map(
+          (creator) => creator.nameTitle
+        )
+        paralleledValues = paralleledValues.filter(
+          (contributor) => !creatorNameTitles.includes(contributor.nameTitle)
+        )
+        const parallelCreatorNameTitles = (
+          bib["parallelCreatorsDisplay"] || []
+        ).map((creator) => creator.nameTitle)
+        keyValues = (keyValues || []).filter(
+          (contributor) =>
+            !parallelCreatorNameTitles.includes(contributor?.nameTitle)
+        )
+      }
       return (
         paralleledValues && {
           [paralleledField]: this.interleaveParallelAndPrimaryValues(
-            bib[key],
+            keyValues,
             paralleledValues
           ),
         }
