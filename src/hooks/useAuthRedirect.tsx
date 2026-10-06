@@ -8,13 +8,16 @@ import { BASE_URL } from "../config/constants"
  * Can pass parameter to focus on a specific id upon returning
  */
 export const useLoginRedirect = (focusId?: string) => {
-  const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
+  const loginEndpoint =
+    appConfig.urls?.loginUrl?.[appConfig.environment] ||
+    appConfig.apiEndpoints?.loginUrl?.[appConfig.environment]
+  const [redirect, setRedirect] = useState(
+    `${loginEndpoint}?redirect_uri=${encodeURIComponentWithPeriods(
+      `https://www.nypl.org${BASE_URL}`
+    )}`
+  )
   useEffect(() => {
-    const loginEndpoint =
-      appConfig.urls?.loginUrl?.[appConfig.environment] ||
-      appConfig.apiEndpoints?.loginUrl?.[appConfig.environment]
-    if (typeof window === "undefined") return loginEndpoint
-
+    if (typeof window === "undefined") return
     const currentUrl = new URL(window.location.href)
     if (focusId) currentUrl.searchParams.set("focus", focusId)
     const encodedRedirect = encodeURIComponentWithPeriods(currentUrl.toString())
