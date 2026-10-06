@@ -9,8 +9,6 @@ import {
   results,
 } from "../../../__test__/fixtures/searchResultsManyBibs"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("SearchFilters", () => {
   const component = (
     <Search

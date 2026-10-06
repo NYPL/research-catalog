@@ -7,7 +7,6 @@ import MyAccountMenu from "./MyAccountMenu"
 import type { RCPage } from "../../types/pageTypes"
 import { useLogoutRedirect } from "../../hooks/useAuthRedirect"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../hooks/useAuthRedirect")
 
 const renderMenu = (activePage: RCPage = "search") =>

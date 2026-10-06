@@ -18,13 +18,6 @@ jest.mock("../../../src/server/auth")
 jest.mock("../../../src/models/MyAccount")
 jest.mock("../../../src/server/sierraClient")
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(() => ({
-    asPath: "/account",
-    push: jest.fn(),
-  })),
-}))
-
 const mockRes = {
   setHeader: jest.fn(),
 }

@@ -9,7 +9,6 @@ import { FocusProvider } from "../../context/FocusContext"
 import { userEvent } from "@testing-library/user-event"
 import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../hooks/useAuthRedirect")
 
 describe("RCSubNav", () => {

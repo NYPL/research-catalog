@@ -8,8 +8,6 @@ import mockRouter from "next-router-mock"
 import userEvent from "@testing-library/user-event"
 import Search from "../Search/Search"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("Applied Filters", () => {
   const component = (
     <Search

@@ -10,7 +10,6 @@ import {
 } from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 import { PatronDataProvider } from "../../context/PatronDataContext"
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const accountData = {
   patron: processedPatron,
