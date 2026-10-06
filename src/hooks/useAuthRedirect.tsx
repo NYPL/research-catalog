@@ -27,37 +27,6 @@ export const useLoginRedirect = (focusId?: string) => {
 }
 
 /**
- * After redirecting back to RC, sets the focus to the element with the id
- * found in the original redirect URL param (must match expectedFocusTarget if
- * provided). If focus applied, also executes follow-up operation if provided.
- * This is a layer on top of setPersistentFocus from FocusContext - takes in the
- * setPersistentFocus function defined from hook in calling component
- */
-export const applyFocusAfterRedirect = (
-  persistentFocusSetter,
-  expectedFocusTarget?,
-  followUpOperation?
-) => {
-  const params = new URLSearchParams(window.location.search)
-  const focusTarget = params.get("focus")
-
-  if (!focusTarget) return
-
-  if (!expectedFocusTarget || focusTarget === expectedFocusTarget) {
-    persistentFocusSetter(expectedFocusTarget ?? focusTarget)
-    // Clean up the URL
-    params.delete("focus")
-    const newUrl =
-      window.location.pathname +
-      (params.toString() ? `?${params.toString()}` : "") +
-      window.location.hash
-
-    window.history.replaceState({}, "", newUrl)
-    followUpOperation && followUpOperation()
-  }
-}
-
-/**
  * Creates redirect to log out user, then return user to their current page.
  */
 export const useLogoutRedirect = () => {

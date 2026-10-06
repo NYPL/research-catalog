@@ -21,10 +21,7 @@ import {
   STATIC_STATUS_MESSAGES,
 } from "../../utils/statusUtils"
 import { idConstants, useFocusContext } from "../../context/FocusContext"
-import {
-  applyFocusAfterRedirect,
-  useLoginRedirect,
-} from "../../hooks/useAuthRedirect"
+import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
 interface ManageBibInListProps {
   recordId: string
@@ -45,7 +42,8 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus, activeElementId } = useFocusContext()
+  const { setPersistentFocus, activeElementId, redirectFocusTarget } =
+    useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const isMobile = !isLargerThanLargeMobile
@@ -88,12 +86,12 @@ export const ManageBibInList = ({
     }
   }, [activeElementId, triggerId, recordId])
 
-  // Focus the Save button upon returning from the login redirect
+  // Open menu upon returning from the login redirect if focus target matches
   useEffect(() => {
-    applyFocusAfterRedirect(setPersistentFocus, triggerId, () => {
-      if (!onlyHasDefaultList) onOpen()
-    })
-  }, [recordId, onOpen, onlyHasDefaultList, triggerId])
+    if (redirectFocusTarget === triggerId && !onlyHasDefaultList) {
+      onOpen()
+    }
+  }, [redirectFocusTarget, triggerId, onlyHasDefaultList, onOpen])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:

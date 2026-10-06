@@ -1,13 +1,8 @@
 import type { RCPage } from "../../types/pageTypes"
 import { Menu, MenuButton, MenuList, MenuItem, Portal } from "@chakra-ui/react"
 import { useRouter } from "next/router"
-import { useEffect } from "react"
 import { Box, Flex, Icon } from "@nypl/design-system-react-components"
-import { useFocusContext } from "../../context/FocusContext"
-import {
-  applyFocusAfterRedirect,
-  useLogoutRedirect,
-} from "../../hooks/useAuthRedirect"
+import { useLogoutRedirect } from "../../hooks/useAuthRedirect"
 import { myAccountTabsData } from "../../utils/myAccountUtils"
 
 interface MyAccountMenuProps {
@@ -24,12 +19,6 @@ export const myAccountMenuButtonId = `menu-button-${myAccountMenuId}`
  */
 const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   const router = useRouter()
-  const { setPersistentFocus } = useFocusContext()
-
-  // Focus the My Account button upon returning from the login redirect
-  useEffect(() => {
-    applyFocusAfterRedirect(setPersistentFocus, myAccountMenuButtonId)
-  }, [setPersistentFocus])
 
   const updatePath = (newPath, index) => {
     const tabUrl = `/account${newPath && `/${newPath}`}`

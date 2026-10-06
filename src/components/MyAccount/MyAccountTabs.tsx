@@ -5,12 +5,10 @@ import CheckoutsTab from "./CheckoutsTab/CheckoutsTab"
 import RequestsTab from "./RequestsTab/RequestsTab"
 import FeesTab from "./FeesTab/FeesTab"
 import { PatronDataContext } from "../../context/PatronDataContext"
-import { useContext, useEffect } from "react"
+import { useContext } from "react"
 import ListsTab from "./ListsTab/ListsTab"
 import ProfileTab from "./ProfileTab"
 import { MyAccountTabsErrorBanner } from "./MyAccountTabsErrorBanner"
-import { useFocusContext } from "../../context/FocusContext"
-import { applyFocusAfterRedirect } from "../../hooks/useAuthRedirect"
 import { myAccountTabsData } from "../../utils/myAccountUtils"
 
 interface MyAccountTabsPropsType {
@@ -75,12 +73,6 @@ const MyAccountTabs = ({ activePath }: MyAccountTabsPropsType) => {
   const defaultIndex = myAccountTabsData.findIndex(
     ({ key }) => key === currentPath
   )
-
-  const { setPersistentFocus } = useFocusContext()
-
-  useEffect(() => {
-    applyFocusAfterRedirect(setPersistentFocus)
-  }, [setPersistentFocus, router.asPath])
 
   const updatePath = (newPath) => {
     router.push(`/account/${newPath}`, undefined, {
