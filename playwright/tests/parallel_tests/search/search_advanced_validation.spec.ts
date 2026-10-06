@@ -37,7 +37,11 @@ test.describe("Advanced Search validation", () => {
     await advancedSearchPage.dateToInput.fill("2023")
     await advancedSearchPage.dateToInput.blur()
     //expect text "Error: End date must be later than start date." to be visible in-line
-    await expect(advancedSearchPage.page.locator("text=Error: End date must be later than start date.")).toBeVisible()
+    await expect(
+      advancedSearchPage.page.locator(
+        "text=Error: End date must be later than start date."
+      )
+    ).toBeVisible()
     await advancedSearchPage.submit()
 
     await expect(advancedSearchPage.errorBanner).toBeVisible({ timeout: 10000 })
