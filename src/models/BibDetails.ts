@@ -316,7 +316,8 @@ export default class BibDetails {
     const keptByLabel = {}
 
     annotatedMarcDetails.forEach((detail) => {
-      // subject checked per-value
+      // Subject checked per-value to display unlinked subjects.
+      // When a bib has a subject catalogued with indicators, the browse term module filters it out
       if (detail.label !== "Subject" && labelsSet.has(detail.label)) {
         return
       }
