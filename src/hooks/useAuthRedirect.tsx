@@ -27,6 +27,8 @@ export const useLoginRedirect = (focusId?: string) => {
  * After redirecting back to RC, sets the focus to the element with the id
  * found in the original redirect URL param (must match expectedFocusTarget if
  * provided). If focus applied, also executes follow-up operation if provided.
+ * This is a layer on top of setPersistentFocus from FocusContext - takes in the
+ * setPersistentFocus function defined from hook in calling component
  */
 export const applyFocusAfterRedirect = (
   persistentFocusSetter,

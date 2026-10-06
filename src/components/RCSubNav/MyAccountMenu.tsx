@@ -49,7 +49,7 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
 
   const logoutLink = useLogoutRedirect()
 
-  // Styles from DS Menu
+  // TODO: Keep styles aligned with DS Menu
   const menuItemBaseStyle = {
     fontSize: "desktop.body.body2",
     fontWeight: "body.body2",
