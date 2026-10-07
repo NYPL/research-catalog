@@ -1,16 +1,16 @@
 import { test, expect, type Browser, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
-import { appConfig } from "../../../src/config/appConfig"
+import { testPatron } from "../../config/testPatrons"
 import { logger } from "@nypl/node-utils"
 import { setUpTestPatron } from "../utils"
 
 let page: Page
 let accountPage: AccountPage
 
-const username = appConfig.testUser.username[appConfig.environment]
-const password = process.env.QA_PASSWORD
-const name = appConfig.testUser.name[appConfig.environment]
-const cardNumber = appConfig.testUser.cardNumber[appConfig.environment]
+const username = testPatron.username
+const name = testPatron.name
+const cardNumber = testPatron.cardNumber
+const password = testPatron.password
 
 test.describe.serial("Account page", () => {
   test.skip(

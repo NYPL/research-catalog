@@ -91,7 +91,12 @@ const SearchResult = ({
       }}
     >
       <CardContent data-testid="card-content">
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+        <Flex
+          flexDir="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          gap="l"
+        >
           <CardHeading
             level="h3"
             size="heading5"

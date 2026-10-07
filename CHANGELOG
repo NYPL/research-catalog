@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.1.7] 2026-10-07
+
+### Added
+
+- Added Playwright test for advanced search happy path [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+
+### Updated
+
+- Moved `base_page.spec.ts` and `redirects.spec.ts` into `playwright/tests/parallel_tests` [SCC-5652](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5652)
+- Updated regex matching between bib and AM fields to only strip punctuation for deduping [SCC-5667](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5667)
+- Correct search result list button spacing [SCC-5578](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5578)
+- Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
+
 ## [2.1.6] 2026-09-24
 
 ### Added

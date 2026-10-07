@@ -15,7 +15,7 @@ import {
 } from "../utils/appUtils"
 import {
   getFindingAidFromSupplementaryContent,
-  fuzzyIncludes,
+  stripPunctuation,
 } from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
@@ -134,7 +134,9 @@ export default class BibDetails {
     value: string[],
     fieldMarcTags?: string[]
   ): BibDetail | MarcDetail {
-    if (!value?.length) return null
+    if (!value?.length) {
+      return null
+    }
 
     const base = { label: convertToSentenceCase(label), value }
 
@@ -306,7 +308,7 @@ export default class BibDetails {
 
     allDetails.forEach((detail) => {
       normalizeValues(detail.value).forEach(
-        (v) => v && resourceValuesSet.add(v)
+        (v) => v && resourceValuesSet.add(stripPunctuation(v))
       )
     })
 
@@ -314,24 +316,15 @@ export default class BibDetails {
     const keptByLabel = {}
 
     annotatedMarcDetails.forEach((detail) => {
-      if (labelsSet.has(detail.label)) return
-      if (
-        detail.label === "Subject" &&
-        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
-      ) {
+      // Subject checked per-value to display unlinked subjects.
+      // When a bib has a subject catalogued with indicators, the browse term module filters it out
+      if (detail.label !== "Subject" && labelsSet.has(detail.label)) {
         return
       }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
-      // include subjects, which will be displayed but not linked
-      const resourceValuesArray = Array.from(resourceValuesSet)
-      const overlap = detailValues.some(
-        (marcVal) =>
-          marcVal &&
-          resourceValuesArray.some(
-            (resVal) =>
-              fuzzyIncludes(marcVal, resVal) || fuzzyIncludes(resVal, marcVal)
-          )
+      const overlap = detailValues.some((v) =>
+        resourceValuesSet.has(stripPunctuation(v))
       )
       if (!overlap) {
         filteredMarc.push(detail)
