@@ -10,7 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Playwright test for advanced search happy path [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
-- Added My Account dropdown navigation menu [SCC-5521](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5521)
+- Added My Account dropdown navigation menu (+ refactors to login/logout redirect flow & FocusContext url parsing) [SCC-5521](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5521)
 
 ### Updated
 
