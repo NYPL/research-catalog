@@ -8,11 +8,12 @@ import {
   addRecordsToList,
 } from "../lists"
 import nyplApiClient from "../../nyplApiClient"
-import { logServerError } from "../../../utils/logUtils"
+import { logServerError, logServerWarn } from "../../../utils/logUtils"
 
 jest.mock("../../nyplApiClient")
 jest.mock("../../../utils/logUtils", () => ({
   logServerError: jest.fn(),
+  logServerWarn: jest.fn(),
 }))
 
 const mockClient = {
@@ -69,11 +70,72 @@ describe("lists", () => {
       })
     })
 
-    it("returns 500 on exception", async () => {
-      mockClient.get.mockRejectedValueOnce(new Error("server error"))
-      const result = await fetchLists({ patronId: "12345" })
+    it("returns 500 on exception after exhausting retries", async () => {
+      jest.useFakeTimers()
+      mockClient.get.mockRejectedValue(new Error("server error"))
+      const resultPromise = fetchLists({ patronId: "12345" })
+      await jest.advanceTimersByTimeAsync(300)
+      await jest.advanceTimersByTimeAsync(600)
+      const result = await resultPromise
+      expect(mockClient.get).toHaveBeenCalledTimes(3)
       expect(logServerError).toHaveBeenCalledWith("fetchLists", "server error")
       expect(result).toEqual({ status: 500 })
+      jest.useRealTimers()
+    })
+  })
+
+  describe("retries", () => {
+    it("retries a read request on a transient 500 and succeeds", async () => {
+      jest.useFakeTimers()
+      mockClient.get
+        .mockResolvedValueOnce({ statusCode: 500, error: "server error" })
+        .mockResolvedValueOnce([{ id: "a-list" }])
+      const resultPromise = fetchLists({ patronId: "12345" })
+      await jest.advanceTimersByTimeAsync(300)
+      const result = await resultPromise
+      expect(mockClient.get).toHaveBeenCalledTimes(2)
+      expect(logServerWarn).toHaveBeenCalledWith(
+        "fetchLists",
+        expect.stringContaining("Retrying")
+      )
+      expect(result).toEqual({ status: 200, lists: [{ id: "a-list" }] })
+      jest.useRealTimers()
+    })
+
+    it("stops retrying a read request after exhausting max attempts", async () => {
+      jest.useFakeTimers()
+      mockClient.get.mockResolvedValue({
+        statusCode: 500,
+        error: "error",
+      })
+      const resultPromise = fetchLists({ patronId: "12345" })
+      await jest.advanceTimersByTimeAsync(300)
+      await jest.advanceTimersByTimeAsync(600)
+      const result = await resultPromise
+      expect(mockClient.get).toHaveBeenCalledTimes(3)
+      expect(result).toEqual({
+        status: 500,
+        name: undefined,
+        error: "error",
+      })
+      jest.useRealTimers()
+    })
+
+    it("does not retry a write request on a 500 error", async () => {
+      mockClient.post.mockResolvedValueOnce({
+        statusCode: 500,
+        error: "server error",
+      })
+      const result = await createList({
+        patronId: "12345",
+        listName: "hello",
+      })
+      expect(mockClient.post).toHaveBeenCalledTimes(1)
+      expect(result).toEqual({
+        status: 500,
+        name: undefined,
+        error: "server error",
+      })
     })
   })
 

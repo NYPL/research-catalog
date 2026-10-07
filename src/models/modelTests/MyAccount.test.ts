@@ -40,6 +40,45 @@ describe("MyAccountModel", () => {
     })
   })
 
+  describe("fetchWithRetries", () => {
+    it("returns response on first successful attempt", async () => {
+      const mockGet = jest.fn().mockResolvedValue({ entries: [] })
+      const fetcher = new MyAccount({ get: mockGet }, "aaaaa")
+      const result = await fetcher.fetchWithRetries("a/fake/path", "operation")
+      expect(result).toStrictEqual({ entries: [] })
+      expect(mockGet).toHaveBeenCalledTimes(1)
+    })
+
+    it("retries after a failure and returns the response on a later success", async () => {
+      const mockGet = jest
+        .fn()
+        .mockRejectedValueOnce(new Error("fail"))
+        .mockResolvedValueOnce({ entries: [] })
+      const fetcher = new MyAccount({ get: mockGet }, "aaaaa")
+      const result = await fetcher.fetchWithRetries("a/fake/path", "operation")
+      expect(result).toStrictEqual({ entries: [] })
+      expect(mockGet).toHaveBeenCalledTimes(2)
+    })
+
+    it("throws error after exhausting retries", async () => {
+      const mockGet = jest.fn().mockRejectedValue(new Error("always fails"))
+      const fetcher = new MyAccount({ get: mockGet }, "aaaaa")
+      await expect(
+        fetcher.fetchWithRetries("a/fake/path", "operation", 3)
+      ).rejects.toThrow("MyAccount#operation error: ")
+      expect(mockGet).toHaveBeenCalledTimes(3)
+    })
+
+    it("respects custom retries count", async () => {
+      const mockGet = jest.fn().mockRejectedValue(new Error("always fails"))
+      const fetcher = new MyAccount({ get: mockGet }, "aaaaa")
+      await expect(
+        fetcher.fetchWithRetries("a/fake/path", "operation", 1)
+      ).rejects.toThrow()
+      expect(mockGet).toHaveBeenCalledTimes(1)
+    })
+  })
+
   describe("getHoldStatus", () => {
     it("returns the correct status", () => {
       expect(

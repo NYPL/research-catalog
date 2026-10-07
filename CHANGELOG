@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Playwright test for advanced search happy path [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+- Added retries for Sierra requests and list fetch requests [SCC-5523](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5523)
 
 ### Updated
 
