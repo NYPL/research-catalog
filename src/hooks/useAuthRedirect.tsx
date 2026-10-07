@@ -3,21 +3,24 @@ import { appConfig } from "../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../utils/appUtils"
 import { BASE_URL } from "../config/constants"
 
+const protocol = appConfig.environment === "production" ? "https" : "http"
+const hostname = appConfig.apiEndpoints.domain[appConfig.environment]
+const encodedBaseRedirect = encodeURIComponentWithPeriods(
+  `${protocol}://${hostname}${BASE_URL}`
+)
+
 /**
  * Provides login endpoint with redirect back to the current page.
+ * If user has noscript or javascript disabled, will send user back to base URL
+ * (useEffect won't work).
  * Can pass parameter to focus on a specific id upon returning
  */
 export const useLoginRedirect = (focusId?: string) => {
-  const loginEndpoint =
-    appConfig.urls?.loginUrl?.[appConfig.environment] ||
-    appConfig.apiEndpoints?.loginUrl?.[appConfig.environment]
+  const loginEndpoint = appConfig.apiEndpoints.loginUrl[appConfig.environment]
   const [redirect, setRedirect] = useState(
-    `${loginEndpoint}?redirect_uri=${encodeURIComponentWithPeriods(
-      `https://www.nypl.org${BASE_URL}`
-    )}`
+    `${loginEndpoint}?redirect_uri=${encodedBaseRedirect}`
   )
   useEffect(() => {
-    if (typeof window === "undefined") return
     const currentUrl = new URL(window.location.href)
     if (focusId) currentUrl.searchParams.set("focus", focusId)
     const encodedRedirect = encodeURIComponentWithPeriods(currentUrl.toString())
@@ -28,11 +31,14 @@ export const useLoginRedirect = (focusId?: string) => {
 
 /**
  * Creates redirect to log out user, then return user to their current page.
+ * If user has noscript or javascript disabled, will send user back to base URL
+ * (useEffect won't work).
  */
 export const useLogoutRedirect = () => {
-  // Will send user back to prod if user has noscript or javascript disabled
-  // (useEffect won't work).
-  const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
+  const logoutEndpoint = appConfig.apiEndpoints.logoutUrl[appConfig.environment]
+  const [redirect, setRedirect] = useState(
+    `${logoutEndpoint}?redirect_uri=${encodedBaseRedirect}`
+  )
   useEffect(() => {
     const current = window.location.pathname
     let backPath = window.location.href
@@ -43,11 +49,7 @@ export const useLogoutRedirect = () => {
       backPath = window.location.origin + BASE_URL
     }
     const encodedRedirect = encodeURIComponentWithPeriods(backPath)
-    setRedirect(
-      `${
-        appConfig.apiEndpoints.logoutUrl[appConfig.environment]
-      }?redirect_uri=${encodedRedirect}`
-    )
+    setRedirect(`${logoutEndpoint}?redirect_uri=${encodedRedirect}`)
   }, [])
   return redirect
 }
