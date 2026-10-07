@@ -21,6 +21,7 @@ import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
+import { logServerError, logServerWarn } from "../utils/logUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -42,21 +43,24 @@ export default class MyAccount {
     for (let attempt = 1; attempt <= retries; attempt++) {
       try {
         const resp = await this.client.get(path)
-        logger.info(`Retry ${attempt} of ${retries}: succeeded`)
+        if (attempt > 1)
+          logger.info(
+            `Retry ${attempt} of ${retries} for ${operation}: succeeded`
+          )
         return resp
       } catch (e) {
         lastError = e
-        const delay = Math.pow(3, attempt)
-        logger.warn(
-          `Error on attempt ${attempt}. Retrying after ${delay}ms...`,
-          e.message
+        const delay = 300 * attempt
+        logServerWarn(
+          operation,
+          `Error on attempt ${attempt}: ${e.message}. Retrying after ${delay}ms...`
         )
         await new Promise((resolve) => setTimeout(resolve, delay))
       }
     }
-    logger.error(
-      `MyAccount#${operation} error after ${retries} retries:`,
-      lastError.message
+    logServerError(
+      `MyAccount#${operation}`,
+      `Error after ${retries} retries: ${lastError.message}`
     )
     throw new MyAccountModelError(
       `MyAccount#${operation} error: `,
@@ -102,8 +106,9 @@ export default class MyAccount {
   }
 
   async fetchPatron() {
-    return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
+    return await this.fetchWithRetries(
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`,
+      "fetchPatron"
     )
   }
 
@@ -113,7 +118,7 @@ export default class MyAccount {
   }
 
   async fetchFines() {
-    return await this.client.get(`${this.baseQuery}/fines`)
+    return await this.fetchWithRetries(`${this.baseQuery}/fines`, "fetchFines")
   }
 
   async getFines() {
@@ -185,10 +190,11 @@ export default class MyAccount {
     if (itemLevelHoldsorCheckouts.length) {
       try {
         // Fetch bibs
-        const itemLevelBibData = await this.client.get(
+        const itemLevelBibData = await this.fetchWithRetries(
           `bibs?id=${itemLevelHoldsorCheckouts.map(
             (x) => x.bibId
-          )}&fields=default,varFields`
+          )}&fields=default,varFields`,
+          "fetchBibItemData"
         )
         bibEntries.push(...itemLevelBibData.entries)
 
@@ -211,8 +217,9 @@ export default class MyAccount {
     const itemEntries: Record<string, any[]> = {}
 
     const itemIds = itemLevelHoldsorCheckouts.map((x) => x.itemId)
-    const itemLevelData = await this.client.get(
-      `items?id=${itemIds}&fields=varFields`
+    const itemLevelData = await this.fetchWithRetries(
+      `items?id=${itemIds}&fields=varFields`,
+      "fetchItemVarFields"
     )
 
     itemLevelData.entries.forEach((item) => {
