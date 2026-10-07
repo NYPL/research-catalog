@@ -31,7 +31,9 @@ async function callListsServiceAndHandleError({
           const delay = retryDelay * attempt
           logServerWarn(
             methodName,
-            `error from client on attempt ${attempt}. Retrying after ${delay}ms...`
+            `Error on attempt ${attempt}: ${
+              response.error || response.message
+            }. Retrying after ${delay}ms...`
           )
           await sleep(delay)
           continue
@@ -53,7 +55,7 @@ async function callListsServiceAndHandleError({
         const delay = retryDelay * attempt
         logServerWarn(
           methodName,
-          `error on attempt ${attempt}. Retrying after ${delay}ms...`
+          `Error on attempt ${attempt}: ${error.message}. Retrying after ${delay}ms...`
         )
         await sleep(delay)
         continue
