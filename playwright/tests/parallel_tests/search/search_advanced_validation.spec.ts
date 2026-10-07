@@ -44,6 +44,10 @@ test.describe("Advanced Search validation", () => {
     ).toBeVisible()
     await advancedSearchPage.submit()
 
+    // Submission should be blocked and focus sent back to the errored "To" field
+    await expect(page).toHaveURL(/search\/advanced$/)
+    await expect(advancedSearchPage.dateToInput).toBeFocused()
+
     await expect(advancedSearchPage.errorBanner).toBeVisible({ timeout: 10000 })
   })
 })
