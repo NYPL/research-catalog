@@ -9,7 +9,6 @@ import userEvent from "@testing-library/user-event"
 import initializePatronTokenAuth from "../../../../src/server/auth"
 import { logSingleFilterNoResults } from "../../../../src/utils/logUtils"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../../src/server/auth")
 jest.mock("../../../../src/server/api/search")
 jest.mock("../../../../src/utils/logUtils")

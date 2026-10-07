@@ -1,8 +1,6 @@
 import React from "react"
 import { render, screen, within } from "../../utils/testUtils"
 import Layout from "./Layout"
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Layout", () => {
   const searchLabel = "Search Bar Label"

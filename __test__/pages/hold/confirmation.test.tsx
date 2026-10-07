@@ -19,8 +19,6 @@ jest.mock("../../../src/server/api/bib")
 jest.mock("../../../src/server/sierraClient")
 jest.mock("../../../src/server/api/hold")
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 const mockRes = {
   setHeader: jest.fn(),
 }

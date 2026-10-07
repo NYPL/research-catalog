@@ -7,8 +7,6 @@ import { normalAggs } from "../../../__test__/fixtures/testAggregations"
 import { SEARCH_FORM_OPTIONS } from "../../config/constants"
 import { fireEvent, render, screen } from "../../utils/testUtils"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("SearchForm", () => {
   const submit = () =>
     fireEvent(

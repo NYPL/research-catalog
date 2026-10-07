@@ -13,9 +13,6 @@ import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
 
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("Advanced search form", () => {
   beforeEach(async () => {
     mockRouter.setCurrentUrl("/search/advanced")

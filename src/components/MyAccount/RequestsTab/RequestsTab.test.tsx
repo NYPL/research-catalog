@@ -9,8 +9,6 @@ import RequestsTab from "./RequestsTab"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { pickupLocations } from "../../../../__test__/fixtures/rawSierraAccountData"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 const patronFetchSpy = jest.fn()
 const renderWithPatronDataContext = (holds = processedHolds) => {
   return render(

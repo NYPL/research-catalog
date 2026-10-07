@@ -5,8 +5,6 @@ import {
   Box,
   useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
-import { appConfig } from "../../config/appConfig"
-import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import { BASE_URL } from "../../config/constants"
 import type { List } from "../../types/listTypes"
@@ -23,6 +21,7 @@ import {
   STATIC_STATUS_MESSAGES,
 } from "../../utils/statusUtils"
 import { idConstants, useFocusContext } from "../../context/FocusContext"
+import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
 interface ManageBibInListProps {
   recordId: string
@@ -43,7 +42,8 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus, activeElementId } = useFocusContext()
+  const { setPersistentFocus, activeElementId, redirectFocusTarget } =
+    useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const isMobile = !isLargerThanLargeMobile
@@ -66,6 +66,7 @@ export const ManageBibInList = ({
 
   const popoverBaseId = `manage-bib-${recordId}`
   const triggerId = `popover-trigger-${popoverBaseId}`
+  const loginRedirect = useLoginRedirect(triggerId)
 
   // Mobile Drawer component needs explicit focus ref- set using the focus context's active element ID
   const mobileFinalFocusRef = useRef<HTMLElement | null>(null)
@@ -85,44 +86,18 @@ export const ManageBibInList = ({
     }
   }, [activeElementId, triggerId, recordId])
 
-  // Focus the Save button upon returning from the login redirect
+  // Open menu upon returning from the login redirect if focus target matches
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    const focusTarget = params.get("focus")
-
-    if (focusTarget === triggerId) {
-      setPersistentFocus(triggerId)
-      // Clean up the URL
-      params.delete("focus")
-      const newUrl =
-        window.location.pathname +
-        (params.toString() ? `?${params.toString()}` : "") +
-        window.location.hash
-
-      window.history.replaceState({}, "", newUrl)
-      // And open menu
-      if (!onlyHasDefaultList) {
-        onOpen()
-      }
+    if (redirectFocusTarget === triggerId && !onlyHasDefaultList) {
+      onOpen()
     }
-  }, [recordId, onOpen, onlyHasDefaultList, triggerId])
+  }, [redirectFocusTarget, triggerId, onlyHasDefaultList, onOpen])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:
     if (!isAuthenticated) {
       e.preventDefault()
-
-      const currentUrl = new URL(window.location.href)
-      currentUrl.searchParams.set("focus", triggerId)
-
-      const loginEndpoint =
-        appConfig.urls?.loginUrl?.[appConfig.environment] ||
-        appConfig.apiEndpoints?.loginUrl?.[appConfig.environment]
-      const encodedRedirect = encodeURIComponentWithPeriods(
-        currentUrl.toString()
-      )
-
-      window.location.assign(`${loginEndpoint}?redirect_uri=${encodedRedirect}`)
+      window.location.assign(loginRedirect)
       return
     }
     // If user has only the default list:
