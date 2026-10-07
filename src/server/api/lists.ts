@@ -1,6 +1,11 @@
+import { logger } from "@nypl/node-utils"
 import type { ListSort, ListRecordsSort } from "../../types/listTypes"
-import { logServerError } from "../../utils/logUtils"
+import { logServerError, logServerWarn } from "../../utils/logUtils"
 import nyplApiClient from "../nyplApiClient"
+
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms))
+}
 
 async function callListsServiceAndHandleError({
   methodName,
@@ -13,24 +18,50 @@ async function callListsServiceAndHandleError({
   apiCall: (client: any) => Promise<any>
   onSuccess?: (response: any) => any
 }) {
-  try {
-    const client = await nyplApiClient()
-    const response = await apiCall(client)
-    if (response.error || response.message) {
-      logServerError(
-        methodName,
-        `${response?.error || response?.error?.message} Request: ${path}`
-      )
-      return {
-        status: response.statusCode,
-        name: response.name,
-        error: response.error || response.error.message,
+  // Only retry read operations
+  const retries = methodName.includes("fetch") ? 3 : 1
+  const retryDelay = 300
+  for (let attempt = 1; attempt <= retries; attempt++) {
+    try {
+      const client = await nyplApiClient()
+      const response = await apiCall(client)
+      if (response.error || response.message) {
+        const isRetryable = !response.statusCode || response.statusCode >= 500
+        if (isRetryable && attempt < retries) {
+          const delay = retryDelay * attempt
+          logServerWarn(
+            methodName,
+            `error from client on attempt ${attempt}. Retrying after ${delay}ms...`
+          )
+          await sleep(delay)
+          continue
+        }
+        logServerError(
+          methodName,
+          `${response?.error || response?.error?.message} Request: ${path}`
+        )
+        return {
+          status: response.statusCode,
+          name: response.name,
+          error: response.error || response.error.message,
+        }
       }
+      logger.info(`Retry ${attempt} of ${retries} for ${methodName}: succeeded`)
+      return onSuccess(response)
+    } catch (error: any) {
+      if (attempt < retries) {
+        const delay = retryDelay * attempt
+        logServerWarn(
+          methodName,
+          `error on attempt ${attempt}. Retrying after ${delay}ms...`
+        )
+        await sleep(delay)
+        continue
+      }
+
+      logServerError(methodName, error.message)
+      return { status: 500 }
     }
-    return onSuccess(response)
-  } catch (error: any) {
-    logServerError(methodName, error.message)
-    return { status: 500 }
   }
 }
 
