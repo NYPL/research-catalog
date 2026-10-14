@@ -5,7 +5,6 @@ import BrowseForm from "./BrowseForm"
 import { fireEvent, render, screen } from "../../utils/testUtils"
 import { BrowseProvider, useBrowseContext } from "../../context/BrowseContext"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const BrowseTypeDebugger = () => {
   const { browseType } = useBrowseContext()
   return <div data-testid="browse-type">{browseType}</div>
