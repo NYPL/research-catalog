@@ -16,7 +16,7 @@ class SearchResultsFilters {
 
     this.options = aggregationsResults
       .find((f) => f.id === field.value)
-      ?.values?.map((option) => ({
+      ?.values.map((option) => ({
         ...option,
         label: this.getLabel(option, field),
       }))
