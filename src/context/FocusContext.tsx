@@ -11,8 +11,10 @@ interface FocusContextType {
   activeElementId: string | null
   // setActiveElementId: (id: string | null) => void
   setPersistentFocus: (id: string | null) => void
-  // Id found in the "focus" url param. Read on mount and after every
-  // client-side route change
+  // Currently only used by ManageBibInList, which requires more local
+  // focus management (because of raw Chakra Drawer).
+  // Provides the target id parsed from the "focus" url param that is acted
+  // upon inside ManageBibInList after a login redirect.
   triggerIdFromRedirectUrl: string | null
 }
 
