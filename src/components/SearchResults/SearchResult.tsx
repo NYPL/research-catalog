@@ -26,17 +26,12 @@ import { isNyplBibID } from "../../utils/bibUtils"
 interface SearchResultProps {
   bib: SearchResultsBib
   isAuthenticated: boolean
-  isFirstResult?: boolean
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const SearchResult = ({
-  bib,
-  isAuthenticated,
-  isFirstResult,
-}: SearchResultProps) => {
+const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
   const separatingDot = (i) => (
     // @ts-ignore
     <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
