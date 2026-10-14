@@ -1,4 +1,3 @@
-import { useState } from "react"
 import RCHead from "../../../../src/components/Head/RCHead"
 import Layout from "../../../../src/components/Layout/Layout"
 import Bib from "../../../../src/models/Bib"
@@ -32,29 +31,33 @@ export default function MarcPage({
   isAuthenticated,
   errorStatus = null,
 }: MarcPropsType) {
-  const [bib, setBib] = useState(
-    tryInstantiate({
-      constructor: Bib,
-      args: [discoveryBibResult],
-      ignoreError: !!errorStatus,
-      errorMessage: "Bib undefined",
-    })
-  )
+  const bib = tryInstantiate({
+    constructor: Bib,
+    args: [discoveryBibResult],
+    ignoreError: true,
+    errorMessage: "Bib undefined",
+  })
 
   const marc = tryInstantiate({
     constructor: Marc,
     args: [discoveryMarcResult],
-    ignoreError: !!errorStatus,
+    ignoreError: true,
     errorMessage: "Marc undefined",
   })
 
-  if (errorStatus) {
+  // fetch succeeded but still failed to construct the bib/marc
+  const resolvedErrorStatus: HTTPStatusCode =
+    errorStatus ?? (!bib || !marc ? 400 : null)
+
+  if (resolvedErrorStatus) {
     return (
       <PageError
         page="marc"
         errorStatus={
           // 422 = invalid bnum, which we also display as "Not found"
-          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+          resolvedErrorStatus === 404 || resolvedErrorStatus === 422
+            ? 404
+            : resolvedErrorStatus
         }
       />
     )
