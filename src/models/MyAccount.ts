@@ -21,7 +21,8 @@ import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
-import { logServerError, logServerWarn } from "../utils/logUtils"
+import { logServerError } from "../utils/logUtils"
+import { callMethodWithRetries } from "../utils/serverUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -39,33 +40,19 @@ export default class MyAccount {
   }
 
   async fetchWithRetries(path: string, operation: string, retries = 3) {
-    let lastError
-    for (let attempt = 1; attempt <= retries; attempt++) {
-      try {
-        const resp = await this.client.get(path)
-        if (attempt > 1)
-          logger.info(
-            `Retry ${attempt} of ${retries} for ${operation}: succeeded`
-          )
-        return resp
-      } catch (e) {
-        lastError = e
-        const delay = 300 * attempt
-        logServerWarn(
-          operation,
-          `Error on attempt ${attempt}: ${e.message}. Retrying after ${delay}ms...`
-        )
-        await new Promise((resolve) => setTimeout(resolve, delay))
-      }
+    try {
+      return await callMethodWithRetries<any>(
+        () => this.client.get(path),
+        `MyAccount#${operation}`,
+        { retries }
+      )
+    } catch (e) {
+      logServerError(
+        `MyAccount#${operation}`,
+        `Error after ${retries} retries: ${e.message}`
+      )
+      throw new MyAccountModelError(`MyAccount#${operation} error: `, e)
     }
-    logServerError(
-      `MyAccount#${operation}`,
-      `Error after ${retries} retries: ${lastError.message}`
-    )
-    throw new MyAccountModelError(
-      `MyAccount#${operation} error: `,
-      lastError.message
-    )
   }
 
   async fetchCheckouts() {

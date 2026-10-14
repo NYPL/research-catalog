@@ -1,69 +1,49 @@
-import { logger } from "@nypl/node-utils"
 import type { ListSort, ListRecordsSort } from "../../types/listTypes"
-import { logServerError, logServerWarn } from "../../utils/logUtils"
+import { logServerError } from "../../utils/logUtils"
+import { callMethodWithRetries } from "../../utils/serverUtils"
 import nyplApiClient from "../nyplApiClient"
-
-function sleep(ms: number) {
-  return new Promise((resolve) => setTimeout(resolve, ms))
-}
 
 async function callListsServiceAndHandleError({
   methodName,
   path,
   apiCall,
   onSuccess = () => ({ status: 200 }),
+  retryable = false,
 }: {
   methodName: string
   path: string
   apiCall: (client: any) => Promise<any>
   onSuccess?: (response: any) => any
+  retryable?: boolean
 }) {
-  // Only retry read operations
-  const retries = methodName.includes("fetch") ? 3 : 1
-  const retryDelay = 300
-  for (let attempt = 1; attempt <= retries; attempt++) {
-    try {
-      const client = await nyplApiClient()
-      const response = await apiCall(client)
-      if (response.error || response.message) {
-        const isRetryable = !response.statusCode || response.statusCode >= 500
-        if (isRetryable && attempt < retries) {
-          const delay = retryDelay * attempt
-          logServerWarn(
-            methodName,
-            `Error on attempt ${attempt}: ${
-              response.error || response.message
-            }. Retrying after ${delay}ms...`
-          )
-          await sleep(delay)
-          continue
-        }
-        logServerError(
-          methodName,
-          `${response?.error || response?.error?.message} Request: ${path}`
-        )
-        return {
-          status: response.statusCode,
-          name: response.name,
-          error: response.error || response.error.message,
-        }
+  try {
+    const response = await callMethodWithRetries(
+      async () => {
+        const client = await nyplApiClient()
+        return apiCall(client)
+      },
+      methodName,
+      {
+        retries: retryable ? 3 : 1,
+        // Retry on a thrown error or 5xx response
+        shouldRetry: (result, error) => !!error || result?.statusCode >= 500,
       }
-      logger.info(`Retry ${attempt} of ${retries} for ${methodName}: succeeded`)
-      return onSuccess(response)
-    } catch (error: any) {
-      if (attempt < retries) {
-        const delay = retryDelay * attempt
-        logServerWarn(
-          methodName,
-          `Error on attempt ${attempt}: ${error.message}. Retrying after ${delay}ms...`
-        )
-        await sleep(delay)
-        continue
+    )
+    if (response.error || response.message) {
+      logServerError(
+        methodName,
+        `${response?.error || response?.error?.message} Request: ${path}`
+      )
+      return {
+        status: response.statusCode,
+        name: response.name,
+        error: response.error || response.error.message,
       }
-
-      logServerError(methodName, error.message)
-      return { status: 500 }
     }
+    return onSuccess(response)
+  } catch (error: any) {
+    logServerError(methodName, error.message)
+    return { status: 500 }
   }
 }
 
@@ -90,6 +70,7 @@ export async function fetchLists({
     path,
     apiCall: (client) => client.get(path),
     onSuccess: (response) => ({ status: 200, lists: response }),
+    retryable: true,
   })
 }
 
@@ -114,6 +95,7 @@ export async function fetchList({
     path,
     apiCall: (client) => client.get(path),
     onSuccess: (response) => ({ status: 200, list: response }),
+    retryable: true,
   })
 }
 
@@ -150,6 +132,7 @@ export async function createList({
     path,
     apiCall: (client) => client.post(path, body),
     onSuccess: (response) => ({ status: 200, list: response }),
+    retryable: false,
   })
 }
 
@@ -184,6 +167,7 @@ export async function updateList({
     path,
     apiCall: (client) => client.patch(path, body),
     onSuccess: (response) => ({ status: 200, list: response }),
+    retryable: false,
   })
 }
 
@@ -208,6 +192,7 @@ export async function deleteList({
     path,
     apiCall: (client) => client.delete(path),
     onSuccess: () => ({ status: 200 }),
+    retryable: false,
   })
 }
 
@@ -236,6 +221,7 @@ export async function deleteRecordFromList({
     path,
     apiCall: (client) => client.delete(path),
     onSuccess: (response) => ({ status: 200, list: response }),
+    retryable: false,
   })
 }
 
@@ -266,6 +252,7 @@ export async function addRecordsToList({
     path,
     apiCall: (client) => client.patch(path, body),
     onSuccess: (response) => ({ status: 200, list: response }),
+    retryable: false,
   })
 }
 
@@ -295,5 +282,6 @@ export async function fetchBibRecords(uris: string, sort?: ListRecordsSort) {
       status: 200,
       bibData: response.itemListElement,
     }),
+    retryable: true,
   })
 }
