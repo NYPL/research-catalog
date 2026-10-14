@@ -86,7 +86,7 @@ export const ManageBibInList = ({
     }
   }, [activeElementId, triggerId, recordId])
 
-  // Open menu upon returning from the login redirect if focus target matches
+  // Open menu upon returning from the login redirect (if parsed triggerId from url param matches this one)
   useEffect(() => {
     if (redirectFocusTarget === triggerId && !onlyHasDefaultList) {
       onOpen()
