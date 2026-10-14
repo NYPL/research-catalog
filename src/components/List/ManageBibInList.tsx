@@ -42,7 +42,7 @@ export const ManageBibInList = ({
   const [isLoading, setIsLoading] = useState(false)
   const { updatedAccountData, setUpdatedAccountData } =
     useContext(PatronDataContext)
-  const { setPersistentFocus, activeElementId, redirectFocusTarget } =
+  const { setPersistentFocus, activeElementId, triggerIdFromRedirectUrl } =
     useFocusContext()
 
   const { isLargerThanLargeMobile } = useNYPLBreakpoints()
@@ -88,10 +88,10 @@ export const ManageBibInList = ({
 
   // Open menu upon returning from the login redirect if focus target matches
   useEffect(() => {
-    if (redirectFocusTarget === triggerId && !onlyHasDefaultList) {
+    if (triggerIdFromRedirectUrl === triggerId && !onlyHasDefaultList) {
       onOpen()
     }
-  }, [redirectFocusTarget, triggerId, onlyHasDefaultList, onOpen])
+  }, [triggerIdFromRedirectUrl, triggerId, onlyHasDefaultList, onOpen])
 
   const handleSaveClick = async (e: React.MouseEvent) => {
     // Intercept if not logged in:

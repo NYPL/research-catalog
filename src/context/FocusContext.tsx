@@ -13,7 +13,7 @@ interface FocusContextType {
   setPersistentFocus: (id: string | null) => void
   // Id found in the "focus" url param. Read on mount and after every
   // client-side route change
-  redirectFocusTarget: string | null
+  triggerIdFromRedirectUrl: string | null
 }
 
 /**
@@ -56,9 +56,9 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
   )
   const [prevActiveElementId, setPrevActiveElementId] =
     useState(activeElementId)
-  const [redirectFocusTarget, setRedirectFocusTarget] = useState<string | null>(
-    null
-  )
+  const [triggerIdFromRedirectUrl, setTriggerIdFromRedirectUrl] = useState<
+    string | null
+  >(null)
   // Use this flag to avoid accessing document on the server
   const [isClient, setIsClient] = useState(false)
 
@@ -101,7 +101,7 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
     const focusTarget = params.get("focus")
     if (!focusTarget) return
 
-    setRedirectFocusTarget(focusTarget)
+    setTriggerIdFromRedirectUrl(focusTarget)
     setPersistentFocus(focusTarget)
 
     // Clean up the url
@@ -116,7 +116,7 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
 
   return (
     <FocusContext.Provider
-      value={{ setPersistentFocus, activeElementId, redirectFocusTarget }}
+      value={{ setPersistentFocus, activeElementId, triggerIdFromRedirectUrl }}
     >
       {children}
     </FocusContext.Provider>
