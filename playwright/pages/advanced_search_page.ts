@@ -45,7 +45,10 @@ export class AdvancedSearchPage {
     this.genreInput = page.getByLabel("Genre")
     this.seriesInput = page.getByLabel("Series")
 
-    this.dateFromInput = page.getByRole("textbox", { name: "From", exact: true })
+    this.dateFromInput = page.getByRole("textbox", {
+      name: "From",
+      exact: true,
+    })
     this.dateToInput = page.getByRole("textbox", { name: "To", exact: true })
 
     this.formatFilterButton = page.getByRole("button", { name: "Format" })

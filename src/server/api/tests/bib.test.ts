@@ -37,6 +37,10 @@ const mockAMResponse = (overrides = {}) => ({
 describe("fetchBib", () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    // clearAllMocks only resets call history, not queued mockResolvedValueOnce/
+    // mockRejectedValueOnce implementations, so reset mockClient.get explicitly
+    // to prevent unconsumed queued responses from leaking between tests.
+    mockClient.get.mockReset()
     ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
   })
 
@@ -125,5 +129,51 @@ describe("fetchBib", () => {
     const bibResponse = (await fetchBib("B17418167")) as BibResponse
 
     expect(bibResponse.status).toBe(307)
+  })
+
+  it("returns 500 and logs the error when client doesnt initialize", async () => {
+    const clientError = new Error("Failed to build client")
+    ;(nyplApiClient as jest.Mock).mockRejectedValueOnce(clientError)
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe("Failed to build client")
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchBib: Error: Failed to build client"
+    )
+    expect(mockClient.get).not.toHaveBeenCalled()
+  })
+
+  it("returns 500 and logs the error when the bib GET request fails", async () => {
+    const bibError = new Error(
+      "Unexpected token '<', \"<doctype \"... is not valid JSON"
+    )
+    mockClient.get
+      .mockRejectedValueOnce(bibError)
+      .mockResolvedValueOnce(mockAMResponse())
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe(bibError.message)
+    expect(logger.error).toHaveBeenCalledWith(`Error in fetchBib: ${bibError}`)
+  })
+
+  it("returns 500 and logs the error when the annotated marc GET request fails", async () => {
+    const annotatedMarcError = new Error(
+      "Unexpected token '<', \"<doctype \"... is not valid JSON"
+    )
+    mockClient.get
+      .mockResolvedValueOnce(mockBibResponse())
+      .mockRejectedValueOnce(annotatedMarcError)
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe(annotatedMarcError.message)
+    expect(logger.error).toHaveBeenCalledWith(
+      `Error in fetchBib: ${annotatedMarcError}`
+    )
   })
 })
