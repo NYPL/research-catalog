@@ -21,7 +21,6 @@ import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useState } from "react"
 import { idConstants } from "../../context/FocusContext"
-import { FeaturePopup } from "../Banners/FeaturePopup"
 import { isNyplBibID } from "../../utils/bibUtils"
 
 interface SearchResultProps {
@@ -114,30 +113,11 @@ const SearchResult = ({
               </Link>
             </Box>
           </CardHeading>
-          <Box position="relative">
-            {isFirstResult && (
-              <Box
-                position="absolute"
-                sx={{
-                  bottom: "100%",
-                  right: -10,
-                  zIndex: "100",
-                }}
-              >
-                <FeaturePopup
-                  id="listPopup"
-                  titleUpdate="Save to lists"
-                  content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
-                  pointerRight="50px"
-                />
-              </Box>
-            )}
-            <ManageBibInList
-              recordId={bib.id}
-              isAuthenticated={isAuthenticated}
-              setStatus={setStatus}
-            />
-          </Box>
+          <ManageBibInList
+            recordId={bib.id}
+            isAuthenticated={isAuthenticated}
+            setStatus={setStatus}
+          />
         </Flex>
         <Box
           sx={{
