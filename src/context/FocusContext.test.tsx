@@ -2,11 +2,11 @@ import { render, screen, waitFor } from "@testing-library/react"
 import { FocusProvider, useFocusContext } from "./FocusContext"
 
 const TestComponent = () => {
-  const { activeElementId, redirectFocusTarget } = useFocusContext()
+  const { activeElementId, triggerIdFromRedirectUrl } = useFocusContext()
   return (
     <div>
       <div data-testid="active-element-id">{activeElementId}</div>
-      <div data-testid="redirect-focus-target">{redirectFocusTarget}</div>
+      <div data-testid="redirect-focus-target">{triggerIdFromRedirectUrl}</div>
       <button id="button-id">Target</button>
     </div>
   )
