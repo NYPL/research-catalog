@@ -1,62 +1,43 @@
 import { Link } from "@nypl/design-system-react-components"
+import type { MouseEvent } from "react"
 import { useContext } from "react"
 import { FeedbackContext } from "../../context/FeedbackContext"
-import type { ItemMetadata } from "../../types/itemTypes"
 import type Item from "../../models/Item"
 import type { HTTPStatusCode } from "../../types/appTypes"
 
-type BaseProps = {
+type ContactUsProps = {
   contactMessage?: string
-}
-
-type ContactUsWithItemProps = BaseProps & {
-  item: Pick<Item, "id" | "barcode" | "callNumber" | "bibId" | "volume">
+  item?: Pick<Item, "id" | "barcode" | "callNumber" | "bibId" | "volume">
   notificationText?: string
-  errorStatus?: never
+  errorStatus?: HTTPStatusCode
 }
-
-type ContactUsWithErrorProps = BaseProps & {
-  item?: never
-  notificationText?: never
-  errorStatus: HTTPStatusCode
-}
-
-// Either the item or errorStatus prop should be provided
-type ContactUsProps = ContactUsWithItemProps | ContactUsWithErrorProps
 
 const ContactUs = ({
+  contactMessage = "contact us",
   item,
   notificationText,
   errorStatus,
-  contactMessage = "contact us",
 }: ContactUsProps) => {
-  const { onOpen, setItemMetadata, openFeedbackFormWithError } =
+  const { onOpen, setItemMetadata, setErrorStatus } =
     useContext(FeedbackContext)
 
-  const onContactWithItem = (metadata: ItemMetadata) => {
-    setItemMetadata(metadata)
+  const onOpenForm = (e: MouseEvent) => {
+    e.preventDefault()
+    if (item)
+      setItemMetadata({
+        id: item.id,
+        barcode: item.barcode,
+        callNumber: item.callNumber,
+        volume: item.volume,
+        bibId: item.bibId,
+        ...(notificationText && { notificationText }),
+      })
+    if (errorStatus) setErrorStatus(errorStatus)
     onOpen()
-  }
-  const onContactWithErrorStatus = (errorStatus: HTTPStatusCode) => {
-    openFeedbackFormWithError(errorStatus)
   }
 
   return (
-    <Link
-      id="contact-us"
-      onClick={() =>
-        item
-          ? onContactWithItem({
-              id: item.id,
-              barcode: item.barcode,
-              callNumber: item.callNumber,
-              volume: item.volume,
-              bibId: item.bibId,
-              ...(notificationText && { notificationText }),
-            })
-          : onContactWithErrorStatus(errorStatus)
-      }
-    >
+    <Link id="contact-us" href="" onClick={onOpenForm}>
       {contactMessage}
     </Link>
   )

@@ -11,6 +11,9 @@ jest.mock("jose", () => ({
   }),
 }))
 
+// Mock next/router for every test because FocusProvider uses it
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 // We expect an error to be thrown and we do catch, but it still gets
 // logged and we don't want to see expected errors while we test.
 jest.spyOn(global.console, "error").mockImplementation(() => jest.fn())

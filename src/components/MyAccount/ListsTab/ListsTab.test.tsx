@@ -10,8 +10,6 @@ import { processedLists } from "../../../../__test__/fixtures/listFixtures"
 import type { List } from "../../../types/listTypes"
 import mockRouter from "next-router-mock"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 const renderWithPatronDataContext = (lists: List[] = processedLists) => {
   return render(
     <PatronDataProvider

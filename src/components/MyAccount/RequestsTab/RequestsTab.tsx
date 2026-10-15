@@ -53,7 +53,7 @@ const RequestsTab = () => {
     "Status",
     "Pickup location",
     "Pickup by",
-    "Manage request",
+    "Action",
   ]
   const tableStyles = holdsHeaders.map((_, index) => {
     const width = index === 0 ? null : "16%"

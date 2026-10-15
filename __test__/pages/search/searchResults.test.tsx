@@ -5,7 +5,6 @@ import mockRouter from "next-router-mock"
 import { results } from "../../fixtures/searchResultsManyBibs"
 import SearchPage from "../../../pages/search/index"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 const query = "spaghetti"
 
 describe("Search Results page", () => {
