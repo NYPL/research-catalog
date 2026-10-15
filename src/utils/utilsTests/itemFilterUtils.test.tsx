@@ -95,7 +95,7 @@ describe("Item Filter Utils", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
         {
           id: "rc",
-          label: "Item location > Offsite",
+          label: "Item location > Offsite storage",
         },
         {
           id: "status:a",

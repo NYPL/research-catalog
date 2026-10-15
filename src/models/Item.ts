@@ -131,6 +131,10 @@ export default class Item {
       const buildingLocation = item.buildingLocation?.[0]?.prefLabel
       if (buildingLocation) location.prefLabel = buildingLocation
     }
+
+    if (location.prefLabel === "Offsite") {
+      location.prefLabel = "Offsite storage"
+    }
     return location
   }
   getCollectionAccessTypeFromItem(

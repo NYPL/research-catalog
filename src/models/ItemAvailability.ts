@@ -22,6 +22,7 @@ const {
   NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID,
   AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_EDGE_CASE,
   AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
@@ -60,10 +61,18 @@ class ItemAvailability {
     this.key = this.buildKey()
   }
   buildKey() {
-    if (this.collectionAccessType === "desk" && this.isAvailable) {
+    if (
+      this.collectionAccessType === "desk" &&
+      this.isAvailable &&
+      !this.isReCAP
+    ) {
       return AVAILABLE_DESK
     }
-    if (this.collectionAccessType === "desk" && !this.isAvailable) {
+    if (
+      this.collectionAccessType === "desk" &&
+      !this.isAvailable &&
+      !this.isReCAP
+    ) {
       return NOT_AVAILABLE_DESK
     }
     if (
@@ -79,26 +88,6 @@ class ItemAvailability {
       !this.isReCAP
     ) {
       return NOT_AVAILABLE_SHELF
-    }
-    if (!this.hasBarcode && !this.isReCAP && this.isAvailable) {
-      return AVAILABLE_GENERAL_NO_BARCODE
-    }
-    if (!this.hasBarcode && !this.isReCAP && !this.isAvailable) {
-      return NOT_AVAILABLE_GENERAL_NO_BARCODE
-    }
-
-    if (this.isReCAP && this.isAvailable && this.isPartnerReCAP) {
-      return AVAILABLE_PARTNER
-    }
-    if (this.isReCAP && !this.isAvailable && this.isPartnerReCAP) {
-      return NOT_AVAILABLE_PARTNER
-    }
-
-    if (this.isReCAP && this.isAvailable && !this.isPartnerReCAP) {
-      return AVAILABLE_OFFSITE_NYPL
-    }
-    if (this.isReCAP && !this.isAvailable && !this.isPartnerReCAP) {
-      return NOT_AVAILABLE_OFFSITE_NYPL
     }
 
     if (this.aeonUrl && this.isAvailable && this.isSpecRequestable) {
@@ -118,8 +107,39 @@ class ItemAvailability {
         : NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
     }
 
-    // Catch-all:
-    return AVAILABLE_EDGE_CASE
+    if (
+      !this.hasBarcode &&
+      !this.isReCAP &&
+      !this.isSpecRequestable &&
+      this.isAvailable
+    ) {
+      return AVAILABLE_GENERAL_NO_BARCODE
+    }
+    if (
+      !this.hasBarcode &&
+      !this.isReCAP &&
+      !this.isSpecRequestable &&
+      !this.isAvailable
+    ) {
+      return NOT_AVAILABLE_GENERAL_NO_BARCODE
+    }
+
+    if (this.isReCAP && this.isAvailable && this.isPartnerReCAP) {
+      return AVAILABLE_PARTNER
+    }
+    if (this.isReCAP && !this.isAvailable && this.isPartnerReCAP) {
+      return NOT_AVAILABLE_PARTNER
+    }
+
+    if (this.isReCAP && this.isAvailable && !this.isPartnerReCAP) {
+      return AVAILABLE_OFFSITE_NYPL
+    }
+    if (this.isReCAP && !this.isAvailable && !this.isPartnerReCAP) {
+      return NOT_AVAILABLE_OFFSITE_NYPL
+    }
+
+    // Catch-alls:
+    return !this.isAvailable ? NOT_AVAILABLE_EDGE_CASE : AVAILABLE_EDGE_CASE
   }
 }
 

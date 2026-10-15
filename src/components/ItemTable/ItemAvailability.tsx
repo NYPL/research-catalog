@@ -24,6 +24,7 @@ const {
   NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID,
   AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_EDGE_CASE,
   AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
@@ -41,6 +42,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID:
     case NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:
     case NOT_AVAILABLE_PARTNER:
+    case NOT_AVAILABLE_EDGE_CASE:
       return <NotAvailable item={item} />
     case AVAILABLE_DESK:
       return (
@@ -61,6 +63,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case AVAILABLE_GENERAL_NO_BARCODE:
       return (
         <AvailableText
+          item={item}
           text={"Please contact the division to request this item."}
         />
       )

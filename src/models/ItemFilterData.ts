@@ -50,7 +50,10 @@ export class LocationFilterData extends ItemFilterData {
   displayOptions(): FilterCheckbox[] {
     // Format the options for the MultiSelect component
     return this.options.map((option) => {
-      return { id: option.value, name: option.label }
+      return {
+        id: option.value,
+        name: option.label === "Offsite" ? "Offsite storage" : option.label,
+      }
     })
   }
 }
