@@ -39,10 +39,11 @@ export async function callMethodWithRetries<T>(
     shouldRetry = (_result, error) => !!error,
   }: RetryOptions<T> = {}
 ): Promise<T> {
+  const maxAttempts = retries + 1
   let lastError
   let lastResult
 
-  for (let attempt = 1; attempt <= retries; attempt++) {
+  for (let attempt = 1; attempt <= maxAttempts; attempt++) {
     try {
       lastResult = await method()
       if (!shouldRetry(lastResult, undefined)) return lastResult
@@ -51,11 +52,11 @@ export async function callMethodWithRetries<T>(
       if (!shouldRetry(undefined, error)) throw error
     }
 
-    if (attempt < retries) {
+    if (attempt < maxAttempts) {
       const delay = baseDelayMs * attempt
       logServerWarn(
         methodName,
-        `Attempt ${attempt} of ${retries} failed${
+        `Attempt ${attempt} of ${maxAttempts} failed${
           lastError ? `: ${(lastError as Error).message}` : ""
         }. Retrying after ${delay}ms...`
       )

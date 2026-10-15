@@ -76,8 +76,9 @@ describe("lists", () => {
       const resultPromise = fetchLists({ patronId: "12345" })
       await jest.advanceTimersByTimeAsync(300)
       await jest.advanceTimersByTimeAsync(600)
+      await jest.advanceTimersByTimeAsync(900)
       const result = await resultPromise
-      expect(mockClient.get).toHaveBeenCalledTimes(3)
+      expect(mockClient.get).toHaveBeenCalledTimes(4)
       expect(logServerError).toHaveBeenCalledWith("fetchLists", "server error")
       expect(result).toEqual({ status: 500 })
       jest.useRealTimers()
@@ -111,8 +112,9 @@ describe("lists", () => {
       const resultPromise = fetchLists({ patronId: "12345" })
       await jest.advanceTimersByTimeAsync(300)
       await jest.advanceTimersByTimeAsync(600)
+      await jest.advanceTimersByTimeAsync(900)
       const result = await resultPromise
-      expect(mockClient.get).toHaveBeenCalledTimes(3)
+      expect(mockClient.get).toHaveBeenCalledTimes(4)
       expect(result).toEqual({
         status: 500,
         name: undefined,

@@ -66,14 +66,14 @@ describe("MyAccountModel", () => {
       await expect(
         fetcher.fetchWithRetries("a/fake/path", "operation", 3)
       ).rejects.toThrow("MyAccount#operation error: ")
-      expect(mockGet).toHaveBeenCalledTimes(3)
+      expect(mockGet).toHaveBeenCalledTimes(4)
     })
 
     it("respects custom retries count", async () => {
       const mockGet = jest.fn().mockRejectedValue(new Error("always fails"))
       const fetcher = new MyAccount({ get: mockGet }, "aaaaa")
       await expect(
-        fetcher.fetchWithRetries("a/fake/path", "operation", 1)
+        fetcher.fetchWithRetries("a/fake/path", "operation", 0)
       ).rejects.toThrow()
       expect(mockGet).toHaveBeenCalledTimes(1)
     })

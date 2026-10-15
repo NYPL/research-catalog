@@ -24,7 +24,7 @@ async function callListsServiceAndHandleError({
       },
       methodName,
       {
-        retries: retryable ? 3 : 1,
+        retries: retryable ? 3 : 0,
         // Retry on a thrown error or 5xx response
         shouldRetry: (result, error) => !!error || result?.statusCode >= 500,
       }

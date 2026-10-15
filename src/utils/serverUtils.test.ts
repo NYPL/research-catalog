@@ -95,16 +95,17 @@ describe("callMethodWithRetries", () => {
     resultPromise.catch(() => undefined)
     await jest.advanceTimersByTimeAsync(300)
     await jest.advanceTimersByTimeAsync(600)
+    await jest.advanceTimersByTimeAsync(900)
 
     await expect(resultPromise).rejects.toThrow("always fail")
-    expect(method).toHaveBeenCalledTimes(3)
+    expect(method).toHaveBeenCalledTimes(4)
   })
 
   it("respects a custom retries count", async () => {
     const method = jest.fn().mockRejectedValue(new Error("always fail"))
 
     const resultPromise = callMethodWithRetries(method, "test", {
-      retries: 1,
+      retries: 0,
     })
 
     await expect(resultPromise).rejects.toThrow("always fail")
@@ -143,7 +144,7 @@ describe("callMethodWithRetries", () => {
       .mockResolvedValue({ statusCode: 500 })
 
     const resultPromise = callMethodWithRetries(method, "test", {
-      retries: 2,
+      retries: 1,
       shouldRetry: (result) => result?.statusCode >= 500,
     })
     await jest.advanceTimersByTimeAsync(300)
