@@ -10,16 +10,18 @@ const {
   NOT_AVAILABLE_DESK,
   AVAILABLE_SHELF,
   NOT_AVAILABLE_SHELF,
-  AVAILABLE_CLOSED_STACK_NO_BARCODE,
-  NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE,
-  AVAILABLE_OFFSITE_PARTNER,
-  NOT_AVAILABLE_OFFSITE_PARTNER,
+  AVAILABLE_GENERAL_NO_BARCODE,
+  NOT_AVAILABLE_GENERAL_NO_BARCODE,
+  AVAILABLE_PARTNER,
+  NOT_AVAILABLE_PARTNER,
   AVAILABLE_OFFSITE_NYPL,
   NOT_AVAILABLE_OFFSITE_NYPL,
   AVAILABLE_APPT_AEON,
   NOT_AVAILABLE_APPT_AEON,
-  AVAILABLE_APPT_NO_AEON,
-  NOT_AVAILABLE_APPT_NO_AEON,
+  AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
@@ -28,8 +30,10 @@ class ItemAvailability {
   isAvailable: boolean
   isReCAP: boolean
   aeonUrl: string
+  isInCollection: boolean
+  hasFindingAid: boolean
   collectionAccessType: ItemCollectionAccess
-  isSpecRequestable?: boolean
+  isSpecRequestable: boolean
   isOnsite: boolean
   hasBarcode: boolean
   isPartnerReCAP: boolean
@@ -42,6 +46,7 @@ class ItemAvailability {
     isSpecRequestable,
     hasBarcode,
     isPartnerReCAP,
+    hasFindingAid,
   }) {
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
@@ -51,6 +56,7 @@ class ItemAvailability {
     this.isSpecRequestable = isSpecRequestable
     this.hasBarcode = hasBarcode
     this.isPartnerReCAP = isPartnerReCAP
+    this.hasFindingAid = hasFindingAid
     this.key = this.buildKey()
   }
   buildKey() {
@@ -63,29 +69,29 @@ class ItemAvailability {
     if (
       this.collectionAccessType === "shelf" &&
       this.isAvailable &&
-      this.isOnsite
+      !this.isReCAP
     ) {
       return AVAILABLE_SHELF
     }
     if (
       this.collectionAccessType === "shelf" &&
       !this.isAvailable &&
-      this.isOnsite
+      !this.isReCAP
     ) {
       return NOT_AVAILABLE_SHELF
     }
-    if (!this.hasBarcode && this.isOnsite && this.isAvailable) {
-      return AVAILABLE_CLOSED_STACK_NO_BARCODE
+    if (!this.hasBarcode && !this.isReCAP && this.isAvailable) {
+      return AVAILABLE_GENERAL_NO_BARCODE
     }
-    if (!this.hasBarcode && this.isOnsite && !this.isAvailable) {
-      return NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE
+    if (!this.hasBarcode && !this.isReCAP && !this.isAvailable) {
+      return NOT_AVAILABLE_GENERAL_NO_BARCODE
     }
 
     if (this.isReCAP && this.isAvailable && this.isPartnerReCAP) {
-      return AVAILABLE_OFFSITE_PARTNER
+      return AVAILABLE_PARTNER
     }
     if (this.isReCAP && !this.isAvailable && this.isPartnerReCAP) {
-      return NOT_AVAILABLE_OFFSITE_PARTNER
+      return NOT_AVAILABLE_PARTNER
     }
 
     if (this.isReCAP && this.isAvailable && !this.isPartnerReCAP) {
@@ -102,10 +108,14 @@ class ItemAvailability {
       return NOT_AVAILABLE_APPT_AEON
     }
     if (!this.aeonUrl && this.isAvailable && this.isSpecRequestable) {
-      return AVAILABLE_APPT_NO_AEON
+      return this.hasFindingAid
+        ? AVAILABLE_APPT_NO_AEON_FINDING_AID
+        : AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
     }
     if (!this.aeonUrl && !this.isAvailable && this.isSpecRequestable) {
-      return NOT_AVAILABLE_APPT_NO_AEON
+      return this.hasFindingAid
+        ? NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID
+        : NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
     }
 
     // Catch-all:

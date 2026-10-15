@@ -1,13 +1,9 @@
 import { Box, Icon, Text } from "@nypl/design-system-react-components"
 import { formatDueDate } from "../../../utils/itemUtils"
+import ContactALibrarian from "./ContactALibrarian"
+import type Item from "../../../models/Item"
 
-const NotAvailable = ({
-  text,
-  dueDate,
-}: {
-  text: string | JSX.Element
-  dueDate?: string
-}) => {
+const NotAvailable = ({ item }: { item: Item }) => {
   return (
     <>
       <Box as="span" display="flex" gap="xxs" alignItems="flex-start">
@@ -27,8 +23,15 @@ const NotAvailable = ({
             Not available
           </Text>
           <Text as="span" style={{ fontStyle: "italic" }}>
-            {dueDate ? ` - In use through ${formatDueDate(dueDate)}. ` : " - "}
-            {text}
+            {item.dueDate
+              ? ` - In use through ${formatDueDate(item.dueDate)}. `
+              : " - "}
+            {item.collection ? (
+              "Please contact the division for assistance."
+            ) : (
+              // Partner items or items not in a division
+              <ContactALibrarian item={item} />
+            )}
           </Text>
         </Text>
       </Box>

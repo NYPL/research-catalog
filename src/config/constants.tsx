@@ -226,19 +226,23 @@ export const AVAILABILITY_KEYS = {
   AVAILABLE_SHELF: "availableShelf",
   NOT_AVAILABLE_SHELF: "notAvailableShelf",
 
-  AVAILABLE_CLOSED_STACK_NO_BARCODE: "availableNoBarcode",
-  NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE: "notAvailableNoBarcode",
+  AVAILABLE_GENERAL_NO_BARCODE: "availableNoBarcode",
+  NOT_AVAILABLE_GENERAL_NO_BARCODE: "notAvailableNoBarcode",
 
   // Special
-  AVAILABLE_APPT_NO_AEON: "availableApptNoAeon",
-  NOT_AVAILABLE_APPT_NO_AEON: "notAvailableApptNoAeon",
-
   AVAILABLE_APPT_AEON: "availableApptAeon",
   NOT_AVAILABLE_APPT_AEON: "notAvailableApptAeon",
 
+  AVAILABLE_APPT_NO_AEON_FINDING_AID: "availableApptNoAeonFindingAid",
+  NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID: "notAvailableApptNoAeonFindingAid",
+
+  AVAILABLE_APPT_NO_AEON_NO_FINDING_AID: "availableApptNoAeonNoFindingAid",
+  NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:
+    "notAvailableApptNoAeonNoFindingAid",
+
   // Offsite
-  AVAILABLE_OFFSITE_PARTNER: "availableOffsitePartner",
-  NOT_AVAILABLE_OFFSITE_PARTNER: "notAvailableOffsitePartner",
+  AVAILABLE_PARTNER: "availableOffsitePartner",
+  NOT_AVAILABLE_PARTNER: "notAvailableOffsitePartner",
 
   AVAILABLE_OFFSITE_NYPL: "availableOffsiteNypl",
   NOT_AVAILABLE_OFFSITE_NYPL: "notAvailableOffsiteNypl",
