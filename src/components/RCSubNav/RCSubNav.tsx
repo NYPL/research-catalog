@@ -1,13 +1,15 @@
 import type { RCPage } from "../../types/pageTypes"
-import { useLogoutRedirect } from "../../server/auth"
 import {
+  Box,
   Icon,
   SubNav,
   SubNavLink,
-  Text,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
-import { useBrowseContext } from "../../context/BrowseContext"
+import Link from "../Link/Link"
+import { FeaturePopup } from "../Banners/FeaturePopup"
+import MyAccountMenu, { myAccountMenuButtonId } from "./MyAccountMenu"
+import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
 interface SubNavProps {
   activePage: RCPage
@@ -20,8 +22,7 @@ interface SubNavProps {
  * and passes the active prop to the correct link based on the route.
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
-  const logoutLink = useLogoutRedirect()
-
+  const loginRedirect = useLoginRedirect(myAccountMenuButtonId)
   return (
     <SubNav
       className="no-print"
@@ -47,7 +48,12 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
                 : undefined
             }
           >
-            Search the Catalog
+            <Box as="span">
+              Search{" "}
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                {"the Catalog"}
+              </Box>
+            </Box>
           </SubNavLink>
 
           <SubNavLink
@@ -57,42 +63,67 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             isSelected={inBrowse}
             aria-current={inBrowse ? "page" : undefined}
           >
-            Browse the Catalog
+            <Box as="span">
+              Browse{" "}
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                {"the Catalog"}
+              </Box>
+            </Box>
           </SubNavLink>
         </>
       }
       secondaryActions={
         <>
-          <div style={{ display: isAuthenticated ? "flex" : "none" }}>
-            <SubNavLink
-              href={logoutLink}
-              id="subnav-logout"
-              screenreaderOnlyText="of NYPL.org"
-            >
-              Log out
-            </SubNavLink>
-          </div>
-          <SubNavLink
-            href="/account"
-            as={NextLink}
-            id="subnav-account"
-            isOutlined
-            isSelected={activePage === "account"}
-            aria-current={activePage === "account" ? "page" : undefined}
-            screenreaderOnlyText="for NYPL.org"
-          >
-            <Icon name="actionIdentityFilled" size="medium" />
-            <Text
-              __css={{
-                display: "none",
-                ["@media screen and (min-width: 600px)"]: {
-                  display: "flex",
-                },
+          <Box position="relative">
+            <Box
+              position="absolute"
+              display="inline-flex"
+              sx={{
+                bottom: "100%",
+                left: { base: "0%", sm: "10%", md: "65%" },
+                transform: "translateX(-50%)",
+                zIndex: "100",
+                textWrap: "wrap",
               }}
             >
-              My account
-            </Text>
-          </SubNavLink>
+              <FeaturePopup
+                id="userGuidePopup"
+                titleNew="New location!"
+                titleUpdate="User guide"
+                content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
+                pointerRight={{ base: "90px", sm: "75px", md: "150px" }}
+              />
+            </Box>
+            <Link
+              href="https://libguides.nypl.org/researchcatalog/"
+              id="subnav-user-guide"
+              isExternal
+              borderRadius="6px"
+            >
+              <Icon name="actionLightbulb" size="medium" />
+              <Box as="span" display={{ base: "none", sm: "inline" }}>
+                User guide
+              </Box>
+              <Box as="span" display={{ base: "inline", sm: "none" }}>
+                Guide
+              </Box>
+            </Link>
+          </Box>
+          {isAuthenticated ? (
+            <MyAccountMenu activePage={activePage} />
+          ) : (
+            <SubNavLink
+              id="subnav-log-in"
+              href={loginRedirect}
+              isOutlined
+              screenreaderOnlyText="to NYPL.org"
+            >
+              <Icon name="actionIdentity" size="medium" />
+              <Box as="span" display={{ base: "none", md: "inline" }}>
+                {"Log in"}
+              </Box>
+            </SubNavLink>
+          )}
         </>
       }
     />

@@ -1,6 +1,6 @@
 import React from "react"
 import { render, fireEvent, screen } from "../../utils/testUtils"
-import ProfileTabs from "./ProfileTabs"
+import MyAccountTabs from "./MyAccountTabs"
 import {
   filteredPickupLocations,
   processedCheckouts,
@@ -10,7 +10,6 @@ import {
 } from "../../../__test__/fixtures/processedMyAccountData"
 import mockRouter from "next-router-mock"
 import { PatronDataProvider } from "../../context/PatronDataContext"
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 const accountData = {
   patron: processedPatron,
@@ -22,47 +21,44 @@ const accountData = {
 const renderWithPatronDataProvider = (data, path) => {
   return render(
     <PatronDataProvider value={{ ...data }}>
-      <ProfileTabs activePath={path} />
+      <MyAccountTabs activePath={path} />
     </PatronDataProvider>
   )
 }
-describe("ProfileTabs", () => {
-  it("renders", () => {
-    renderWithPatronDataProvider(accountData, "checkouts")
+describe("MyAccountTabs", () => {
+  beforeEach(() => {
+    mockRouter.setCurrentUrl("/")
   })
 
-  it("renders correct number of tabs when fines are greater than $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      accountData,
-      "checkouts"
-    )
+  it("renders", () => {
+    renderWithPatronDataProvider(accountData, "")
+  })
+
+  it("renders correct number of tabs", () => {
+    const { getAllByRole } = renderWithPatronDataProvider(accountData, "")
 
     const tabs = getAllByRole("tab")
     expect(tabs.length).toBe(5)
   })
 
-  it("renders correct number of tabs when fines are $0", () => {
-    const { getAllByRole } = renderWithPatronDataProvider(
-      { ...accountData, fines: { total: 0, entries: [] } },
-      "checkouts"
-    )
-    const tabs = getAllByRole("tab")
-    expect(tabs.length).toBe(4)
-  })
-
   it("calls updatePath when tab is clicked", () => {
-    const { getByText } = renderWithPatronDataProvider(accountData, "checkouts")
+    const { getByText } = renderWithPatronDataProvider(accountData, "items")
     fireEvent.click(getByText("Requests", { exact: false }))
     expect(mockRouter.asPath).toBe("/account/requests")
   })
-  it("displays error message when checkouts or holds are null", () => {
+  it("displays error banner when checkouts or holds are null", async () => {
     renderWithPatronDataProvider(
       { ...accountData, checkouts: null, holds: null },
-      "checkouts"
+      "items"
     )
     const errorMessage = screen.getByText(
-      "There was an error accessing your checkouts."
+      "Your checkouts could not be loaded.",
+      { exact: false }
     )
     expect(errorMessage).toBeInTheDocument()
+    expect(screen.getByRole("complementary")).toHaveAttribute(
+      "data-variant",
+      "negative"
+    )
   })
 })

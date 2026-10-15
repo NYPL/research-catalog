@@ -1,8 +1,6 @@
 import React from "react"
 import { render, screen, within } from "../../utils/testUtils"
 import Layout from "./Layout"
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 
 describe("Layout", () => {
   const searchLabel = "Search Bar Label"
@@ -27,17 +25,7 @@ describe("Layout", () => {
   })
   it("should show search banners", () => {
     render(<Layout activePage="search"></Layout>)
-    expect(screen.getAllByRole("complementary")).toHaveLength(2)
-  })
-  it("should hide Log Out if user is not logged in", () => {
-    render(<Layout activePage="search" isAuthenticated={false}></Layout>)
-    const logout = screen.queryByText("Log out")
-    expect(logout).not.toBeVisible()
-  })
-  it("should show Log Out if user is logged in", () => {
-    render(<Layout activePage="search" isAuthenticated={true}></Layout>)
-    const logout = screen.queryByText("Log out")
-    expect(logout).toBeVisible()
+    expect(screen.getAllByRole("complementary")).toHaveLength(1)
   })
   it("renders a feedback form component", () => {
     render(<Layout activePage="search"></Layout>)

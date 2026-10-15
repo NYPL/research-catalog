@@ -5,11 +5,17 @@ import React, {
   useEffect,
   useState,
 } from "react"
+import { useRouter } from "next/router"
 
 interface FocusContextType {
   activeElementId: string | null
   // setActiveElementId: (id: string | null) => void
   setPersistentFocus: (id: string | null) => void
+  // Currently only used by ManageBibInList, which requires more local
+  // focus management (because of raw Chakra Drawer).
+  // Provides the target id parsed from the "focus" url param that is acted
+  // upon inside ManageBibInList after a login redirect.
+  triggerIdFromRedirectUrl: string | null
 }
 
 /**
@@ -46,11 +52,15 @@ export const idConstants = {
 }
 
 export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter()
   const [activeElementId, setActiveElementId] = useState<string | null>(
     undefined
   )
   const [prevActiveElementId, setPrevActiveElementId] =
     useState(activeElementId)
+  const [triggerIdFromRedirectUrl, setTriggerIdFromRedirectUrl] = useState<
+    string | null
+  >(null)
   // Use this flag to avoid accessing document on the server
   const [isClient, setIsClient] = useState(false)
 
@@ -85,8 +95,31 @@ export const FocusProvider = ({ children }: { children: React.ReactNode }) => {
     setIsClient(true)
   }, [])
 
+  // Reads focus param from url, sets focus on it, cleans up url.
+  // Re-runs on every route change (e.g. tab switches from MyAccountMenu)
+  // because FocusProvider persists across client-side navigation.
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const focusTarget = params.get("focus")
+    if (!focusTarget) return
+
+    setTriggerIdFromRedirectUrl(focusTarget)
+    setPersistentFocus(focusTarget)
+
+    // Clean up the url
+    params.delete("focus")
+    const newUrl =
+      window.location.pathname +
+      (params.toString() ? `?${params.toString()}` : "") +
+      window.location.hash
+    window.history.replaceState({}, "", newUrl)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router?.asPath])
+
   return (
-    <FocusContext.Provider value={{ setPersistentFocus, activeElementId }}>
+    <FocusContext.Provider
+      value={{ setPersistentFocus, activeElementId, triggerIdFromRedirectUrl }}
+    >
       {children}
     </FocusContext.Provider>
   )
