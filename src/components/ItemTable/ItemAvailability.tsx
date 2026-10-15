@@ -1,6 +1,6 @@
 import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
-import NotAvailable from "./ItemAvailability/NotAvailable"
+import NotAvailableText from "./ItemAvailability/NotAvailableText"
 import AvailableText from "./ItemAvailability/AvailableText"
 
 interface ItemAvailabilityProps {
@@ -43,7 +43,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:
     case NOT_AVAILABLE_PARTNER:
     case NOT_AVAILABLE_EDGE_CASE:
-      return <NotAvailable item={item} />
+      return <NotAvailableText item={item} />
     case AVAILABLE_DESK:
       return (
         <AvailableText
