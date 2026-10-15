@@ -18,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
 - Updated account error display [SCC-5494](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5494)
 
+### Removed
+
+- Removed lists feature popups [SCC-5700](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5700)
+
 ## [2.1.7] 2026-10-07
 
 ### Updated
