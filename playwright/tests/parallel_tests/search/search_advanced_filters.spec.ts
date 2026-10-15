@@ -40,9 +40,7 @@ test.describe("Advanced Search filter pills behavior", () => {
       "Lionel Pincus and Princess Firyal Map Division",
     ])
   })
-  test("Clicking a filter's count pill clears only that filter and returns focus to its button", async ({
-    page,
-  }) => {
+  test("Clicking a filter's count pill clears only that filter and returns focus to its button", async () => {
     await expect(advancedSearchPage.heading).toBeVisible()
 
     await advancedSearchPage.selectFilterOption(
@@ -64,7 +62,7 @@ test.describe("Advanced Search filter pills behavior", () => {
     // expect focus to move back to the "Division" filter button
     await expect(advancedSearchPage.divisionFilterButton).toBeFocused()
   })
-  test("Clicking outside closes a filter", async ({ page }) => {
+  test("Clicking outside closes a filter", async () => {
     await expect(advancedSearchPage.heading).toBeVisible()
 
     await advancedSearchPage.selectFilterOption(
@@ -84,7 +82,7 @@ test.describe("Advanced Search filter pills behavior", () => {
       "false"
     )
   })
-  test("Clear fields resets everything", async ({ page }) => {
+  test("Clear fields resets everything", async () => {
     await expect(advancedSearchPage.heading).toBeVisible()
 
     //fill in the text input fields
