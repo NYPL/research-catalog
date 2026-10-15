@@ -1,5 +1,14 @@
 import type { Patron, SierraPatron } from "../types/myAccountTypes"
 
+// Source of truth for My Account tabs
+export const myAccountTabsData = [
+  { key: "profile", label: "Profile", urlPath: "" },
+  { key: "items", label: "Checkouts", urlPath: "items" },
+  { key: "requests", label: "Requests", urlPath: "requests" },
+  { key: "lists", label: "Lists", urlPath: "lists" },
+  { key: "overdues", label: "Fees", urlPath: "overdues" },
+]
+
 export const notificationPreferenceMap = {
   z: "Email",
   p: "Phone",

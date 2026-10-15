@@ -3,7 +3,6 @@
 import { importSPKI, jwtVerify, type JWTPayload } from "jose"
 import { appConfig } from "../config/appConfig"
 import { BASE_URL } from "../config/constants"
-import { useEffect, useState } from "react"
 import { encodeURIComponentWithPeriods } from "../utils/appUtils"
 
 interface UserJwtPayload extends JWTPayload {
@@ -83,30 +82,5 @@ export function getLoginRedirect(req, defaultPath?: string) {
   const redirect = `${
     appConfig.apiEndpoints.loginUrl[appConfig.environment]
   }?redirect_uri=${fullUrl}`
-  return redirect
-}
-
-/**
- * Creates redirect to log out user, then return user to their current page.
- */
-export const useLogoutRedirect = () => {
-  // Will send user back to prod if user has noscript or javascript disabled
-  // (useEffect won't work).
-  const [redirect, setRedirect] = useState(`https://www.nypl.org${BASE_URL}`)
-  useEffect(() => {
-    const current = window.location.pathname
-    let backPath = window.location.href
-    // If the patron is on any hold or account page, then
-    // redirect them to the home page after logging out. Otherwise,
-    // send them back to the page they were on.
-    if (current.includes("hold") || current.includes("account")) {
-      backPath = window.location.origin + BASE_URL
-    }
-    setRedirect(
-      `${
-        appConfig.apiEndpoints.logoutUrl[appConfig.environment]
-      }?redirect_uri=${backPath}`
-    )
-  }, [])
   return redirect
 }

@@ -10,8 +10,6 @@ import BibDetails from "./BibDetail"
 import { render, screen } from "@testing-library/react"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("BibDetail component", () => {
   const supplementaryContentModel = new BibDetailsModel(
     bibWithSupplementaryContent.resource,

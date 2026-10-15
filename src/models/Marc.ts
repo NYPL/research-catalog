@@ -57,7 +57,8 @@ export default class Marc {
     return fields
       .filter(
         (field): field is MarcField =>
-          !isLeader(field) && !isControlField(field)
+          // a data field should always have a 3-digit marcTag; drop malformed entries
+          !!field.marcTag && !isLeader(field) && !isControlField(field)
       )
       .sort((a, b) => a.marcTag.localeCompare(b.marcTag))
       .map((field) => ({
