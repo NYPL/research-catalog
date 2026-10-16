@@ -10,7 +10,7 @@ interface AvailabilityLinksProps {
 }
 
 /**
- * The AvailabilityLinks component renders the RequestButtons and ItemAvailability for a given Item
+ * The AvailabilityLinks component renders the RequestButtons and ItemAvailability message for a given Item
  */
 const AvailabilityLinks = ({ item, mt }: AvailabilityLinksProps) => {
   return (

@@ -52,7 +52,7 @@ describe("LocationFilterData model", () => {
         },
         {
           count: 2,
-          label: "Offsite storage",
+          label: "Offsite",
           value: "rc",
         },
       ])
