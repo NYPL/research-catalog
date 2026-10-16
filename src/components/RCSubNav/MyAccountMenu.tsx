@@ -79,6 +79,11 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
       <Portal>
         <MenuList
           zIndex="10000" // To stack over Tabs arrow buttons (zIndex 9999)
+          // Chakra focuses menu items with preventScroll, so keyboard
+          // navigation doesn't scroll off-screen items into view
+          onFocus={(event) => {
+            event.target.scrollIntoView({ block: "nearest" })
+          }}
           sx={{
             minWidth: "200px",
             outline: "0px",
