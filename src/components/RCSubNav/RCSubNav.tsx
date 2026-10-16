@@ -31,6 +31,8 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
       actionBackgroundColor="section.research.primary-05"
       highlightColor="section.research.secondary"
       aria-label="Research Catalog main menu"
+      // vertically center align subnav items
+      sx={{ ul: { alignItems: "center" }, li: { display: "flex" } }}
       primaryActions={
         <>
           <SubNavLink
