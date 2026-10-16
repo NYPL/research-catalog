@@ -1,6 +1,8 @@
 import { Box, Icon, Text } from "@nypl/design-system-react-components"
+import type Item from "../../../models/Item"
+import ContactALibrarian from "./ContactALibrarian"
 
-const AvailableText = ({ text }: { text: string }) => {
+const AvailableText = ({ text, item }: { text: string; item?: Item }) => {
   return (
     <>
       <Box as="span" display="flex" gap="xs" alignItems="flex-start">
@@ -11,10 +13,14 @@ const AvailableText = ({ text }: { text: string }) => {
           size="medium"
           mt="2px"
         />
-        <Text size="body2" isItalic>
-          {" "}
-          {text}
-        </Text>
+        {item && !item.collection ? (
+          <ContactALibrarian item={item} />
+        ) : (
+          <Text size="body2" isItalic>
+            {" "}
+            {text}
+          </Text>
+        )}
       </Box>
     </>
   )

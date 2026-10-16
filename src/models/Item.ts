@@ -64,6 +64,7 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
+    this.collection = item.collection ? item.collection[0] : null
     this.availability = new ItemAvailability({
       isSpecRequestable: item.specRequestable,
       isAvailable: this.isAvailable,
@@ -72,8 +73,8 @@ export default class Item {
       collectionAccessType: this.getCollectionAccessTypeFromItem(item),
       hasBarcode: !!this.barcode,
       isPartnerReCAP: this.isPartnerReCAP(),
+      hasFindingAid: !!bib.findingAid,
     })
-    this.collection = item.collection ? item.collection[0] : null
     this.buildingLocation = item.buildingLocation?.[0]?.prefLabel || null
   }
 
@@ -129,6 +130,10 @@ export default class Item {
     if (itemCollectionAccess !== "shelf" && itemCollectionAccess !== "desk") {
       const buildingLocation = item.buildingLocation?.[0]?.prefLabel
       if (buildingLocation) location.prefLabel = buildingLocation
+    }
+
+    if (location.prefLabel === "Offsite") {
+      location.prefLabel = "Offsite storage"
     }
     return location
   }

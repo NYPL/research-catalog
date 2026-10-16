@@ -1,8 +1,7 @@
 import type Item from "../../models/Item"
 import { AVAILABILITY_KEYS } from "../../config/constants"
-import NotAvailable from "./ItemAvailability/NotAvailable"
+import NotAvailableText from "./ItemAvailability/NotAvailableText"
 import AvailableText from "./ItemAvailability/AvailableText"
-import NotAvailablePartner from "./ItemAvailability/NotAvailablePartner"
 
 interface ItemAvailabilityProps {
   item: Item
@@ -13,16 +12,19 @@ const {
   NOT_AVAILABLE_DESK,
   AVAILABLE_SHELF,
   NOT_AVAILABLE_SHELF,
-  AVAILABLE_CLOSED_STACK_NO_BARCODE,
-  NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE,
-  AVAILABLE_OFFSITE_PARTNER,
-  NOT_AVAILABLE_OFFSITE_PARTNER,
+  AVAILABLE_GENERAL_NO_BARCODE,
+  NOT_AVAILABLE_GENERAL_NO_BARCODE,
+  AVAILABLE_PARTNER,
+  NOT_AVAILABLE_PARTNER,
   AVAILABLE_OFFSITE_NYPL,
   NOT_AVAILABLE_OFFSITE_NYPL,
   AVAILABLE_APPT_AEON,
   NOT_AVAILABLE_APPT_AEON,
-  AVAILABLE_APPT_NO_AEON,
-  NOT_AVAILABLE_APPT_NO_AEON,
+  AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_EDGE_CASE,
   AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
@@ -34,23 +36,19 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
   switch (item.availability.key) {
     case NOT_AVAILABLE_DESK:
     case NOT_AVAILABLE_SHELF:
-    case NOT_AVAILABLE_CLOSED_STACK_NO_BARCODE:
+    case NOT_AVAILABLE_GENERAL_NO_BARCODE:
     case NOT_AVAILABLE_OFFSITE_NYPL:
     case NOT_AVAILABLE_APPT_AEON:
-    case NOT_AVAILABLE_APPT_NO_AEON:
-      return (
-        <NotAvailable
-          text={"Please contact the division for assistance."}
-          dueDate={item.dueDate}
-        />
-      )
-    case NOT_AVAILABLE_OFFSITE_PARTNER:
-      return <NotAvailablePartner item={item} />
+    case NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID:
+    case NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:
+    case NOT_AVAILABLE_PARTNER:
+    case NOT_AVAILABLE_EDGE_CASE:
+      return <NotAvailableText item={item} />
     case AVAILABLE_DESK:
       return (
         <AvailableText
           text={
-            "Item located at service desk. Please visit the service desk in this room to request this item."
+            "Please visit the service desk in this room to request this item."
           }
         />
       )
@@ -62,20 +60,27 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
           }
         />
       )
-    case AVAILABLE_CLOSED_STACK_NO_BARCODE:
+    case AVAILABLE_GENERAL_NO_BARCODE:
       return (
         <AvailableText
+          item={item}
           text={"Please contact the division to request this item."}
         />
       )
-    case AVAILABLE_OFFSITE_PARTNER:
+    case AVAILABLE_PARTNER:
     case AVAILABLE_OFFSITE_NYPL:
       return (
         <AvailableText
           text={"Item stored offsite and must be requested in advance."}
         />
       )
-    case AVAILABLE_APPT_NO_AEON:
+    case AVAILABLE_APPT_NO_AEON_FINDING_AID:
+      return (
+        <AvailableText
+          text={"Please view the finding aid to schedule an appointment."}
+        />
+      )
+    case AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:
       return (
         <AvailableText
           text={"Please contact the division to schedule an appointment."}

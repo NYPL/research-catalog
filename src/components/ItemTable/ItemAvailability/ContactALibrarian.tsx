@@ -19,12 +19,12 @@ const ContactALibrarian = ({
     onOpen()
   }
   return (
-    <Text size="body2" fontStyle="italic">
+    <Text as="span" fontSize="14px" fontStyle="italic">
       {"Please "}
       <Link
         id="contact-librarian"
         onClick={() =>
-          // If item's available, pass that metadata
+          // Pass item metadata if possible
           onContact(
             item
               ? {

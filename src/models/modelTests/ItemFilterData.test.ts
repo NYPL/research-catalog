@@ -74,7 +74,7 @@ describe("LocationFilterData model", () => {
           },
           {
             id: "rc",
-            name: "Offsite",
+            name: "Offsite storage",
           },
         ],
         name: "Item location",

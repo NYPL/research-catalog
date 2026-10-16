@@ -4,7 +4,7 @@ import {
   buildAppliedFiltersTagSetData,
 } from "../itemFilterUtils"
 import { normalAggs } from "../../../__test__/fixtures/testAggregations"
-import { ItemFilterData } from "../../models/ItemFilterData"
+import { ItemFilterData, LocationFilterData } from "../../models/ItemFilterData"
 
 describe("Item Filter Utils", () => {
   describe("parseItemFilterQueryParams", () => {
@@ -83,8 +83,10 @@ describe("Item Filter Utils", () => {
       item_date: "2005",
     })
     const emptyQuery = parseItemFilterQueryParams({})
-    const aggregations = normalAggs.map(
-      (aggregation) => new ItemFilterData(aggregation)
+    const aggregations = normalAggs.map((aggregation) =>
+      aggregation.field === "location"
+        ? new LocationFilterData(aggregation)
+        : new ItemFilterData(aggregation)
     )
     it("no filters", () => {
       expect(
@@ -95,7 +97,7 @@ describe("Item Filter Utils", () => {
       expect(buildAppliedFiltersTagSetData(query, aggregations)).toStrictEqual([
         {
           id: "rc",
-          label: "Item location > Offsite",
+          label: "Item location > Offsite storage",
         },
         {
           id: "status:a",
