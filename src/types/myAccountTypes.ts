@@ -33,6 +33,22 @@ export interface SierraCheckout {
   dueDate: string
 }
 
+export interface PatronServicesCheckouts {
+  total: number
+  entries: PatronServicesCheckout[]
+}
+
+export interface PatronServicesCheckout {
+  dueDate: string
+  numberOfRenewals: number
+  outDate: string
+  id: string
+  sierraItem: SierraItem
+  platformItem: PlatformItem
+  platformBib: PlatformBib
+  discoveryUri: string
+}
+
 export interface Phone {
   number: string
   type: string
@@ -40,39 +56,56 @@ export interface Phone {
 
 export interface SierraItem {
   id: string
-  updatedDate: string
-  createdDate: string
-  deleted: boolean
   bibIds: string[]
-  location: SierraCodeName
-  status: {
-    code: string
-    display: string
-    duedate: string
-  }
-  volumes: string[]
-  barcode: string
-  callNumber: string
 }
 
 export interface SierraHold {
   id: string
-  record: SierraRecord
+  record: string
   frozen: boolean
   canFreeze: boolean
   status: SierraCodeName
-  pickupLocation: SierraCodeName
-  pickupByDate: string
-  patron: string
   recordType: string
+  placed: string
 }
 
-export interface SierraRecord {
-  id?: string
-  title?: string
-  bibIds: string[]
+export interface PlatformHold {
+  id: string
+  createdDate: string
+  updatedDate: string
+  docDeliveryData
+}
+
+export interface PlatformItem {
+  id: string
+  nyplSource: string
   barcode: string
   callNumber: string
+  volume: string
+}
+
+export interface PlatformBib {
+  id: string
+  nyplSource: string
+  title: string
+  author: string
+  isResearch: boolean
+}
+
+export interface PatronServicesHolds {
+  total: number
+  entries: PatronServicesHold[]
+}
+
+export interface PatronServicesHold {
+  requestType: string
+  pickupLocation: SierraCodeName
+  pickupByDate: string
+  sierraHold: SierraHold
+  platformHold: PlatformHold
+  platformItem: PlatformItem
+  platformBib: PlatformBib
+  discoveryUri: string
 }
 
 export type FixedField = { label: string; value: "z" | "p" }
@@ -204,8 +237,3 @@ export interface Fine {
     date: string
   }[]
 }
-
-export type BibDataMapType = Record<
-  string,
-  { title: string; isResearch: boolean; isNyplOwned: boolean }
->
