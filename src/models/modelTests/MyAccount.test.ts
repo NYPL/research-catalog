@@ -19,16 +19,11 @@ import {
   listsResponse,
   processedLists,
 } from "../../../__test__/fixtures/listFixtures"
-import type { Hold, SierraHold } from "../../types/myAccountTypes"
+import type { Hold } from "../../types/myAccountTypes"
 import { fetchLists } from "../../server/api/lists"
 jest.mock("../../server/api/lists")
 
 describe("MyAccountModel", () => {
-  const fetchBibs = MyAccount.prototype.fetchBibItemData
-  afterEach(() => {
-    MyAccount.prototype.fetchBibItemData = fetchBibs
-  })
-
   describe("getRecordId", () => {
     it("can parse an id", () => {
       const idUrl =
@@ -90,7 +85,10 @@ describe("MyAccountModel", () => {
           }
         },
       }
-      const fetcher = new MyAccount(mockSierraClient, "12345")
+      const fetcher = new MyAccount({
+        sierraClient: mockSierraClient,
+        patronId: "12345",
+      })
       const processedCheckoutsToTest = await fetcher.getCheckouts()
       expect(processedCheckoutsToTest).toStrictEqual(processedCheckouts)
     })
@@ -106,7 +104,10 @@ describe("MyAccountModel", () => {
           }
         },
       }
-      const fetcher = new MyAccount(mockSierraClient, "12345")
+      const fetcher = new MyAccount({
+        sierraClient: mockSierraClient,
+        patronId: "12345",
+      })
       const processedHoldsToTest = await fetcher.getHolds()
       expect(processedHoldsToTest).toStrictEqual(processedHolds)
     })
@@ -114,59 +115,21 @@ describe("MyAccountModel", () => {
       const mockSierraClient = {
         get: async () => Promise.resolve(fines),
       }
-      const fetcher = new MyAccount(mockSierraClient, "12345")
+      const fetcher = new MyAccount({
+        sierraClient: mockSierraClient,
+        patronId: "12345",
+      })
       const processedFinesToTest = await fetcher.getFines()
       expect(processedFinesToTest).toStrictEqual(processedFines)
     })
     it("can return lists", async () => {
       ;(fetchLists as jest.Mock).mockResolvedValue({ lists: listsResponse })
-      const fetcher = new MyAccount({}, "12345")
+      const fetcher = new MyAccount({
+        patronId: "12345",
+      })
       const processedListsToTest = await fetcher.getLists("12345")
       expect(processedListsToTest).toStrictEqual(processedLists)
       expect(fetchLists).toHaveBeenCalledWith({ patronId: "12345" })
-    })
-  })
-
-  describe("getResearchAndOwnership", () => {
-    it("can handle no varfields", () => {
-      expect(MyAccount.getResearchAndOwnership({})).toStrictEqual({
-        isResearch: false,
-        isNyplOwned: true,
-      })
-    })
-    it("can handle missing 910 field", () => {
-      expect(
-        MyAccount.getResearchAndOwnership({
-          varFields: [{ marcTag: "666" }],
-        })
-      ).toStrictEqual({
-        isResearch: true,
-        isNyplOwned: false,
-      })
-    })
-    it("can handle a otf record", () => {
-      expect(
-        MyAccount.getResearchAndOwnership({
-          varFields: [
-            { marcTag: "910", subfields: [{ tag: "a", content: "RLOTF" }] },
-          ],
-        })
-      ).toStrictEqual({
-        isResearch: true,
-        isNyplOwned: false,
-      })
-    })
-    it("can handle an nypl research record", () => {
-      expect(
-        MyAccount.getResearchAndOwnership({
-          varFields: [
-            { marcTag: "910", subfields: [{ tag: "a", content: "RL" }] },
-          ],
-        })
-      ).toStrictEqual({
-        isResearch: true,
-        isNyplOwned: true,
-      })
     })
   })
 
@@ -198,20 +161,10 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => Promise.resolve(fines)
       MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
-      MyAccount.prototype.fetchBibItemData = jest
-        .fn()
-        .mockResolvedValueOnce({
-          bibEntries: checkoutBibs.entries,
-          itemEntries: {},
-        })
-        .mockResolvedValueOnce({
-          bibEntries: holdBibs.entries,
-          itemEntries: {},
-        })
       // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
       // mocking the fetch calls.
       // @ts-ignore
-      const account = await MyAccountFactory("12345", {})
+      const account = await MyAccountFactory({ patronId: "12345" })
       expect(account.patron).toStrictEqual(processedPatron)
       expect(account.holds).toStrictEqual(processedHolds)
       expect(account.checkouts).toStrictEqual(processedCheckouts)
@@ -230,13 +183,8 @@ describe("MyAccountModel", () => {
       })
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.getLists = async () => []
-      MyAccount.prototype.fetchBibItemData = async () => ({
-        total: 0,
-        bibEntries: [],
-        itemEntries: {},
-      })
 
-      const emptyAccount = await MyAccountFactory("12345", {})
+      const emptyAccount = await MyAccountFactory({ patronId: "12345" })
       expect(emptyAccount.patron).toStrictEqual(emptyPatron)
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
@@ -250,17 +198,8 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
-      MyAccount.prototype.fetchBibItemData = jest
-        .fn()
-        .mockResolvedValueOnce({
-          bibEntries: checkoutBibs.entries,
-          itemEntries: {},
-        })
-        .mockResolvedValueOnce({
-          bibEntries: holdBibs.entries,
-          itemEntries: {},
-        })
-      const patronWithFails = await MyAccountFactory("123", {})
+
+      const patronWithFails = await MyAccountFactory({ patronId: "123" })
       expect(patronWithFails.holds).toBeNull()
       expect(patronWithFails.checkouts).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
@@ -274,82 +213,13 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.getLists = async () => Promise.resolve(processedLists)
-      MyAccount.prototype.fetchBibItemData = jest
-        .fn()
-        .mockImplementationOnce(() => {
-          throw new Error("spahget")
-        })
-        .mockResolvedValueOnce({
-          bibEntries: holdBibs.entries,
-          itemEntries: {},
-        })
-      const patronWithFails = await MyAccountFactory("123", {})
+
+      const patronWithFails = await MyAccountFactory({ patronId: "123" })
       expect(patronWithFails.checkouts).toBe(null)
       expect(patronWithFails.holds).not.toHaveLength(0)
       expect(patronWithFails.fines.total).toEqual(0)
       expect(patronWithFails.patron.name).toEqual("Strega Nonna")
       expect(patronWithFails.lists).toStrictEqual(processedLists)
-    })
-  })
-  describe("fetchBibItemData", () => {
-    it("can handle bib level holds with no item level holds", async () => {
-      const account = new MyAccount({ get: () => "spaghetti" }, "1234567")
-      const bibHolds = holds.entries.filter((hold) => !hold.record.bibIds)
-      const processedBibHolds = await account.fetchBibItemData(
-        bibHolds as SierraHold[],
-        "record"
-      )
-      expect(processedBibHolds).toStrictEqual({
-        bibEntries: bibHolds.map((hold) => hold.record),
-        itemEntries: {},
-      })
-    })
-    it("requests bib and item info for item level holds", async () => {
-      const fetchSpy = jest.fn().mockResolvedValue({ entries: [{ id: "123" }] })
-      const account = new MyAccount({ get: fetchSpy }, "1234567")
-
-      await account.fetchBibItemData(holds.entries as SierraHold[], "record")
-
-      expect(fetchSpy).toHaveBeenCalledTimes(2)
-    })
-  })
-  describe("item-level volume appending", () => {
-    it("fetches item data and adds volume to title", async () => {
-      const itemLevelCheckout = [
-        {
-          id: "checkout123",
-          item: {
-            id: "item123",
-            bibIds: ["bib123"],
-            callNumber: "QA123",
-            barcode: "barcode123",
-          },
-          numberOfRenewals: 0,
-          patron: "patron123",
-          dueDate: "2025-12-08",
-        },
-      ]
-
-      const account = new MyAccount({ get: jest.fn() }, "patron123")
-
-      account.fetchBibItemData = jest.fn().mockResolvedValue({
-        bibEntries: [{ id: "bib123", title: "Test Book", varFields: [] }],
-        itemEntries: {
-          item123: [{ fieldTag: "v", content: "v.1" }],
-        },
-      })
-
-      account.fetchCheckouts = jest.fn().mockResolvedValue({
-        entries: itemLevelCheckout,
-      })
-      const checkouts = await account.getCheckouts()
-
-      expect(checkouts[0].title).toBe("Test Book")
-      expect(checkouts[0].volume).toBe("v.1")
-      expect(account.fetchBibItemData).toHaveBeenCalledWith(
-        itemLevelCheckout,
-        "item"
-      )
     })
   })
 })
