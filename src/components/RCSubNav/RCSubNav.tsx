@@ -76,6 +76,8 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
       }
       secondaryActions={
         <>
+          {/* SubNavLink and SubNavButton internally render with <li> parent element
+              for SubNav <ul> organization, so other components need to be wrapped with <li>. */}
           <li>
             <Box position="relative">
               <Box
@@ -117,7 +119,9 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
             </Box>
           </li>
           {isAuthenticated ? (
-            <MyAccountMenu activePage={activePage} />
+            <li>
+              <MyAccountMenu activePage={activePage} />
+            </li>
           ) : (
             <SubNavLink
               id="subnav-log-in"
