@@ -71,6 +71,8 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
             sx={{
               border: "1px solid",
               borderRadius: "6px",
+              paddingLeft: "12px !important",
+              paddingRight: "12px !important",
               backgroundColor:
                 isOpen || isButtonHovered ? "ui.link.primary-05" : "ui.white",
             }}
