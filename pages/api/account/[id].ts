@@ -4,7 +4,7 @@ import { MyAccountFactory } from "../../../src/models/MyAccount"
 
 export const getPatronData = async (id: string) => {
   const client = await sierraClient()
-  return await MyAccountFactory(id, client)
+  return await MyAccountFactory({ sierraClient: client, patronId: id })
 }
 
 export const fetchPatronData = async (id: string) => {

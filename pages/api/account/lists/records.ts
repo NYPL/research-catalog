@@ -38,7 +38,7 @@ export default async function handler(
       patronId: cookiePatronId,
     })
     if (response.list) {
-      const accountModel = new MyAccount(null, cookiePatronId)
+      const accountModel = new MyAccount({ patronId: cookiePatronId })
       response.list = accountModel.buildLists([response.list])[0]
     }
     res.status(response.status || 200).json(response)
@@ -49,7 +49,7 @@ export default async function handler(
       patronId: cookiePatronId,
     })
     if (response.list) {
-      const accountModel = new MyAccount(null, cookiePatronId)
+      const accountModel = new MyAccount({ patronId: cookiePatronId })
       response.list = accountModel.buildLists([response.list])[0]
     }
     res.status(response.status || 200).json(response)

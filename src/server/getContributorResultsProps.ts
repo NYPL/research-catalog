@@ -48,7 +48,7 @@ export async function getContributorResultsProps(
   let accountData = null
   if (isAuthenticated) {
     const patronId = patronTokenResponse.decodedPatron.sub
-    const accountModel = new MyAccount(null, patronId)
+    const accountModel = new MyAccount({ patronId })
     const lists = await accountModel.getLists(patronId)
 
     accountData = { patron: { id: patronId }, lists }
