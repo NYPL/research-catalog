@@ -4,6 +4,7 @@ import {
   Icon,
   SubNav,
   SubNavLink,
+  useNYPLBreakpoints,
 } from "@nypl/design-system-react-components"
 import NextLink from "next/link"
 import Link from "../Link/Link"
@@ -22,6 +23,7 @@ interface SubNavProps {
  * and passes the active prop to the correct link based on the route.
  */
 const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
+  const { isLargerThanLargeMobile } = useNYPLBreakpoints()
   const loginRedirect = useLoginRedirect(myAccountMenuButtonId)
   return (
     <SubNav
@@ -74,41 +76,46 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
       }
       secondaryActions={
         <>
-          <Box position="relative">
-            <Box
-              position="absolute"
-              display="inline-flex"
-              sx={{
-                bottom: "100%",
-                left: { base: "0%", sm: "10%", md: "65%" },
-                transform: "translateX(-50%)",
-                zIndex: "100",
-                textWrap: "wrap",
-              }}
-            >
-              <FeaturePopup
-                id="userGuidePopup"
-                titleNew="New location!"
-                titleUpdate="User guide"
-                content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
-                pointerRight={{ base: "90px", sm: "75px", md: "150px" }}
-              />
+          <li>
+            <Box position="relative">
+              <Box
+                position="absolute"
+                display="inline-flex"
+                sx={{
+                  bottom: "100%",
+                  left: { base: "0%", sm: "10%", md: "65%" },
+                  transform: "translateX(-50%)",
+                  zIndex: "100",
+                  textWrap: "wrap",
+                }}
+              >
+                <FeaturePopup
+                  id="userGuidePopup"
+                  titleNew="New location!"
+                  titleUpdate="User guide"
+                  content="Read our user guide to learn more about using the Research Catalog and requesting research materials."
+                  pointerRight={{ base: "90px", sm: "75px", md: "150px" }}
+                />
+              </Box>
+              {/* Right now SubNavLink cannot be used because of missing isExternal prop, and the Popup affecting
+                  <li> structure. */}
+              <Link
+                href="https://libguides.nypl.org/researchcatalog/"
+                id="subnav-user-guide"
+                isExternal
+                borderRadius="6px"
+                aria-label="User guide"
+              >
+                <Icon name="actionLightbulb" size="medium" />
+                <Box as="span" display={{ base: "none", sm: "inline" }}>
+                  User guide
+                </Box>
+                <Box as="span" display={{ base: "inline", sm: "none" }}>
+                  Guide
+                </Box>
+              </Link>
             </Box>
-            <Link
-              href="https://libguides.nypl.org/researchcatalog/"
-              id="subnav-user-guide"
-              isExternal
-              borderRadius="6px"
-            >
-              <Icon name="actionLightbulb" size="medium" />
-              <Box as="span" display={{ base: "none", sm: "inline" }}>
-                User guide
-              </Box>
-              <Box as="span" display={{ base: "inline", sm: "none" }}>
-                Guide
-              </Box>
-            </Link>
-          </Box>
+          </li>
           {isAuthenticated ? (
             <MyAccountMenu activePage={activePage} />
           ) : (
@@ -116,7 +123,9 @@ const RCSubNav = ({ activePage, isAuthenticated, inBrowse }: SubNavProps) => {
               id="subnav-log-in"
               href={loginRedirect}
               isOutlined
-              screenreaderOnlyText="to NYPL.org"
+              {...(!isLargerThanLargeMobile && {
+                screenreaderOnlyText: "Log in",
+              })}
             >
               <Icon name="actionIdentity" size="medium" />
               <Box as="span" display={{ base: "none", md: "inline" }}>

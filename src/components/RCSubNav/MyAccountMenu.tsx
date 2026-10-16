@@ -62,6 +62,7 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
       <MenuButton
         className={activePage === "account" ? "ds-subNav-selectedItem" : ""}
         aria-current={activePage === "account" ? "page" : undefined}
+        aria-label="My account"
         sx={{
           border: "1px solid",
           borderRadius: "6px",
