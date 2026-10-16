@@ -36,7 +36,7 @@ export class AdvancedSearchPage {
       name: "Advanced search",
     })
 
-    this.keywordInput = page.getByLabel("Keyword")
+    this.keywordInput = page.getByLabel("Keyword", { exact: true })
     this.titleInput = page.getByLabel("Title")
     this.contributorInput = page.getByLabel("Author/Contributor")
     this.callNumberInput = page.getByLabel("Call number")
@@ -51,12 +51,12 @@ export class AdvancedSearchPage {
     })
     this.dateToInput = page.getByRole("textbox", { name: "To", exact: true })
 
-    this.formatFilterButton = page.getByRole("button", { name: "Format" })
+    this.formatFilterButton = page.getByRole("button", { name: /^Format/ })
     this.itemLocationFilterButton = page.getByRole("button", {
-      name: "Item location",
+      name: /^Item location/,
     })
-    this.languageFilterButton = page.getByRole("button", { name: "Language" })
-    this.divisionFilterButton = page.getByRole("button", { name: "Division" })
+    this.languageFilterButton = page.getByRole("button", { name: /^Language/ })
+    this.divisionFilterButton = page.getByRole("button", { name: /^Division/ })
 
     this.submitButton = page.getByTestId("submit-advanced-search-button")
     this.clearButton = page.getByTestId("clear-advanced-search-button")
@@ -75,6 +75,14 @@ export class AdvancedSearchPage {
     await this.page
       .locator("label", { hasText: new RegExp(`^${optionLabel}$`) })
       .click()
+  }
+
+  // The "count" pill shown next to a filter once an option is selected.
+  // Its accessible name ends with the filter label, e.g. "remove 1 item selected from Division".
+  filterCountPill(filterLabel: string): Locator {
+    return this.page.getByRole("button", {
+      name: new RegExp(`${filterLabel}$`),
+    })
   }
 
   async submit() {
