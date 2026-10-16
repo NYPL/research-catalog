@@ -20,7 +20,7 @@ const EditButton = forwardRef<HTMLButtonElement, EditButtonProps>(
         onClick={onClick}
         translate="yes"
         sx={{
-          marginTop: { base: "unset", md: "-xs" },
+          marginTop: "-xs",
           paddingTop: "0",
           paddingBottom: "0",
           paddingLeft: "xs",
