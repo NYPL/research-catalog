@@ -40,6 +40,8 @@ const SearchForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
+  const [helperText, setHelperText] = useState("")
+
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
     setSearchScope((router.query.search_scope as string) || "all")
@@ -63,6 +65,7 @@ const SearchForm = ({
     e: SyntheticEvent,
     setValue: Dispatch<SetStateAction<string>>
   ) => {
+    setHelperText("")
     const target = e.target as HTMLInputElement
     setValue(target.value)
   }
@@ -75,6 +78,11 @@ const SearchForm = ({
       field: searchScope,
     }
     const queryString = getSearchQuery(params)
+    if (queryString === "") {
+      setPersistentFocus("mainContent-textInput")
+      setHelperText("Please enter a search term.")
+      return
+    }
     setPersistentFocus(idConstants.searchResultsHeading)
     await router.push(`${PATHS.SEARCH}${queryString}`, undefined, {
       scroll: false,
@@ -104,6 +112,7 @@ const SearchForm = ({
             action={PATHS.SEARCH}
             method="get"
             onSubmit={handleSubmit}
+            helperText={helperText}
             labelText="Search Bar Label"
             isDisabled={isLoading}
             ref={(el: HTMLDivElement | null) => {
@@ -134,7 +143,7 @@ const SearchForm = ({
         <Flex
           direction="column"
           justifyContent="space-between"
-          mt={{ base: "0", md: "xs" }}
+          mt={{ base: "0", md: helperText === "" ? "xs" : "-14px" }}
         >
           <Link
             className={styles.advancedSearch}
