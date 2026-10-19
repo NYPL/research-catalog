@@ -1,4 +1,3 @@
-import { useState } from "react"
 import type { RCPage } from "../../types/pageTypes"
 import { Menu, MenuButton, MenuList, MenuItem, Portal } from "@chakra-ui/react"
 import { useRouter } from "next/router"
@@ -20,7 +19,6 @@ export const myAccountMenuButtonId = `menu-button-${myAccountMenuId}`
  */
 const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
   const router = useRouter()
-  const [isButtonHovered, setIsButtonHovered] = useState(false)
 
   const updatePath = (newPath, index) => {
     const tabUrl = `/account${newPath && `/${newPath}`}`
@@ -66,15 +64,15 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
           <MenuButton
             aria-current={activePage === "account" ? "page" : undefined}
             aria-label="My account"
-            onMouseEnter={() => setIsButtonHovered(true)}
-            onMouseLeave={() => setIsButtonHovered(false)}
             sx={{
               border: "1px solid",
               borderRadius: "6px",
               paddingLeft: "12px !important",
               paddingRight: "12px !important",
-              backgroundColor:
-                isOpen || isButtonHovered ? "ui.link.primary-05" : "ui.white",
+              backgroundColor: isOpen ? "ui.link.primary-05" : "ui.white",
+              _hover: {
+                backgroundColor: "ui.link.primary-05",
+              },
             }}
           >
             <Flex alignItems="center">
