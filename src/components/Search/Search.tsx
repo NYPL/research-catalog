@@ -247,6 +247,7 @@ const Search = ({
                         <Link isUnderlined href={`/bib/${linkedEntry.bibId}`}>
                           this record
                         </Link>
+                        .
                       </Text>
                     }
                   />

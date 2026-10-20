@@ -10,7 +10,7 @@ import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
 import { logServerError, logServerWarn } from "../../utils/logUtils"
 import type { APIError } from "../../types/appTypes"
-import { emmaMadeUpLinkedEntry } from "../../../__test__/fixtures/bibFixtures"
+import { testLinkingEntries } from "../../../__test__/fixtures/bibFixtures"
 
 export async function fetchBib(
   id: string,
@@ -146,9 +146,8 @@ export async function fetchBib(
 }
 
 /**
- * Looks up a bib's linkingEntry array for the entry matching the given
- * marcTagIndex + hash, returning its raw NYQL query string, or null if the
- * bib or the entry can't be found.
+ * Looks up a bib's linkingEntry for the entry matching the given
+ * marcTag + hash
  */
 export async function findLinkingEntryQuery(
   bibId: string,
@@ -159,11 +158,12 @@ export async function findLinkingEntryQuery(
 
   if (!("discoveryBibResult" in bibResponse)) return null
   //const linkedEntry = bibResponse.discoveryBibResult.linkingEntry?.find(
-  const linkedEntry = emmaMadeUpLinkedEntry?.find(
-    (entry) => String(entry.marcTag) === marcTag && String(entry.hash) === hash
+  const linkingEntry = testLinkingEntries?.find(
+    (entry) =>
+      String(entry.bibId) === bibId &&
+      String(entry.marcTag) === marcTag &&
+      String(entry.hash) === hash
   )
 
-  console.log("linked entry", linkedEntry)
-
-  return linkedEntry || null
+  return linkingEntry || null
 }

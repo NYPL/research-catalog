@@ -492,7 +492,6 @@ export function buildLockedSearchQuery({
 }) {
   const collapsedFilters = collapseMultiValueQueryParams(query)
 
-  console.log("locked query", lockedQuery)
   return {
     ...collapsedFilters,
     q: lockedQuery,

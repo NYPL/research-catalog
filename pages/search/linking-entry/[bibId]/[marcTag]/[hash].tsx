@@ -101,14 +101,11 @@ export async function getServerSideProps({ req, query, params }) {
   if (!lockedQuery) {
     return { props: { errorStatus: 404 } }
   }
-  console.log(linkedEntry)
 
   const baseQuery = buildLockedSearchQuery({
     query,
     lockedQuery,
   })
-
-  console.log(baseQuery)
 
   const searchParams = mapQueryToSearchParams(baseQuery)
 
