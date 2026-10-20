@@ -21,6 +21,8 @@ import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
+import { logServerError } from "../utils/logUtils"
+import { callMethodWithRetries } from "../utils/serverUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -37,16 +39,27 @@ export default class MyAccount {
     this.baseQuery = `patrons/${patronId}`
   }
 
-  async fetchCheckouts() {
+  async fetchWithRetries(path: string, operation: string, retries = 3) {
     try {
-      return await this.client.get(`${this.baseQuery}/checkouts?expand=item`)
-    } catch (e) {
-      logger.error("MyAccount#fetchCheckouts error:", e)
-      throw new MyAccountModelError(
-        "MyAccount#fetchCheckouts error: ",
-        e.message
+      return await callMethodWithRetries<any>(
+        () => this.client.get(path),
+        `MyAccount#${operation}`,
+        { retries }
       )
+    } catch (e) {
+      logServerError(
+        `MyAccount#${operation}`,
+        `Error after ${retries} retries: ${e.message}`
+      )
+      throw new MyAccountModelError(`MyAccount#${operation} error: `, e)
     }
+  }
+
+  async fetchCheckouts() {
+    return await this.fetchWithRetries(
+      `${this.baseQuery}/checkouts?expand=item`,
+      "fetchCheckouts"
+    )
   }
 
   async getCheckouts() {
@@ -59,8 +72,9 @@ export default class MyAccount {
   }
 
   async fetchHolds() {
-    return await this.client.get(
-      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`
+    return await this.fetchWithRetries(
+      `${this.baseQuery}/holds?expand=record&fields=canFreeze,status,pickupLocation,frozen,patron,pickupByDate,recordType,record`,
+      "fetchHolds"
     )
   }
 
@@ -79,8 +93,9 @@ export default class MyAccount {
   }
 
   async fetchPatron() {
-    return await this.client.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
+    return await this.fetchWithRetries(
+      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`,
+      "fetchPatron"
     )
   }
 
@@ -90,7 +105,7 @@ export default class MyAccount {
   }
 
   async fetchFines() {
-    return await this.client.get(`${this.baseQuery}/fines`)
+    return await this.fetchWithRetries(`${this.baseQuery}/fines`, "fetchFines")
   }
 
   async getFines() {
@@ -162,10 +177,11 @@ export default class MyAccount {
     if (itemLevelHoldsorCheckouts.length) {
       try {
         // Fetch bibs
-        const itemLevelBibData = await this.client.get(
+        const itemLevelBibData = await this.fetchWithRetries(
           `bibs?id=${itemLevelHoldsorCheckouts.map(
             (x) => x.bibId
-          )}&fields=default,varFields`
+          )}&fields=default,varFields`,
+          "fetchBibItemData"
         )
         bibEntries.push(...itemLevelBibData.entries)
 
@@ -188,8 +204,9 @@ export default class MyAccount {
     const itemEntries: Record<string, any[]> = {}
 
     const itemIds = itemLevelHoldsorCheckouts.map((x) => x.itemId)
-    const itemLevelData = await this.client.get(
-      `items?id=${itemIds}&fields=varFields`
+    const itemLevelData = await this.fetchWithRetries(
+      `items?id=${itemIds}&fields=varFields`,
+      "fetchItemVarFields"
     )
 
     itemLevelData.entries.forEach((item) => {

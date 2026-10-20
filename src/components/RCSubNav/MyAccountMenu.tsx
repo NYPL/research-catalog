@@ -59,71 +59,86 @@ const MyAccountMenu = ({ activePage }: MyAccountMenuProps) => {
 
   return (
     <Menu placement="bottom-end" id={myAccountMenuId}>
-      <MenuButton
-        className={activePage === "account" ? "ds-subNav-selectedItem" : ""}
-        aria-current={activePage === "account" ? "page" : undefined}
-        sx={{
-          border: "1px solid",
-          borderRadius: "6px",
-        }}
-      >
-        <Flex alignItems="center">
-          <Icon name="actionIdentityFilled" size="medium" />
-          <Box as="span" display={{ base: "none", md: "inline" }} ml="xxs">
-            {"My account"}
-          </Box>
-        </Flex>
-      </MenuButton>
-      {/* Portal to escape SubNav component styling */}
-      <Portal>
-        <MenuList
-          zIndex="10000" // To stack over Tabs arrow buttons (zIndex 9999)
-          sx={{
-            minWidth: "200px",
-            outline: "0px",
-            maxWidth: "300px",
-            padding: "0px",
-            borderRadius: "2px",
-            border: "1px solid",
-            borderColor: "ui.gray.light-cool",
-            boxShadow: "none",
-            overflowY: "auto",
-            maxHeight: "320px",
-          }}
-        >
-          {tabsData.map(({ urlPath, label }, index) => {
-            return (
+      {({ isOpen }) => (
+        <>
+          <MenuButton
+            aria-current={activePage === "account" ? "page" : undefined}
+            aria-label="My account"
+            sx={{
+              border: "1px solid",
+              borderRadius: "6px",
+              paddingLeft: "12px !important",
+              paddingRight: "12px !important",
+              backgroundColor: isOpen ? "ui.link.primary-05" : "ui.white",
+              _hover: {
+                backgroundColor: "ui.link.primary-05",
+              },
+            }}
+          >
+            <Flex alignItems="center">
+              <Icon name="actionIdentityFilled" size="medium" />
+              <Box as="span" display={{ base: "none", md: "inline" }} ml="xxs">
+                {"My account"}
+              </Box>
+            </Flex>
+          </MenuButton>
+          {/* Portal to escape SubNav component styling */}
+          <Portal>
+            <MenuList
+              zIndex="10000" // To stack over Tabs arrow buttons (zIndex 9999)
+              // Chakra focuses menu items with preventScroll, so keyboard
+              // navigation doesn't scroll off-screen items into view
+              onFocus={(event) => {
+                event.target.scrollIntoView({ block: "nearest" })
+              }}
+              sx={{
+                minWidth: "200px",
+                outline: "0px",
+                maxWidth: "300px",
+                padding: "0px",
+                borderRadius: "2px",
+                border: "1px solid",
+                borderColor: "ui.gray.light-cool",
+                boxShadow: "none",
+                overflowY: "auto",
+                maxHeight: "320px",
+              }}
+            >
+              {tabsData.map(({ urlPath, label }, index) => {
+                return (
+                  <MenuItem
+                    key={label.toLowerCase()}
+                    sx={{
+                      ...menuItemBaseStyle,
+                      ...(currentAccountTab === urlPath && {
+                        fontWeight: "medium",
+                        borderLeftColor: "dark.ui.border.default",
+                        borderWidth: "0px 0px 0px 2px",
+                        background: "ui.bg.default",
+                        textColor: "ui.typography.heading",
+                      }),
+                    }}
+                    onClick={() => {
+                      updatePath(urlPath, index)
+                    }}
+                  >
+                    {label}
+                  </MenuItem>
+                )
+              })}
               <MenuItem
-                key={label.toLowerCase()}
                 sx={{
                   ...menuItemBaseStyle,
-                  ...(currentAccountTab === urlPath && {
-                    fontWeight: "medium",
-                    borderLeftColor: "dark.ui.border.default",
-                    borderWidth: "0px 0px 0px 2px",
-                    background: "ui.bg.default",
-                    textColor: "ui.typography.heading",
-                  }),
+                  textColor: "ui.error.primary",
                 }}
-                onClick={() => {
-                  updatePath(urlPath, index)
-                }}
+                onClick={() => router.push(logoutLink)}
               >
-                {label}
+                Log out
               </MenuItem>
-            )
-          })}
-          <MenuItem
-            sx={{
-              ...menuItemBaseStyle,
-              textColor: "ui.error.primary",
-            }}
-            onClick={() => router.push(logoutLink)}
-          >
-            Log out
-          </MenuItem>
-        </MenuList>
-      </Portal>
+            </MenuList>
+          </Portal>
+        </>
+      )}
     </Menu>
   )
 }
