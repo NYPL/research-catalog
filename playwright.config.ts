@@ -23,10 +23,6 @@ export default defineConfig({
 
   projects: [
     {
-      name: "setup-gha",
-      testMatch: "global.setup.ts",
-    },
-    {
       name: "chromium-gha",
       testMatch: "parallel_tests/**/*.ts",
       use: {
@@ -53,8 +49,9 @@ export default defineConfig({
       testMatch: "account/account.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
+        // Full Chromium: Imperva blocks the default headless shell on login
+        channel: "chromium",
       },
-      dependencies: ["setup-gha"],
     },
     {
       name: "my account firefox-gha",
