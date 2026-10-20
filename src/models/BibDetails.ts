@@ -1,4 +1,8 @@
-import type { DiscoveryBibResult, Note } from "../types/bibTypes"
+import type {
+  DiscoveryBibResult,
+  DiscoveryLinkedEntry,
+  Note,
+} from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
@@ -103,6 +107,35 @@ export default class BibDetails {
           value: displayValues,
         }
       : null
+  }
+
+  buildLinkingEntryFields(
+    linkedEntries: DiscoveryLinkedEntry[]
+  ): LinkedBibDetail[] {
+    if (!linkedEntries?.length) return []
+
+    const entriesByLabel = linkedEntries.reduce((groups, entry) => {
+      if (!groups[entry.label]) groups[entry.label] = []
+      groups[entry.label].push(entry)
+      return groups
+    }, {} as Record<string, DiscoveryLinkedEntry[]>)
+
+    return Object.keys(entriesByLabel).map((label) => {
+      const linkLabel = "[Search as query]"
+      const value: BibDetailURL[] = entriesByLabel[label].map((entry) => ({
+        url: `/search/linking-entry/${this.bib["@id"].split(":")[1]}/${
+          entry.marcTag
+        }/${entry.hash}`,
+        searchValue: linkLabel,
+        text: `${entry.display} ${linkLabel}`,
+      }))
+
+      return {
+        label: convertToSentenceCase(label),
+        link: "internal",
+        value,
+      }
+    })
   }
 
   buildAnnotatedMarcDetails(
@@ -231,10 +264,12 @@ export default class BibDetails {
       { field: "genreForm", label: "Genre/form" },
       { field: "tableOfContents", label: "Contents" },
       { field: "shelfMark", label: "Call number" },
+      // Should these be removed?
       { field: "isbn", label: "ISBN" },
       { field: "issn", label: "ISSN" },
       { field: "oclc", label: "OCLC" },
       { field: "lccn", label: "LCCN" },
+      //
       { field: "owner", label: "Owning institution" },
       { field: "language", label: "Language" },
     ]
@@ -246,6 +281,7 @@ export default class BibDetails {
         return detail
       })
       .filter((f) => f)
+      .concat(this.buildLinkingEntryFields(this.bib.linkingEntry))
 
     const fieldsWithNotes = this.addNotes(resourceFields)
     return this.combineBibDetailsData(

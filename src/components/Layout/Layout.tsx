@@ -26,6 +26,7 @@ interface LayoutProps {
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
   bannerNotification?: string
+  lockedQueryDisplay?: string
 }
 
 /**
@@ -39,6 +40,7 @@ const Layout = ({
   activePage,
   searchResultsCount,
   bannerNotification,
+  lockedQueryDisplay,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
   const { browseType } = useBrowseContext()
@@ -94,6 +96,7 @@ const Layout = ({
               <SearchForm
                 aggregations={searchAggregations}
                 searchResultsCount={searchResultsCount}
+                lockedQueryDisplay={lockedQueryDisplay}
               />
             )}
             {showBrowse && (

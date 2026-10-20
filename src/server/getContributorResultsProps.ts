@@ -9,7 +9,7 @@ import { buildLockedBrowseQuery } from "../utils/browseUtils"
 import { logSingleFilterNoResults } from "../utils/logUtils"
 import MyAccount from "../models/MyAccount"
 
-// Shared by the /browse/authors and /browse/author-title routes, which only differ their locked filter
+// Shared by the /browse/authors and /browse/author-title routes, which only differ by their locked filter
 export async function getContributorResultsProps(
   { req, query, params },
   field: "contributorLiteral" | "contributorNameTitle"

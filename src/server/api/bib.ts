@@ -1,4 +1,8 @@
-import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
+import type {
+  BibQueryParams,
+  BibResponse,
+  DiscoveryLinkedEntry,
+} from "../../types/bibTypes"
 import { isNyplBibID, getBibQueryString } from "../../utils/bibUtils"
 import { standardizeBibId, isValidBibId } from "../../utils/bibServerUtils"
 import nyplApiClient from "../nyplApiClient"
@@ -6,6 +10,7 @@ import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
 import { logServerError, logServerWarn } from "../../utils/logUtils"
 import type { APIError } from "../../types/appTypes"
+import { emmaMadeUpLinkedEntry } from "../../../__test__/fixtures/bibFixtures"
 
 export async function fetchBib(
   id: string,
@@ -138,4 +143,27 @@ export async function fetchBib(
     logServerError("fetchBib", error)
     return { status: 500, error }
   }
+}
+
+/**
+ * Looks up a bib's linkingEntry array for the entry matching the given
+ * marcTagIndex + hash, returning its raw NYQL query string, or null if the
+ * bib or the entry can't be found.
+ */
+export async function findLinkingEntryQuery(
+  bibId: string,
+  marcTag: string,
+  hash: string
+): Promise<DiscoveryLinkedEntry | null> {
+  const bibResponse = await fetchBib(bibId)
+
+  if (!("discoveryBibResult" in bibResponse)) return null
+  //const linkedEntry = bibResponse.discoveryBibResult.linkingEntry?.find(
+  const linkedEntry = emmaMadeUpLinkedEntry?.find(
+    (entry) => String(entry.marcTag) === marcTag && String(entry.hash) === hash
+  )
+
+  console.log("linked entry", linkedEntry)
+
+  return linkedEntry || null
 }

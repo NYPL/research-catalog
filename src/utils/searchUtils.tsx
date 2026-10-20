@@ -476,6 +476,31 @@ export function filtersObjectLength(obj) {
   return total
 }
 
+/**
+ * buildLockedSearchQuery
+ * Forces "q" to the given lockedQuery (and field to "all", since the locked
+ * query is a raw NYQL string, not a single-field search term), while
+ * preserving any filters/sort/page already in the URL so they can still be
+ * added/removed on top of the locked query.
+ */
+export function buildLockedSearchQuery({
+  query,
+  lockedQuery,
+}: {
+  query: Record<string, any>
+  lockedQuery: string
+}) {
+  const collapsedFilters = collapseMultiValueQueryParams(query)
+
+  console.log("locked query", lockedQuery)
+  return {
+    ...collapsedFilters,
+    q: lockedQuery,
+    search_scope: "cql",
+    page: Array.isArray(query.page) ? query.page[0] : query.page ?? "1",
+  }
+}
+
 export const formatParsedQuery = (node: NestedStringArray): string => {
   if (Array.isArray(node)) {
     return node

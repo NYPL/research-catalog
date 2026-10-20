@@ -25,14 +25,19 @@ import Link from "../Link/Link"
 const SearchForm = ({
   aggregations,
   searchResultsCount,
+  lockedQueryDisplay,
 }: {
   aggregations?: Aggregation[]
   searchResultsCount?: number
+  // Pre-fills the search
+  lockedQueryDisplay?: string
 }) => {
   const router = useRouter()
   const isLoading = useLoading()
   const { setPersistentFocus } = useFocusContext()
-  const [searchTerm, setSearchTerm] = useState((router.query.q as string) || "")
+  const [searchTerm, setSearchTerm] = useState(
+    lockedQueryDisplay || (router.query.q as string) || ""
+  )
   const [searchScope, setSearchScope] = useState(
     (router?.query?.search_scope as string) || "all"
   )
@@ -43,8 +48,8 @@ const SearchForm = ({
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
     setSearchScope((router.query.search_scope as string) || "all")
-    setSearchTerm((router.query.q as string) || "")
-  }, [router.query])
+    setSearchTerm(lockedQueryDisplay || (router.query.q as string) || "")
+  }, [router.query, lockedQueryDisplay])
 
   const displayFilters = !!aggregations?.filter((agg) => agg.values.length)
     .length

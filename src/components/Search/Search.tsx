@@ -8,6 +8,8 @@ import {
   Heading,
   SimpleGrid,
   Pagination,
+  Banner,
+  Text,
 } from "@nypl/design-system-react-components"
 import { LOADING_RESULTS, RESULTS_PER_PAGE } from "../../config/constants"
 import type SearchResultsBib from "../../models/SearchResultsBib"
@@ -15,6 +17,7 @@ import {
   getSearchResultsHeading,
   mapElementsToSearchResultsBibs,
   sortOptions,
+  formatParsedQuery,
 } from "../../utils/searchUtils"
 import AppliedFilters from "../AppliedFilters/AppliedFilters"
 import RCHead from "../Head/RCHead"
@@ -34,6 +37,8 @@ import type {
 import type { RCPage } from "../../types/pageTypes"
 import { getBrowseTypeFromPath } from "../../utils/appUtils"
 import { useRouter } from "next/router"
+import type { DiscoveryLinkedEntry } from "../../types/bibTypes"
+import Link from "../Link/Link"
 
 interface SearchProps {
   errorStatus?: HTTPStatusCode | null
@@ -48,6 +53,7 @@ interface SearchProps {
   handleSortChange: (selectedSortOption: string) => Promise<void>
   slug?: string
   role?: string
+  linkedEntry?: DiscoveryLinkedEntry
 }
 
 const Search = ({
@@ -63,6 +69,7 @@ const Search = ({
   handleSortChange,
   slug,
   role,
+  linkedEntry,
 }: SearchProps) => {
   const isLoading = useLoading()
   const router = useRouter()
@@ -94,6 +101,14 @@ const Search = ({
     results.results
   const parsedQuery = results?.results?.debug?.parsed
 
+  // Display the Discovery API's parsed form of the locked query, falling
+  // back to the raw NYQL string if the response didn't include one.
+  const lockedQueryDisplay = linkedEntry
+    ? parsedQuery
+      ? formatParsedQuery(parsedQuery)
+      : linkedEntry.query
+    : undefined
+
   const aggs = results?.aggregations?.itemListElement
   // if there are no results, then applied filters correspond to aggregations
   // with no values, which will break our code down the line. Do not render
@@ -113,6 +128,7 @@ const Search = ({
         searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
         activePage={activePage}
+        lockedQueryDisplay={lockedQueryDisplay}
       >
         <Flex direction="row" gap="l">
           {totalResults > 0 && displayFilters ? (
@@ -216,17 +232,37 @@ const Search = ({
                 />
               </Box>
             ) : (
-              <SimpleGrid columns={1} id="search-results-list" gap="grid.s">
-                {searchResultBibs.map((bib: SearchResultsBib) => {
-                  return (
-                    <SearchResult
-                      key={bib.id}
-                      bib={bib}
-                      isAuthenticated={isAuthenticated}
-                    />
-                  )
-                })}
-              </SimpleGrid>
+              <>
+                {linkedEntry && (
+                  <Banner
+                    mb="s"
+                    content={
+                      <Text>
+                        These results were generated from a query we constructed
+                        for{" "}
+                        <span style={{ fontWeight: "bold" }}>
+                          &quot;{linkedEntry.display}&quot;
+                        </span>{" "}
+                        in{" "}
+                        <Link isUnderlined href={`/bib/${linkedEntry.bibId}`}>
+                          this record
+                        </Link>
+                      </Text>
+                    }
+                  />
+                )}
+                <SimpleGrid columns={1} id="search-results-list" gap="grid.s">
+                  {searchResultBibs.map((bib: SearchResultsBib) => {
+                    return (
+                      <SearchResult
+                        key={bib.id}
+                        bib={bib}
+                        isAuthenticated={isAuthenticated}
+                      />
+                    )
+                  })}
+                </SimpleGrid>
+              </>
             )}
             <Pagination
               id="results-pagination"
