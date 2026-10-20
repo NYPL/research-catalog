@@ -64,6 +64,7 @@ interface BibPropsType {
   viewAllItems?: boolean
   errorStatus?: HTTPStatusCode | null
   accountData?: any
+  linkingEntryTest?: boolean
 }
 
 /**
@@ -77,6 +78,7 @@ export default function BibPage({
   viewAllItems = false,
   errorStatus = null,
   accountData,
+  linkingEntryTest,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
@@ -251,6 +253,13 @@ export default function BibPage({
             Finding aid available
           </StatusBadge>
         )}
+        {linkingEntryTest && (
+          <Banner
+            variant="warning"
+            content={"This is a test bib with a linking entry"}
+            mb="m"
+          />
+        )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
           <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
@@ -415,6 +424,7 @@ export async function getServerSideProps({ params, query, req }) {
       isAuthenticated,
       itemPage: query.item_page ? parseInt(query.item_page) : 1,
       accountData,
+      linkingEntryTest: testLinkingEntry.length > 0,
     },
   }
 }

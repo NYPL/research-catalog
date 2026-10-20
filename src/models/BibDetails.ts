@@ -121,7 +121,7 @@ export default class BibDetails {
     }, {} as Record<string, DiscoveryLinkedEntry[]>)
 
     return Object.keys(entriesByLabel).map((label) => {
-      const linkLabel = "[Search as query]"
+      const linkLabel = "[Search as a query]"
       const value: BibDetailURL[] = entriesByLabel[label].map((entry) => ({
         url: `/search/linking-entry/${this.bib["@id"].split(":")[1]}/${
           entry.marcTag
