@@ -58,10 +58,11 @@ describe("ItemAvailability", () => {
       item.availability.key =
         AVAILABILITY_KEYS.AVAILABLE_APPT_NO_AEON_FINDING_AID
       render(<ItemAvailability item={item} />)
+      // whitespace workaround
+      expect(screen.getByText(/Please view the/)).toBeInTheDocument()
+      expect(screen.getByText(/finding aid/)).toBeInTheDocument()
       expect(
-        screen.getByText(
-          "Please view the finding aid to schedule an appointment."
-        )
+        screen.getByText(/to schedule an appointment./)
       ).toBeInTheDocument()
     })
 
