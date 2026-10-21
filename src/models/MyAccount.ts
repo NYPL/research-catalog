@@ -92,8 +92,8 @@ export default class MyAccount {
 
   async getHolds() {
     const holds = await this.fetchHolds()
-    const holdsWithBibData = this.buildHolds(holds.entries)
-    return MyAccount.sortHolds(holdsWithBibData)
+    const builtHolds = this.buildHolds(holds.entries)
+    return MyAccount.sortHolds(builtHolds)
   }
 
   async fetchPatron() {
@@ -165,7 +165,7 @@ export default class MyAccount {
   static getIsNyplOwned(platformBib: PlatformBib) {
     if (!platformBib) return false
     const { nyplSource } = platformBib
-    return nyplSource == "sierra-nypl"
+    return nyplSource === "sierra-nypl"
   }
 
   static getTitleDisplay(platformBib: PlatformBib, isNyplOwned: boolean) {

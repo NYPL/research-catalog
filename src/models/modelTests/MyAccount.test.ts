@@ -27,7 +27,6 @@ describe("MyAccountModel", () => {
       const fetcher = new MyAccount({
         patronId: "aaaaa",
         sierraClient: { get: mockGet },
-        platformClient: { get: mockGet },
       })
       const result = await fetcher.fetchWithRetries(
         "sierra",
@@ -46,7 +45,6 @@ describe("MyAccountModel", () => {
       const fetcher = new MyAccount({
         patronId: "aaaaa",
         sierraClient: { get: mockGet },
-        platformClient: { get: mockGet },
       })
       const result = await fetcher.fetchWithRetries(
         "sierra",
@@ -62,7 +60,6 @@ describe("MyAccountModel", () => {
       const fetcher = new MyAccount({
         patronId: "aaaaa",
         sierraClient: { get: mockGet },
-        platformClient: { get: mockGet },
       })
       await expect(
         fetcher.fetchWithRetries("sierra", "a/fake/path", "operation", 3)
@@ -75,7 +72,6 @@ describe("MyAccountModel", () => {
       const fetcher = new MyAccount({
         patronId: "aaaaa",
         sierraClient: { get: mockGet },
-        platformClient: { get: mockGet },
       })
       await expect(
         fetcher.fetchWithRetries("sierra", "a/fake/path", "operation", 0)
@@ -131,7 +127,6 @@ describe("MyAccountModel", () => {
         patronId: "12345",
       })
       const processedCheckoutsToTest = await fetcher.getCheckouts()
-      console.log(`checkouts: ${JSON.stringify(processedCheckoutsToTest)}`)
       expect(processedCheckoutsToTest).toStrictEqual(
         processedCheckoutsFromPatronServices
       )
@@ -145,7 +140,6 @@ describe("MyAccountModel", () => {
         patronId: "12345",
       })
       const processedHoldsToTest = await fetcher.getHolds()
-      console.log(`holds: ${JSON.stringify(processedHoldsToTest)}`)
       expect(processedHoldsToTest).toStrictEqual(
         processedHoldsFromPatronServices
       )
