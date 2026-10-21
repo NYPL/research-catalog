@@ -1,18 +1,14 @@
 import {
   emptyPatron,
-  processedCheckouts,
+  processedCheckoutsFromPatronServices,
   processedFines,
-  processedHolds,
+  processedHoldsFromPatronServices,
   processedPatron,
 } from "../../../__test__/fixtures/processedMyAccountData"
 import MyAccount, { MyAccountFactory } from "../MyAccount"
 import {
-  holds,
-  checkouts,
   patron,
   fines,
-  holdBibs,
-  checkoutBibs,
   empty,
 } from "../../../__test__/fixtures/rawSierraAccountData"
 import {
@@ -21,20 +17,10 @@ import {
 } from "../../../__test__/fixtures/listFixtures"
 import type { Hold } from "../../types/myAccountTypes"
 import { fetchLists } from "../../server/api/lists"
+import { holds, checkouts } from "../../../__test__/fixtures/patronServicesData"
 jest.mock("../../server/api/lists")
 
 describe("MyAccountModel", () => {
-  describe("getRecordId", () => {
-    it("can parse an id", () => {
-      const idUrl =
-        "https://ilsstaff.nypl.org/iii/sierra-api/v6/patrons/holds/48636910"
-      expect(MyAccount.getRecordId(idUrl)).toBe("48636910")
-    })
-    it("can handle no input", () => {
-      expect(MyAccount.getRecordId("")).toBe(null)
-    })
-  })
-
   describe("getHoldStatus", () => {
     it("returns the correct status", () => {
       expect(
@@ -74,42 +60,32 @@ describe("MyAccountModel", () => {
 
   describe("fetcher", () => {
     it("can return checkouts", async () => {
-      const mockSierraClient = {
-        get: async (path) => {
-          if (path.includes("checkouts")) {
-            return Promise.resolve(checkouts)
-          } else if (path.includes("bibs")) {
-            return Promise.resolve(checkoutBibs)
-          } else if (path.includes("items")) {
-            return Promise.resolve({ entries: [] })
-          }
-        },
+      const mockPlatformClient = {
+        get: async () => Promise.resolve(checkouts),
       }
       const fetcher = new MyAccount({
-        sierraClient: mockSierraClient,
+        platformClient: mockPlatformClient,
         patronId: "12345",
       })
       const processedCheckoutsToTest = await fetcher.getCheckouts()
-      expect(processedCheckoutsToTest).toStrictEqual(processedCheckouts)
+      console.log(`checkouts: ${JSON.stringify(processedCheckoutsToTest)}`)
+      expect(processedCheckoutsToTest).toStrictEqual(
+        processedCheckoutsFromPatronServices
+      )
     })
     it("can return holds", async () => {
-      const mockSierraClient = {
-        get: async (path) => {
-          if (path.includes("holds")) {
-            return Promise.resolve(holds)
-          } else if (path.includes("bibs")) {
-            return Promise.resolve(holdBibs)
-          } else if (path.includes("items")) {
-            return Promise.resolve({ entries: [] })
-          }
-        },
+      const mockPlatformClient = {
+        get: async () => Promise.resolve(holds),
       }
       const fetcher = new MyAccount({
-        sierraClient: mockSierraClient,
+        platformClient: mockPlatformClient,
         patronId: "12345",
       })
       const processedHoldsToTest = await fetcher.getHolds()
-      expect(processedHoldsToTest).toStrictEqual(processedHolds)
+      console.log(`holds: ${JSON.stringify(processedHoldsToTest)}`)
+      expect(processedHoldsToTest).toStrictEqual(
+        processedHoldsFromPatronServices
+      )
     })
     it("can return fines", async () => {
       const mockSierraClient = {
@@ -166,8 +142,10 @@ describe("MyAccountModel", () => {
       // @ts-ignore
       const account = await MyAccountFactory({ patronId: "12345" })
       expect(account.patron).toStrictEqual(processedPatron)
-      expect(account.holds).toStrictEqual(processedHolds)
-      expect(account.checkouts).toStrictEqual(processedCheckouts)
+      expect(account.holds).toStrictEqual(processedHoldsFromPatronServices)
+      expect(account.checkouts).toStrictEqual(
+        processedCheckoutsFromPatronServices
+      )
       expect(account.fines).toStrictEqual(processedFines)
       expect(account.lists).toStrictEqual(processedLists)
     })
@@ -207,8 +185,7 @@ describe("MyAccountModel", () => {
       expect(patronWithFails.lists).toStrictEqual(processedLists)
     })
     it("will return other processed data if an error is thrown", async () => {
-      MyAccount.prototype.fetchCheckouts = async () =>
-        Promise.resolve(checkouts)
+      MyAccount.prototype.fetchCheckouts = jest.fn().mockRejectedValue({})
       MyAccount.prototype.fetchHolds = async () => Promise.resolve(holds)
       MyAccount.prototype.fetchPatron = async () => Promise.resolve(patron)
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
