@@ -30,17 +30,19 @@ class MyAccountModelError extends Error {
 export default class MyAccount {
   sierraClient
   platformClient
-  baseQuery: string
+  sierraBaseQuery: string
+  platformBaseQuery: string
   patronId: string
   constructor({ patronId, sierraClient = null, platformClient = null }) {
     this.sierraClient = sierraClient
     this.platformClient = platformClient
-    this.baseQuery = `patrons/${patronId}`
+    this.sierraBaseQuery = `patrons/${patronId}`
+    this.platformBaseQuery = `/${this.sierraBaseQuery}`
     this.patronId = patronId
   }
 
   async fetchCheckouts() {
-    const request = `${this.baseQuery}/checkouts`
+    const request = `${this.platformBaseQuery}/checkouts`
     try {
       return await this.platformClient.get(request)
     } catch (e) {
@@ -58,7 +60,7 @@ export default class MyAccount {
   }
 
   async fetchHolds() {
-    const request = `${this.baseQuery}/holds`
+    const request = `${this.platformBaseQuery}/holds`
     try {
       return await this.platformClient.get(request)
     } catch (e) {
@@ -75,7 +77,7 @@ export default class MyAccount {
 
   async fetchPatron() {
     return await this.sierraClient.get(
-      `${this.baseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
+      `${this.sierraBaseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
     )
   }
 
@@ -85,7 +87,7 @@ export default class MyAccount {
   }
 
   async fetchFines() {
-    return await this.sierraClient.get(`${this.baseQuery}/fines`)
+    return await this.sierraClient.get(`${this.sierraBaseQuery}/fines`)
   }
 
   async getFines() {
