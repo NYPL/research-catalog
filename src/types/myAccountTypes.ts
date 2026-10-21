@@ -46,7 +46,7 @@ export interface PatronServicesCheckout {
   sierraItem: SierraItem
   platformItem: PlatformItem
   platformBib: PlatformBib
-  discoveryUri: string
+  discoveryUri?: string
 }
 
 export interface Phone {
@@ -70,7 +70,7 @@ export interface SierraHold {
 }
 
 export interface PlatformHold {
-  id: string
+  id: string | number
   createdDate: string
   updatedDate: string
   docDeliveryData
@@ -105,7 +105,7 @@ export interface PatronServicesHold {
   platformHold: PlatformHold
   platformItem: PlatformItem
   platformBib: PlatformBib
-  discoveryUri: string
+  discoveryUri?: string
 }
 
 export type FixedField = { label: string; value: "z" | "p" }
@@ -140,7 +140,7 @@ export interface Checkout {
 
 export interface SierraCodeName {
   code: string
-  name: string
+  name?: string
 }
 
 export interface Hold {
