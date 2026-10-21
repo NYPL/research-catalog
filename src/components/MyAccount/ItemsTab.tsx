@@ -36,13 +36,23 @@ const ItemsTab = ({
       </Box>
       {data?.length > 0 && (
         <Table
-          className={styles.accountItemsTable}
+          className={styles.accountTable}
           showRowDividers={true}
           columnHeadersBackgroundColor={"ui.gray.x-light-cool"}
           columnHeaders={headers}
           tableData={data}
           isScrollable
           columnStyles={tableStyling}
+          ref={(el: HTMLTableElement | null) => {
+            // Title and Pickup location values should not be translated
+            ;["Title", "Pickup location"].forEach((header) => {
+              const columnIndex = headers.indexOf(header)
+              if (columnIndex === -1) return
+              el?.querySelectorAll(
+                `tbody tr td:nth-child(${columnIndex + 1})`
+              ).forEach((td) => td.setAttribute("translate", "no"))
+            })
+          }}
         />
       )}
     </Box>

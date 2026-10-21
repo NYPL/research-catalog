@@ -10,7 +10,6 @@ import initializePatronTokenAuth from "../../../src/server/auth"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import { discoveryContributorsResult } from "../../fixtures/contributorFixtures"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
 jest.mock("../../../src/server/api/browse")
 jest.mock("../../../src/server/auth")
 

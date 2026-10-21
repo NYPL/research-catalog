@@ -2,16 +2,14 @@ import { Flex, Heading, Text } from "@nypl/design-system-react-components"
 import { SITE_NAME } from "../../src/config/constants"
 import Layout from "../../src/components/Layout/Layout"
 import RCHead from "../../src/components/Head/RCHead"
-import { useContext } from "react"
-import { FeedbackContext } from "../../src/context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../src/assets/errorImage.png"
 import { appConfig } from "../../src/config/appConfig"
 import Link from "../../src/components/Link/Link"
+import ContactUs from "../../src/components/ContactUs/ContactUs"
 
 export default function Redirect404() {
   const metadataTitle = `Page not found | ${SITE_NAME}`
-  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
@@ -45,14 +43,8 @@ export default function Redirect404() {
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            for more materials, or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(404)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            for assistance.
+            for more materials, or <ContactUs errorStatus={404} /> for
+            assistance.
           </Text>
         </Flex>
       </Layout>

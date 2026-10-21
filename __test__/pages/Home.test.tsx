@@ -3,9 +3,6 @@ import { render, screen } from "../../src/utils/testUtils"
 
 import Home from "../../pages/index"
 
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("Home", () => {
   const component = <Home isAuthenticated={true} />
   it("should render the search form", () => {

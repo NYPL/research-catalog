@@ -29,6 +29,7 @@ const ElectronicResourcesLink = ({
       <CardContent>
         {electronicResources.length === 1 ? (
           <Link
+            translate="no"
             isExternal
             href={electronicResources[0].url}
             variant="standalone"

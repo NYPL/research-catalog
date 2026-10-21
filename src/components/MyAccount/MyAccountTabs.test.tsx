@@ -1,0 +1,64 @@
+import React from "react"
+import { render, fireEvent, screen } from "../../utils/testUtils"
+import MyAccountTabs from "./MyAccountTabs"
+import {
+  filteredPickupLocations,
+  processedCheckouts,
+  processedFines,
+  processedHolds,
+  processedPatron,
+} from "../../../__test__/fixtures/processedMyAccountData"
+import mockRouter from "next-router-mock"
+import { PatronDataProvider } from "../../context/PatronDataContext"
+
+const accountData = {
+  patron: processedPatron,
+  fines: processedFines,
+  checkouts: processedCheckouts,
+  holds: processedHolds,
+  pickupLocations: filteredPickupLocations,
+}
+const renderWithPatronDataProvider = (data, path) => {
+  return render(
+    <PatronDataProvider value={{ ...data }}>
+      <MyAccountTabs activePath={path} />
+    </PatronDataProvider>
+  )
+}
+describe("MyAccountTabs", () => {
+  beforeEach(() => {
+    mockRouter.setCurrentUrl("/")
+  })
+
+  it("renders", () => {
+    renderWithPatronDataProvider(accountData, "")
+  })
+
+  it("renders correct number of tabs", () => {
+    const { getAllByRole } = renderWithPatronDataProvider(accountData, "")
+
+    const tabs = getAllByRole("tab")
+    expect(tabs.length).toBe(5)
+  })
+
+  it("calls updatePath when tab is clicked", () => {
+    const { getByText } = renderWithPatronDataProvider(accountData, "items")
+    fireEvent.click(getByText("Requests", { exact: false }))
+    expect(mockRouter.asPath).toBe("/account/requests")
+  })
+  it("displays error banner when checkouts or holds are null", async () => {
+    renderWithPatronDataProvider(
+      { ...accountData, checkouts: null, holds: null },
+      "items"
+    )
+    const errorMessage = screen.getByText(
+      "Your checkouts could not be loaded.",
+      { exact: false }
+    )
+    expect(errorMessage).toBeInTheDocument()
+    expect(screen.getByRole("complementary")).toHaveAttribute(
+      "data-variant",
+      "negative"
+    )
+  })
+})

@@ -11,6 +11,9 @@ jest.mock("jose", () => ({
   }),
 }))
 
+// Mock next/router for every test because FocusProvider uses it
+jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+
 // We expect an error to be thrown and we do catch, but it still gets
 // logged and we don't want to see expected errors while we test.
 jest.spyOn(global.console, "error").mockImplementation(() => jest.fn())
@@ -41,7 +44,7 @@ jest.mock("jose", () => ({
 jest.mock("@nypl/node-utils", () => {
   const mockLogger = {
     info: jest.fn(),
-    warning: jest.fn(),
+    warn: jest.fn(),
     error: jest.fn(),
     debug: jest.fn(),
     initialize: jest.fn(),
@@ -53,6 +56,11 @@ jest.mock("@nypl/node-utils", () => {
   }
 
   return {
+    NyplSourceMapper: {
+      instance: async () => ({
+        splitIdentifier: () => ({ type: true, id: true, nyplSource: true }),
+      }),
+    },
     logger: mockLogger,
     config: mockConfig,
   }

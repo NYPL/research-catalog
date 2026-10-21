@@ -7,13 +7,15 @@ const VariantTableCell = ({ record }: { record: Variant }) => {
     <Text size="body2" mt="-23px">
       <span style={{ fontWeight: "bold" }}>See:</span>{" "}
       {/* Using standard link instead of CSR, to trigger full reload */}
-      <a href={`${BASE_URL}${prefTerm.url}`}>{prefTerm.termLabel}</a>{" "}
+      <a translate="no" href={`${BASE_URL}${prefTerm.url}`}>
+        {prefTerm.termLabel}
+      </a>{" "}
     </Text>
   )
 
   return (
     <Flex flexDir="column" gap="xs">
-      <Text>{record.termLabel}</Text>
+      <Text translate="no">{record.termLabel}</Text>
       <List
         sx={{ "li::before": { color: "ui.black" } }}
         variant="ul"

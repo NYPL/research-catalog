@@ -23,6 +23,7 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
       }}
     >
       <Banner
+        key={browseType}
         className={`${styles.banner} no-print`}
         variant="recommendation"
         isDismissible

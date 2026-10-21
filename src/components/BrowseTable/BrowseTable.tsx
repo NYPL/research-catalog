@@ -4,7 +4,7 @@ import { BASE_URL } from "../../config/constants"
 
 export function commaSeparatedTermLinks(terms: TermLink[]) {
   return terms.map((term, i) => (
-    <span key={term.url}>
+    <span translate="no" key={term.url}>
       {/* Using standard link instead of CSR, to trigger full reload */}
       <a href={`${BASE_URL}${term.url}`}>{term.termLabel}</a>
       {i < terms.length - 1 && ", "}

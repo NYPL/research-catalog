@@ -4,12 +4,12 @@ import { appConfig } from "../../config/appConfig"
 import { SITE_NAME } from "../../config/constants"
 import RCHead from "../Head/RCHead"
 import Layout from "../Layout/Layout"
-import { useContext } from "react"
-import { FeedbackContext } from "../../context/FeedbackContext"
 import Image from "next/image"
 import errorImage from "../../assets/errorImage.png"
 import type { RCPage } from "../../types/pageTypes"
 import Link from "../Link/Link"
+import ContactUs from "../ContactUs/ContactUs"
+import ReloadButton from "../ReloadButton/ReloadButton"
 
 type ResultsErrorProps = {
   page: RCPage
@@ -23,7 +23,6 @@ export default function ResultsError({
   errorName,
   page,
 }: ResultsErrorProps) {
-  const { openFeedbackFormWithError } = useContext(FeedbackContext)
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
@@ -33,13 +32,6 @@ export default function ResultsError({
       metadataTitle = "Results not found"
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             No results found
           </Heading>
@@ -52,14 +44,8 @@ export default function ResultsError({
             <Link isExternal href={appConfig.urls.circulatingCatalog}>
               Branch Catalog
             </Link>{" "}
-            for more materials, or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            for assistance.
+            for more materials, or <ContactUs errorStatus={errorStatus} /> for
+            assistance.
           </Text>
         </>
       )
@@ -68,13 +54,6 @@ export default function ResultsError({
     case 500:
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             Something went wrong on our end
           </Heading>
@@ -82,14 +61,8 @@ export default function ResultsError({
             We encountered an error while trying to load the page.
           </Text>
           <Text marginBottom="0">
-            Try refreshing the page or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            if the error persists.
+            Try <ReloadButton /> or <ContactUs errorStatus={errorStatus} /> if
+            the error persists.
           </Text>
         </>
       )
@@ -98,13 +71,6 @@ export default function ResultsError({
       if (errorName === "InvalidQuerySyntaxError") {
         errorContent = (
           <>
-            <Image
-              src={errorImage}
-              alt="Error image"
-              width={96}
-              height={64}
-              style={{ marginBottom: "48px" }}
-            />
             <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
               Invalid query
             </Heading>
@@ -122,13 +88,7 @@ export default function ResultsError({
                 Query Guide
               </Link>{" "}
               to learn how to construct queries or{" "}
-              <Link
-                onClick={() => openFeedbackFormWithError(errorStatus)}
-                id="feedback-link"
-              >
-                contact us
-              </Link>{" "}
-              for assistance.
+              <ContactUs errorStatus={errorStatus} /> for assistance.
             </Text>
           </>
         )
@@ -139,13 +99,6 @@ export default function ResultsError({
     default:
       errorContent = (
         <>
-          <Image
-            src={errorImage}
-            alt="Error image"
-            width={96}
-            height={64}
-            style={{ marginBottom: "48px" }}
-          />
           <Heading level="h3" tabIndex={-1} id={headingID} mb="s">
             There was an unexpected error
           </Heading>
@@ -153,14 +106,8 @@ export default function ResultsError({
             We couldn&apos;t process your request at this time.
           </Text>
           <Text marginBottom="0">
-            Try again later or{" "}
-            <Link
-              onClick={() => openFeedbackFormWithError(errorStatus)}
-              id="feedback-link"
-            >
-              contact us
-            </Link>{" "}
-            if the error persists.
+            Try again later or <ContactUs errorStatus={errorStatus} /> if the
+            error persists.
           </Text>
         </>
       )
@@ -181,6 +128,14 @@ export default function ResultsError({
           justifyContent="center"
           textAlign="center"
         >
+          <Image
+            unoptimized
+            src={errorImage}
+            alt="Error image"
+            width={96}
+            height={64}
+            style={{ marginBottom: "48px" }}
+          />
           {errorContent}
         </Flex>
       </Layout>

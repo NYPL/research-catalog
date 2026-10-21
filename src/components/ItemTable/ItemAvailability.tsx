@@ -77,7 +77,12 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
     case AVAILABLE_APPT_NO_AEON_FINDING_AID:
       return (
         <AvailableText
-          text={"Please view the finding aid to schedule an appointment."}
+          text={
+            <>
+              Please view the <span translate="no"> finding aid </span> to
+              schedule an appointment.
+            </>
+          }
         />
       )
     case AVAILABLE_APPT_NO_AEON_NO_FINDING_AID:

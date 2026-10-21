@@ -32,6 +32,7 @@ const FindingAid = ({
       </CardHeading>
       <CardContent>
         <Link
+          translate="no"
           isExternal
           href={findingAidURL}
           variant="standalone"
@@ -46,8 +47,9 @@ const FindingAid = ({
           <Flex gap="xxs" mt="xs">
             <Icon name="errorOutline" iconRotation="rotate180" size="medium" />
             <Text size="caption" mb="0">
-              The finding aid is a document containing details about the
-              organization and contents of this archival collection.
+              The <span translate="no"> finding aid </span> is a document
+              containing details about the organization and contents of this
+              archival collection.
             </Text>
           </Flex>
           {isNyplBib && (

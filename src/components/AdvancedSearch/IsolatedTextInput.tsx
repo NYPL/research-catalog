@@ -24,6 +24,7 @@ const IsolatedTextInput = ({
 
   return (
     <TextInput
+      translate={label === "Call number" ? "no" : "yes"}
       id={name}
       labelText={label}
       name={name}

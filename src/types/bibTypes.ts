@@ -3,6 +3,7 @@ import type { Collection, DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 import type { HTTPStatusCode } from "./appTypes"
 import type { AnnotatedMarc } from "./marcTypes"
+import type { DisplayComponentsEntry } from "./bibDetailsTypes"
 
 export interface DiscoveryBibResult {
   extent?: string[]
@@ -14,6 +15,7 @@ export interface DiscoveryBibResult {
   uri?: string
   titleDisplay?: string[]
   creatorLiteral?: string[]
+  creatorDisplay?: DisplayComponentsEntry[]
   title?: string[]
   collection?: Collection[]
   format?: format[]
@@ -30,6 +32,7 @@ export interface DiscoveryBibResult {
   parallelTitleDisplay?: string[]
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]
+  contributorDisplay?: DisplayComponentsEntry[]
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
   hasItemDates?: boolean

@@ -12,7 +12,7 @@ export class ItemFilterData {
   field: string
 
   constructor(aggregation: Aggregation) {
-    this.options = aggregation.values
+    this.options = aggregation.values || []
     this.field = aggregation.field
   }
 

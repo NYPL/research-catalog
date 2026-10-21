@@ -7,8 +7,8 @@ export const appConfig: AppConfig = {
   apiEndpoints: {
     platform: {
       // FOR TESTING
-      development: "http://localhost:8082/api",
-      qa: "http://localhost:8082/api",
+      development: "http://discovery-api-qa2.nypl.org/api",
+      qa: "http://discovery-api-qa2.nypl.org/api",
       production: "https://platform.nypl.org/api",
     },
     domain: {
@@ -60,24 +60,6 @@ export const appConfig: AppConfig = {
       "https://www.nypl.org/help/request-research-materials",
     tokenUrl: "https://isso.nypl.org/",
     renewCard: "https://www.nypl.org/help/library-card/terms-conditions#renew",
-  },
-  testUser: {
-    name: {
-      development: "PLAYWRIGHT TEST ACCOUNT LOCAL",
-      qa: "PLAYWRIGHT TEST ACCOUNT GHA",
-      production: "PLAYWRIGHT TEST ACCOUNT GHA",
-    },
-    cardNumber: {
-      development: "2 5555 01278 5809",
-      qa: "2 3333 12428 7325",
-      production: "2 3333 12428 7325",
-    },
-    username: {
-      development: "playwrightlocal",
-      qa: "playwrightgha",
-      production: "playwrightgha",
-    },
-    password: process.env.QA_PASSWORD,
   },
   // Array of closed nypl location keys (available options for NYPL locations: all, schwarzman, schomburg, lpa)
   closedLocations: [] as (NYPLocationKey | "all")[],

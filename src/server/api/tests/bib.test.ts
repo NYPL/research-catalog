@@ -4,18 +4,18 @@ import type { BibResponse } from "../../../types/bibTypes"
 jest.mock("../../nyplApiClient")
 import nyplApiClient from "../../nyplApiClient"
 
-jest.mock("@nypl/node-utils", () => ({
-  logger: {
-    info: jest.fn(),
-    warn: jest.fn(),
-    error: jest.fn(),
-  },
-}))
 import { logger } from "@nypl/node-utils"
-
 const mockClient = {
   get: jest.fn(),
 }
+
+jest.mock("../../../utils/bibServerUtils", () => {
+  return {
+    ...jest.requireActual("../../../utils/bibServerUtils"),
+    isValidBibId: jest.fn().mockReturnValue(true),
+  }
+})
+import * as utils from "../../../utils/bibServerUtils"
 
 const mockBibResponse = (overrides = {}) => ({
   items: [{}],
@@ -37,6 +37,10 @@ const mockAMResponse = (overrides = {}) => ({
 describe("fetchBib", () => {
   beforeEach(() => {
     jest.clearAllMocks()
+    // clearAllMocks only resets call history, not queued mockResolvedValueOnce/
+    // mockRejectedValueOnce implementations, so reset mockClient.get explicitly
+    // to prevent unconsumed queued responses from leaking between tests.
+    mockClient.get.mockReset()
     ;(nyplApiClient as jest.Mock).mockResolvedValue(mockClient)
   })
 
@@ -89,6 +93,12 @@ describe("fetchBib", () => {
     )
   })
 
+  it("responds with 404 if bibId is found to be invalid", async () => {
+    ;(utils.isValidBibId as jest.Mock).mockReturnValueOnce(false)
+    const bibResponse = await fetchBib("null")
+    expect(bibResponse.status).toBe(404)
+  })
+
   it("responds with 404 when bib not found and Sierra call fails", async () => {
     mockClient.get
       // Bib
@@ -119,5 +129,51 @@ describe("fetchBib", () => {
     const bibResponse = (await fetchBib("B17418167")) as BibResponse
 
     expect(bibResponse.status).toBe(307)
+  })
+
+  it("returns 500 and logs the error when client doesnt initialize", async () => {
+    const clientError = new Error("Failed to build client")
+    ;(nyplApiClient as jest.Mock).mockRejectedValueOnce(clientError)
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe("Failed to build client")
+    expect(logger.error).toHaveBeenCalledWith(
+      "Error in fetchBib: Error: Failed to build client"
+    )
+    expect(mockClient.get).not.toHaveBeenCalled()
+  })
+
+  it("returns 500 and logs the error when the bib GET request fails", async () => {
+    const bibError = new Error(
+      "Unexpected token '<', \"<doctype \"... is not valid JSON"
+    )
+    mockClient.get
+      .mockRejectedValueOnce(bibError)
+      .mockResolvedValueOnce(mockAMResponse())
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe(bibError.message)
+    expect(logger.error).toHaveBeenCalledWith(`Error in fetchBib: ${bibError}`)
+  })
+
+  it("returns 500 and logs the error when the annotated marc GET request fails", async () => {
+    const annotatedMarcError = new Error(
+      "Unexpected token '<', \"<doctype \"... is not valid JSON"
+    )
+    mockClient.get
+      .mockResolvedValueOnce(mockBibResponse())
+      .mockRejectedValueOnce(annotatedMarcError)
+
+    const bibResponse = await fetchBib("b17418167")
+
+    expect(bibResponse.status).toBe(500)
+    expect((bibResponse as any).error).toBe(annotatedMarcError.message)
+    expect(logger.error).toHaveBeenCalledWith(
+      `Error in fetchBib: ${annotatedMarcError}`
+    )
   })
 })

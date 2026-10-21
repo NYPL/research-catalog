@@ -225,6 +225,18 @@ const ListRecordsTable = ({
             showRowDividers
             my={{ base: 0, md: "s" }}
             data-testid="list-records-table"
+            ref={(el: HTMLTableElement | null) => {
+              // Do not translate any cells except the last column (action menu)
+              el?.querySelectorAll("tbody td:not(:last-child)").forEach((td) =>
+                td.setAttribute("translate", "no")
+              )
+              // Do not translate "call number" column header
+              el?.querySelectorAll("th").forEach((th) => {
+                if (th.textContent?.trim() === "Call number") {
+                  th.setAttribute("translate", "no")
+                }
+              })
+            }}
           />
           {list.recordCount > LIST_RECORDS_PER_PAGE && (
             <Flex justifyContent={{ base: "center", md: "flex-start" }}>

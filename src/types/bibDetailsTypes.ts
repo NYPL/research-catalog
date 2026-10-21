@@ -38,9 +38,10 @@ export interface MarcLinkedDetail {
 
 export interface BibDetailURL {
   url: string
-  urlText?: string
-  // Unlinked text surrounding (and including) the linked urlText
+  searchValue?: string
+  // Unlinked text surrounding (and including) the linked searchValue
   text?: string
+  browseValue?: string
 }
 
 export interface FieldMapping {
@@ -48,7 +49,8 @@ export interface FieldMapping {
   field: string
 }
 
-export interface DisplayPackedEntry {
-  display: string
-  "@value": string
+export interface DisplayComponentsEntry {
+  displayLabel: string
+  name: string
+  nameTitle: string
 }

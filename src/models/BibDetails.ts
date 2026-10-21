@@ -7,13 +7,16 @@ import type {
   AnyBibDetail,
   MarcLinkedDetail,
   AnyMarcDetail,
-  DisplayPackedEntry,
+  DisplayComponentsEntry,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
   encodeURIComponentWithPeriods,
 } from "../utils/appUtils"
-import { getFindingAidFromSupplementaryContent } from "../utils/bibUtils"
+import {
+  getFindingAidFromSupplementaryContent,
+  stripPunctuation,
+} from "../utils/bibUtils"
 import type {
   AnnotatedMarc,
   AnnotatedMarcField,
@@ -75,15 +78,24 @@ export default class BibDetails {
       url: searchUrl,
     } = DISPLAY_LINKED_FIELD_MAPPING[literalField]
 
-    const displayData: DisplayPackedEntry[] = this.bib[displayField] || []
+    let displayData: DisplayComponentsEntry[] = this.bib[displayField] || []
+    // the creator is sometimes redundantly also listed as a contributor
+    if (literalField === "contributorLiteral") {
+      const creatorNameTitles = (this.bib.creatorDisplay || []).map(
+        (creator) => creator.nameTitle
+      )
+      displayData = displayData.filter(
+        ({ nameTitle }) => !creatorNameTitles.includes(nameTitle)
+      )
+    }
     const displayValues: BibDetailURL[] = displayData.map(
-      ({ display, "@value": name }) => ({
-        url: searchUrl(name),
-        urlText: name,
-        text: display,
+      ({ displayLabel, name, nameTitle }) => ({
+        url: searchUrl(literalField === "series" ? name : nameTitle),
+        searchValue: literalField === "series" ? name : nameTitle,
+        text: displayLabel,
+        browseValue: name,
       })
     )
-
     return displayValues?.length > 0
       ? {
           label: displayLabel,
@@ -102,7 +114,7 @@ export default class BibDetails {
       if (label === "Connect to:") {
         const urlValues = values.map(({ label, content }) => ({
           url: content,
-          urlText: label,
+          searchValue: label,
         }))
         const detail = this.buildExternalLinkedDetail(
           "Connect to:",
@@ -122,7 +134,9 @@ export default class BibDetails {
     value: string[],
     fieldMarcTags?: string[]
   ): BibDetail | MarcDetail {
-    if (!value?.length) return null
+    if (!value?.length) {
+      return null
+    }
 
     const base = { label: convertToSentenceCase(label), value }
 
@@ -280,12 +294,12 @@ export default class BibDetails {
           .map((v) =>
             typeof v === "string"
               ? v.trim()
-              : v?.content?.trim() || v?.urlText?.trim()
+              : v?.content?.trim() || v?.searchValue?.trim()
           )
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
-      return [val?.urlText?.trim()]
+      return [val?.searchValue?.trim()]
     }
 
     const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
@@ -294,7 +308,7 @@ export default class BibDetails {
 
     allDetails.forEach((detail) => {
       normalizeValues(detail.value).forEach(
-        (v) => v && resourceValuesSet.add(v)
+        (v) => v && resourceValuesSet.add(stripPunctuation(v))
       )
     })
 
@@ -302,17 +316,16 @@ export default class BibDetails {
     const keptByLabel = {}
 
     annotatedMarcDetails.forEach((detail) => {
-      if (labelsSet.has(detail.label)) return
-      if (
-        detail.label === "Subject" &&
-        (!this.bib.subjectLiteral || !this.bib.subjectLiteral.length)
-      ) {
+      // Subject checked per-value to display unlinked subjects.
+      // When a bib has a subject catalogued with indicators, the browse term module filters it out
+      if (detail.label !== "Subject" && labelsSet.has(detail.label)) {
         return
       }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
-      // include subjects, which will be displayed but not linked
-      const overlap = detailValues.some((v) => resourceValuesSet.has(v))
+      const overlap = detailValues.some((v) =>
+        resourceValuesSet.has(stripPunctuation(v))
+      )
       if (!overlap) {
         filteredMarc.push(detail)
         // store both values and marc tags in one object per AM label
@@ -394,7 +407,9 @@ export default class BibDetails {
               v
             )}`
         }
-        return { url: internalUrl, urlText: v }
+        return field === "subjectLiteral"
+          ? { url: internalUrl, searchValue: v, browseValue: v }
+          : { url: internalUrl, searchValue: v }
       }),
     }
   }
@@ -459,16 +474,19 @@ export default class BibDetails {
    * Assumes that arr2 is at least as long as arr1.
    */
   interleaveParallelAndPrimaryValues(
-    primaries: string[],
-    parallels: string[] | Note[]
+    primaries: string[] | DisplayComponentsEntry[],
+    parallels: string[] | Note[] | DisplayComponentsEntry[]
   ) {
     const interleavedValues = []
     parallels.forEach((parallelValue, i) => {
       if (primaries[i]) {
-        const value =
-          parallelValue && parallelValue["noteType"]
-            ? this.combineMatchingNotes(primaries[i], parallelValue)
-            : primaries[i]
+        let value: string | Note | DisplayComponentsEntry = primaries[i]
+        if (parallelValue && parallelValue["noteType"]) {
+          value = this.combineMatchingNotes(
+            primaries[i] as string,
+            parallelValue
+          )
+        }
         interleavedValues.push(value)
       }
       if (parallelValue) {
@@ -485,17 +503,44 @@ export default class BibDetails {
    * Skips over subject fields.
    */
   matchParallelToPrimaryValues(bib: DiscoveryBibResult) {
+    // These parallel fields are irregularly pluralized
+    const irregularParallelFields = {
+      parallelCreatorsDisplay: "creatorDisplay",
+      parallelContributorsDisplay: "contributorDisplay",
+    }
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
         return null
       }
-      const match = key.match(/parallel(.)(.*)/)
-      const paralleledField = match && `${match[1].toLowerCase()}${match[2]}`
-      const paralleledValues = paralleledField && bib[paralleledField]
+      const paralleledField =
+        irregularParallelFields[key] ||
+        (() => {
+          const match = key.match(/parallel(.)(.*)/)
+          return match && `${match[1].toLowerCase()}${match[2]}`
+        })()
+      let paralleledValues = paralleledField && bib[paralleledField]
+      let keyValues = bib[key]
+      // creator is sometimes also listed as a contributor (on either or both
+      // of the primary/parallel sides)
+      if (paralleledField === "contributorDisplay" && paralleledValues) {
+        const creatorNameTitles = (bib.creatorDisplay || []).map(
+          (creator) => creator.nameTitle
+        )
+        paralleledValues = paralleledValues.filter(
+          (contributor) => !creatorNameTitles.includes(contributor.nameTitle)
+        )
+        const parallelCreatorNameTitles = (
+          bib["parallelCreatorsDisplay"] || []
+        ).map((creator) => creator.nameTitle)
+        keyValues = (keyValues || []).filter(
+          (contributor) =>
+            !parallelCreatorNameTitles.includes(contributor?.nameTitle)
+        )
+      }
       return (
         paralleledValues && {
           [paralleledField]: this.interleaveParallelAndPrimaryValues(
-            bib[key],
+            keyValues,
             paralleledValues
           ),
         }
@@ -526,7 +571,7 @@ export default class BibDetails {
       })
       .map((sc) => ({
         url: sc.url,
-        urlText: sc.label,
+        searchValue: sc.label,
       }))
     return this.buildExternalLinkedDetail(convertToSentenceCase(label), values)
   }

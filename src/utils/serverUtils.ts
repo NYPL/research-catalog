@@ -1,7 +1,7 @@
 const TIMEOUT_MS = 15000
 
 export async function withTimeout<T>(
-  promise,
+  asyncCallback,
   ms: number = TIMEOUT_MS
 ): Promise<T> {
   let timeoutId: ReturnType<typeof setTimeout>
@@ -10,7 +10,7 @@ export async function withTimeout<T>(
       reject(new Error(`Request timed out after ${ms} ms`))
     }, ms)
   })
-  return Promise.race([promise, timeoutPromise]).finally(() =>
+  return Promise.race([asyncCallback(), timeoutPromise]).finally(() =>
     clearTimeout(timeoutId)
   )
 }

@@ -13,9 +13,6 @@ import AdvancedSearch, {
   defaultEmptySearchErrorMessage,
 } from "../../../pages/search/advanced"
 
-// Mock next router
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("Advanced search form", () => {
   beforeEach(async () => {
     mockRouter.setCurrentUrl("/search/advanced")
@@ -176,7 +173,7 @@ describe("Advanced search form", () => {
 
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
-      "Division multiselect, 1 item selected"
+      "Division, 1 item currently selected"
     )
     await userEvent.click(screen.getByText("Clear fields"))
     ;[
@@ -198,7 +195,7 @@ describe("Advanced search form", () => {
     })
     expect(divisionMultiselect).toHaveAttribute(
       "aria-label",
-      "Division multiselect, 0 items selected"
+      "Division, 0 items currently selected"
     )
 
     submit()

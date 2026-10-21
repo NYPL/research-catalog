@@ -1,8 +1,9 @@
 import { Box, Icon, Text } from "@nypl/design-system-react-components"
+import type { ReactNode } from "react"
 import type Item from "../../../models/Item"
 import ContactALibrarian from "./ContactALibrarian"
 
-const AvailableText = ({ text, item }: { text: string; item?: Item }) => {
+const AvailableText = ({ text, item }: { text: ReactNode; item?: Item }) => {
   return (
     <>
       <Box as="span" display="flex" gap="xs" alignItems="flex-start">

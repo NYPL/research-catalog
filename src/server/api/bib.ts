@@ -1,9 +1,6 @@
 import type { BibQueryParams, BibResponse } from "../../types/bibTypes"
-import {
-  isNyplBibID,
-  getBibQueryString,
-  standardizeBibId,
-} from "../../utils/bibUtils"
+import { isNyplBibID, getBibQueryString } from "../../utils/bibUtils"
+import { standardizeBibId, isValidBibId } from "../../utils/bibServerUtils"
 import nyplApiClient from "../nyplApiClient"
 import { DISCOVERY_API_SEARCH_ROUTE } from "../../config/constants"
 import { appConfig } from "../../config/appConfig"
@@ -16,6 +13,14 @@ export async function fetchBib(
   itemId?: string
 ): Promise<BibResponse | APIError> {
   const standardizedId = standardizeBibId(id)
+  const validBibId = await isValidBibId(standardizedId)
+  if (!validBibId) {
+    logServerWarn("fetchBib", `Invalid bib id provided: ${id}`)
+    return {
+      status: 404,
+      error: "Invalid bib id",
+    }
+  }
   // Redirect to bib page with standardized version of the bib ID
   if (id !== standardizedId) {
     return {
@@ -24,22 +29,28 @@ export async function fetchBib(
     }
   }
 
-  const client = await nyplApiClient()
+  let client
+  try {
+    client = await nyplApiClient()
+  } catch (error: any) {
+    logServerError("fetchBib", error)
+    return { status: 500, error: error.message || error }
+  }
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
-    await client.get(
+    client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
         itemId ? `-${itemId}` : ""
       }${getBibQueryString(bibQuery)}`
     ),
     // Don't fetch annotated marc for partner records or hold requests (item ID passed):
-    isNyplBibID(standardizedId) &&
-      !itemId &&
-      (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
-          bibQuery,
-          true
-        )}`
-      )),
+    isNyplBibID(standardizedId) && !itemId
+      ? client.get(
+          `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+            bibQuery,
+            true
+          )}`
+        )
+      : Promise.resolve(false),
   ])
 
   if (bibResponse.status === "rejected") {

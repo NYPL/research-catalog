@@ -160,7 +160,7 @@ const ListDisplay = ({ list }: { list: List }) => {
         </Link>
       </Box>
       <Flex flexDir="column">
-        <Heading level="h2" size="heading3">
+        <Heading level="h2" size="heading3" translate="no">
           {list.listName}
         </Heading>
         <Box
@@ -179,7 +179,7 @@ const ListDisplay = ({ list }: { list: List }) => {
         ) : list.description ? (
           <Box as="span" mt="m">
             <span style={{ fontWeight: "bold" }}>Description:</span>{" "}
-            {list.description}
+            <span translate="no">{list.description}</span>
           </Box>
         ) : (
           <Box as="span" mt="m" color="ui.gray.dark" fontStyle="italic">

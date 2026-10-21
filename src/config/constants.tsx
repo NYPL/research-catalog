@@ -1,7 +1,7 @@
 import Link from "../components/Link/Link"
 import type { BrowseType } from "../types/browseTypes"
 import { getSeriesSearchUrl } from "../utils/bibUtils"
-import { getContributorSearchURL } from "../utils/browseUtils"
+import { getContributorNameTitleSearchURL } from "../utils/browseUtils"
 
 export const BASE_URL = "/research/research-catalog"
 export const SITE_NAME = "Research Catalog | NYPL"
@@ -72,11 +72,11 @@ export const SEARCH_FORM_OPTIONS = {
   contributor: {
     text: "Author/Contributor",
     searchTip: (
-      <span>
+      <>
         Enter the name of an author, contributor, or organization. Use Last
         Name, First Name for more precise results. To browse a list of authors
         instead, go to <Link href="/browse/authors">Browse the Catalog</Link>.
-      </span>
+      </>
     ),
     placeholder: `${example} Hurston, Zora Neale or New York City Ballet`,
   },
@@ -99,17 +99,17 @@ export const SEARCH_FORM_OPTIONS = {
   subject: {
     text: "Subject",
     searchTip: (
-      <span>
+      <>
         Enter a subject keyword or phrase. To browse a list of Subject Headings
         instead, go to <Link href="/browse">Browse the Catalog</Link>.
-      </span>
+      </>
     ),
     placeholder: `${example} Ornithology or Greek Architecture`,
   },
   cql: {
     text: "Query",
     searchTip: (
-      <span>
+      <>
         Read our{" "}
         <Link
           isExternal
@@ -120,7 +120,7 @@ export const SEARCH_FORM_OPTIONS = {
         to learn how to construct queries or{" "}
         <Link href="https://www.nypl.org/get-help/contact-us">contact us</Link>{" "}
         for assistance.
-      </span>
+      </>
     ),
     placeholder:
       'Example: callnumber = "^*R-RMRR" AND author any "locke hobbes rousseau"',
@@ -190,13 +190,13 @@ export const DISPLAY_LINKED_FIELD_MAPPING: Record<
 > = {
   creatorLiteral: {
     label: "Author",
-    displayField: "creatorsDisplay",
-    url: (name) => getContributorSearchURL(name),
+    displayField: "creatorDisplay",
+    url: (name) => getContributorNameTitleSearchURL(name),
   },
   contributorLiteral: {
     label: "Additional authors",
-    displayField: "contributorsDisplay",
-    url: (name) => getContributorSearchURL(name),
+    displayField: "contributorDisplay",
+    url: (name) => getContributorNameTitleSearchURL(name),
   },
   seriesAddedEntry: {
     label: "Series added entry",

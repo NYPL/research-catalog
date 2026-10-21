@@ -48,7 +48,6 @@ import { tryInstantiate } from "../../../src/utils/appUtils"
 import Link from "../../../src/components/Link/Link"
 import type { HTTPStatusCode } from "../../../src/types/appTypes"
 import PageError from "../../../src/components/Error/PageError"
-import UserGuideBanner from "../../../src/components/Banners/UserGuideBanner"
 import { ManageBibInList } from "../../../src/components/List/ManageBibInList"
 import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
@@ -105,13 +104,13 @@ export default function BibPage({
   // Manage status banner display for list actions
   const [status, setStatus] = useState<StatusBannerState | null>(null)
 
-  if (errorStatus) {
+  if (errorStatus || !discoveryBibResult) {
     return (
       <PageError
         page="bib"
         errorStatus={
           // 422 = invalid bnum, which we also display as "Not found"
-          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus
+          errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus || 500
         }
       />
     )
@@ -237,9 +236,6 @@ export default function BibPage({
     <PatronDataProvider value={accountData || null}>
       <RCHead metadataTitle={metadataTitle} />
       <Layout isAuthenticated={isAuthenticated} activePage="bib">
-        <Box mb="l">
-          <UserGuideBanner />
-        </Box>
         <div
           tabIndex={-1}
           id={`${idConstants.listStatusBanner}-${bib.id}`}
@@ -250,12 +246,12 @@ export default function BibPage({
           )}
         </div>
         {findingAid && (
-          <StatusBadge mb="s" variant="informative">
+          <StatusBadge mb="s" variant="informative" translate="no">
             Finding aid available
           </StatusBadge>
         )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
-          <Heading level="h2" size="heading3">
+          <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
           </Heading>
           <ManageBibInList

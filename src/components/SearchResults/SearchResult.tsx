@@ -21,7 +21,6 @@ import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useState } from "react"
 import { idConstants } from "../../context/FocusContext"
-import { FeaturePopup } from "../Banners/FeaturePopup"
 import AvailableText from "../ItemTable/ItemAvailability/AvailableText"
 import ContactALibrarian from "../ItemTable/ItemAvailability/ContactALibrarian"
 import { isNyplBibID } from "../../utils/bibUtils"
@@ -29,17 +28,12 @@ import { isNyplBibID } from "../../utils/bibUtils"
 interface SearchResultProps {
   bib: SearchResultsBib
   isAuthenticated: boolean
-  isFirstResult?: boolean
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const SearchResult = ({
-  bib,
-  isAuthenticated,
-  isFirstResult,
-}: SearchResultProps) => {
+const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
   const separatingDot = (i) => (
     // @ts-ignore
     <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
@@ -54,15 +48,23 @@ const SearchResult = ({
       </svg>
     </Icon>
   )
+  const numItemsMessage = bib.getNumItemsMessage()
   const metadata = [
     bib.format,
     bib.publicationStatement,
-    bib.getNumItemsMessage(),
+    numItemsMessage,
   ].filter(Boolean)
 
   const joinedMetadata = metadata.reduce((acc, piece, i) => {
     if (i > 0) acc.push(separatingDot(i))
-    acc.push(<Text key={i}>{piece}</Text>)
+    acc.push(
+      <Text
+        key={i}
+        translate={piece === bib.publicationStatement ? "no" : "yes"}
+      >
+        {piece}
+      </Text>
+    )
     return acc
   }, [])
 
@@ -85,7 +87,12 @@ const SearchResult = ({
       }}
     >
       <CardContent data-testid="card-content">
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+        <Flex
+          flexDir="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          gap="l"
+        >
           <CardHeading
             level="h3"
             size="heading5"
@@ -94,37 +101,20 @@ const SearchResult = ({
           >
             <Box>
               {bib.findingAid && (
-                <StatusBadge variant="informative" mb="s">
+                <StatusBadge variant="informative" mb="s" translate="no">
                   Finding aid available
                 </StatusBadge>
               )}
-              <Link href={`${PATHS.BIB}/${bib.id}`}>{bib.titleDisplay}</Link>
+              <Link href={`${PATHS.BIB}/${bib.id}`} translate="no">
+                {bib.titleDisplay}
+              </Link>
             </Box>
           </CardHeading>
-          <Box position="relative">
-            {isFirstResult && (
-              <Box
-                position="absolute"
-                sx={{
-                  bottom: "100%",
-                  right: -10,
-                  zIndex: "100",
-                }}
-              >
-                <FeaturePopup
-                  id="listPopup"
-                  title="Save to lists"
-                  content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
-                  pointerRight="50px"
-                />
-              </Box>
-            )}
-            <ManageBibInList
-              recordId={bib.id}
-              isAuthenticated={isAuthenticated}
-              setStatus={setStatus}
-            />
-          </Box>
+          <ManageBibInList
+            recordId={bib.id}
+            isAuthenticated={isAuthenticated}
+            setStatus={setStatus}
+          />
         </Flex>
         <Box
           sx={{

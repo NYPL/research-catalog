@@ -164,7 +164,7 @@ describe("Bib Details model", () => {
         label: "Supplementary content",
         value: [
           {
-            urlText: "Image",
+            searchValue: "Image",
             url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
           },
         ],
@@ -177,7 +177,7 @@ describe("Bib Details model", () => {
         label: "Supplementary content",
         value: [
           {
-            urlText: "Image",
+            searchValue: "Image",
             url: "http://images.contentreserve.com/ImageType-100/0293-1/{C87D2BB9-0E13-4851-A9E2-547643F41A0E}Img100.jpg",
           },
         ],
@@ -210,7 +210,7 @@ describe("Bib Details model", () => {
           value: [
             {
               url: "/search?filters[placeOfPublication][0]=Mansfield%2C%20Ohio",
-              urlText: "Mansfield, Ohio",
+              searchValue: "Mansfield, Ohio",
             },
           ],
         },
@@ -225,7 +225,7 @@ describe("Bib Details model", () => {
           value: [
             {
               url: "/search?filters[donor][0]=Gift%20of%20the%20DeWitt%20Wallace%20Endowment%20Fund%2C%20named%20in%20honor%20of%20the%20founder%20of%20Reader's%20Digest",
-              urlText:
+              searchValue:
                 "Gift of the DeWitt Wallace Endowment Fund, named in honor of the founder of Reader's Digest",
             },
           ],
@@ -249,7 +249,7 @@ describe("Bib Details model", () => {
       ) as LinkedBibDetail
       expect(additionalAuthors.link).toBe("internal")
       expect(additionalAuthors.value[0].text).toContain("ballet dancer")
-      expect(additionalAuthors.value[0].url).toContain("/browse/authors/")
+      expect(additionalAuthors.value[0].url).toContain("/browse/author-title/")
     })
 
     it("creates subjects with correct internal urls", () => {
@@ -259,19 +259,29 @@ describe("Bib Details model", () => {
       expect(subjects.link).toBe("internal")
       expect(subjects.value[0].url).toContain("/browse/subjects/")
     })
+    it("sets browseValue on subjects for use in the subject index browse link", () => {
+      const subjects = bibWithSubjectHeadingsModel.bottomDetails.find(
+        (d) => d.label === "Subject"
+      ) as LinkedBibDetail
+      expect(subjects.value[0].browseValue).toEqual(
+        subjects.value[0].searchValue
+      )
+    })
     it("creates series fields and merges series uniform title into series added entry", () => {
       const series = bibWithSeriesModel.bottomDetails.find(
         (d) => d.label === "Series"
       ) as LinkedBibDetail
       expect(series.link).toBe("internal")
       expect(series.value[0].url).toContain("search?filters[series][0]")
-      expect(series.value[0].urlText).toEqual("Inediti e rarità rossiniane ;")
+      expect(series.value[0].searchValue).toEqual(
+        "Inediti e rarità rossiniane ;"
+      )
       expect(series.value[0].text).toEqual("Inediti e rarità rossiniane ; 12")
       const seriesAddedEntry = bibWithSeriesModel.bottomDetails.find(
         (d) => d.label === "Series added entry"
       ) as LinkedBibDetail
       // Value is from seriesUniformTitle
-      expect(seriesAddedEntry.value[0].urlText).toEqual(
+      expect(seriesAddedEntry.value[0].searchValue).toEqual(
         "Rossini, Gioacchino 1792-1868. Works. Selections (Boccaccini & Spada editore) ;"
       )
     })
@@ -304,6 +314,183 @@ describe("Bib Details model", () => {
     it("can handle no parallels, and no notes", () => {
       const model = bibWithNoParallelsModel
       expect(model.groupedNotes).toBeUndefined
+    })
+    it("combines parallel author display text with the primary display object", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Tolstoy, Leo, 1828-1910"],
+        creatorDisplay: [
+          {
+            displayLabel: "Tolstoy, Leo, 1828-1910",
+            name: "Tolstoy, Leo, 1828-1910",
+            nameTitle: "Tolstoy, Leo, 1828-1910",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "Толстой, Лев Николаевич, 1828-1910",
+            name: "Толстой, Лев Николаевич, 1828-1910",
+            nameTitle: "Толстой, Лев Николаевич, 1828-1910",
+          },
+        ],
+      })
+      const author = model.topDetails.find(
+        (detail) => detail.label === "Author"
+      ) as LinkedBibDetail
+      expect(author.value.map((v) => v.text)).toEqual([
+        "Толстой, Лев Николаевич, 1828-1910",
+        "Tolstoy, Leo, 1828-1910",
+      ])
+    })
+    it("excludes the creator's duplicate entry from contributorDisplay so parallels stay aligned", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Liu, Li, 1953 December 12-", "Liu, Li, 2"],
+        creatorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Liu, Li, 2",
+            name: "Liu, Li, 2",
+            nameTitle: "Liu, Li, 2",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+        ],
+        contributorLiteral: ["Chen, Xingcan"],
+        // Contributor list redundantly repeats the creator, but its parallel
+        // (translated) value is never repeated in parallelContributorsDisplay
+        contributorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Liu, Li, 2",
+            name: "Liu, Li, 2",
+            nameTitle: "Liu, Li, 2",
+          },
+          {
+            displayLabel: "Chen, Xingcan, author",
+            name: "Chen, Xingcan",
+            nameTitle: "Chen, Xingcan",
+          },
+        ],
+        // @ts-ignore
+        parallelContributorsDisplay: [
+          {
+            displayLabel: "陈星灿, author",
+            name: "陈星灿",
+            nameTitle: "陈星灿",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "陈星灿, author",
+        "Chen, Xingcan, author",
+      ])
+    })
+    it("excludes the creator duplicate entry from parallelContributorsDisplay too", () => {
+      const model = new BibDetailsModel({
+        ...parallelsBib.resource,
+        creatorLiteral: ["Liu, Li, 1953 December 12-"],
+        creatorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+        ],
+        // @ts-ignore
+        parallelCreatorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+        ],
+        contributorLiteral: ["Chen, Xingcan"],
+        // Creator is repeated on both the primary and parallel
+        // contributor sides
+        contributorDisplay: [
+          {
+            displayLabel: "Liu, Li, 1953 December 12-, author",
+            name: "Liu, Li, 1953 December 12-",
+            nameTitle: "Liu, Li, 1953 December 12-",
+          },
+          {
+            displayLabel: "Chen, Xingcan, author",
+            name: "Chen, Xingcan",
+            nameTitle: "Chen, Xingcan",
+          },
+        ],
+        // @ts-ignore
+        parallelContributorsDisplay: [
+          {
+            displayLabel: "刘莉, 1953 December 12-, author",
+            name: "刘莉, 1953 December 12-",
+            nameTitle: "刘莉, 1953 December 12-",
+          },
+          {
+            displayLabel: "陈星灿, author",
+            name: "陈星灿",
+            nameTitle: "陈星灿",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "陈星灿, author",
+        "Chen, Xingcan, author",
+      ])
+    })
+    it("excludes the creator from contributorDisplay even when there are no parallels", () => {
+      const model = new BibDetailsModel({
+        ...noParallels.resources,
+        creatorLiteral: ["Copley, Richard"],
+        creatorDisplay: [
+          {
+            displayLabel: "Copley, Richard, author",
+            name: "Copley, Richard",
+            nameTitle: "Copley, Richard",
+          },
+        ],
+        contributorLiteral: ["Copley, Richard", "Kavenoki, Severin"],
+        contributorDisplay: [
+          {
+            displayLabel: "Copley, Richard, author",
+            name: "Copley, Richard",
+            nameTitle: "Copley, Richard",
+          },
+          {
+            displayLabel: "Kavenoki, Severin, translator",
+            name: "Kavenoki, Severin",
+            nameTitle: "Kavenoki, Severin",
+          },
+        ],
+      })
+      const additionalAuthors = model.bottomDetails.find(
+        (detail) => detail.label === "Additional authors"
+      ) as LinkedBibDetail
+      expect(additionalAuthors.value.map((v) => v.text)).toEqual([
+        "Kavenoki, Severin, translator",
+      ])
     })
   })
   describe("annotated marc fields", () => {
