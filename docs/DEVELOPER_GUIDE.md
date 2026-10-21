@@ -5,6 +5,10 @@ This guide provides technical information required for developers working on the
 ## Table of contents
 
 - [Getting started](#getting-started)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
+  - [Local development](#local-development)
+  - [Troubleshooting your setup](#troubleshooting-your-setup)
 - [Development workflow](#development-workflow)
 - [Hotfixes and rolling back](#hotfixes-and-rolling-back)
 - [Alert banners](#alert-banners)
@@ -28,7 +32,84 @@ This guide provides technical information required for developers working on the
 
 ## Getting started
 
-Before contributing, please read and familiarize yourself with the [README.md](README.md).
+### Prerequisites
+
+#### Node.js
+
+The application requires the Node.js version specified in the `.nvmrc` file. We recommend using [NVM (Node Version Manager)](https://github.com/nvm-sh/nvm) to manage Node.js versions.
+
+```bash
+# Install and use the correct Node.js version
+nvm install
+nvm use
+```
+
+#### AWS credentials
+
+We store API credentials as KMS encrypted variables. Decryption (and by extension, use of these API clients) requires the developer to have AWS credentials configured locally via the AWS CLI. Reach out to DevOps to get this set up and check out [environment variables documentation](docs/ENVIRONMENT_VARIABLES.md) for more information.
+
+### Installation
+
+1. Clone the repository
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Set up your local `.env`
+   ```bash
+   cp .env.example .env
+   ```
+
+See our guide on [environment variables](docs/ENVIRONMENT_VARIABLES.md) for more details on the `.env`.
+
+### Local development
+
+#### Local authentication setup
+
+To enable login functionality in local development:
+
+1. Update your machine's `etc/hosts` file by adding:
+   ```
+   127.0.0.1       local.nypl.org
+   ```
+
+#### Running with npm
+
+1. Run:
+
+```bash
+aws sso login --profile nypl-digital-dev  #if you need to refresh the token!
+npm run dev
+```
+
+2. Access the application at http://local.nypl.org:8080/research/research-catalog
+
+This starts the development server. Next.js's Fast Refresh should automatically recompile and apply saved changes without a full reload. The SSO token lasts one hour, so you may have to log in again during development.
+
+#### Running with Docker
+
+1. Install Docker
+2. Run:
+   ```bash
+   docker-compose up --build --force-recreate
+   ```
+3. Access the application at http://localhost:8080/research/research-catalog
+
+### Troubleshooting your setup
+
+#### Common issues
+
+1. **Authentication issues**:
+
+   - Ensure your machine's `etc/hosts` file includes `127.0.0.1       local.nypl.org`
+   - Check that you're accessing the site via `local.nypl.org:8080` instead of `localhost:8080`
+   - Check that your AWS SSO token is refreshed (`aws sso login --profile nypl-digital-dev`)
+     - For more information on issues with KMS and encrypted environment variables, refer to our guide on [environment variables](docs/ENVIRONMENT_VARIABLES.md)
+
+2. **API connection issues**:
+
+   - Verify that client keys/secrets are correctly set and decrypted
+   - Check VPN connection (for QA APIs)
 
 ## Development workflow
 
@@ -42,7 +123,7 @@ When code is pushed to the `qa` branch, it is automatically deployed to the [QA 
 
 When code is pushed to the `production` branch, it is automatically deployed to the [production environment](https://nypl.org/research/research-catalog), hosted in the AWS ECS cluster `research-catalog-production` within the `nypl-digital-dev` account.
 
-There is a third ECS cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches. Deployments to `train` can be configured with the [Github Actions deploy workflow](../.github/workflows/test-and-deploy.yml).
+There is a third ECS cluster reserved for the Research Catalog, `research-catalog-train`, that is used flexibly and is often reserved for testing feature branches. Deployments to `train` can be configured with the [Github Actions deploy workflow](../.github/workflows/test-and-deploy.yml), along [these lines](https://github.com/NYPL/research-catalog/blob/21b25c3ecc8b05340d2acad2e8e3900dbbc0094b/.github/workflows/test_and_deploy.yml).
 
 ### Deployment process (staging, releasing, tagging)
 

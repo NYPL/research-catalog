@@ -19,6 +19,8 @@ import type { List, ListRecord, ListResult, ListSort } from "../types/listTypes"
 import { formatMMDDYYYY } from "../utils/dateUtils"
 import { fetchLists, createList } from "../server/api/lists"
 import { buildListRecordWithBibData } from "../utils/listUtils"
+import { logServerError } from "../utils/logUtils"
+import { callMethodWithRetries } from "../utils/serverUtils"
 
 class MyAccountModelError extends Error {
   constructor(errorDetail: string, error: Error) {
@@ -41,17 +43,42 @@ export default class MyAccount {
     this.patronId = patronId
   }
 
-  async fetchCheckouts() {
-    const request = `${this.platformBaseQuery}/checkouts`
-    try {
-      return await this.platformClient.get(request)
-    } catch (e) {
-      logger.error("MyAccount#fetchCheckouts error:", e)
-      throw new MyAccountModelError(
-        "MyAccount#fetchCheckouts error: ",
-        e.message
-      )
+  async fetchWithRetries(
+    clientForRequest: "platform" | "sierra",
+    endpoint: string,
+    operation: string,
+    retries = 3
+  ) {
+    let client
+    let baseQuery
+    if (clientForRequest === "platform") {
+      client = this.platformClient
+      baseQuery = this.platformBaseQuery
+    } else {
+      client = this.sierraClient
+      baseQuery = this.sierraBaseQuery
     }
+    try {
+      return await callMethodWithRetries<any>(
+        () => client.get(`${baseQuery}${endpoint}`),
+        `MyAccount#${operation}`,
+        { retries }
+      )
+    } catch (e) {
+      logServerError(
+        `MyAccount#${operation}`,
+        `Error after ${retries} retries: ${e.message}`
+      )
+      throw new MyAccountModelError(`MyAccount#${operation} error: `, e)
+    }
+  }
+
+  async fetchCheckouts() {
+    return await this.fetchWithRetries(
+      "platform",
+      "/checkouts",
+      "fetchCheckouts"
+    )
   }
 
   async getCheckouts() {
@@ -60,13 +87,7 @@ export default class MyAccount {
   }
 
   async fetchHolds() {
-    const request = `${this.platformBaseQuery}/holds`
-    try {
-      return await this.platformClient.get(request)
-    } catch (e) {
-      logger.error("MyAccount#fetchHolds error:", e)
-      throw new MyAccountModelError("MyAccount#fetchHolds error: ", e.message)
-    }
+    return await this.fetchWithRetries("platform", "/holds", "fetchHolds")
   }
 
   async getHolds() {
@@ -76,8 +97,10 @@ export default class MyAccount {
   }
 
   async fetchPatron() {
-    return await this.sierraClient.get(
-      `${this.sierraBaseQuery}?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields`
+    return await this.fetchWithRetries(
+      "sierra",
+      "?fields=names,barcodes,expirationDate,homeLibrary,emails,phones,fixedFields,varFields",
+      "fetchPatron"
     )
   }
 
@@ -87,7 +110,7 @@ export default class MyAccount {
   }
 
   async fetchFines() {
-    return await this.sierraClient.get(`${this.sierraBaseQuery}/fines`)
+    return await this.fetchWithRetries("sierra", "/fines", "fetchFines")
   }
 
   async getFines() {

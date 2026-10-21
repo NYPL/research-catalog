@@ -117,13 +117,9 @@ function buildFuzzyRegex(query: string): RegExp {
   return new RegExp(escapedWords.join("[^a-zA-Z0-9]*"), "gi")
 }
 
-/** Returns true if query appears in text, allowing non-alphanumeric chars between words. */
-export function fuzzyIncludes(text: string, query: string): boolean {
-  if (!text || !query) return false
-  if (text.includes(query)) return true
-  return buildFuzzyRegex(query).test(text)
+export function stripPunctuation(v: string): string {
+  return v.toLowerCase().replace(/[^\p{L}\p{N}]+/gu, "")
 }
-
 /** Splits text around fuzzy occurrences of query, returning parts and matched segments for link rendering. */
 export function splitTextByQuery(
   text: string,

@@ -9,14 +9,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added Playwright test for advanced search happy path [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+- Added Playwright tests for advanced search [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+- Added My Account dropdown navigation menu (+ refactors to login/logout redirect flow & FocusContext url parsing) [SCC-5521](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5521)
+- Added retries for Sierra requests and list fetch requests [SCC-5523](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5523)
+
+### Updated
+
+- Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
+- Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
+- Updated account error display [SCC-5494](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5494)
+
+### Removed
+
+- Removed lists feature popups [SCC-5700](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5700)
+
+## [2.1.7] 2026-10-07
 
 ### Updated
 
 - Moved `base_page.spec.ts` and `redirects.spec.ts` into `playwright/tests/parallel_tests` [SCC-5652](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5652)
-- Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
-- Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
-- Updated account error display [SCC-5494](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5494)
+- Updated regex matching between bib and AM fields to only strip punctuation for deduping [SCC-5667](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5667)
+- Correct search result list button spacing [SCC-5578](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5578)
+- Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
 
 ## [2.1.6] 2026-09-24
 
@@ -25,8 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added `author-title` route for name + title results
 
 ### Updated
-
-- Moved Playwright test patron config out of `appConfig` so the app environment and test patron are selected separately [SCC-5629](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5629)
 
 - Updated contributor linked fields to use name and title [SCC-5474](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5474)
 - Replaced non-breaking spaces in playwright test

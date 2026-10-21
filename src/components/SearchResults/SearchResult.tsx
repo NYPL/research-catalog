@@ -21,23 +21,17 @@ import { StatusBanner } from "../MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../MyAccount/Settings/StatusBanner"
 import { useState } from "react"
 import { idConstants } from "../../context/FocusContext"
-import { FeaturePopup } from "../Banners/FeaturePopup"
 import { isNyplBibID } from "../../utils/bibUtils"
 
 interface SearchResultProps {
   bib: SearchResultsBib
   isAuthenticated: boolean
-  isFirstResult?: boolean
 }
 
 /**
  * The SearchResult component displays a single search result element.
  */
-const SearchResult = ({
-  bib,
-  isAuthenticated,
-  isFirstResult,
-}: SearchResultProps) => {
+const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
   const separatingDot = (i) => (
     // @ts-ignore
     <Icon key={`dot-${i}`} size="xxsmall" ml="xs" mr="xs" pb="xxs">
@@ -91,7 +85,12 @@ const SearchResult = ({
       }}
     >
       <CardContent data-testid="card-content">
-        <Flex flexDir="row" justifyContent="space-between" alignItems="center">
+        <Flex
+          flexDir="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+          gap="l"
+        >
           <CardHeading
             level="h3"
             size="heading5"
@@ -109,30 +108,11 @@ const SearchResult = ({
               </Link>
             </Box>
           </CardHeading>
-          <Box position="relative">
-            {isFirstResult && (
-              <Box
-                position="absolute"
-                sx={{
-                  bottom: "100%",
-                  right: -10,
-                  zIndex: "100",
-                }}
-              >
-                <FeaturePopup
-                  id="listPopup"
-                  titleUpdate="Save to lists"
-                  content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
-                  pointerRight="50px"
-                />
-              </Box>
-            )}
-            <ManageBibInList
-              recordId={bib.id}
-              isAuthenticated={isAuthenticated}
-              setStatus={setStatus}
-            />
-          </Box>
+          <ManageBibInList
+            recordId={bib.id}
+            isAuthenticated={isAuthenticated}
+            setStatus={setStatus}
+          />
         </Flex>
         <Box
           sx={{
