@@ -254,11 +254,13 @@ export default function BibPage({
           <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
           </Heading>
-          <ManageBibInList
-            setStatus={setStatus}
-            recordId={bib.id}
-            isAuthenticated={isAuthenticated}
-          />
+          <Box>
+            <ManageBibInList
+              setStatus={setStatus}
+              recordId={bib.id}
+              isAuthenticated={isAuthenticated}
+            />
+          </Box>
         </Flex>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
