@@ -112,6 +112,7 @@ export default function BibPage({
           // 422 = invalid bnum, which we also display as "Not found"
           errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus || 500
         }
+        isAuthenticated={isAuthenticated}
       />
     )
   }
