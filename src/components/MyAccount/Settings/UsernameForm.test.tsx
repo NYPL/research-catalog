@@ -10,7 +10,11 @@ import { STATIC_STATUS_MESSAGES } from "../../../utils/statusUtils"
 import { FocusProvider } from "../../../context/FocusContext"
 
 describe("username form", () => {
-  const mockSetUsernameStatus = jest.fn()
+  const mockSettingsState = {
+    setStatus: jest.fn(),
+    editingField: "",
+    setEditingField: jest.fn(),
+  }
   beforeEach(() => {
     jest.clearAllMocks()
 
@@ -32,7 +36,7 @@ describe("username form", () => {
       >
         <UsernameForm
           patron={processedPatron}
-          setUsernameStatus={mockSetUsernameStatus}
+          settingsState={mockSettingsState}
         />
       </PatronDataProvider>
     </FocusProvider>
@@ -46,10 +50,7 @@ describe("username form", () => {
           pickupLocations: filteredPickupLocations,
         }}
       >
-        <UsernameForm
-          patron={emptyPatron}
-          setUsernameStatus={mockSetUsernameStatus}
-        />
+        <UsernameForm patron={emptyPatron} settingsState={mockSettingsState} />
       </PatronDataProvider>
     </FocusProvider>
   )
@@ -208,7 +209,7 @@ describe("username form", () => {
     fireEvent.click(screen.getByRole("button", { name: /save changes/i }))
 
     await waitFor(() => {
-      expect(mockSetUsernameStatus).toHaveBeenCalledWith(
+      expect(mockSettingsState.setStatus).toHaveBeenCalledWith(
         STATIC_STATUS_MESSAGES.usernameFailure
       )
     })

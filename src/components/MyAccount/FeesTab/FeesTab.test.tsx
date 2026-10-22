@@ -4,10 +4,6 @@ import { processedFines } from "../../../../__test__/fixtures/processedMyAccount
 
 import FeesTab from "./FeesTab"
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
-
 describe("FeesTab", () => {
   it("renders", () => {
     const component = render(<FeesTab fines={processedFines} />)

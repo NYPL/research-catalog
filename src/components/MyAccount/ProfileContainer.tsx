@@ -1,39 +1,25 @@
 import { useContext } from "react"
 import { PatronDataContext } from "../../context/PatronDataContext"
 import FeesBanner from "./FeesBanner"
-import ProfileHeader from "./ProfileHeader"
-import ProfileTabs from "./ProfileTabs"
-import UserGuideBanner from "../Banners/UserGuideBanner"
-import { Box, Flex } from "@nypl/design-system-react-components"
-import { FeaturePopup } from "../Banners/FeaturePopup"
+import MyAccountTabs from "./MyAccountTabs"
+import { Flex, Heading } from "@nypl/design-system-react-components"
 
 const ProfileContainer = ({ tabsPath }) => {
   const { updatedAccountData } = useContext(PatronDataContext)
+  const hasFines = updatedAccountData.fines?.total > 0
   return (
     <>
-      <Flex gap="s" flexDir="column" mb="m">
-        {updatedAccountData.fines?.total > 0 && <FeesBanner />}
-        <UserGuideBanner />
+      <Flex
+        gap="s"
+        flexDir="column"
+        mb={hasFines ? { base: "m", md: "l" } : "xs"}
+      >
+        {hasFines && <FeesBanner />}
       </Flex>
-      <ProfileHeader patron={updatedAccountData.patron} />
-      <Box position="relative" display="inline-block">
-        <Box
-          position="absolute"
-          sx={{
-            bottom: "100%",
-            left: { base: 100, sm: 200, md: 350, lg: 400 },
-            zIndex: "100",
-          }}
-        >
-          <FeaturePopup
-            id="listAccountPopup"
-            title="Save to lists"
-            content="You can now save records to one or more lists. Lists can be found and managed in the 'Lists' tab in your patron account."
-            pointerRight="50px"
-          />
-        </Box>
-      </Box>
-      <ProfileTabs activePath={tabsPath} />
+      <Heading level="h2" size="heading3" mb={{ base: "m", md: "l" }}>
+        My account
+      </Heading>
+      <MyAccountTabs activePath={tabsPath} />
     </>
   )
 }

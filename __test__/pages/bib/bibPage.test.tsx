@@ -11,8 +11,6 @@ import {
   parallelsBib as bibNoElectronicResources,
 } from "../../fixtures/bibFixtures"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
-
 describe("Bib Page with items", () => {
   beforeEach(() => {
     render(

@@ -18,10 +18,6 @@ jest.mock("../../../src/server/auth")
 jest.mock("../../../src/models/MyAccount")
 jest.mock("../../../src/server/sierraClient")
 
-jest.mock("next/router", () => ({
-  useRouter: jest.fn(),
-}))
-
 const mockRes = {
   setHeader: jest.fn(),
 }
@@ -143,31 +139,11 @@ describe("MyAccount page", () => {
         isAuthenticated={true}
       />
     )
-    expect(screen.getByText("We are unable to display", { exact: false }))
-  })
-
-  it("redirects /overdues to /account if user has no fees", async () => {
-    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      pickupLocations: filteredPickupLocations,
-      checkouts: processedCheckouts,
-      patron: processedPatron,
-      fines: { total: 0, entries: [] },
-      holds: processedHolds,
-    })
-
-    const req = {
-      ...mockReq,
-      url: "/account/overdues",
-    }
-
-    const result = await getServerSideProps({
-      req,
-      res: mockRes,
-      query: { index: ["overdues"] },
-    })
-    expect(result).toStrictEqual({
-      redirect: { destination: "/account", permanent: false },
-    })
+    expect(
+      screen.getByText("Your account details could not be loaded", {
+        exact: false,
+      })
+    )
   })
 
   it("redirects invalid paths to /account", async () => {
@@ -194,7 +170,7 @@ describe("MyAccount page", () => {
     })
   })
 
-  it("corrects invalid path to correct path, ex. /account/settings", async () => {
+  it("corrects invalid path to correct path, ex. /account/requests", async () => {
     ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
       checkouts: processedCheckouts,
       patron: processedPatron,
@@ -204,38 +180,17 @@ describe("MyAccount page", () => {
 
     const req = {
       ...mockReq,
-      url: "/account/settings/spaghetti",
+      url: "/account/requests/spaghetti",
     }
 
     const result = await getServerSideProps({
       req: req,
       res: mockRes,
-      query: { index: ["settings", "spaghetti"] },
+      query: { index: ["requests", "spaghetti"] },
     })
     expect(result).toStrictEqual({
-      redirect: { destination: "/account/settings", permanent: false },
+      redirect: { destination: "/account/requests", permanent: false },
     })
-  })
-
-  it("allows valid path to /account/settings", async () => {
-    ;(MyAccountFactory as jest.Mock).mockResolvedValueOnce({
-      checkouts: processedCheckouts,
-      patron: processedPatron,
-      fines: processedFines,
-      holds: processedHolds,
-    })
-
-    const req = {
-      ...mockReq,
-      url: "/account/settings",
-    }
-
-    const result = await getServerSideProps({
-      req: req,
-      res: mockRes,
-      query: { index: ["settings"] },
-    })
-    expect(result.props.tabsPath).toBe("settings")
   })
 
   it("allows valid path to /account/overdues", async () => {
@@ -294,27 +249,5 @@ describe("MyAccount page", () => {
       exact: false,
     })
     expect(notification).not.toBeInTheDocument()
-  })
-
-  it("renders user guide banner", () => {
-    render(
-      <MyAccount
-        isAuthenticated={true}
-        accountData={{
-          pickupLocations: filteredPickupLocations,
-          patron: processedPatron,
-          checkouts: processedCheckouts,
-          holds: processedHolds,
-          fines: { total: 0, entries: [] },
-        }}
-      />
-    )
-    const userGuideText = screen.queryByText(
-      "learn more about using the Research Catalog and requesting research materials",
-      {
-        exact: false,
-      }
-    )
-    expect(userGuideText).toBeInTheDocument()
   })
 })

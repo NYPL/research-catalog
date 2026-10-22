@@ -7,9 +7,23 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.2.0] 2026-10-22
+
 ### Added
 
-- Added Playwright tests for advanced search validation [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+- Added Playwright tests for advanced search [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
+- Added My Account dropdown navigation menu (+ refactors to login/logout redirect flow & FocusContext url parsing) [SCC-5521](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5521)
+- Added retries for Sierra requests and list fetch requests [SCC-5523](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5523)
+
+### Updated
+
+- Restructured subnav and removed user guide banners [SCC-5519](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5519)
+- Updated account tab layout and styles [SCC-5520](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5520)
+- Updated account error display [SCC-5494](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5494)
+
+### Removed
+
+- Removed lists feature popups [SCC-5700](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5700)
 
 ## [2.1.7] 2026-10-07
 

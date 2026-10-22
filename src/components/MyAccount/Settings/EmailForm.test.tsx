@@ -2,7 +2,7 @@ import { render, screen, fireEvent, waitFor } from "@testing-library/react"
 import { filteredPickupLocations } from "../../../../__test__/fixtures/processedMyAccountData"
 import { PatronDataProvider } from "../../../context/PatronDataContext"
 import { processedPatron } from "../../../../__test__/fixtures/processedMyAccountData"
-import SettingsInputForm from "./SettingsInputForm"
+import ContactInputForm from "./ContactInputForm"
 import { FocusProvider } from "../../../context/FocusContext"
 
 describe("email form", () => {
@@ -30,7 +30,7 @@ describe("email form", () => {
           pickupLocations: filteredPickupLocations,
         }}
       >
-        <SettingsInputForm
+        <ContactInputForm
           patronData={processedPatron}
           settingsState={mockSettingsState}
           inputType="emails"

@@ -1,17 +1,13 @@
 import { render, screen, fireEvent, act } from "@testing-library/react"
 import TimedLogoutModal from "./TimedLogoutModal"
 import React from "react"
-import router from "next/router"
 import { deleteCookie } from "../../utils/cookieUtils"
+import mockRouter from "next-router-mock"
 
-jest.mock("next/router", () => ({
-  __esModule: true,
-  default: { push: jest.fn() },
-}))
 jest.mock("../../utils/cookieUtils", () => ({
   deleteCookie: jest.fn(),
 }))
-jest.mock("../../server/auth", () => ({
+jest.mock("../../hooks/useAuthRedirect", () => ({
   useLogoutRedirect: jest.fn().mockReturnValue("/login"),
 }))
 
@@ -58,6 +54,7 @@ describe("Logout modal", () => {
 
   it("should log out and redirect when countdown reaches 0", async () => {
     render(<TimedLogoutModal />)
+    const routerPushSpy = jest.spyOn(mockRouter, "push")
 
     await act(() => {
       jest.advanceTimersByTime(5 * 60 * 1000)
@@ -75,11 +72,12 @@ describe("Logout modal", () => {
     }
 
     expect(deleteCookie).toHaveBeenCalledWith("accountPageExp")
-    expect(router.push).toHaveBeenCalledWith("/login")
+    expect(routerPushSpy).toHaveBeenCalledWith("/login")
   })
 
   it('should reset the timer when "Stay logged in" is clicked', async () => {
     render(<TimedLogoutModal />)
+    const routerPushSpy = jest.spyOn(mockRouter, "push")
 
     act(() => {
       jest.advanceTimersByTime(5 * 60 * 1000)
@@ -88,7 +86,7 @@ describe("Logout modal", () => {
     fireEvent.click(screen.getByText("Stay logged in"))
 
     expect(screen.queryByTestId("logout-modal")).not.toBeInTheDocument()
-    expect(router.push).not.toHaveBeenCalled()
+    expect(routerPushSpy).not.toHaveBeenCalled()
   })
 
   it("should reset the inactivity timer on user activity", async () => {

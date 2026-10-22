@@ -6,6 +6,7 @@ import {
   Button,
   SkeletonLoader,
   Banner,
+  Box,
 } from "@nypl/design-system-react-components"
 import type { TextInputRefType } from "@nypl/design-system-react-components"
 import { useContext, useRef, useState } from "react"
@@ -20,14 +21,15 @@ import { idConstants, useFocusContext } from "../../../context/FocusContext"
 
 interface UsernameFormProps {
   patron: Patron
-  setUsernameStatus
+  settingsState
 }
 
-const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
+const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
   const { getMostUpdatedSierraAccountData } = useContext(PatronDataContext)
   const [isLoading, setIsLoading] = useState(false)
   const [isEditing, setIsEditing] = useState(false)
   const [error, setError] = useState(false)
+  const { setStatus, editingField, setEditingField } = settingsState
   const { setPersistentFocus } = useFocusContext()
 
   /**
@@ -53,9 +55,12 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
   const cancelEditing = () => {
     setTempUsername(usernameInSierra)
     setIsEditing(false)
+    setEditingField("")
     setError(false)
     setTimeout(() => {
-      editingRef.current?.focus()
+      usernameInSierra
+        ? editingRef.current?.focus()
+        : addButtonRef.current?.focus()
     }, 0)
   }
 
@@ -72,7 +77,7 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
   const submitInput = async () => {
     setIsLoading(true)
     setIsEditing(false)
-    setUsernameStatus(null)
+    setStatus(null)
     const submissionInput = tempUsername === null ? "" : tempUsername
     try {
       const response = await fetch(
@@ -88,11 +93,11 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
       const responseMessage = await response.json()
       if (responseMessage !== "Username taken" && response.status === 200) {
         await getMostUpdatedSierraAccountData()
-        setUsernameStatus(STATIC_STATUS_MESSAGES.accountSuccess)
+        setStatus(STATIC_STATUS_MESSAGES.accountSuccess)
         setusernameInSierra(submissionInput)
         setTempUsername(submissionInput)
       } else {
-        setUsernameStatus(
+        setStatus(
           responseMessage === "Username taken"
             ? STATIC_STATUS_MESSAGES.usernameFailure
             : STATIC_STATUS_MESSAGES.accountFailure
@@ -101,10 +106,11 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
       }
       setPersistentFocus(idConstants.usernameStatusBanner)
     } catch (error) {
-      setUsernameStatus(STATIC_STATUS_MESSAGES.accountFailure)
+      setStatus(STATIC_STATUS_MESSAGES.accountFailure)
       console.error("Error submitting username:", error)
     } finally {
       setIsLoading(false)
+      setEditingField("")
     }
   }
 
@@ -127,6 +133,7 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
           onChange={handleInputChange}
           isClearable
           isClearableCallback={() => setError(true)}
+          translate="yes"
         />
         <Button
           aria-label="Delete username from your account"
@@ -150,45 +157,55 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
         sx={{ marginTop: "xs", width: "fill" }}
         content="If you delete your username, you will have to use your barcode to log in to your account in the future."
         variant="warning"
+        translate="yes"
       />
     </>
   )
 
   const notEditingView = (
-    <Flex alignItems="center" marginTop={{ base: "unset", md: "-xs" }}>
+    <Flex>
       {usernameInSierra ? (
         <>
           <Text
             size="body1"
-            sx={{ marginBottom: 0, width: { base: "l", sm: "250px" } }}
+            sx={{
+              marginBottom: 0,
+              width: { base: "200px", sm: "256px" },
+            }}
           >
             {usernameInSierra}
           </Text>
-          <EditButton
-            ref={editingRef}
-            buttonLabel="Edit username"
-            buttonId="edit-username-button"
+          {editingField === "" && (
+            <EditButton
+              ref={editingRef}
+              buttonLabel="Edit username"
+              buttonId="edit-username-button"
+              onClick={() => {
+                setIsEditing(true)
+                setEditingField("username")
+                setTimeout(() => {
+                  inputRef?.current?.focus()
+                }, 0)
+              }}
+            />
+          )}
+        </>
+      ) : (
+        <Box sx={{ marginTop: { base: "unset", md: "-s" } }}>
+          <AddButton
+            ref={addButtonRef}
+            label="+ Add username"
             onClick={() => {
               setIsEditing(true)
+              setEditingField("username")
+              setTempUsername("")
+              setError(true)
               setTimeout(() => {
                 inputRef?.current?.focus()
               }, 0)
             }}
           />
-        </>
-      ) : (
-        <AddButton
-          ref={editingRef}
-          label="+ Add username"
-          onClick={() => {
-            setIsEditing(true)
-            setTempUsername("")
-            setError(true)
-            setTimeout(() => {
-              inputRef?.current?.focus()
-            }, 0)
-          }}
-        />
+        </Box>
       )}
     </Flex>
   )
@@ -206,6 +223,8 @@ const UsernameForm = ({ patron, setUsernameStatus }: UsernameFormProps) => {
           ref={addButtonRef}
           label="+ Add username"
           onClick={() => {
+            setIsEditing(true)
+            setEditingField("username")
             setTempUsername("")
             setError(true)
             setTimeout(() => {

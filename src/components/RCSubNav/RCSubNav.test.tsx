@@ -5,57 +5,80 @@ import { render, screen } from "@testing-library/react"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
 
 import RCSubNav from "./RCSubNav"
+import { FocusProvider } from "../../context/FocusContext"
+import { userEvent } from "@testing-library/user-event"
+import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 
-jest.mock("next/router", () => jest.requireActual("next-router-mock"))
+jest.mock("../../hooks/useAuthRedirect")
 
 describe("RCSubNav", () => {
+  beforeEach(() => {
+    ;(useLoginRedirect as jest.Mock).mockReturnValue("/login")
+  })
+
+  const renderWithProviders = (
+    activePage,
+    isAuthenticated = false,
+    inBrowse = false
+  ) => {
+    return render(
+      <MemoryRouterProvider>
+        <FocusProvider>
+          <RCSubNav
+            activePage={activePage}
+            isAuthenticated={isAuthenticated}
+            inBrowse={inBrowse}
+          />
+        </FocusProvider>
+      </MemoryRouterProvider>
+    )
+  }
+
   it("sends you to Subject Heading Explorer", async () => {
-    render(<RCSubNav activePage="search" inBrowse={false} />, {
-      wrapper: MemoryRouterProvider,
-    })
+    renderWithProviders("search")
     const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(3)
+    expect(subNavLinks).toHaveLength(4)
   })
 
   it("labels the active link with aria-current", async () => {
-    const { rerender } = render(
-      <RCSubNav activePage="search" inBrowse={false} />,
-      {
-        wrapper: MemoryRouterProvider,
-      }
-    )
+    const { rerender } = renderWithProviders("search")
     // We expect the first link, "Search", to be active and
     // have the aria-current attribute set to "page"
     let subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks[0]).toHaveAttribute("aria-current", "page")
     expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
     expect(subNavLinks[2]).not.toHaveAttribute("aria-current")
+    expect(subNavLinks[3]).not.toHaveAttribute("aria-current")
 
-    rerender(<RCSubNav activePage="account" inBrowse={false} />)
-    // We expect the third link, "My account", to be active and
-    // have the aria-current attribute set to "page"
+    rerender(
+      <MemoryRouterProvider>
+        <FocusProvider>
+          <RCSubNav activePage="account" isAuthenticated inBrowse={false} />
+        </FocusProvider>
+      </MemoryRouterProvider>
+    )
+
     subNavLinks = screen.getAllByRole("link")
     expect(subNavLinks[0]).not.toHaveAttribute("aria-current")
     expect(subNavLinks[1]).not.toHaveAttribute("aria-current")
-    expect(subNavLinks[2]).toHaveAttribute("aria-current", "page")
+    expect(subNavLinks[2]).not.toHaveAttribute("aria-current")
+
+    // We expect the "My account" button to be active (if authenticated) and
+    // have the aria-current attribute set to "page"
+    const myAccountButton = screen.getByRole("button", { name: "My account" })
+    expect(myAccountButton).toHaveAttribute("aria-current", "page")
   })
 
-  it("does not render Log Out link if user is not logged in", () => {
-    render(
-      <RCSubNav isAuthenticated={false} activePage="search" inBrowse={false} />
-    )
-    const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(3)
-    const logoutLink = screen.queryByText("Log Out")
-    expect(logoutLink).toBeNull()
+  it("renders the user guide link", async () => {
+    renderWithProviders("search")
+    const userGuideLink = screen.queryByRole("link", { name: /guide/i })
+    expect(userGuideLink).toBeInTheDocument()
   })
-  it("does render Log Out link if user is logged in", () => {
-    render(
-      <RCSubNav isAuthenticated={true} activePage="search" inBrowse={false} />
-    )
-    const subNavLinks = screen.getAllByRole("link")
-    expect(subNavLinks).toHaveLength(4)
-    const logoutLink = screen.getByText("Log out")
-    expect(logoutLink).toBeInTheDocument()
+
+  it("renders 'Log in' link when not authenticated, which calls useLoginRedirect", async () => {
+    renderWithProviders("search")
+    const loginLink = screen.queryByRole("link", { name: "Log in" })
+    await userEvent.click(loginLink)
+    expect(useLoginRedirect).toHaveBeenCalled()
   })
 })

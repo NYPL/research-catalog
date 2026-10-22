@@ -20,12 +20,13 @@ const AddButton = forwardRef<HTMLButtonElement, AddButtonProps>(
         isDisabled={isDisabled}
         sx={{
           justifyContent: "flex-start",
-          width: { base: "100%", md: "300px" },
+          width: { base: "100%", md: "256px" },
           paddingLeft: "xs",
           paddingTop: "xs",
           paddingBottom: "xs",
           paddingRight: "xs",
         }}
+        translate="yes"
       >
         {label}
       </Button>
