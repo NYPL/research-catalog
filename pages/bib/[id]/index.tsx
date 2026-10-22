@@ -54,6 +54,7 @@ import MyAccount from "../../../src/models/MyAccount"
 import { StatusBanner } from "../../../src/components/MyAccount/Settings/StatusBanner"
 import type { StatusBannerState } from "../../../src/components/MyAccount/Settings/StatusBanner"
 import { idConstants } from "../../../src/context/FocusContext"
+import { testLinkingEntries } from "../../../__test__/fixtures/bibFixtures"
 
 interface BibPropsType {
   discoveryBibResult: DiscoveryBibResult
@@ -63,6 +64,7 @@ interface BibPropsType {
   viewAllItems?: boolean
   errorStatus?: HTTPStatusCode | null
   accountData?: any
+  linkingEntryTest?: boolean
 }
 
 /**
@@ -76,6 +78,7 @@ export default function BibPage({
   viewAllItems = false,
   errorStatus = null,
   accountData,
+  linkingEntryTest,
 }: BibPropsType) {
   const { push, query } = useRouter()
   const [bib, setBib] = useState(
@@ -250,6 +253,13 @@ export default function BibPage({
             Finding aid available
           </StatusBadge>
         )}
+        {linkingEntryTest && (
+          <Banner
+            variant="warning"
+            content={"This is a test bib with a linking entry"}
+            mb="m"
+          />
+        )}
         <Flex flexDir="row" justifyContent="space-between" alignItems="center">
           <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
@@ -400,13 +410,21 @@ export async function getServerSideProps({ params, query, req }) {
     accountData = { patron: { id: patronId }, lists }
   }
 
+  const testLinkingEntry = testLinkingEntries?.filter(
+    (entry) => String(entry.bibId) === id
+  )
+
   return {
     props: {
-      discoveryBibResult: results.discoveryBibResult,
+      discoveryBibResult: {
+        ...results.discoveryBibResult,
+        ...{ linkingEntry: testLinkingEntry },
+      },
       annotatedMarc: results.annotatedMarc,
       isAuthenticated,
       itemPage: query.item_page ? parseInt(query.item_page) : 1,
       accountData,
+      linkingEntryTest: testLinkingEntry.length > 0,
     },
   }
 }

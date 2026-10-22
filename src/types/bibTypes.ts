@@ -31,12 +31,29 @@ export interface DiscoveryBibResult {
   supplementaryContent?: SupplementaryContent[]
   contributorLiteral?: string[]
   contributorDisplay?: DisplayComponentsEntry[]
+  linkingEntry?: DiscoveryLinkedEntry[]
   holdings?: object
   owner?: { "@id": string; prefLabel: string }
   hasItemDates?: boolean
   description?: string[]
   summary?: string[]
   physicalDescription?: string[]
+}
+
+export interface DiscoveryLinkedEntry {
+  bibId: string
+  parallelDisplay: string
+  label: string
+  display: string
+  marcTag: string
+  issn?: string
+  isbn?: string
+  language?: string
+  oclc?: string
+  lccn?: string
+  hash: number
+  marcTagIndex: number
+  query: string
 }
 
 // export interface Holding {
