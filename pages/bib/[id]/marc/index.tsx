@@ -59,6 +59,7 @@ export default function MarcPage({
             ? 404
             : resolvedErrorStatus
         }
+        isAuthenticated={isAuthenticated}
       />
     )
   }

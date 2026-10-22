@@ -86,6 +86,7 @@ const Search = ({
         errorStatus={errorStatus || 500}
         errorName={errorName}
         page="search"
+        isAuthenticated={isAuthenticated}
       />
     )
   }
