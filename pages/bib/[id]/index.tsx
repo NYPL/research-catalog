@@ -254,6 +254,7 @@ export default function BibPage({
           <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
           </Heading>
+          {/* wrapping list button to guard width */}
           <Box>
             <ManageBibInList
               setStatus={setStatus}

@@ -108,6 +108,7 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
               </Link>
             </Box>
           </CardHeading>
+          {/* wrapping list button to guard width */}
           <Box>
             <ManageBibInList
               recordId={bib.id}
