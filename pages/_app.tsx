@@ -117,7 +117,9 @@ class ErrorBoundary extends Component<
 function App({ Component, pageProps }) {
   const router = useRouter()
 
-  // If WAF returns 200+HTML for /_next/data requests = throw here
+  // if a /_next/data/ request comes back as HTML instead of JSON (WAF
+  // captcha? or an upstream redirect landing on the real page),
+  // force a real page load
   useEffect(() => {
     const originalFetch = window.fetch
     window.fetch = async (...args) => {
@@ -126,12 +128,15 @@ function App({ Component, pageProps }) {
         typeof args[0] === "string" ? args[0] : (args[0] as Request).url
       if (url?.includes("/_next/data/")) {
         const contentType = response.headers.get("content-type")
-        if (
-          response.ok &&
-          !response.redirected &&
-          contentType?.includes("text/html")
-        ) {
-          throw new Error("Non-JSON response for data route")
+        if (response.ok && contentType?.includes("text/html")) {
+          console.warn("[WAF fallback] navigating away from data route", {
+            from: url,
+            to: response.url,
+            status: response.status,
+            redirected: response.redirected,
+          })
+          window.location.assign(response.url)
+          return new Promise(() => undefined)
         }
       }
       return response

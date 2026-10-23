@@ -22,7 +22,7 @@ import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
   activePage?: RCPage
-  isAuthenticated?: boolean
+  isAuthenticated: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
   bannerNotification?: string
@@ -44,6 +44,7 @@ const Layout = ({
   const { browseType } = useBrowseContext()
   const showBrowse = activePage === "browse" || activePage === "browse-results"
   const showNotification = activePage === "" || activePage === "search"
+  console.log("layout isauthenticated", isAuthenticated)
   return (
     <DSProvider>
       <Template variant="full">
