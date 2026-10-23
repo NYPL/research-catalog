@@ -1,5 +1,5 @@
 FROM node:24-alpine AS production
-
+RUN node --version
 #RUN apt-get update
 #RUN apt-get upgrade -y
 
