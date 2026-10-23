@@ -20,10 +20,16 @@ export default class SearchResultsBib extends Bib {
     this.publicationStatement = result.publicationStatement?.length
       ? result.publicationStatement[0]
       : null
-    // Potential bib level fields to check if bib has no items:
     const hasItems = !!result.items?.length
-    this.callNumber = hasItems ? null : result.shelfMark?.[0] || null
-    this.collection = hasItems ? null : result.collection?.[0] || null
+    // Suppressing call number and collection to avoid displaying them on no items/
+    // purely electronic resource bibs:
+    const suppressBibLevelFields = hasItems || this.isOnlyElectronicResources
+    this.callNumber = suppressBibLevelFields
+      ? null
+      : result.shelfMark?.[0] || null
+    this.collection = suppressBibLevelFields
+      ? null
+      : result.collection?.[0] || null
   }
 
   showViewAllItemsLink() {
