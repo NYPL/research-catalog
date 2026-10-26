@@ -7,13 +7,18 @@ import errorImage from "../../src/assets/errorImage.png"
 import { appConfig } from "../../src/config/appConfig"
 import Link from "../../src/components/Link/Link"
 import ContactUs from "../../src/components/ContactUs/ContactUs"
+import initializePatronTokenAuth from "../../src/server/auth"
 
-export default function Redirect404() {
+interface Redirect404Props {
+  isAuthenticated?: boolean
+}
+
+export default function Redirect404({ isAuthenticated }: Redirect404Props) {
   const metadataTitle = `Page not found | ${SITE_NAME}`
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="404">
+      <Layout activePage="404" isAuthenticated={isAuthenticated}>
         <Flex
           flexDir="column"
           marginTop="xxl"
@@ -50,4 +55,12 @@ export default function Redirect404() {
       </Layout>
     </>
   )
+}
+
+export async function getServerSideProps({ req }) {
+  const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
+  const isAuthenticated = patronTokenResponse.isTokenValid
+  return {
+    props: { isAuthenticated },
+  }
 }
