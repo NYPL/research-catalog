@@ -129,7 +129,7 @@ function App({ Component, pageProps }) {
       if (url?.includes("/_next/data/")) {
         const contentType = response.headers.get("content-type")
         if (response.ok && contentType?.includes("text/html")) {
-          console.warn("[WAF fallback] navigating away from data route", {
+          console.warn("got html when we wanted json", {
             from: url,
             to: response.url,
             status: response.status,

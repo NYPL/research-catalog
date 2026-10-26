@@ -248,6 +248,7 @@ export default function Browse({
 }
 
 export async function getServerSideProps({ req, params, query }) {
+  console.log("gssp browse")
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
 
   const browseTypeParam = params?.browseType?.[0]
