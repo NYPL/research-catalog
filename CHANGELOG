@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
+
 ## [2.2.0] 2026-10-22
 
 ### Added
