@@ -1,8 +1,11 @@
 import type { GetServerSideProps } from "next"
 import { getBrowseDestination } from "../../src/utils/redirectUtils"
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
-  const url = new URL(req.url, `https://${req.headers.host}`)
+export const getServerSideProps: GetServerSideProps = async ({
+  req,
+  resolvedUrl,
+}) => {
+  const url = new URL(resolvedUrl, `https://${req.headers.host}`)
 
   return {
     redirect: {
