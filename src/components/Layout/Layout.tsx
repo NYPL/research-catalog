@@ -22,7 +22,7 @@ import { useBrowseContext } from "../../context/BrowseContext"
 
 interface LayoutProps {
   activePage?: RCPage
-  isAuthenticated: boolean
+  isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
   bannerNotification?: string

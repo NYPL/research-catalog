@@ -15,7 +15,7 @@ import { useLoginRedirect } from "../../hooks/useAuthRedirect"
 interface SubNavProps {
   activePage: RCPage
   inBrowse: boolean
-  isAuthenticated: boolean
+  isAuthenticated?: boolean
 }
 
 /**
