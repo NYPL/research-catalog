@@ -32,6 +32,7 @@ export const PATHS = {
 // API Routes
 export const DISCOVERY_API_SEARCH_ROUTE = "/discovery/resources"
 export const DISCOVERY_API_BROWSE_ROUTE = "/discovery/browse"
+export const DISCOVERY_API_AUTOCOMPLETE_ROUTE = "/discovery/autocomplete"
 
 export const LOADING_RESULTS = "Loading results..."
 
