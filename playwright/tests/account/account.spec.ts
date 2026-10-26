@@ -1,7 +1,6 @@
 import { test, expect, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
 import { getTestPatron, type TestPatron } from "../../config/testPatrons"
-import { logger } from "@nypl/node-utils"
 import { setUpTestPatron } from "../utils"
 
 let page: Page
@@ -9,17 +8,6 @@ let accountPage: AccountPage
 let patron: TestPatron
 
 test.describe.serial("Account page", () => {
-  test.skip(
-    (function () {
-      const skipAccountTests = process.env.SKIP_ACCOUNT_TESTS === "true"
-      if (skipAccountTests)
-        logger.info(
-          "Skipping account tests because patron data was not reset correctly"
-        )
-      return skipAccountTests
-    })(),
-    "Skipping account tests due to patron data verification error"
-  )
   // Reset this browser's test patron, then start on home, navigate to login,
   // and wait for redirect to return to account page
   test.beforeAll(async ({ browser, browserName }) => {
