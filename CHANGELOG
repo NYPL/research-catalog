@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Updated MyAccount checkouts and holds to use PatronServices endpoints to correctly display bound-with titles [SCC-5312](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5312)
+
 ## [2.2.0] 2026-10-22
 
 ### Added
