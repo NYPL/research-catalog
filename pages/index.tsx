@@ -173,7 +173,6 @@ export default function Home({ isAuthenticated }: HomeProps) {
 }
 
 export async function getServerSideProps({ req }) {
-  console.log("gssp index")
   // Every page that needs patron data must call initializePatronTokenAuth
   // to find if the token is valid and what the patron id is.
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)

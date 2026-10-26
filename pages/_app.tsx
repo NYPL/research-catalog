@@ -117,35 +117,6 @@ class ErrorBoundary extends Component<
 function App({ Component, pageProps }) {
   const router = useRouter()
 
-  // if a /_next/data/ request comes back as HTML instead of JSON (WAF
-  // captcha? or an upstream redirect landing on the real page),
-  // force a real page load
-  useEffect(() => {
-    const originalFetch = window.fetch
-    window.fetch = async (...args) => {
-      const response = await originalFetch(...args)
-      const url =
-        typeof args[0] === "string" ? args[0] : (args[0] as Request).url
-      if (url?.includes("/_next/data/")) {
-        const contentType = response.headers.get("content-type")
-        if (response.ok && contentType?.includes("text/html")) {
-          console.warn("got html when we wanted json", {
-            from: url,
-            to: response.url,
-            status: response.status,
-            redirected: response.redirected,
-          })
-          window.location.assign(response.url)
-          return new Promise(() => undefined)
-        }
-      }
-      return response
-    }
-    return () => {
-      window.fetch = originalFetch
-    }
-  }, [])
-
   if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
 
