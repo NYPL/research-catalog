@@ -29,22 +29,28 @@ export async function fetchBib(
     }
   }
 
-  const client = await nyplApiClient()
+  let client
+  try {
+    client = await nyplApiClient()
+  } catch (error: any) {
+    logServerError("fetchBib", error)
+    return { status: 500, error: error.message || error }
+  }
   const [bibResponse, annotatedMarcResponse] = await Promise.allSettled([
-    await client.get(
+    client.get(
       `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}${
         itemId ? `-${itemId}` : ""
       }${getBibQueryString(bibQuery)}`
     ),
     // Don't fetch annotated marc for partner records or hold requests (item ID passed):
-    isNyplBibID(standardizedId) &&
-      !itemId &&
-      (await client.get(
-        `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
-          bibQuery,
-          true
-        )}`
-      )),
+    isNyplBibID(standardizedId) && !itemId
+      ? client.get(
+          `${DISCOVERY_API_SEARCH_ROUTE}/${standardizedId}.annotated-marc${getBibQueryString(
+            bibQuery,
+            true
+          )}`
+        )
+      : Promise.resolve(false),
   ])
 
   if (bibResponse.status === "rejected") {

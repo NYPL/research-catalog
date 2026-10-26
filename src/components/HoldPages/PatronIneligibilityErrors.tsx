@@ -29,7 +29,7 @@ const PatronIneligibilityErrors = ({
     ...(expired
       ? [
           <>
-            Your account has expired -- Please see{" "}
+            Your account has expired. See{" "}
             <Link isExternal href={appConfig.urls.renewCard}>
               Library Terms and Conditions -- Renewing or Validating Your
               Library Card

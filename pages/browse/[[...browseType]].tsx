@@ -78,7 +78,13 @@ export default function Browse({
   }, [isLoading])
 
   if (errorStatus || !results) {
-    return <ResultsError errorStatus={errorStatus || 500} page="browse" />
+    return (
+      <ResultsError
+        errorStatus={errorStatus || 500}
+        page="browse"
+        isAuthenticated={isAuthenticated}
+      />
+    )
   }
 
   const handlePageChange = async (page: number) => {
