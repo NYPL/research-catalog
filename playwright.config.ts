@@ -43,7 +43,7 @@ export default defineConfig({
         ...devices["Desktop Safari"],
       },
     },
-    // Account tests must be run in series with each other or else they are all updating the same user data
+    // Each browser's account tests use their own test patron (see testPatrons.ts), so they can run in parallel
     {
       name: "my account chromium-gha",
       testMatch: "account/account.spec.ts",
@@ -56,8 +56,6 @@ export default defineConfig({
     {
       name: "my account firefox-gha",
       testMatch: "account/account.spec.ts",
-
-      dependencies: ["my account chromium-gha"],
       use: {
         ...devices["Desktop Firefox"],
       },
@@ -65,7 +63,6 @@ export default defineConfig({
     {
       testMatch: "account/account.spec.ts",
       name: "my account webkit",
-      dependencies: ["my account firefox-gha"],
       use: {
         ...devices["Desktop Safari"],
       },
