@@ -1,8 +1,8 @@
 import {
   emptyPatron,
-  processedCheckoutsFromPatronServices,
+  processedCheckouts,
   processedFines,
-  processedHoldsFromPatronServices,
+  processedHolds,
   processedPatron,
 } from "../../../__test__/fixtures/processedMyAccountData"
 import MyAccount, { MyAccountFactory } from "../MyAccount"
@@ -124,12 +124,10 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount({
         platformClient: mockPlatformClient,
-        patronId: "12345",
+        patronId: "6742743",
       })
       const processedCheckoutsToTest = await fetcher.getCheckouts()
-      expect(processedCheckoutsToTest).toStrictEqual(
-        processedCheckoutsFromPatronServices
-      )
+      expect(processedCheckoutsToTest).toStrictEqual(processedCheckouts)
     })
     it("can return holds", async () => {
       const mockPlatformClient = {
@@ -137,12 +135,10 @@ describe("MyAccountModel", () => {
       }
       const fetcher = new MyAccount({
         platformClient: mockPlatformClient,
-        patronId: "12345",
+        patronId: "6742743",
       })
       const processedHoldsToTest = await fetcher.getHolds()
-      expect(processedHoldsToTest).toStrictEqual(
-        processedHoldsFromPatronServices
-      )
+      expect(processedHoldsToTest).toStrictEqual(processedHolds)
     })
     it("can return fines", async () => {
       const mockSierraClient = {
@@ -197,12 +193,10 @@ describe("MyAccountModel", () => {
       // passing in an empty object for a mock sierra client triggers a type error. ignore because we are
       // mocking the fetch calls.
       // @ts-ignore
-      const account = await MyAccountFactory({ patronId: "12345" })
+      const account = await MyAccountFactory({ patronId: "6742743" })
       expect(account.patron).toStrictEqual(processedPatron)
-      expect(account.holds).toStrictEqual(processedHoldsFromPatronServices)
-      expect(account.checkouts).toStrictEqual(
-        processedCheckoutsFromPatronServices
-      )
+      expect(account.holds).toStrictEqual(processedHolds)
+      expect(account.checkouts).toStrictEqual(processedCheckouts)
       expect(account.fines).toStrictEqual(processedFines)
       expect(account.lists).toStrictEqual(processedLists)
     })
@@ -219,7 +213,7 @@ describe("MyAccountModel", () => {
       MyAccount.prototype.fetchFines = async () => ({ total: 0, entries: [] })
       MyAccount.prototype.getLists = async () => []
 
-      const emptyAccount = await MyAccountFactory({ patronId: "12345" })
+      const emptyAccount = await MyAccountFactory({ patronId: "6742743" })
       expect(emptyAccount.patron).toStrictEqual(emptyPatron)
       expect(emptyAccount.checkouts).toStrictEqual([])
       expect(emptyAccount.holds).toStrictEqual([])
