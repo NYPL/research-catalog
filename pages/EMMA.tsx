@@ -4,10 +4,15 @@ import {
   Table,
   Text,
 } from "@nypl/design-system-react-components"
+import Image from "next/image"
 import RCHead from "../src/components/Head/RCHead"
 import Layout from "../src/components/Layout/Layout"
 import Link from "../src/components/Link/Link"
+import accountError from "../src/assets/accountError.png"
+import listsError from "../src/assets/listsError.png"
+import holdRequestError from "../src/assets/holdRequestError.png"
 
+// Temporary page to collect all our error paths
 const appErrors = [
   {
     links: [{ href: "/testError?mode=render", label: "Rendering error" }],
@@ -23,12 +28,22 @@ const appErrors = [
     ],
     code: "200",
     description:
-      "Rendering error that also errors as it tries to fall back to the error page. To render at all, must be dependency-free (no imported DS styles/components)",
+      "Rendering error that also errors as it tries to fall back to the error page. To ensure this can always render, it must be dependency-free (no imported DS styles/components)",
   },
   {
     links: [{ href: "/testError", label: "Clientside error" }],
     code: "200",
     description: "Uncaught clientside error (after page mounts)",
+  },
+  {
+    links: [
+      {
+        href: "/testError?mode=gssp",
+        label: "Uncaught serverside error",
+      },
+    ],
+    code: "500",
+    description: "Data fetching in getServerSideProps error",
   },
 
   {
@@ -48,7 +63,8 @@ const apiErrors = [
       },
     ],
     code: "200",
-    description: "Generic error, any 500 from Discovery API",
+    description: "General API error:  ES rejections, timeouts",
+    codeDA: "500",
   },
   {
     links: [
@@ -56,8 +72,8 @@ const apiErrors = [
       { href: "/bib/does-not-exist-xyz/marc", label: 'MARC page "404"' },
     ],
     code: "200",
-    description:
-      "Bib or MARC that we don't recognize and can't redirect to circ (404 from Discovery API)",
+    description: "Bib or MARC that we don't recognize as research or circ",
+    codeDA: "404",
   },
   {
     links: [
@@ -73,6 +89,7 @@ const apiErrors = [
     code: "200",
     description:
       "No results found for that request (totalResults = 0 from Discovery API)",
+    codeDA: "200",
   },
   {
     links: [
@@ -82,7 +99,8 @@ const apiErrors = [
       },
     ],
     code: "200",
-    description: "Invalid NYQL query syntax (422 from Discovery API)",
+    description: "Invalid NYQL query syntax",
+    codeDA: "422",
   },
   {
     links: [
@@ -91,6 +109,7 @@ const apiErrors = [
     code: "200",
     description:
       "Catch all for 4xx errors from Discovery API. Mainly seen for non-NYQL invalid query syntax, like unclosed quotes in search",
+    codeDA: "400 (401, 403)",
   },
 ]
 
@@ -99,8 +118,11 @@ export default function ErrorExamples() {
     <>
       <RCHead metadataTitle={"Error examples"} />
       <Layout activePage={"404"} isAuthenticated={false}>
-        <Flex flexDir="column" marginTop="m" marginBottom="xxl">
-          <h1>Error examples</h1>
+        <Flex flexDir="column" marginBottom="xxl">
+          <h1>
+            RC errors: <b>E</b>rror <b>M</b>eaning & <b>M</b>anagement <b>A</b>
+            ppendix
+          </h1>
           <Heading level="h2" size="heading5" mt="m" mb="xs">
             App errors
           </Heading>
@@ -118,6 +140,9 @@ export default function ErrorExamples() {
                 borderRight: "1px solid",
                 borderColor: "ui.gray.medium",
                 _last: { borderRight: "none" },
+              },
+              "tbody tr:last-child td": {
+                borderBottom: "none",
               },
             }}
             columnStyles={[
@@ -151,7 +176,12 @@ export default function ErrorExamples() {
           message, not a crash.
         </Text>
         <Table
-          columnHeaders={["Link", "Description", "RC status code"]}
+          columnHeaders={[
+            "Link",
+            "Description",
+            "RC status code",
+            "Discovery API status code",
+          ]}
           border="1px solid"
           borderColor="ui.gray.medium"
           showRowDividers
@@ -161,13 +191,17 @@ export default function ErrorExamples() {
               borderColor: "ui.gray.medium",
               _last: { borderRight: "none" },
             },
+            "tbody tr:last-child td": {
+              borderBottom: "none",
+            },
           }}
           columnStyles={[
-            { width: "30%", minWidth: 100 },
+            { width: "20%", minWidth: 100 },
             { width: "40%", minWidth: 100 },
-            { width: "30%", minWidth: 100 },
+            { width: "20%", minWidth: 100 },
+            { width: "20%", minWidth: 100 },
           ]}
-          tableData={apiErrors.map(({ links, code, description }) => [
+          tableData={apiErrors.map(({ links, code, description, codeDA }) => [
             <Flex
               key={links.map((l) => l.href).join(",")}
               flexDir="column"
@@ -181,8 +215,21 @@ export default function ErrorExamples() {
             </Flex>,
             description,
             code,
+            codeDA,
           ])}
         />
+        <Heading level="h2" size="heading5" mt="m" mb="xs">
+          Account errors
+        </Heading>
+        <Text mb="s">
+          Sierra API, lists (via Platform API), and hold request errors display
+          as error banners within the page. Some examples (not comprehensive):
+        </Text>
+        <Flex flexDir="row" gap="m" mt="s" mb="m">
+          <Image src={accountError} alt="Account data error" width={650} />
+          <Image src={holdRequestError} alt="Hold request error" width={500} />
+        </Flex>
+        <Image src={listsError} alt="List loading error" width={400} />
       </Layout>
     </>
   )

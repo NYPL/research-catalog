@@ -3,7 +3,7 @@ import Image from "next/image"
 import ErrorPage from "../../../pages/_error"
 import errorImage from "../../assets/errorImage.png"
 
-// for render errors in the page tree
+// for render errors within providers in the page tree
 export class PageErrorBoundary extends Component<
   { children: ReactNode; isAuthenticated?: boolean; resetKey?: string },
   { hasError: boolean }
@@ -14,6 +14,9 @@ export class PageErrorBoundary extends Component<
   }
   static getDerivedStateFromError() {
     return { hasError: true }
+  }
+  componentDidCatch(error: Error, info: { componentStack: string }) {
+    console.error("Page error boundary caught:", error, info.componentStack)
   }
   // Clear a caught error on route change
   componentDidUpdate(prevProps) {
@@ -35,7 +38,7 @@ export class PageErrorBoundary extends Component<
   }
 }
 
-// last-resort pure HTML fallback if ErrorPage itself throws while rendering inside PageErrorBoundary
+// last-resort fallback if ErrorPage itself throws while rendering inside PageErrorBoundary
 export class ErrorBoundary extends Component<
   { children: ReactNode; resetKey?: string },
   { hasError: boolean }
@@ -46,6 +49,9 @@ export class ErrorBoundary extends Component<
   }
   static getDerivedStateFromError() {
     return { hasError: true }
+  }
+  componentDidCatch(error: Error, info: { componentStack: string }) {
+    console.error("App error boundary caught:", error, info.componentStack)
   }
   componentDidUpdate(prevProps) {
     if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
