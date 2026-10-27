@@ -54,6 +54,8 @@ export interface Phone {
   type: string
 }
 
+export type NyplSource = "sierra-nypl" | "recap-pul" | "recap-cul" | "recap-hl"
+
 export interface SierraItem {
   id: string
   bibIds: string[]
@@ -78,7 +80,7 @@ export interface PlatformHold {
 
 export interface PlatformItem {
   id: string
-  nyplSource: string
+  nyplSource: NyplSource
   barcode: string
   callNumber: string
   volume: string
@@ -86,7 +88,7 @@ export interface PlatformItem {
 
 export interface PlatformBib {
   id: string
-  nyplSource: string
+  nyplSource: NyplSource
   title: string
   author: string
   isResearch: boolean
@@ -98,7 +100,7 @@ export interface PatronServicesHolds {
 }
 
 export interface PatronServicesHold {
-  requestType: string
+  requestType: "edd" | "hold"
   pickupLocation: SierraCodeName
   pickupByDate: string
   sierraHold: SierraHold
