@@ -120,11 +120,14 @@ function App({ Component, pageProps }) {
 
         <title key="main-title">{SITE_NAME}</title>
       </Head>
-      <ErrorBoundary>
+      <ErrorBoundary resetKey={router.asPath}>
         <FeedbackProvider value={null}>
           <FocusProvider>
             <BrowseProvider>
-              <PageErrorBoundary isAuthenticated={pageProps?.isAuthenticated}>
+              <PageErrorBoundary
+                isAuthenticated={pageProps?.isAuthenticated}
+                resetKey={router.asPath}
+              >
                 <Component {...pageProps} />
               </PageErrorBoundary>
             </BrowseProvider>

@@ -1,9 +1,11 @@
 import { Component, type ReactNode } from "react"
+import Image from "next/image"
 import ErrorPage from "../../../pages/_error"
+import errorImage from "../../assets/errorImage.png"
 
 // for render errors in the page tree
 export class PageErrorBoundary extends Component<
-  { children: ReactNode; isAuthenticated?: boolean },
+  { children: ReactNode; isAuthenticated?: boolean; resetKey?: string },
   { hasError: boolean }
 > {
   constructor(props) {
@@ -13,11 +15,17 @@ export class PageErrorBoundary extends Component<
   static getDerivedStateFromError() {
     return { hasError: true }
   }
+  // Clear a caught error on route change
+  componentDidUpdate(prevProps) {
+    if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false })
+    }
+  }
   render() {
     if (this.state.hasError) {
       return (
         <ErrorPage
-          activePage=""
+          activePage="error"
           statusCode={500}
           isAuthenticated={this.props.isAuthenticated}
         />
@@ -29,7 +37,7 @@ export class PageErrorBoundary extends Component<
 
 // last-resort pure HTML fallback if ErrorPage itself throws while rendering inside PageErrorBoundary
 export class ErrorBoundary extends Component<
-  { children: ReactNode },
+  { children: ReactNode; resetKey?: string },
   { hasError: boolean }
 > {
   constructor(props) {
@@ -38,6 +46,11 @@ export class ErrorBoundary extends Component<
   }
   static getDerivedStateFromError() {
     return { hasError: true }
+  }
+  componentDidUpdate(prevProps) {
+    if (this.state.hasError && prevProps.resetKey !== this.props.resetKey) {
+      this.setState({ hasError: false })
+    }
   }
   render() {
     if (this.state.hasError) {
@@ -54,27 +67,15 @@ export class ErrorBoundary extends Component<
             color: "#1b1b1b",
           }}
         >
-          <div
-            aria-hidden="true"
-            style={{
-              width: "68px",
-              height: "68px",
-              borderRadius: "50%",
-              background: "#00838A ",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              fontSize: "28px",
-              fontWeight: 700,
-              color: "#FFF",
-              marginBottom: "48px",
-              flexShrink: 0,
-            }}
-          >
-            !
-          </div>
+          <Image
+            src={errorImage}
+            alt=""
+            width={98}
+            height={68}
+            style={{ marginBottom: "48px" }}
+          />
           <h2
-            style={{ fontSize: "2rem", fontWeight: 600, marginBottom: "8px" }}
+            style={{ fontSize: "2rem", fontWeight: 500, marginBottom: "8px" }}
           >
             Something went wrong on our end
           </h2>
@@ -105,7 +106,7 @@ export class ErrorBoundary extends Component<
                 cursor: "pointer",
                 textDecoration: "underline",
                 textUnderlineOffset: "2px",
-                textDecorationThickness: "1.5px",
+                textDecorationThickness: "1px",
                 font: "inherit",
                 padding: 0,
                 color: "inherit",
@@ -116,7 +117,11 @@ export class ErrorBoundary extends Component<
             or{" "}
             <a
               href="https://www.nypl.org/get-help/contact-us"
-              style={{ color: "inherit" }}
+              style={{
+                color: "inherit",
+                textUnderlineOffset: "2px",
+                textDecorationThickness: "1px",
+              }}
             >
               contact us
             </a>{" "}
