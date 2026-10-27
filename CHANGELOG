@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
+
 ## [2.2.0] 2026-10-22
 
 ### Added
