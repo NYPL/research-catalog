@@ -248,6 +248,8 @@ export default class MyAccount {
           return {
             numberOfRenewals: numberOfRenewals,
             id: sierraItem?.id || null,
+            // Partner items do not have call numbers. Null has to be explicitly
+            // returned for JSON serialization in getServerSideProps
             callNumber: platformItem?.callNumber || null,
             barcode: platformItem?.barcode || null,
             dueDate: MyAccount.formatDate(dueDate),
