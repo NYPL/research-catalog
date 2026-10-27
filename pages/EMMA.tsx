@@ -218,12 +218,12 @@ export default function ErrorExamples() {
             codeDA,
           ])}
         />
-        <Heading level="h2" size="heading5" mt="m" mb="xs">
+        <Heading level="h2" size="heading5" mt="xl" mb="xs">
           Account errors
         </Heading>
         <Text mb="s">
-          Sierra API, lists (via Platform API), and hold request errors display
-          as error banners within the page. Some examples (not comprehensive):
+          Lists, hold requests (Platform API), and Sierra API errors display as
+          error banners within the page. Some examples (not comprehensive):
         </Text>
         <Flex flexDir="row" gap="m" mt="s" mb="m">
           <Image src={accountError} alt="Account data error" width={650} />
