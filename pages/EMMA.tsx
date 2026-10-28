@@ -236,10 +236,7 @@ export default function ErrorExamples() {
 }
 
 export async function getServerSideProps() {
-  if (
-    process.env.VERCEL_ENV === "1" ||
-    process.env.NEXT_PUBLIC_APP_ENV === "production"
-  ) {
+  if (process.env.NEXT_PUBLIC_APP_ENV === "production") {
     return { notFound: true }
   }
   return { props: {} }
