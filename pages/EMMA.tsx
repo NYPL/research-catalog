@@ -236,5 +236,9 @@ export default function ErrorExamples() {
 }
 
 export async function getServerSideProps() {
+  // Keep this reference page off of production; it's only meant to live on preview deployments.
+  if (process.env.VERCEL_ENV === "production") {
+    return { notFound: true }
+  }
   return { props: {} }
 }
