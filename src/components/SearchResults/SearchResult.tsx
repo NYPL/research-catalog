@@ -189,7 +189,7 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
                 />
               </SimpleGrid>
               {bib.noItemsBibTableData.tableHeadings.includes("Division") ? (
-                <AvailableText text="Please contact the division for information." />
+                <AvailableText text="Please contact the division for assistance." />
               ) : (
                 <Box
                   as="span"
