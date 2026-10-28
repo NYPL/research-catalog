@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
 - Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
 
 ## [2.2.0] 2026-10-22
