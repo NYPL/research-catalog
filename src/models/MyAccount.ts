@@ -356,15 +356,6 @@ export default class MyAccount {
       return "REQUEST PENDING"
     }
   }
-
-  /**
-   * getRecordId
-   * Trims actual id number off of record (checkout or hold)
-   */
-  static getRecordId(recordLink: string) {
-    const match = recordLink.match(/\/(\d+)$/)
-    return match ? match[1] : null
-  }
 }
 
 export const MyAccountFactory = async ({
