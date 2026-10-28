@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
 - Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
+- Renamed `searchNotification` to `serviceAnnouncement` banner and added to browse pages
 - Updated MyAccount checkouts and holds to use PatronServices endpoints to correctly display bound-with titles [SCC-5312](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5312)
 
 ## [2.2.0] 2026-10-22

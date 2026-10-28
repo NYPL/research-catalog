@@ -19,13 +19,11 @@ import type {
   HTTPStatusCode,
 } from "../../src/types/appTypes"
 import Search from "../../src/components/Search/Search"
-import { appConfig } from "../../src/config/appConfig"
 import { PatronDataProvider } from "../../src/context/PatronDataContext"
 import MyAccount from "../../src/models/MyAccount"
 import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
-  bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null
@@ -82,7 +80,6 @@ export default function SearchPage({
         results={results}
         metadataTitle={`Search | ${SITE_NAME}`}
         activePage="search"
-        bannerNotification={appConfig.searchNotification[appConfig.environment]}
         isAuthenticated={isAuthenticated}
         searchParams={searchParams}
         handlePageChange={handlePageChange}

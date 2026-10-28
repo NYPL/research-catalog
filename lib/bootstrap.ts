@@ -1,4 +1,4 @@
-import { config, logger, NyplSourceMapper } from "@nypl/node-utils"
+import { config, logger } from "@nypl/node-utils"
 import configJson from "../config/vercel-config.json"
 
 let initialized = false
@@ -6,7 +6,7 @@ let initialized = false
 export async function bootstrapConfig() {
   if (initialized) return
 
-  if (process.env.VERCEL) {
+  if (process.env.VERCEL === "1") {
     await config.loadConfigFromObject(configJson)
   } else {
     await config.loadConfig(process.env.NEXT_PUBLIC_APP_ENV || "development")
