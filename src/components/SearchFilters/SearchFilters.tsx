@@ -156,7 +156,9 @@ const SearchFilters = ({
                 .filter((option) => option.label && option.label.trim() !== "")
                 .map((option) => ({
                   id: option.value,
-                  name: `${option.label} (${option.count.toLocaleString()})`,
+                  name: `${option.label} (${
+                    option.count?.toLocaleString() ?? ""
+                  })`,
                 }))}
               onChange={(itemId) => {
                 handleCheckboxChange(field.value, itemId)

@@ -117,30 +117,6 @@ class ErrorBoundary extends Component<
 function App({ Component, pageProps }) {
   const router = useRouter()
 
-  // If WAF returns 200+HTML for /_next/data requests = throw here
-  useEffect(() => {
-    const originalFetch = window.fetch
-    window.fetch = async (...args) => {
-      const response = await originalFetch(...args)
-      const url =
-        typeof args[0] === "string" ? args[0] : (args[0] as Request).url
-      if (url?.includes("/_next/data/")) {
-        const contentType = response.headers.get("content-type")
-        if (
-          response.ok &&
-          !response.redirected &&
-          contentType?.includes("text/html")
-        ) {
-          throw new Error("Non-JSON response for data route")
-        }
-      }
-      return response
-    }
-    return () => {
-      window.fetch = originalFetch
-    }
-  }, [])
-
   if (typeof window !== "undefined") {
     const current = sessionStorage.getItem("currentPath")
 

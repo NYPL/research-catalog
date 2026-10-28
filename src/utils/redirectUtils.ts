@@ -1,4 +1,4 @@
-import { shepToBrowse } from "../../data/shepToBrowse"
+import shepToBrowse from "../../data/shepToBrowse.json"
 import { encodeURIComponentWithPeriods } from "./appUtils"
 
 // Given a `/subject_headings*` URL, gets redirect destination in `/browse`

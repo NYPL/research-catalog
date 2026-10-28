@@ -7,10 +7,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
+- Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
+
+## [2.2.0] 2026-10-22
+
 ### Added
 
 - Added Playwright tests for advanced search [SCC-5382](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5382)
 - Added My Account dropdown navigation menu (+ refactors to login/logout redirect flow & FocusContext url parsing) [SCC-5521](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5521)
+- Added retries for Sierra requests and list fetch requests [SCC-5523](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5523)
 
 ### Updated
 
