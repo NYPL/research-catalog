@@ -12,6 +12,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
 - Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
 
+### Fixed
+
+- Fixed the Firefox Playwright test for an invalid advanced search date, which failed in every CI run [SCC-5758](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5758)
+
 ## [2.2.0] 2026-10-22
 
 ### Added
