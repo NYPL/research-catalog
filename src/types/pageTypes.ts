@@ -9,3 +9,4 @@ export type RCPage =
   | "hold"
   | "404"
   | ""
+  | "error"
