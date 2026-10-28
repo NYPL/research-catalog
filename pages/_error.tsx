@@ -17,12 +17,12 @@ type ErrorPageProps = {
 }
 
 // Global catch-all for unhandled errors.
-function Error({ activePage, statusCode }: ErrorPageProps) {
+function Error({ activePage, statusCode, isAuthenticated }: ErrorPageProps) {
   const metadataTitle = `Error | ${SITE_NAME}`
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage={activePage}>
+      <Layout activePage={activePage} isAuthenticated={isAuthenticated}>
         <Flex
           flexDir="column"
           marginTop="xxl"
