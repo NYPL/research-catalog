@@ -247,6 +247,8 @@ export const AVAILABILITY_KEYS = {
   AVAILABLE_OFFSITE_NYPL: "availableOffsiteNypl",
   NOT_AVAILABLE_OFFSITE_NYPL: "notAvailableOffsiteNypl",
 
+  AVAILABLE_EDGE_CASE_NOT_REQUESTABLE: "availableEdgeCaseNotRequestable",
+
   NOT_AVAILABLE_EDGE_CASE: "notAvailableEdgeCase",
   AVAILABLE_EDGE_CASE: "availableEdgeCase",
 }

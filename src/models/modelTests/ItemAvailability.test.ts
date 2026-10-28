@@ -265,6 +265,8 @@ describe("ItemAvailability model", () => {
         isSpecRequestable: false,
         hasBarcode: true,
         hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
       })
       expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE)
     })
@@ -279,8 +281,64 @@ describe("ItemAvailability model", () => {
         isSpecRequestable: false,
         hasBarcode: true,
         hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
       })
       expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_EDGE_CASE)
+    })
+
+    it("returns AVAILABLE_EDGE_CASE_NOT_REQUESTABLE when it's an edge case and no request buttons would display", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: false,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
+    })
+
+    it("does not return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE if onsite use is requestable", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).not.toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
+    })
+
+    it("does not return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE if EDD scan is requestable", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: false,
+        isEDDRequestable: true,
+      })
+      expect(availability.key).not.toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
     })
   })
 })

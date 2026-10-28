@@ -74,6 +74,8 @@ export default class Item {
       hasBarcode: !!this.barcode,
       isPartnerReCAP: this.isPartnerReCAP(),
       hasFindingAid: !!bib.findingAid,
+      isPhysicallyRequestable: this.isPhysicallyRequestable,
+      isEDDRequestable: this.isEDDRequestable,
     })
     this.buildingLocation = item.buildingLocation?.[0]?.prefLabel || null
   }

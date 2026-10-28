@@ -25,6 +25,7 @@ const {
   AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   NOT_AVAILABLE_EDGE_CASE,
+  AVAILABLE_EDGE_CASE_NOT_REQUESTABLE,
   AVAILABLE_EDGE_CASE,
 } = AVAILABILITY_KEYS
 
@@ -89,6 +90,13 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       return (
         <AvailableText
           text={"Please contact the division to schedule an appointment."}
+        />
+      )
+    case AVAILABLE_EDGE_CASE_NOT_REQUESTABLE:
+      return (
+        <AvailableText
+          item={item}
+          text={"Please contact the division to request this item."}
         />
       )
     // No message displays for these cases

@@ -24,6 +24,7 @@ const {
   NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
   NOT_AVAILABLE_EDGE_CASE,
   AVAILABLE_EDGE_CASE,
+  AVAILABLE_EDGE_CASE_NOT_REQUESTABLE,
 } = AVAILABILITY_KEYS
 
 class ItemAvailability {
@@ -38,6 +39,8 @@ class ItemAvailability {
   isOnsite: boolean
   hasBarcode: boolean
   isPartnerReCAP: boolean
+  isPhysicallyRequestable: boolean
+  isEDDRequestable: boolean
 
   constructor({
     isAvailable,
@@ -48,6 +51,8 @@ class ItemAvailability {
     hasBarcode,
     isPartnerReCAP,
     hasFindingAid,
+    isPhysicallyRequestable,
+    isEDDRequestable,
   }) {
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
@@ -58,6 +63,8 @@ class ItemAvailability {
     this.hasBarcode = hasBarcode
     this.isPartnerReCAP = isPartnerReCAP
     this.hasFindingAid = hasFindingAid
+    this.isPhysicallyRequestable = isPhysicallyRequestable
+    this.isEDDRequestable = isEDDRequestable
     this.key = this.buildKey()
   }
   buildKey() {
@@ -136,6 +143,15 @@ class ItemAvailability {
     }
     if (this.isReCAP && !this.isAvailable && !this.isPartnerReCAP) {
       return NOT_AVAILABLE_OFFSITE_NYPL
+    }
+
+    // If it's an availability edge case AND no request buttons will display:
+    if (
+      !this.aeonUrl &&
+      !this.isPhysicallyRequestable &&
+      !this.isEDDRequestable
+    ) {
+      return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
     }
 
     // Catch-alls:
