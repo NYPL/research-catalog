@@ -24,7 +24,6 @@ import MyAccount from "../../src/models/MyAccount"
 import { logSingleFilterNoResults } from "../../src/utils/logUtils"
 
 interface SearchPageProps {
-  bannerContent?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   errorStatus?: HTTPStatusCode | null

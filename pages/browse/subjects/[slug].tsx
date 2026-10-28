@@ -16,7 +16,6 @@ import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
 
 interface SubjectHeadingResultsProps {
-  bannerContent?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   slug: string
@@ -31,7 +30,6 @@ interface SubjectHeadingResultsProps {
  * and other filters.
  */
 export default function SubjectHeadingResults({
-  bannerContent,
   results,
   isAuthenticated,
   errorStatus = null,
