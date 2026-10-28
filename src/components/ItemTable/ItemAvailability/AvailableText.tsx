@@ -12,7 +12,7 @@ const AvailableText = ({ text, item }: { text: ReactNode; item?: Item }) => {
           color="ui.gray.semi-dark"
           iconRotation="rotate180"
           size="medium"
-          mt="2px"
+          mt="1px"
         />
         {item && !item.collection ? (
           <ContactALibrarian item={item} />
