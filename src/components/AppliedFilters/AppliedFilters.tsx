@@ -38,14 +38,6 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
 
   const handleRemove = (tag: TagSetFilterDataProps) => {
     if (tag.label === "Clear filters") {
-      if (
-        Object.keys(getQueryWithoutFiltersOrPage(router.query)).length === 0
-      ) {
-        router.push({
-          pathname: "/",
-        })
-        return
-      }
       setPersistentFocus(idConstants.filterResultsHeading)
       router.push({
         pathname: router.pathname,
@@ -66,19 +58,12 @@ const AppliedFilters = ({ aggregations }: { aggregations: Aggregation[] }) => {
     if (tagSetData.length > 1) {
       // If there's still 1 or more filter tags after removing one
       setPersistentFocus(idConstants.activeFiltersHeading)
-    } else if (
-      Object.keys(getQueryWithoutFiltersOrPage(router.query)).length > 0
-    ) {
+    } else {
       setPersistentFocus(
         isLargerThanSmallTablet
           ? idConstants.filterResultsHeading
           : idConstants.searchFiltersModal
       )
-    } else {
-      router.push({
-        pathname: "/",
-      })
-      return
     }
     router.push(
       {
