@@ -33,7 +33,7 @@ const SearchResultItems = ({ itemTableData }: SearchResultItemsProps) => {
                 style={{
                   width: "181px",
                   minWidth: "60px",
-                  verticalAlign: "top",
+                  verticalAlign: "center",
                   paddingTop: "4px",
                 }}
               >
