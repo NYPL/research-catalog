@@ -45,7 +45,7 @@ export const appConfig: AppConfig = {
       ;NREUM.loader_config={accountID:"121334",trustKey:"121334",agentID:"1589215819",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215819"};
       ;NREUM.info={beacon:"gov-bam.nr-data.net",errorBeacon:"gov-bam.nr-data.net",licenseKey:"NRBR-652886ebb1f9416c1bb",applicationID:"1589215819",sa:1};`,
   },
-  searchNotification: {
+  serviceAnnouncement: {
     development: "",
     qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
     production: "",
