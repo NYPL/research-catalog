@@ -56,7 +56,7 @@ const ItemAvailability = ({ item }: ItemAvailabilityProps) => {
       return (
         <AvailableText
           text={
-            "Item located on open reference shelves. Please contact a staff member in this room for assistance if you cannot locate this item."
+            "Item located on open reference shelves. Please contact a staff member in this room for assistance if you cannot find this item."
           }
         />
       )

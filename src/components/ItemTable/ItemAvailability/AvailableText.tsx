@@ -6,7 +6,7 @@ import ContactALibrarian from "./ContactALibrarian"
 const AvailableText = ({ text, item }: { text: ReactNode; item?: Item }) => {
   return (
     <>
-      <Box as="span" display="flex" gap="xs" alignItems="flex-start">
+      <Box as="span" display="flex" gap="xxs" alignItems="flex-start">
         <Icon
           name="errorOutline"
           color="ui.gray.semi-dark"
@@ -18,7 +18,6 @@ const AvailableText = ({ text, item }: { text: ReactNode; item?: Item }) => {
           <ContactALibrarian item={item} />
         ) : (
           <Text size="body2" isItalic>
-            {" "}
             {text}
           </Text>
         )}

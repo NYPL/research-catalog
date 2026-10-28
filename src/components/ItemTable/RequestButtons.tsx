@@ -1,4 +1,4 @@
-import { Box } from "@nypl/design-system-react-components"
+import { Flex } from "@nypl/design-system-react-components"
 import Link from "../Link/Link"
 
 import type Item from "../../models/Item"
@@ -23,7 +23,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
   }
 
   return (
-    <Box sx={{ a: { marginRight: "xs" } }} className="no-print">
+    <Flex flexWrap="wrap" columnGap="xs" rowGap="8px" className="no-print">
       {item.aeonUrl && (
         <Link
           isExternal
@@ -47,6 +47,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           Request for onsite use
         </Link>
       )}
+
       {item.isEDDRequestable && (
         <Link
           href={`/hold/request/${item.bibId}-${item.id}/edd`}
@@ -57,7 +58,7 @@ const RequestButtons = ({ item }: RequestButtonsProps) => {
           Request scan
         </Link>
       )}
-    </Box>
+    </Flex>
   )
 }
 
