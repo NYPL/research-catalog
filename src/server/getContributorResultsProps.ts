@@ -14,7 +14,6 @@ export async function getContributorResultsProps(
   { req, query, params },
   field: "contributorLiteral" | "contributorNameTitle"
 ) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const slug: string = params.slug as string
   const role = typeof query.role === "string" ? query.role : null
@@ -56,7 +55,6 @@ export async function getContributorResultsProps(
 
   return {
     props: {
-      bannerNotification,
       results,
       isAuthenticated,
       metadataTitle: `Search | ${SITE_NAME}`,

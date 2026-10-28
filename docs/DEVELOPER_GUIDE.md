@@ -165,9 +165,9 @@ Note: this rollback only changes the running image in the ECS deployment, it doe
 
 ## Alert banners
 
-A common shortcut we take in our deployment workflow is publishing an alert banner to the home/search pages. A banner with title "Service announcement" is set up to display when there's a value set in [`appConfig.searchNotification`](../src/config/appConfig.ts) (see QA for an example banner which is always up).
+A common shortcut we take in our deployment workflow is publishing an alert banner to the home/search/browse pages. A banner with title "Service announcement" is set up to display when there's a value set in [`appConfig.serviceAnnouncement`](../src/config/appConfig.ts) (see QA for an example banner which is always up).
 
-To publish a new banner, you only need to populate the `production` value of `searchNotification` with the banner content and push to `production`.
+To publish a new banner, you only need to populate the `production` value of `serviceAnnouncement` with the banner content and push to `production`.
 
 Adding/removing the alert banner does not require a changelog entry or a full release.
 

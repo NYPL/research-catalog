@@ -41,7 +41,6 @@ interface SearchProps {
   results: SearchResultsResponse
   metadataTitle: string
   activePage: RCPage
-  bannerNotification: string
   isAuthenticated: boolean
   searchParams: SearchParams
   handlePageChange: (page: number) => Promise<void>
@@ -56,7 +55,6 @@ const Search = ({
   results,
   metadataTitle,
   activePage,
-  bannerNotification,
   isAuthenticated,
   searchParams,
   handlePageChange,
@@ -109,7 +107,6 @@ const Search = ({
     <>
       <RCHead metadataTitle={metadataTitle} />
       <Layout
-        bannerNotification={bannerNotification}
         searchAggregations={aggs}
         searchResultsCount={totalResults}
         isAuthenticated={isAuthenticated}
