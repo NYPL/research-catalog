@@ -15,10 +15,13 @@ function TestError({ mode }: { mode?: string }) {
   return null
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, res }) {
   // ?mode=gssp throws during data-fetching, before React ever renders
   if (query.mode === "gssp") {
     throw new Error("Throwing an uncaught getServerSideProps error")
+  }
+  if (query.statusCode) {
+    res.statusCode = Number(query.statusCode)
   }
   return { props: { mode: query.mode || null } }
 }
