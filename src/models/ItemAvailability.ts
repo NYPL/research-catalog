@@ -51,8 +51,9 @@ class ItemAvailability {
     hasBarcode,
     isPartnerReCAP,
     hasFindingAid,
-    isPhysicallyRequestable,
-    isEDDRequestable,
+    // defaults
+    isPhysicallyRequestable = true,
+    isEDDRequestable = false,
   }) {
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
