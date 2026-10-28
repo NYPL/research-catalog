@@ -17,7 +17,10 @@ import {
 } from "../../../__test__/fixtures/listFixtures"
 import type { Hold } from "../../types/myAccountTypes"
 import { fetchLists } from "../../server/api/lists"
-import { holds, checkouts } from "../../../__test__/fixtures/patronServicesData"
+import {
+  holds,
+  checkouts,
+} from "../../../__test__/fixtures/rawPatronServicesAccountData"
 jest.mock("../../server/api/lists")
 
 describe("MyAccountModel", () => {
