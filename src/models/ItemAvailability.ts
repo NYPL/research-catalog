@@ -52,7 +52,7 @@ class ItemAvailability {
     isPartnerReCAP,
     hasFindingAid,
     // defaults
-    isPhysicallyRequestable = true,
+    isPhysicallyRequestable = false,
     isEDDRequestable = false,
   }) {
     this.isReCAP = isReCAP
