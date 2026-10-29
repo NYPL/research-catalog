@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.2.1] 2026-10-29
+
+### Added
+
+- Reworked error handling to add two app-wide error boundaries: `PageErrorBoundary` and `ErrorBoundary`
+
 ### Updated
 
 - Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
