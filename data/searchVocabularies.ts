@@ -2109,11 +2109,11 @@
       "count": 23,
       "label": "Pohnpeian"
     },
-    {
-      "value": "lang:",
-      "count": 23,
-      "label": "t"
-    },
+    // {
+    //   "value": "lang:",
+    //   "count": 23,
+    //   "label": "t"
+    // },
     {
       "value": "lang:ada",
       "count": 22,
@@ -2559,11 +2559,11 @@
       "count": 7,
       "label": "Kanuri"
     },
-    {
-      "value": "lang:pa",
-      "count": 7,
-      "label": "|"
-    },
+    // {
+    //   "value": "lang:pa",
+    //   "count": 7,
+    //   "label": "|"
+    // },
     {
       "value": "lang:ale",
       "count": 6,
