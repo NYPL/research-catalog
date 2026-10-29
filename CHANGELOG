@@ -14,6 +14,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Renamed `searchNotification` to `serviceAnnouncement` banner and added to browse pages
 - Updated MyAccount checkouts and holds to use PatronServices endpoints to correctly display bound-with titles [SCC-5312](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5312)
 
+### Fixed
+
+- Fixed the Firefox Playwright test for an invalid advanced search date, which failed in every CI run [SCC-5758](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5758)
+
 ## [2.2.0] 2026-10-22
 
 ### Added
