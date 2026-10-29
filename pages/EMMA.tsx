@@ -175,6 +175,14 @@ export default function ErrorExamples() {
           upstream failure). Handled as a normal 200 page showing an error
           message, not a crash.
         </Text>
+        <Text mb="s">
+          Note: where possible, we display errors within the page the user is
+          already on– ex, you don&apos;t go to the 404 page when you have no
+          results for a search, you just see &apos;No results found&apos; within
+          the search page. This is reflected in the RC status codes, which
+          usually swallow the Discovery API code (but we could surface that
+          code, in the HTTP response or in the interface or both).
+        </Text>
         <Table
           columnHeaders={[
             "Link",
