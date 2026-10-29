@@ -1,4 +1,5 @@
 import { Heading, Text, Flex } from "@nypl/design-system-react-components"
+import { useRouter } from "next/router"
 import Layout from "../src/components/Layout/Layout"
 import { SITE_NAME } from "../src/config/constants"
 import RCHead from "../src/components/Head/RCHead"
@@ -16,13 +17,18 @@ type ErrorPageProps = {
   isAuthenticated?: boolean
 }
 
-// Global catch-all for unhandled errors.
-function Error({ activePage, statusCode }: ErrorPageProps) {
+// Global catch-all error page.
+function Error({ activePage, statusCode, isAuthenticated }: ErrorPageProps) {
+  const { query } = useRouter()
+  // Test-only hook
+  if (query.breakErrorPage === "1") {
+    throw new globalThis.Error("Simulated ErrorPage render failure")
+  }
   const metadataTitle = `Error | ${SITE_NAME}`
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage={activePage}>
+      <Layout activePage={activePage} isAuthenticated={isAuthenticated}>
         <Flex
           flexDir="column"
           marginTop="xxl"

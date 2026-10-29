@@ -17,6 +17,14 @@ export async function fetchSearchResults(
 ): Promise<SearchResultsResponse | APIError> {
   const { q, field } = searchParams
 
+  // Test-only hook
+  if (q === "__FORCE_500__") {
+    return {
+      status: 500,
+      error: "Simulated 500 error from Platform API response",
+    }
+  }
+
   // If user is making a search for bib number (i.e. field set to "standard_number"),
   // standardize the bib ID and pass it as the search keywords
   const keywordsOrBibId = field === "standard_number" ? standardizeBibId(q) : q

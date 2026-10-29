@@ -26,11 +26,7 @@ export default function Home({ isAuthenticated }: HomeProps) {
   return (
     <>
       <RCHead metadataTitle={SITE_NAME} />
-      <Layout
-        isAuthenticated={isAuthenticated}
-        activePage=""
-        bannerNotification={appConfig.searchNotification[appConfig.environment]}
-      >
+      <Layout isAuthenticated={isAuthenticated} activePage="">
         {isLoading ? (
           <SkeletonLoader showImage={false} />
         ) : (

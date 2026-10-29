@@ -25,7 +25,7 @@ describe("Layout", () => {
   })
   it("should show search banners", () => {
     render(<Layout activePage="search"></Layout>)
-    expect(screen.getAllByRole("complementary")).toHaveLength(1)
+    expect(screen.getByText("Articles Plus")).toBeInTheDocument()
   })
   it("renders a feedback form component", () => {
     render(<Layout activePage="search"></Layout>)

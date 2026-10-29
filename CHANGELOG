@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.2.1] 2026-10-29
+
+### Added
+
+- Reworked error handling to add two app-wide error boundaries: `PageErrorBoundary` and `ErrorBoundary`
+
+### Updated
+
+- Each browser's Playwright account tests now use their own test patron and run in parallel [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
+- Move SHEP redirects into `pages/subject_headings` to resolve Next `index.tsx` bug
+- Renamed `searchNotification` to `serviceAnnouncement` banner and added to browse pages
+
+### Fixed
+
+- Fixed the Firefox Playwright test for an invalid advanced search date, which failed in every CI run [SCC-5758](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5758)
+
 ## [2.2.0] 2026-10-22
 
 ### Added

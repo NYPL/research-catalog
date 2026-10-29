@@ -23,9 +23,15 @@ export default async function initializePatronTokenAuth(reqCookies: unknown) {
   type cookie = typeof reqCookies & { nyplIdentityPatron?: string }
 
   const nyplIdentityPatron = (reqCookies as cookie)?.nyplIdentityPatron
-  const nyplIdentityCookieObject = nyplIdentityPatron
-    ? JSON.parse(nyplIdentityPatron)
-    : {}
+  let nyplIdentityCookieObject: { access_token?: string } = {}
+  if (nyplIdentityPatron) {
+    try {
+      nyplIdentityCookieObject = JSON.parse(nyplIdentityPatron)
+    } catch (error) {
+      // Malformed cookie value, treat patron as unauthenticated rather than throwing
+      console.error("initializePatronTokenAuth: failed to parse cookie", error)
+    }
+  }
   const patronTokenResponse = {
     isTokenValid: false,
     // Token is undefined from the cookie
