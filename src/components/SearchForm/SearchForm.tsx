@@ -73,16 +73,17 @@ const SearchForm = ({
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
-    const params = {
-      q: searchTerm,
-      field: searchScope,
-    }
-    const queryString = getSearchQuery(params)
-    if (queryString === "") {
+    const trimmedSearchTerm = searchTerm.trim()
+    if (!trimmedSearchTerm) {
       setPersistentFocus("mainContent-textInput")
       setInvalidText("Enter a valid search term.")
       return
     }
+
+    const queryString = getSearchQuery({
+      q: searchTerm,
+      field: searchScope,
+    })
     setPersistentFocus(idConstants.searchResultsHeading)
     await router.push(`${PATHS.SEARCH}${queryString}`, undefined, {
       scroll: false,
