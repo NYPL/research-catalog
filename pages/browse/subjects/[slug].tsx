@@ -16,7 +16,6 @@ import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import MyAccount from "../../../src/models/MyAccount"
 
 interface SubjectHeadingResultsProps {
-  bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   slug: string
@@ -31,7 +30,6 @@ interface SubjectHeadingResultsProps {
  * and other filters.
  */
 export default function SubjectHeadingResults({
-  bannerNotification,
   results,
   isAuthenticated,
   errorStatus = null,
@@ -74,7 +72,6 @@ export default function SubjectHeadingResults({
   return (
     <PatronDataProvider value={accountData || null}>
       <Search
-        bannerNotification={bannerNotification}
         results={results}
         isAuthenticated={isAuthenticated}
         errorStatus={errorStatus}
@@ -90,7 +87,6 @@ export default function SubjectHeadingResults({
 }
 
 export async function getServerSideProps({ req, query, params }) {
-  const bannerNotification = process.env.SEARCH_RESULTS_NOTIFICATION || ""
   const patronTokenResponse = await initializePatronTokenAuth(req.cookies)
   const slug: string = params.slug as string
 
@@ -123,7 +119,7 @@ export async function getServerSideProps({ req, query, params }) {
   let accountData = null
   if (isAuthenticated) {
     const patronId = patronTokenResponse.decodedPatron.sub
-    const accountModel = new MyAccount(null, patronId)
+    const accountModel = new MyAccount({ patronId })
     const lists = await accountModel.getLists(patronId)
 
     accountData = { patron: { id: patronId }, lists }
@@ -131,7 +127,6 @@ export async function getServerSideProps({ req, query, params }) {
 
   return {
     props: {
-      bannerNotification,
       results,
       isAuthenticated,
       metadataTitle: `Search | ${SITE_NAME}`,

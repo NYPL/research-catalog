@@ -1,7 +1,7 @@
 export interface AppConfig {
   environment: Environment
   apiEndpoints: Record<string, APIEndpoints>
-  searchNotification: any
+  serviceAnnouncement: Record<string, string>
   urls: Record<string, string>
   closedLocations: string[]
   recapClosedLocations: string[]

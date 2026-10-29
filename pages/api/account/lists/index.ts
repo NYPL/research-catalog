@@ -20,7 +20,7 @@ export default async function handler(
   const { sort } = req.query
 
   try {
-    const accountModel = new MyAccount(null, cookiePatronId)
+    const accountModel = new MyAccount({ patronId: cookiePatronId })
     const lists = await accountModel.getLists(cookiePatronId, sort as ListSort)
     res.status(200).json({ lists })
   } catch (error) {
