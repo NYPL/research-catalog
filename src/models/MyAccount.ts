@@ -234,20 +234,15 @@ export default class MyAccount {
     try {
       return checkouts
         .map((checkout: PatronServicesCheckout) => {
-          const {
-            dueDate,
-            numberOfRenewals,
-            sierraItem,
-            platformItem,
-            platformBib,
-          } = checkout
+          const { id, dueDate, numberOfRenewals, platformItem, platformBib } =
+            checkout
 
           const bibId = platformBib?.id || null
           const isNyplOwned = MyAccount.getIsNyplOwned(platformBib)
 
           return {
             numberOfRenewals: numberOfRenewals,
-            id: sierraItem?.id || null,
+            id: id,
             // Partner items do not have call numbers. Null has to be explicitly
             // returned for JSON serialization in getServerSideProps
             callNumber: platformItem?.callNumber || null,
