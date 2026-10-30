@@ -7,6 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+### Updated
+
+- Removed the parallel_tests folder and the separate account projects from the Playwright config (SCC-5627)
+
 ## [2.2.1] 2026-10-29
 
 ### Added
