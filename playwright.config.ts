@@ -70,7 +70,7 @@ export default defineConfig({
   ],
 
   webServer: {
-    // locally, tests run against the production build instead of the dev server
+    // running tests locally against a production build instead of the dev server
     // (in CI build has already happened)
     command: process.env.CI
       ? "npm run start"

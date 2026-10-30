@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 
 // uses testError.tsx which throws multiple kinds of errors
+// must be run against a production instance, otherwise dev mode errors will interrupt
 test.describe("App error boundaries", () => {
   test("renders the error page on a render error during initial page load", async ({
     page,
