@@ -77,4 +77,18 @@ test.describe("App error boundaries", () => {
       })
     ).toBeVisible()
   })
+
+  test("renders the 404 page with a real HTTP 404 on an unmatched route", async ({
+    page,
+  }) => {
+    const response = await page.goto("this-route-does-not-exist")
+
+    expect(response?.status()).toBe(404)
+    await expect(
+      page.getByRole("heading", {
+        level: 3,
+        name: "We couldn't find that page",
+      })
+    ).toBeVisible()
+  })
 })
