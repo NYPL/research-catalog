@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test"
 
 // uses testError.tsx which throws multiple kinds of errors
+// must be run against a production instance, otherwise dev mode errors will interrupt
 test.describe("App error boundaries", () => {
   test("renders the error page on a render error during initial page load", async ({
     page,
@@ -74,6 +75,20 @@ test.describe("App error boundaries", () => {
       page.getByRole("heading", {
         level: 3,
         name: "Something went wrong on our end",
+      })
+    ).toBeVisible()
+  })
+
+  test("renders the 404 page with a real HTTP 404 on an unmatched route", async ({
+    page,
+  }) => {
+    const response = await page.goto("this-route-does-not-exist")
+
+    expect(response?.status()).toBe(404)
+    await expect(
+      page.getByRole("heading", {
+        level: 3,
+        name: "We couldn't find that page",
       })
     ).toBeVisible()
   })

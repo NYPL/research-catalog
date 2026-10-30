@@ -70,7 +70,11 @@ export default defineConfig({
   ],
 
   webServer: {
-    command: process.env.CI ? "npm run start" : "npm run dev",
+    // running tests locally against a production build instead of the dev server
+    // (in CI build has already happened)
+    command: process.env.CI
+      ? "npm run start"
+      : "npm run build && npm run start",
     url: "http://local.nypl.org:8080/research/research-catalog",
     reuseExistingServer: true,
     timeout: 120000,

@@ -2,8 +2,9 @@ import { useEffect } from "react"
 
 // Test page for checking uncaught errors against the _app error boundaries
 function TestError({ mode }: { mode?: string }) {
-  // ?mode=render throws during render
-  if (mode === "render") {
+  // ?mode=render throws during render, but only clientside so the initial
+  // SSR response still succeeds and the error is caught by the client boundary
+  if (mode === "render" && typeof window !== "undefined") {
     throw new Error("Throwing a client side test error")
   }
 
