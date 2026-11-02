@@ -1,7 +1,6 @@
-/* eslint-disable @typescript-eslint/naming-convention */
+import type { ReactElement } from "react"
 
-// Item structure coming from the Search Results API response
-
+// Item structure coming from the Discovery API search response
 export interface DiscoveryItemResult {
   uri?: string
   idNyplSourceId?: ItemSourceID
@@ -24,12 +23,22 @@ export interface DiscoveryItemResult {
   owner?: JSONLDValue[]
   physicalLocation?: string[]
   recapCustomerCode?: string[]
+  collection?: Collection[]
+  buildingLocation?: JSONLDValue[]
+}
+
+export interface Collection {
+  "@id": string
+  prefLabel?: string
+  buildingLocationLabel?: string
+  locationsPath?: string
 }
 
 export interface ItemLocation extends JSONLDValue {
   customerCode?: string
   prefLabel?: string
   endpoint?: string
+  collectionAccessType?: string
 }
 
 export type ItemLocationKey = "Schwarzman" | "Performing" | "Schomburg"
@@ -38,7 +47,10 @@ export interface ItemTableParams {
   isDesktop?: boolean
   inSearchResult?: boolean
   isArchiveCollection?: boolean
+  collection?: Collection
 }
+
+export type ItemCollectionAccess = "shelf" | "desk" | "special" | null
 
 export interface ItemMetadata {
   id?: string
@@ -49,12 +61,16 @@ export interface ItemMetadata {
   notificationText?: string
 }
 
+export interface NoItemsBibTableData {
+  tableHeadings: string[]
+  tableData: ReactElement[][]
+  inSearchResult: boolean
+}
+
 export interface ItemDateRange {
   gte: string
   lte: string
 }
-
-/* eslint-disable @typescript-eslint/naming-convention */
 
 export interface JSONLDValue {
   "@id": string

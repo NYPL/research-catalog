@@ -1,109 +1,344 @@
 import { AVAILABILITY_KEYS } from "../../config/constants"
 import ItemAvailability from "../ItemAvailability"
 
-describe("ItemAvailabilityFactory", () => {
-  it("not available", () => {
-    const availability = new ItemAvailability({
-      isAvailable: false,
-      isReCAP: false,
-      aeonUrl: null,
-      findingAid: null,
-      isSpecRequestable: false,
+describe("ItemAvailability model", () => {
+  describe("desk items", () => {
+    it("returns AVAILABLE_DESK for available desk items", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: "desk",
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_DESK)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE)
+
+    it("returns NOT_AVAILABLE_DESK for unavailable desk items", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: "desk",
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_DESK)
+    })
   })
-  it("recap not special collections", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: true,
-      aeonUrl: null,
-      findingAid: null,
-      isSpecRequestable: false,
+
+  describe("shelf items", () => {
+    it("returns AVAILABLE_SHELF for available onsite shelf items", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: "shelf",
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_SHELF)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_GENERAL_COLLECTIONS)
+
+    it("returns NOT_AVAILABLE_SHELF for unavailable onsite shelf items", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: "shelf",
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_SHELF)
+    })
   })
-  it("recap aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: true,
-      aeonUrl: "spaghetti.com",
-      findingAid: null,
-      isSpecRequestable: true,
+
+  describe("special collections appt needed with Aeon link", () => {
+    it("returns AVAILABLE_APPT_AEON for available special collections items with an Aeon URL", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: "https://specialcollections.nypl.org/aeon",
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_APPT_AEON)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON)
+
+    it("returns NOT_AVAILABLE_APPT_AEON for unavailable special collections items with an Aeon URL", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: "https://specialcollections.nypl.org/aeon",
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_APPT_AEON)
+    })
   })
-  it("recap aeon finding aid", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: true,
-      aeonUrl: "spaghetti.com",
-      findingAid: "meatballs.com",
-      isSpecRequestable: true,
+
+  describe("special collections appt needed without Aeon link", () => {
+    it("returns AVAILABLE_APPT_NO_AEON_FINDING_AID when the bib has a finding aid", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: true,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.AVAILABLE_APPT_NO_AEON_FINDING_AID
+      )
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_AEON_FINDING_AID)
+
+    it("returns AVAILABLE_APPT_NO_AEON_NO_FINDING_AID when the bib does not have finding aid", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
+      )
+    })
+
+    it("returns NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID when the bib does not have finding aid", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: true,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID
+      )
+    })
+
+    it("returns NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID when the bib does not have finding aid", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: true,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
+      )
+    })
   })
-  it("onsite aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: false,
-      aeonUrl: "spaghetti.com",
-      findingAid: false,
-      isSpecRequestable: true,
+
+  describe("General collections, no barcode", () => {
+    it("returns AVAILABLE_GENERAL_NO_BARCODE for available, onsite, general collections items without barcodes", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: false,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.AVAILABLE_GENERAL_NO_BARCODE
+      )
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON)
+
+    it("returns NOT_AVAILABLE_GENERAL_NO_BARCODE for unavailable, onsite, general collections items without barcodes", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: false,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.NOT_AVAILABLE_GENERAL_NO_BARCODE
+      )
+    })
   })
-  it("onsite aeon finding aid", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: false,
-      aeonUrl: "spaghetti.com",
-      findingAid: "meatballs.com",
-      isSpecRequestable: true,
+
+  describe("Partner items", () => {
+    it("returns AVAILABLE_PARTNER for available partner items (always in recap)", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: true,
+        isPartnerReCAP: true,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_PARTNER)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_AEON_FINDING_AID)
+
+    it("returns NOT_AVAILABLE_PARTNER for unavailable partner items (always in recap)", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: true,
+        isPartnerReCAP: true,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_PARTNER)
+    })
   })
-  it("onsite finding aid - no aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: false,
-      aeonUrl: false,
-      findingAid: "meatballs.com",
-      isSpecRequestable: true,
+
+  describe("NYPL ReCAP", () => {
+    it("returns AVAILABLE_OFFSITE_NYPL for available NYPL items stored in recap", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: true,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_OFFSITE_NYPL)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.ONSITE_FINDING_AID)
+
+    it("returns NOT_AVAILABLE_OFFSITE_NYPL for unavailable NYPL items stored in recap", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: true,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.NOT_AVAILABLE_OFFSITE_NYPL
+      )
+    })
   })
-  it("recap finding aid - no aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: true,
-      aeonUrl: false,
-      findingAid: "meatballs.com",
-      isSpecRequestable: true,
+
+  describe("catch alls", () => {
+    it("returns AVAILABLE_EDGE_CASE when no other rule matches an available item", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE)
     })
-    expect(availability.key).toBe(AVAILABILITY_KEYS.RECAP_FINDING_AID)
-  })
-  it("recap no finding aid no aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: true,
-      aeonUrl: false,
-      findingAid: false,
-      isSpecRequestable: true,
+
+    it("returns NOT_AVAILABLE_EDGE_CASE when no other rule matches an unavailable item", () => {
+      const availability = new ItemAvailability({
+        isAvailable: false,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).toBe(AVAILABILITY_KEYS.NOT_AVAILABLE_EDGE_CASE)
     })
-    expect(availability.key).toBe(
-      AVAILABILITY_KEYS.RECAP_NO_FINDING_AID_NO_AEON
-    )
-  })
-  it("recap no finding aid no aeon", () => {
-    const availability = new ItemAvailability({
-      isAvailable: true,
-      isReCAP: false,
-      aeonUrl: false,
-      findingAid: false,
-      isSpecRequestable: true,
+
+    it("returns AVAILABLE_EDGE_CASE_NOT_REQUESTABLE when it's an edge case and no request buttons would display", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: false,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
     })
-    expect(availability.key).toBe(
-      AVAILABILITY_KEYS.ONSITE_NO_FINDING_AID_NO_AEON
-    )
+
+    it("does not return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE if onsite use is requestable", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: true,
+        isEDDRequestable: false,
+      })
+      expect(availability.key).not.toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
+    })
+
+    it("does not return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE if EDD scan is requestable", () => {
+      const availability = new ItemAvailability({
+        isAvailable: true,
+        isReCAP: false,
+        isPartnerReCAP: false,
+        aeonUrl: null,
+        collectionAccessType: null,
+        isSpecRequestable: false,
+        hasBarcode: true,
+        hasFindingAid: false,
+        isPhysicallyRequestable: false,
+        isEDDRequestable: true,
+      })
+      expect(availability.key).not.toBe(
+        AVAILABILITY_KEYS.AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+      )
+    })
   })
 })

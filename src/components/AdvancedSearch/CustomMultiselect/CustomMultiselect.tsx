@@ -49,6 +49,10 @@ export interface MultiSelectProps {
   translate?: boolean
   /** Value used to set the width for the MultiSelect component. Defaults to "full". */
   width?: "fitContent" | "full"
+  /** Margin top applied to the root element. */
+  mt?: string | { [breakpoint: string]: string }
+  /** Additional style overrides applied to the root element. */
+  sx?
 }
 
 /* Reservoir Multiselect modified to accept items with an optional grouping title. */
@@ -68,6 +72,8 @@ const CustomMultiselect = ({
   onClear,
   translate = true,
   width = "full",
+  mt,
+  sx,
 }: MultiSelectProps) => {
   const mainId = field.value
   const groups = groupedItems ?? [
@@ -241,7 +247,9 @@ const CustomMultiselect = ({
       id={mainId}
       ref={containerRef}
       width={width === "full" ? "100%" : "fit-content"}
+      mt={mt}
       __css={styles.base}
+      sx={sx}
     >
       <Accordion
         accordionData={[

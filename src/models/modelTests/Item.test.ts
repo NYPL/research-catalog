@@ -40,7 +40,7 @@ describe("Item model", () => {
     })
 
     it("initializes the Item's access message", () => {
-      expect(item.accessMessage).toBe("Use in library")
+      expect(item.accessMessage).toBe("")
     })
 
     it("initializes the Item's call number", () => {

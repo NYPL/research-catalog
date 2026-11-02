@@ -14,14 +14,14 @@ const FeedbackForm = () => {
     isOpen,
     onClose,
     onOpen,
-    itemMetadata,
-    setItemMetadata,
+    feedbackMetadata,
+    setFeedbackMetadata,
     errorStatus,
     setErrorStatus,
   } = useContext(FeedbackContext)
 
   const closeAndResetFeedbackData = () => {
-    setItemMetadata(null)
+    setFeedbackMetadata(null)
 
     setErrorStatus(null)
     onClose()
@@ -62,10 +62,12 @@ const FeedbackForm = () => {
 
   const notificationText = errorStatus
     ? "You are asking for help or information about a page error"
-    : itemMetadata?.notificationText
-    ? itemMetadata.notificationText
-    : itemMetadata?.callNumber
-    ? `You are asking for help or information about ${itemMetadata.callNumber} in this record.`
+    : feedbackMetadata?.notificationText
+    ? feedbackMetadata.notificationText
+    : feedbackMetadata?.callNumber
+    ? `You are asking for help or information about ${feedbackMetadata.callNumber} in this record.`
+    : feedbackMetadata && "title" in feedbackMetadata && feedbackMetadata.title
+    ? `You are asking for help or information about ${feedbackMetadata.title} in this record.`
     : null
 
   return (
@@ -78,7 +80,7 @@ const FeedbackForm = () => {
       title="Help and Feedback"
       showEmailField
       hiddenFields={{
-        ...itemMetadata,
+        ...feedbackMetadata,
         ...(errorStatus != null && { error: String(errorStatus) }),
       }}
       notificationText={notificationText}

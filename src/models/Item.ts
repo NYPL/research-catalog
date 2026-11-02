@@ -2,6 +2,8 @@ import type {
   JSONLDValue,
   ItemLocation,
   DiscoveryItemResult,
+  ItemCollectionAccess,
+  Collection,
 } from "../types/itemTypes"
 import { locationLabelToKey } from "../utils/itemUtils"
 import type Bib from "./Bib"
@@ -10,6 +12,7 @@ import {
   defaultNYPLLocation,
   partnerDefaultLocation,
   locationEndpointsMap,
+  accessMessageMap,
 } from "../utils/itemUtils"
 import { appConfig } from "../config/appConfig"
 import ItemAvailability from "./ItemAvailability"
@@ -37,15 +40,15 @@ export default class Item {
   isEDDRequestable: boolean
   bibTitle: string
   availability: ItemAvailability
+  collection?: Collection
+  buildingLocation?: string
 
   constructor(item: DiscoveryItemResult, bib: Bib) {
     this.id = item.uri || ""
     this.bibId = bib.id
     this.status = item.status?.length ? item.status[0] : null
     this.source = item.idNyplSourceId ? item.idNyplSourceId["@type"] : null
-    this.accessMessage = item.accessMessage?.length
-      ? item.accessMessage[0]?.prefLabel
-      : ""
+    this.accessMessage = this.getAccessMessageFromItem(item)
     this.callNumber = item.shelfMark?.length ? item.shelfMark[0] : null
     this.volume = item.enumerationChronology?.length
       ? item.enumerationChronology[0]
@@ -61,13 +64,20 @@ export default class Item {
     this.isPhysicallyRequestable = item.physRequestable
     this.isEDDRequestable = item.eddRequestable
     this.bibTitle = bib.titleDisplay
+    this.collection = item.collection ? item.collection[0] : null
     this.availability = new ItemAvailability({
       isSpecRequestable: item.specRequestable,
       isAvailable: this.isAvailable,
       isReCAP: this.isReCAP,
       aeonUrl: this.aeonUrl,
-      findingAid: bib.findingAid,
+      collectionAccessType: this.getCollectionAccessTypeFromItem(item),
+      hasBarcode: !!this.barcode,
+      isPartnerReCAP: this.isPartnerReCAP(),
+      hasFindingAid: !!bib.findingAid,
+      isPhysicallyRequestable: this.isPhysicallyRequestable,
+      isEDDRequestable: this.isEDDRequestable,
     })
+    this.buildingLocation = item.buildingLocation?.[0]?.prefLabel || null
   }
 
   // Item availability is determined by the existence of status id in the availability ids list
@@ -98,8 +108,9 @@ export default class Item {
 
   // Pre-processing logic for setting Item holding location
   getLocationFromItem(item: DiscoveryItemResult): ItemLocation {
-    let location = defaultNYPLLocation
-    if (this.isPartnerReCAP) location = partnerDefaultLocation
+    let location = { ...defaultNYPLLocation }
+
+    if (this.isPartnerReCAP()) location = { ...partnerDefaultLocation }
 
     // Check for existence of Location object in API response
     const itemLocationFromAPI = item.holdingLocation?.length
@@ -108,13 +119,46 @@ export default class Item {
 
     // If location exists in the API response, parse the label and set branch endpoint
     if (itemLocationFromAPI) {
-      location = itemLocationFromAPI
+      location = { ...itemLocationFromAPI }
 
       // Set branch endpoint based on API location label
       const locationKey = locationLabelToKey(location.prefLabel)
       location.endpoint = locationEndpointsMap[locationKey] || null
     }
+
+    // If reference item, display the more specific holding location label
+    // Otherwise, use the building location
+    const itemCollectionAccess = this.getCollectionAccessTypeFromItem(item)
+    if (itemCollectionAccess !== "shelf" && itemCollectionAccess !== "desk") {
+      const buildingLocation = item.buildingLocation?.[0]?.prefLabel
+      if (buildingLocation) location.prefLabel = buildingLocation
+    }
+
+    if (location.prefLabel === "Offsite") {
+      location.prefLabel = "Offsite storage"
+    }
     return location
+  }
+  getCollectionAccessTypeFromItem(
+    item: DiscoveryItemResult
+  ): ItemCollectionAccess {
+    return item.holdingLocation?.length
+      ? (item.holdingLocation[0]?.collectionAccessType as ItemCollectionAccess)
+      : null
+  }
+
+  getAccessMessageFromItem(item: DiscoveryItemResult) {
+    if (!item.accessMessage?.length) return ""
+    const message = item.accessMessage[0]
+    const idString = message?.["@id"] || ""
+    const code = idString.split(":").pop() || ""
+
+    // Don't display some access messages
+    if (["1", "2", "-"].includes(code)) return ""
+
+    if (message?.prefLabel) return message.prefLabel
+
+    return accessMessageMap[code] || ""
   }
 
   // Determine if item is Non-NYPL ReCAP by existence of "Recap" string in item source attribute

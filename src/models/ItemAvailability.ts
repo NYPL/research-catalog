@@ -1,19 +1,30 @@
 import { AVAILABILITY_KEYS } from "../config/constants"
+import type { ItemCollectionAccess } from "../types/itemTypes"
+
+/* Availability keys describe an availability status, and correspond to the message displayed
+ ** below the request buttons on an item. Note: Many of these do not display a
+ ** message (see the corresponding component). */
 
 const {
-  EDGE_CASE,
-  RECAP_GENERAL_COLLECTIONS,
-  ONSITE_GENERAL_COLLECTIONS,
-  NOT_AVAILABLE,
-  // special collections availability keys
-  RECAP_AEON,
-  ONSITE_AEON,
-  ONSITE_AEON_FINDING_AID,
-  RECAP_AEON_FINDING_AID,
-  ONSITE_FINDING_AID,
-  RECAP_FINDING_AID,
-  ONSITE_NO_FINDING_AID_NO_AEON,
-  RECAP_NO_FINDING_AID_NO_AEON,
+  AVAILABLE_DESK,
+  NOT_AVAILABLE_DESK,
+  AVAILABLE_SHELF,
+  NOT_AVAILABLE_SHELF,
+  AVAILABLE_GENERAL_NO_BARCODE,
+  NOT_AVAILABLE_GENERAL_NO_BARCODE,
+  AVAILABLE_PARTNER,
+  NOT_AVAILABLE_PARTNER,
+  AVAILABLE_OFFSITE_NYPL,
+  NOT_AVAILABLE_OFFSITE_NYPL,
+  AVAILABLE_APPT_AEON,
+  NOT_AVAILABLE_APPT_AEON,
+  AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID,
+  AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID,
+  NOT_AVAILABLE_EDGE_CASE,
+  AVAILABLE_EDGE_CASE,
+  AVAILABLE_EDGE_CASE_NOT_REQUESTABLE,
 } = AVAILABILITY_KEYS
 
 class ItemAvailability {
@@ -21,72 +32,131 @@ class ItemAvailability {
   isAvailable: boolean
   isReCAP: boolean
   aeonUrl: string
-  findingAid: string
-  isSpecRequestable?: boolean
+  isInCollection: boolean
+  hasFindingAid: boolean
+  collectionAccessType: ItemCollectionAccess
+  isSpecRequestable: boolean
   isOnsite: boolean
+  hasBarcode: boolean
+  isPartnerReCAP: boolean
+  isPhysicallyRequestable: boolean
+  isEDDRequestable: boolean
 
   constructor({
     isAvailable,
     isReCAP,
     aeonUrl,
-    findingAid,
+    collectionAccessType,
     isSpecRequestable,
+    hasBarcode,
+    isPartnerReCAP,
+    hasFindingAid,
+    // defaults
+    isPhysicallyRequestable = false,
+    isEDDRequestable = false,
   }) {
-    this.findingAid = findingAid
     this.isReCAP = isReCAP
     this.isAvailable = isAvailable
+    this.collectionAccessType = collectionAccessType
     this.aeonUrl = aeonUrl
     this.isOnsite = !this.isReCAP
     this.isSpecRequestable = isSpecRequestable
+    this.hasBarcode = hasBarcode
+    this.isPartnerReCAP = isPartnerReCAP
+    this.hasFindingAid = hasFindingAid
+    this.isPhysicallyRequestable = isPhysicallyRequestable
+    this.isEDDRequestable = isEDDRequestable
     this.key = this.buildKey()
   }
   buildKey() {
-    // All unavailable records have the same messaging.
-    // general collections messages
-    if (!this.isAvailable) {
-      return NOT_AVAILABLE
-    }
-    if (this.isReCAP && !this.isSpecRequestable) {
-      return RECAP_GENERAL_COLLECTIONS
-    }
-    if (this.isOnsite && !this.isSpecRequestable) {
-      return ONSITE_GENERAL_COLLECTIONS
-    }
-    // special collections messaging
-    if (this.aeonUrl && this.isReCAP && !this.findingAid) {
-      return RECAP_AEON
-    }
-    if (this.aeonUrl && this.isReCAP && this.findingAid) {
-      return RECAP_AEON_FINDING_AID
-    }
-    if (this.aeonUrl && this.isOnsite && !this.findingAid) {
-      return ONSITE_AEON
-    }
-    if (this.isOnsite && this.aeonUrl && this.findingAid) {
-      return ONSITE_AEON_FINDING_AID
-    }
-    if (this.isOnsite && this.findingAid && !this.aeonUrl) {
-      return ONSITE_FINDING_AID
-    }
-    if (this.isReCAP && this.findingAid && !this.aeonUrl) {
-      return RECAP_FINDING_AID
+    if (
+      this.collectionAccessType === "desk" &&
+      this.isAvailable &&
+      !this.isReCAP
+    ) {
+      return AVAILABLE_DESK
     }
     if (
-      this.isOnsite &&
-      !this.findingAid &&
-      !this.aeonUrl &&
-      this.isSpecRequestable
+      this.collectionAccessType === "desk" &&
+      !this.isAvailable &&
+      !this.isReCAP
     ) {
-      return ONSITE_NO_FINDING_AID_NO_AEON
+      return NOT_AVAILABLE_DESK
     }
     if (
-      this.isReCAP &&
-      !this.findingAid &&
-      !this.aeonUrl &&
-      this.isSpecRequestable
+      this.collectionAccessType === "shelf" &&
+      this.isAvailable &&
+      !this.isReCAP
     ) {
-      return RECAP_NO_FINDING_AID_NO_AEON
-    } else return EDGE_CASE
+      return AVAILABLE_SHELF
+    }
+    if (
+      this.collectionAccessType === "shelf" &&
+      !this.isAvailable &&
+      !this.isReCAP
+    ) {
+      return NOT_AVAILABLE_SHELF
+    }
+
+    if (this.aeonUrl && this.isAvailable && this.isSpecRequestable) {
+      return AVAILABLE_APPT_AEON
+    }
+    if (this.aeonUrl && !this.isAvailable && this.isSpecRequestable) {
+      return NOT_AVAILABLE_APPT_AEON
+    }
+    if (!this.aeonUrl && this.isAvailable && this.isSpecRequestable) {
+      return this.hasFindingAid
+        ? AVAILABLE_APPT_NO_AEON_FINDING_AID
+        : AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
+    }
+    if (!this.aeonUrl && !this.isAvailable && this.isSpecRequestable) {
+      return this.hasFindingAid
+        ? NOT_AVAILABLE_APPT_NO_AEON_FINDING_AID
+        : NOT_AVAILABLE_APPT_NO_AEON_NO_FINDING_AID
+    }
+
+    if (
+      !this.hasBarcode &&
+      !this.isReCAP &&
+      !this.isSpecRequestable &&
+      this.isAvailable
+    ) {
+      return AVAILABLE_GENERAL_NO_BARCODE
+    }
+    if (
+      !this.hasBarcode &&
+      !this.isReCAP &&
+      !this.isSpecRequestable &&
+      !this.isAvailable
+    ) {
+      return NOT_AVAILABLE_GENERAL_NO_BARCODE
+    }
+
+    if (this.isReCAP && this.isAvailable && this.isPartnerReCAP) {
+      return AVAILABLE_PARTNER
+    }
+    if (this.isReCAP && !this.isAvailable && this.isPartnerReCAP) {
+      return NOT_AVAILABLE_PARTNER
+    }
+
+    if (this.isReCAP && this.isAvailable && !this.isPartnerReCAP) {
+      return AVAILABLE_OFFSITE_NYPL
+    }
+    if (this.isReCAP && !this.isAvailable && !this.isPartnerReCAP) {
+      return NOT_AVAILABLE_OFFSITE_NYPL
+    }
+
+    // If it's an availability edge case AND no request buttons will display:
+    if (
+      !this.aeonUrl &&
+      !this.isPhysicallyRequestable &&
+      !this.isEDDRequestable
+    ) {
+      return AVAILABLE_EDGE_CASE_NOT_REQUESTABLE
+    }
+
+    // Catch-alls:
+    return !this.isAvailable ? NOT_AVAILABLE_EDGE_CASE : AVAILABLE_EDGE_CASE
   }
 }
 

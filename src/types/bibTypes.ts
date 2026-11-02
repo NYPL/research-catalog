@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/naming-convention */
-import type { DiscoveryItemResult, JSONLDValue } from "./itemTypes"
+import type { Collection, DiscoveryItemResult, JSONLDValue } from "./itemTypes"
 import type { Aggregation, ItemFilterQueryParams } from "./filterTypes"
 import type { HTTPStatusCode } from "./appTypes"
 import type { AnnotatedMarc } from "./marcTypes"
@@ -17,8 +17,10 @@ export interface DiscoveryBibResult {
   creatorLiteral?: string[]
   creatorDisplay?: DisplayComponentsEntry[]
   title?: string[]
+  collection?: Collection[]
   format?: format[]
   publicationStatement?: string[]
+  shelfMark?: string[]
   dateStartYear?: number
   dateEndYear?: number
   electronicResources?: ElectronicResource[]
@@ -102,4 +104,11 @@ export type SubjectHeading = {
   uuid?: string
   bib_count?: number
   desc_count?: number
+}
+
+export interface BibMetadata {
+  id?: string
+  callNumber?: string
+  title?: string
+  notificationText?: string
 }

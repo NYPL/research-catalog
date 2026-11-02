@@ -10,7 +10,9 @@ import type { HTTPStatusCode } from "../types/appTypes"
 export const FeedbackContext = createContext<FeedbackContextType | null>(null)
 
 export const FeedbackProvider = ({ children, value }) => {
-  const [itemMetadata, setItemMetadata] = useState(value?.itemMetadata || null)
+  const [feedbackMetadata, setFeedbackMetadata] = useState(
+    value?.feedbackMetadata || null
+  )
   const [errorStatus, setErrorStatus] = useState<HTTPStatusCode>(
     value?.error || null
   )
@@ -30,8 +32,8 @@ export const FeedbackProvider = ({ children, value }) => {
         FeedbackBox,
         isOpen,
         onClose,
-        itemMetadata,
-        setItemMetadata,
+        feedbackMetadata,
+        setFeedbackMetadata,
         errorStatus,
         setErrorStatus,
         openFeedbackFormWithError,
