@@ -3,25 +3,32 @@ import React from "react"
 import styles from "../../../styles/components/Layout.module.scss"
 import Link from "../Link/Link"
 import type { BrowseType } from "../../types/browseTypes"
+import ServiceAnnouncementBanner from "./ServiceAnnouncementBanner"
 
 interface BrowseBannerProps {
   browseType: BrowseType
+  announcementContent?: string
 }
 
 /**
  * Renders browse information in a DS banner.
  */
-const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
+const BrowseBanners = ({
+  browseType,
+  announcementContent,
+}: BrowseBannerProps) => {
   return (
     <Flex
       align="center"
       direction="column"
+      gap="s"
       sx={{
         px: { base: "s", md: "m", xl: "s" },
         pt: "l",
         pb: "xs",
       }}
     >
+      <ServiceAnnouncementBanner bannerContent={announcementContent} />
       <Banner
         key={browseType}
         className={`${styles.banner} no-print`}
@@ -87,4 +94,4 @@ const BrowseBanner = ({ browseType }: BrowseBannerProps) => {
   )
 }
 
-export default BrowseBanner
+export default BrowseBanners

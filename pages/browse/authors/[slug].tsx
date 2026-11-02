@@ -8,7 +8,6 @@ import { PatronDataProvider } from "../../../src/context/PatronDataContext"
 import { getContributorResultsProps } from "../../../src/server/getContributorResultsProps"
 
 interface ContributorResultsProps {
-  bannerNotification?: string
   results: SearchResultsResponse
   isAuthenticated: boolean
   slug: string
@@ -24,7 +23,6 @@ interface ContributorResultsProps {
  * and other filters.
  */
 export default function ContributorResults({
-  bannerNotification,
   results,
   isAuthenticated,
   errorStatus = null,
@@ -68,7 +66,6 @@ export default function ContributorResults({
   return (
     <PatronDataProvider value={accountData || null}>
       <Search
-        bannerNotification={bannerNotification}
         results={results}
         isAuthenticated={isAuthenticated}
         errorStatus={errorStatus}

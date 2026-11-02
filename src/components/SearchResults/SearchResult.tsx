@@ -110,11 +110,14 @@ const SearchResult = ({ bib, isAuthenticated }: SearchResultProps) => {
               </Link>
             </Box>
           </CardHeading>
-          <ManageBibInList
-            recordId={bib.id}
-            isAuthenticated={isAuthenticated}
-            setStatus={setStatus}
-          />
+          {/* wrapping list button to guard width */}
+          <Box>
+            <ManageBibInList
+              recordId={bib.id}
+              isAuthenticated={isAuthenticated}
+              setStatus={setStatus}
+            />
+          </Box>
         </Flex>
         <Box
           sx={{

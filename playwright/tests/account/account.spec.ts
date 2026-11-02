@@ -1,46 +1,35 @@
-import { test, expect, type Browser, type Page } from "@playwright/test"
+import { test, expect, type Page } from "@playwright/test"
 import { AccountPage } from "../../pages/account_page"
-import { testPatron } from "../../config/testPatrons"
-import { logger } from "@nypl/node-utils"
+import { getTestPatron, type TestPatron } from "../../config/testPatrons"
 import { setUpTestPatron } from "../utils"
 
 let page: Page
 let accountPage: AccountPage
-
-const username = testPatron.username
-const name = testPatron.name
-const cardNumber = testPatron.cardNumber
-const password = testPatron.password
+let patron: TestPatron
 
 test.describe.serial("Account page", () => {
-  test.skip(
-    (function () {
-      const skipAccountTests = process.env.SKIP_ACCOUNT_TESTS === "true"
-      if (skipAccountTests)
-        logger.info(
-          "Skipping account tests because patron data was not reset correctly"
-        )
-      return skipAccountTests
-    })(),
-    "Skipping account tests due to patron data verification error"
-  )
-  // Start on home, navigate to login, and wait for redirect to return to account page
-  test.beforeAll(async ({ browser }: { browser: Browser }) => {
+  // Reset this browser's test patron, then start on home, navigate to login,
+  // and wait for redirect to return to account page
+  test.beforeAll(async ({ browser, browserName }) => {
+    patron = getTestPatron(browserName)
+    await setUpTestPatron(patron)
+
     const context = await browser.newContext()
     page = await context.newPage()
 
     await page.goto("")
     await page.getByRole("link", { name: /log in/i }).click()
-    await page.getByLabel(/barcode/i).fill(username)
-    await page.getByLabel(/pin/i).fill(password)
+    await page.getByLabel(/barcode/i).fill(patron.username)
+    await page.getByLabel(/pin/i).fill(patron.password)
     await page.getByRole("button", { name: /submit/i }).click()
     await page.getByRole("button", { name: "My account" }).click()
     await page.getByRole("menuitem", { name: "Profile" }).click()
     await page.waitForSelector('h2:has-text("My account")')
     accountPage = new AccountPage(page)
   })
+  // Reset again so the patron can still log in by hand with its usual username
   test.afterAll(async () => {
-    await setUpTestPatron()
+    await setUpTestPatron(patron)
   })
   test.describe("Profile tab", () => {
     test.beforeAll(async () => {
@@ -49,15 +38,15 @@ test.describe.serial("Account page", () => {
     })
     test("should show labels and values for account settings", async () => {
       await expect(accountPage.nameLabel).toBeVisible()
-      await expect(accountPage.name).toHaveText(name)
+      await expect(accountPage.name).toHaveText(patron.displayName)
       await expect(accountPage.usernameLabel).toBeVisible()
-      await expect(accountPage.username).toHaveText(username)
+      await expect(accountPage.username).toHaveText(patron.username)
       await expect(accountPage.usernameEditLink).toBeVisible()
       await expect(accountPage.passwordLabel).toBeVisible()
       await expect(accountPage.passwordText).toHaveText("****")
       await expect(accountPage.passwordEditLink).toBeVisible()
       await expect(accountPage.cardNumberLabel).toBeVisible()
-      const expectedCardnumber = cardNumber.replace(/^"|"$/g, "")
+      const expectedCardnumber = patron.displayCardNumber.replace(/^"|"$/g, "")
       const cardNumberText = await accountPage.cardNumber.textContent()
       expect(cardNumberText.trim().replace(/^"|"$/g, "")).toBe(
         expectedCardnumber
@@ -99,7 +88,7 @@ test.describe.serial("Account page", () => {
       await expect(accountPage.usernameEditInput).toHaveCount(0)
     })
     test("should allow valid user name update", async () => {
-      const newUsername = "usernameedit"
+      const newUsername = patron.newUsername
       await accountPage.usernameEditLink.click()
       await accountPage.usernameEditInput.fill(newUsername)
       await expect(accountPage.usernameEditInput).toHaveValue(newUsername)

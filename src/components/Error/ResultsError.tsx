@@ -15,6 +15,7 @@ type ResultsErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
   errorName?: APIErrorName
+  isAuthenticated?: boolean
 }
 
 /* Display error state that replaces browse/search results. */
@@ -22,6 +23,7 @@ export default function ResultsError({
   errorStatus,
   errorName,
   page,
+  isAuthenticated,
 }: ResultsErrorProps) {
   let metadataTitle = "Error"
   let errorContent
@@ -117,7 +119,7 @@ export default function ResultsError({
   return (
     <>
       <RCHead metadataTitle={`${metadataTitle} | ${SITE_NAME}`} />
-      <Layout activePage={page}>
+      <Layout activePage={page} isAuthenticated={isAuthenticated}>
         <Flex
           flexDir="column"
           marginTop="l"

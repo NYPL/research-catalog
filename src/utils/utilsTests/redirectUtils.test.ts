@@ -1,10 +1,8 @@
 import { getBrowseDestination } from "../redirectUtils"
 
 // mock SHEP to browse url mapping
-jest.mock("../../../data/shepToBrowse", () => ({
-  shepToBrowse: {
-    "/subject_headings/test-exact": "/browse/subjects/Test Exact",
-  },
+jest.mock("../../../data/shepToBrowse.json", () => ({
+  "/subject_headings/test-exact": "/browse/subjects/Test Exact",
 }))
 
 describe("getBrowseDestination", () => {

@@ -47,7 +47,7 @@ const ContactUs = ({
   }
 
   return (
-    <Link id="contact-us" href="" onClick={onOpenForm}>
+    <Link id="contact-us" hasVisitedState={false} href="" onClick={onOpenForm}>
       {contactMessage}
     </Link>
   )

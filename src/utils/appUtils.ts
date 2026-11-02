@@ -10,10 +10,11 @@ export function getPaginationOffsetStrings(
   total: number,
   pageLimit: number
 ): [string, string] {
+  const safeTotal = total ?? 0
   const offset = pageLimit * page - pageLimit
   const start = offset + 1
   let end = offset + pageLimit
-  end = end >= total ? total : end
+  end = end >= safeTotal ? safeTotal : end
 
   return [start.toLocaleString(), end.toLocaleString()]
 }

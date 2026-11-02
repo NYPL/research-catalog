@@ -140,7 +140,13 @@ export default function EDDRequestPage({
   }, [holdErrorStatus, patronEligibilityStatus])
 
   if (bibItemErrorStatus) {
-    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
+    return (
+      <PageError
+        page="hold"
+        errorStatus={bibItemErrorStatus}
+        isAuthenticated={isAuthenticated}
+      />
+    )
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
@@ -325,7 +331,7 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     // fetch patron's email to pre-populate the edd form if available
     const client = await sierraClient()
-    const patronAccount = new MyAccount(client, patronId)
+    const patronAccount = new MyAccount({ sierraClient: client, patronId })
     const patron = await patronAccount.getPatron()
     const patronEmail = patron?.emails?.[0]
 

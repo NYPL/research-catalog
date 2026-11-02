@@ -40,6 +40,8 @@ const SearchForm = ({
     collapseMultiValueQueryParams(router.query)
   )
 
+  const [isInvalid, setIsInvalid] = useState(false)
+
   useEffect(() => {
     setAppliedFilters(collapseMultiValueQueryParams(router.query))
     setSearchScope((router.query.search_scope as string) || "all")
@@ -65,16 +67,24 @@ const SearchForm = ({
   ) => {
     const target = e.target as HTMLInputElement
     setValue(target.value)
+    if (isInvalid) {
+      setIsInvalid(!target.value.trim())
+    }
   }
 
   const handleSubmit = async (e: SyntheticEvent) => {
     e.preventDefault()
 
-    const params = {
+    if (!searchTerm.trim()) {
+      setPersistentFocus("mainContent-textInput")
+      setIsInvalid(true)
+      return
+    }
+
+    const queryString = getSearchQuery({
       q: searchTerm,
       field: searchScope,
-    }
-    const queryString = getSearchQuery(params)
+    })
     setPersistentFocus(idConstants.searchResultsHeading)
     await router.push(`${PATHS.SEARCH}${queryString}`, undefined, {
       scroll: false,
@@ -104,6 +114,8 @@ const SearchForm = ({
             action={PATHS.SEARCH}
             method="get"
             onSubmit={handleSubmit}
+            isInvalid={isInvalid}
+            invalidText="Enter a valid search term."
             labelText="Search Bar Label"
             isDisabled={isLoading}
             ref={(el: HTMLDivElement | null) => {
@@ -134,7 +146,7 @@ const SearchForm = ({
         <Flex
           direction="column"
           justifyContent="space-between"
-          mt={{ base: "0", md: "xs" }}
+          mt={{ base: "0", md: isInvalid ? "-18px" : "xs" }}
         >
           <Link
             className={styles.advancedSearch}

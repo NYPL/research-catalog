@@ -58,7 +58,9 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
     setEditingField("")
     setError(false)
     setTimeout(() => {
-      editingRef.current?.focus()
+      usernameInSierra
+        ? editingRef.current?.focus()
+        : addButtonRef.current?.focus()
     }, 0)
   }
 
@@ -191,7 +193,7 @@ const UsernameForm = ({ patron, settingsState }: UsernameFormProps) => {
       ) : (
         <Box sx={{ marginTop: { base: "unset", md: "-s" } }}>
           <AddButton
-            ref={editingRef}
+            ref={addButtonRef}
             label="+ Add username"
             onClick={() => {
               setIsEditing(true)

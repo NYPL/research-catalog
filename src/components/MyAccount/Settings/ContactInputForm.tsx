@@ -47,6 +47,7 @@ const ContactInputForm = ({
 
   const inputRefs = useRef<Array<TextInputRefType | null>>([])
   const editingRef = useRef<HTMLButtonElement | null>()
+  const addButtonRef = useRef<HTMLButtonElement | null>()
 
   const focusLastInput = () => {
     const lastIndex = tempInputs.length - 1
@@ -141,8 +142,10 @@ const ContactInputForm = ({
     setEditingField("")
     setError(false)
     setTimeout(() => {
-      editingRef.current?.focus()
-    }, 0)
+      inputs.length === 0
+        ? addButtonRef.current?.focus()
+        : editingRef.current?.focus()
+    })
   }
 
   const submitInputs = async () => {
@@ -306,6 +309,7 @@ const ContactInputForm = ({
           // User has no phone or email.
           <Box sx={{ marginTop: { base: "unset", md: "-s" } }}>
             <AddButton
+              ref={addButtonRef}
               isDisabled={editingField !== ""}
               inputType={inputType}
               onClick={() => {

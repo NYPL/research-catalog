@@ -25,12 +25,13 @@ export const buildItemTableDisplayingString = (
   viewAllItems = false,
   filtersAreApplied = false
 ) => {
-  const isPlural = totalResults > 1
-  const totalString = totalResults.toLocaleString()
+  const safeTotalResults = totalResults ?? 0
+  const isPlural = safeTotalResults > 1
+  const totalString = safeTotalResults.toLocaleString()
 
-  if (!totalResults && filtersAreApplied)
+  if (!safeTotalResults && filtersAreApplied)
     return "No results found matching the applied filters"
-  if (viewAllItems || totalResults <= ITEM_PAGINATION_BATCH_SIZE) {
+  if (viewAllItems || safeTotalResults <= ITEM_PAGINATION_BATCH_SIZE) {
     return isPlural
       ? `Displaying all ${totalString} ${
           filtersAreApplied ? "matching " : ""
@@ -40,11 +41,11 @@ export const buildItemTableDisplayingString = (
 
   const [resultsStart, resultsEnd] = getPaginationOffsetStrings(
     page,
-    totalResults,
+    safeTotalResults,
     ITEM_PAGINATION_BATCH_SIZE
   )
 
-  return `Displaying ${resultsStart}-${resultsEnd} of ${totalResults.toLocaleString()} ${
+  return `Displaying ${resultsStart}-${resultsEnd} of ${totalString} ${
     filtersAreApplied ? "matching " : ""
   }item${isPlural ? "s" : ""}`
 }

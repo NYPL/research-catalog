@@ -50,7 +50,7 @@ export class BibPage extends BasePage {
     await this.locationFilter.click()
     await this.page
       .locator("label", {
-        hasText: "SASB S3 - Periodicals Rm 108",
+        hasText: "Stephen A. Schwarzman Building - Room 108 (Desk)",
       })
       .click()
   }

@@ -42,6 +42,7 @@ interface HoldConfirmationPageProps {
   discoveryBibResult: DiscoveryBibResult
   errorStatus?: HTTPStatusCode | null
   itemId?: string
+  isAuthenticated?: boolean
 }
 
 /**
@@ -54,6 +55,7 @@ export default function HoldConfirmationPage({
   discoveryBibResult,
   errorStatus = null,
   itemId,
+  isAuthenticated,
 }: HoldConfirmationPageProps) {
   useEffect(() => {
     // Set flag to show hold already happened, if user goes back to form page
@@ -63,7 +65,13 @@ export default function HoldConfirmationPage({
   }, [])
 
   if (errorStatus || !discoveryBibResult) {
-    return <PageError page="hold" errorStatus={errorStatus || 500} />
+    return (
+      <PageError
+        page="hold"
+        errorStatus={errorStatus || 500}
+        isAuthenticated={isAuthenticated}
+      />
+    )
   }
 
   const bib = new Bib(discoveryBibResult)
@@ -73,7 +81,7 @@ export default function HoldConfirmationPage({
   return (
     <>
       <RCHead metadataTitle={metadataTitle} />
-      <Layout activePage="hold">
+      <Layout activePage="hold" isAuthenticated={isAuthenticated}>
         <Heading level="h2" mb="l" size="heading3">
           {isEDD ? EDD_PAGE_HEADING : HOLD_PAGE_HEADING}
         </Heading>
@@ -179,13 +187,13 @@ export async function getServerSideProps({ params, req, res, query }) {
 
     if ("status" in discoveryBib && discoveryBib.status !== 200) {
       return {
-        props: { errorStatus: discoveryBib.status },
+        props: { errorStatus: discoveryBib.status, isAuthenticated },
       }
     }
     if (!discoveryItemResult) {
       console.error("Hold confirmation: Item not found")
       return {
-        props: { errorStatus: 500 },
+        props: { errorStatus: 500, isAuthenticated },
       }
     }
 
@@ -211,12 +219,13 @@ export async function getServerSideProps({ params, req, res, query }) {
         pickupLocationLabel: pickupLocationLabel || null,
         discoveryBibResult,
         itemId: item.id,
+        isAuthenticated,
       },
     }
   } catch (error) {
     console.log(error)
     return {
-      props: { errorStatus: 500 },
+      props: { errorStatus: 500, isAuthenticated },
     }
   }
 }

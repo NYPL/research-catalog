@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react"
+import { useRouter } from "next/router"
 import { appConfig } from "../config/appConfig"
 import { encodeURIComponentWithPeriods } from "../utils/appUtils"
 import { BASE_URL } from "../config/constants"
@@ -16,6 +17,7 @@ const encodedBaseRedirect = encodeURIComponentWithPeriods(
  * Can pass parameter to focus on a specific id upon returning
  */
 export const useLoginRedirect = (focusId?: string) => {
+  const router = useRouter()
   const loginEndpoint = appConfig.apiEndpoints.loginUrl[appConfig.environment]
   const [redirect, setRedirect] = useState(
     `${loginEndpoint}?redirect_uri=${encodedBaseRedirect}`
@@ -25,7 +27,8 @@ export const useLoginRedirect = (focusId?: string) => {
     if (focusId) currentUrl.searchParams.set("focus", focusId)
     const encodedRedirect = encodeURIComponentWithPeriods(currentUrl.toString())
     setRedirect(`${loginEndpoint}?redirect_uri=${encodedRedirect}`)
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router?.asPath])
   return redirect
 }
 
@@ -35,6 +38,7 @@ export const useLoginRedirect = (focusId?: string) => {
  * (useEffect won't work).
  */
 export const useLogoutRedirect = () => {
+  const router = useRouter()
   const logoutEndpoint = appConfig.apiEndpoints.logoutUrl[appConfig.environment]
   const [redirect, setRedirect] = useState(
     `${logoutEndpoint}?redirect_uri=${encodedBaseRedirect}`
@@ -50,6 +54,7 @@ export const useLogoutRedirect = () => {
     }
     const encodedRedirect = encodeURIComponentWithPeriods(backPath)
     setRedirect(`${logoutEndpoint}?redirect_uri=${encodedRedirect}`)
-  }, [])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [router?.asPath])
   return redirect
 }

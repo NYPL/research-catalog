@@ -53,9 +53,10 @@ const ContactSelectForm = ({
 
   const sortedPickupLocations = [
     patronData.homeLibrary,
-    ...pickupLocations.filter(
-      (loc) => loc.code.trim() !== patronData.homeLibrary.code.trim()
-    ),
+    ...(pickupLocations &&
+      pickupLocations.filter(
+        (loc) => loc.code.trim() !== patronData.homeLibrary.code.trim()
+      )),
   ]
 
   const notificationFormUtils = {

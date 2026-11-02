@@ -10,6 +10,8 @@ const nextConfig = {
         permanent: true,
         basePath: false,
       },
+      // SHEP (/subject_headings*) redirects all live in
+      // pages/subject_headings/[[...path]].tsx's getServerSideProps
     ]
   },
   /**

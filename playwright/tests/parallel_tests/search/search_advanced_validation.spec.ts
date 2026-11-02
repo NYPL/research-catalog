@@ -24,6 +24,7 @@ test.describe("Advanced Search validation", () => {
     await expect(advancedSearchPage.heading).toBeVisible()
 
     await advancedSearchPage.dateFromInput.fill("invalid-date")
+    await advancedSearchPage.dateFromInput.blur()
     await advancedSearchPage.submit()
 
     await expect(advancedSearchPage.errorBanner).toBeVisible({ timeout: 10000 })

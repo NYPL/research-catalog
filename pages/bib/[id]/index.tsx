@@ -112,6 +112,7 @@ export default function BibPage({
           // 422 = invalid bnum, which we also display as "Not found"
           errorStatus === 404 || errorStatus === 422 ? 404 : errorStatus || 500
         }
+        isAuthenticated={isAuthenticated}
       />
     )
   }
@@ -254,11 +255,14 @@ export default function BibPage({
           <Heading level="h2" size="heading3" mr="l" translate="no">
             {bib.title}
           </Heading>
-          <ManageBibInList
-            setStatus={setStatus}
-            recordId={bib.id}
-            isAuthenticated={isAuthenticated}
-          />
+          {/* wrapping list button to guard width */}
+          <Box>
+            <ManageBibInList
+              setStatus={setStatus}
+              recordId={bib.id}
+              isAuthenticated={isAuthenticated}
+            />
+          </Box>
         </Flex>
         <BibDetails key="top-details" details={topDetails} />
         <Box mt="s">
@@ -394,7 +398,7 @@ export async function getServerSideProps({ params, query, req }) {
   let accountData = null
   if (isAuthenticated) {
     const patronId = patronTokenResponse.decodedPatron.sub
-    const accountModel = new MyAccount(null, patronId)
+    const accountModel = new MyAccount({ patronId })
     const lists = await accountModel.getLists(patronId)
 
     accountData = { patron: { id: patronId }, lists }

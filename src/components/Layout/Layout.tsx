@@ -17,15 +17,15 @@ import type { Aggregation } from "../../types/filterTypes"
 import RCSubNav from "../RCSubNav/RCSubNav"
 import BrowseForm from "../BrowseForm/BrowseForm"
 import SearchBanners from "../Banners/SearchBanners"
-import BrowseBanner from "../Banners/BrowseBanner"
 import { useBrowseContext } from "../../context/BrowseContext"
+import BrowseBanners from "../Banners/BrowseBanners"
+import { appConfig } from "../../config/appConfig"
 
 interface LayoutProps {
   activePage?: RCPage
   isAuthenticated?: boolean
   searchAggregations?: Aggregation[]
   searchResultsCount?: number
-  bannerNotification?: string
 }
 
 /**
@@ -38,12 +38,13 @@ const Layout = ({
   isAuthenticated,
   activePage,
   searchResultsCount,
-  bannerNotification,
 }: PropsWithChildren<LayoutProps>) => {
   const showSearch = activePage === "search" || activePage === ""
   const { browseType } = useBrowseContext()
   const showBrowse = activePage === "browse" || activePage === "browse-results"
-  const showNotification = activePage === "" || activePage === "search"
+  // Appears in Browse/SearchBanners if set
+  const announcementContent =
+    appConfig.serviceAnnouncement[appConfig.environment]
   return (
     <DSProvider>
       <Template variant="full">
@@ -96,6 +97,7 @@ const Layout = ({
                 searchResultsCount={searchResultsCount}
               />
             )}
+
             {showBrowse && (
               <>
                 <BrowseForm
@@ -104,16 +106,16 @@ const Layout = ({
                   searchResultsCount={searchResultsCount}
                 />
                 {activePage === "browse" && (
-                  <BrowseBanner browseType={browseType} />
+                  <BrowseBanners
+                    browseType={browseType}
+                    announcementContent={announcementContent}
+                  />
                 )}
               </>
             )}
 
             {(showSearch || activePage === "browse-results") && (
-              <SearchBanners
-                showNotification={showNotification}
-                bannerNotification={bannerNotification}
-              />
+              <SearchBanners announcementContent={announcementContent} />
             )}
           </>
         </TemplateBreakout>

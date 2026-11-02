@@ -13,10 +13,15 @@ import ReloadButton from "../ReloadButton/ReloadButton"
 type PageErrorProps = {
   page: RCPage
   errorStatus: HTTPStatusCode
+  isAuthenticated?: boolean
 }
 
 /* Display error state that replaces entire page contents. */
-export default function PageError({ errorStatus, page }: PageErrorProps) {
+export default function PageError({
+  errorStatus,
+  page,
+  isAuthenticated,
+}: PageErrorProps) {
   let metadataTitle = "Error"
   let errorContent
   const headingID = `${page}-results-heading`
@@ -79,7 +84,7 @@ export default function PageError({ errorStatus, page }: PageErrorProps) {
   return (
     <>
       <RCHead metadataTitle={`${metadataTitle} | ${SITE_NAME}`} />
-      <Layout activePage={page}>
+      <Layout activePage={page} isAuthenticated={isAuthenticated}>
         <Flex
           flexDir="column"
           marginTop="l"

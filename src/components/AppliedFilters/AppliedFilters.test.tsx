@@ -20,7 +20,6 @@ describe("Applied Filters", () => {
       }}
       metadataTitle="Search"
       activePage="search"
-      bannerNotification="Search"
       searchParams={{ page: 1 }}
       handlePageChange={() => null}
       handleSortChange={() => null}
@@ -80,7 +79,6 @@ describe("Applied Filters", () => {
         }}
         metadataTitle="Search"
         activePage="search"
-        bannerNotification="Search"
         searchParams={{ page: 1 }}
         handlePageChange={() => null}
         handleSortChange={() => null}

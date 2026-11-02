@@ -116,7 +116,13 @@ export default function HoldRequestPage({
   const isLoading = useLoading()
 
   if (bibItemErrorStatus) {
-    return <PageError page="hold" errorStatus={bibItemErrorStatus} />
+    return (
+      <PageError
+        page="hold"
+        errorStatus={bibItemErrorStatus}
+        isAuthenticated={isAuthenticated}
+      />
+    )
   }
 
   const handleServerHoldPostError = (errorMessage: string) => {
