@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Removed the parallel_tests folder and the separate account projects from the Playwright config [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
 - Prevent search from submitting empty value [SCC-5709](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5709)
 - In search results, moved vol/date to a separate row and added a division row [SCC-5255](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5255)
 - Updated bib page item table with new names/columns for clearer item status [SCC-5254](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5254)

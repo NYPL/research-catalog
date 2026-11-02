@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test"
-import { AdvancedSearchPage } from "../../../pages/advanced_search_page"
+import { AdvancedSearchPage } from "../../pages/advanced_search_page"
 
 let advancedSearchPage: AdvancedSearchPage
 
