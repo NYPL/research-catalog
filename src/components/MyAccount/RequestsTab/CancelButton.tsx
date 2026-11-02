@@ -141,7 +141,7 @@ const CancelButton = ({
   const [modalProps, setModalProps] = useState<BaseModalProps>(
     checkModalProps as ConfirmationModalProps
   )
-  const buttonLabel = `Cancel${!hold.canFreeze ? " request" : ""}`
+  const buttonLabel = `Cancel${hold.isResearch ? " request" : ""}`
 
   return (
     <>
