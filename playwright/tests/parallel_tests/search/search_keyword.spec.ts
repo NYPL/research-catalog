@@ -36,4 +36,11 @@ test.describe("Keyword Search", () => {
       timeout: 100,
     })
   })
+
+  test("can't submit an empty search", async ({ page }) => {
+    await searchPage.search_submit_button.click()
+
+    await expect(page.getByText("Enter a valid search term.")).toBeVisible()
+    await expect(page).toHaveURL("/")
+  })
 })
