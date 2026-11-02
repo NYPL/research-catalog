@@ -41,6 +41,8 @@ test.describe("Keyword Search", () => {
     await searchPage.search_submit_button.click()
 
     await expect(page.getByText("Enter a valid search term.")).toBeVisible()
-    await expect(page).toHaveURL("/")
+    await expect(page).toHaveURL(
+      "http://local.nypl.org:8080/research/research-catalog"
+    )
   })
 })
