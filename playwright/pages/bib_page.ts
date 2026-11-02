@@ -34,7 +34,7 @@ export class BibPage extends BasePage {
     this.yearFilter = page.getByRole("form", { name: "Apply year filter" })
     this.yearField = page.getByRole("textbox", { name: "Search by year" })
     this.locationFilter = page.getByRole("button", {
-      name: "Location, 0 items currently selected",
+      name: "Item location, 0 items currently selected",
     })
     this.filterTag = page.locator('[data-testid="ds-tagSetFilter-tags"]')
     this.pagination = page.locator('[aria-label="Pagination"]')
@@ -50,7 +50,7 @@ export class BibPage extends BasePage {
     await this.locationFilter.click()
     await this.page
       .locator("label", {
-        hasText: "Stephen A. Schwarzman Building - Room 108 (Desk)",
+        hasText: "Stephen A. Schwarzman Building",
       })
       .click()
   }
