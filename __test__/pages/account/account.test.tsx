@@ -17,7 +17,6 @@ import {
 jest.mock("../../../src/server/auth")
 jest.mock("../../../src/models/MyAccount")
 jest.mock("../../../src/server/sierraClient")
-jest.mock("../../../src/server/nyplApiClient")
 
 const mockRes = {
   setHeader: jest.fn(),
