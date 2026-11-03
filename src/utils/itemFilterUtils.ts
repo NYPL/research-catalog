@@ -8,30 +8,16 @@ import type {
   ItemFilterQueryParams,
 } from "../types/filterTypes"
 
-export const isRecapLocation = (loc: string) => {
-  return loc.split(":")[1].startsWith("rc")
-}
-
-export const combineRecapLocations = (locations: string[]) => {
-  if (locations.find(isRecapLocation)) {
-    return [...locations.filter((loc) => !isRecapLocation(loc)), "Offsite"]
-  } else return locations
-}
-
 export const areFiltersApplied = (appliedFilters: AppliedItemFilters) =>
   Object.entries(appliedFilters).some(([, value]) => value.length > 0)
 
-export const buildItemFilterQuery = (
-  { location, status, year }: AppliedItemFilters,
-  recapLocations: string
-) => {
-  const locs = location.map((loc) => {
-    if (loc === "Offsite") return recapLocations
-    else return loc
-  })
-
+export const buildItemFilterQuery = ({
+  location,
+  status,
+  year,
+}: AppliedItemFilters) => {
   return {
-    ...(locs.length && { item_location: locs.join(",") }),
+    ...(location.length && { item_location: location.join(",") }),
     ...(status.length && { item_status: status.join(",") }),
     ...(year.length && { item_date: year.join(",") }),
   }
@@ -48,13 +34,15 @@ export const buildAppliedFiltersTagSetData = (
       const fieldAggregations = itemAggregations.find(
         (aggregation: ItemFilterData) => aggregation.field === field
       )
+      const fieldLabel =
+        fieldAggregations?.formattedFilterData?.name || capitalize(field)
       const valueLabel =
         field === "year"
           ? filterValue
           : fieldAggregations?.labelForValue(filterValue)
       if (valueLabel) {
         filters.push({
-          label: `${capitalize(field)} > ${valueLabel}`,
+          label: `${fieldLabel} > ${valueLabel}`,
           // This ID needs to be the filters value to allow for proper clearing of the individual filters
           id: filterValue,
         })
@@ -91,9 +79,7 @@ export const parseItemFilterQueryParams = ({
   item_date,
 }: ItemFilterQueryParams) => {
   return {
-    location: item_location
-      ? combineRecapLocations(item_location.split(","))
-      : [],
+    location: item_location?.split(",") || [],
     status: item_status?.split(",") || [],
     year: item_date?.split(",") || [],
   }

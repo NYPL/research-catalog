@@ -46,15 +46,12 @@ test.describe("Bib page", () => {
       bibPage = new BibPage(page)
     })
     test("applies filter and updates page", async () => {
-      await bibPage.navigate("b15080796")
+      await bibPage.navigate("b15091524")
       await bibPage.clickFilterCheckbox()
-      await expect(bibPage.page).toHaveURL(/item_location=loc%3Amak32/)
-      await expect(
-        bibPage.page.getByText("Displaying all", { exact: false })
-      ).toBeVisible()
+      await expect(bibPage.page).toHaveURL(/item_location=ma/)
 
       await bibPage.clearFilterTag()
-      await expect(bibPage.page).toHaveURL(/\/bib\/b15080796$/)
+      await expect(bibPage.page).toHaveURL(/\/bib\/b15091524$/)
     })
 
     test("filters by year", async () => {

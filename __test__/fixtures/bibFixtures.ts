@@ -567,12 +567,12 @@ export const bibWithItems = {
         field: "location",
         values: [
           {
-            value: "loc:mak32",
+            value: "ma",
             count: 2,
-            label: "SASB S3 - Periodicals Rm 108",
+            label: "Stephen A. Schwarzman Building",
           },
           {
-            value: "loc:rc2ma",
+            value: "rc",
             count: 2,
             label: "Offsite",
           },
@@ -1325,7 +1325,7 @@ export const bibWithSeries = {
         field: "location",
         values: [
           {
-            value: "loc:rcpm2",
+            value: "rc",
             count: 1,
             label: "Offsite",
           },
@@ -6089,13 +6089,8 @@ export const parallelsBib = {
         field: "location",
         values: [
           {
-            value: "loc:rc2ma",
-            count: 29,
-            label: "Offsite",
-          },
-          {
-            value: "loc:rcma2",
-            count: 4,
+            value: "rc",
+            count: 33,
             label: "Offsite",
           },
         ],
@@ -9538,7 +9533,7 @@ export const noParallels = {
         field: "location",
         values: [
           {
-            value: "loc:rc2ma",
+            value: "rc",
             count: 1,
             label: "Offsite",
           },
@@ -10044,14 +10039,9 @@ export const yiddishBib = {
         field: "location",
         values: [
           {
-            value: "loc:maf82",
-            count: 1,
-            label: "Schwarzman Building - Dorot Jewish Division Room 111",
-          },
-          {
-            value: "loc:maff3",
-            count: 1,
-            label: "Schwarzman Building - Dorot Jewish Division Desk Room 111",
+            value: "ma",
+            count: 2,
+            label: "Stephen A. Schwarzman Building",
           },
         ],
       },
@@ -12285,7 +12275,7 @@ export const bibManyEResources = {
         field: "location",
         values: [
           {
-            value: "loc:rc2ma",
+            value: "rc",
             count: 370,
             label: "Offsite",
           },
@@ -13331,7 +13321,7 @@ export const bibWithSubjectHeadings = {
         field: "location",
         values: [
           {
-            value: "loc:rc2ma",
+            value: "rc",
             count: 1,
             label: "Offsite",
           },
@@ -13859,7 +13849,7 @@ export const bibWithSingleAeonItem = {
         field: "location",
         values: [
           {
-            value: "loc:rcmr2",
+            value: "rc",
             count: 1,
             label: "Offsite",
           },

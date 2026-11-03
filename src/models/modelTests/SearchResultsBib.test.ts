@@ -6,6 +6,12 @@ import {
 import SearchResultsBib from "../SearchResultsBib"
 import ItemTableData from "../ItemTableData"
 
+const collectionField = {
+  "@id": "collection:id",
+  prefLabel: "Collection",
+  locationsPath: "locations/collection",
+}
+
 describe("SearchResultsBib model", () => {
   let searchResultsBib: SearchResultsBib
 
@@ -46,6 +52,28 @@ describe("SearchResultsBib model", () => {
         "Mansfield, Ohio : Urban Spaghetti, [1999?-"
       )
     })
+
+    it("suppresses bib level callNumber and collection from the result when it has no items AND is not purely electronic", () => {
+      const bibWithNoItems = new SearchResultsBib(bibNoItems.resource)
+      expect(bibWithNoItems.callNumber).toBe("JFK 01-374")
+    })
+
+    it("suppresses bib level callNumber and collection for purely electronic resource bibs", () => {
+      const electronicOnlyResult = {
+        ...bibWithOneElectronicResource.resource,
+        shelfMark: ["JFK 01-374"],
+        collection: [collectionField],
+      }
+      const electronicOnlyBib = new SearchResultsBib(electronicOnlyResult)
+      expect(electronicOnlyBib.isOnlyElectronicResources).toBe(true)
+      expect(electronicOnlyBib.callNumber).toBeNull()
+      expect(electronicOnlyBib.collection).toBeNull()
+    })
+
+    it("suppresses bib level callNumber and collection when the bib has items", () => {
+      expect(searchResultsBib.callNumber).toBeNull()
+      expect(searchResultsBib.collection).toBeNull()
+    })
   })
 
   describe("showViewAllItemsLink", () => {
@@ -75,6 +103,29 @@ describe("SearchResultsBib model", () => {
       expect(searchResultsBib.itemTables.length).toBe(3)
       expect(typeof searchResultsBib.itemTables[0]).toBe("object")
       expect(searchResultsBib.itemTables[0] instanceof ItemTableData).toBe(true)
+    })
+  })
+
+  describe("noItemsBibTableData", () => {
+    it("returns call number table data for a bib with no items and no electronic resources", () => {
+      const bibWithNoItems = new SearchResultsBib(bibNoItems.resource)
+      expect(bibWithNoItems.noItemsBibTableData.tableHeadings).toContain(
+        "Call Number"
+      )
+    })
+
+    it("returns null for a purely electronic resource bib, even if it has a shelfMark/collection", () => {
+      const electronicOnlyResult = {
+        ...bibWithOneElectronicResource.resource,
+        shelfMark: ["JFK 01-374"],
+        collection: [collectionField],
+      }
+      const electronicOnlyBib = new SearchResultsBib(electronicOnlyResult)
+      expect(electronicOnlyBib.noItemsBibTableData).toBeNull()
+    })
+
+    it("returns null for a bib with items", () => {
+      expect(searchResultsBib.noItemsBibTableData).toBeNull()
     })
   })
 })

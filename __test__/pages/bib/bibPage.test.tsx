@@ -139,10 +139,10 @@ describe("Bib Page Item Table general", () => {
     const checkboxGroups = screen.getAllByTestId("checkbox-group")
 
     await userEvent.click(checkboxGroups[0].querySelector("input"))
-    expect(mockRouter.asPath).toBe("/bib/b15080796?item_location=loc%3Amak32")
+    expect(mockRouter.asPath).toBe("/bib/b15080796?item_location=ma")
 
     await userEvent.click(
-      screen.getByLabelText("remove 1 item selected from Location")
+      screen.getByLabelText("remove 1 item selected from Item location")
     )
     expect(mockRouter.asPath).toBe("/bib/b15080796")
   })
@@ -200,7 +200,7 @@ describe("Bib Page Item Table general", () => {
     expect(mockRouter.asPath).toBe("/bib/b15080796?item_status=status%3Aa")
 
     await userEvent.click(
-      screen.getByLabelText("remove 1 item selected from Status")
+      screen.getByLabelText("remove 1 item selected from Availability")
     )
 
     expect(mockRouter.asPath).toBe("/bib/b15080796")
@@ -212,7 +212,7 @@ describe("Bib Page Item Table general", () => {
     )
 
     const tagButton = screen.queryByTestId("ds-tagSetFilter-tags")
-    expect(tagButton).toHaveTextContent("Status > Available")
+    expect(tagButton).toHaveTextContent("Availability > Available")
     expect(mockRouter.asPath).toBe("/bib/b15080796?item_status=status%3Aa")
 
     await userEvent.click(tagButton)
@@ -231,7 +231,7 @@ describe("Bib Page Item Table general", () => {
     )
 
     expect(mockRouter.asPath).toBe(
-      "/bib/b15080796?item_location=loc%3Amak32&item_date=2005"
+      "/bib/b15080796?item_location=ma&item_date=2005"
     )
     await userEvent.click(screen.getByText("Clear filters"))
 

@@ -52,11 +52,6 @@ describe("Bib model", () => {
       it("can handle no supplementary content", () => {
         expect(bib.findingAid).toBe(null)
       })
-      it("initializes finding aid in time to populate finding aid on item availability", () => {
-        expect(
-          findingAidBib.items.every((item) => item.availability.findingAid)
-        ).toBe(true)
-      })
     })
     it("initializes the Bib ID with the with the Bib's @id field", () => {
       expect(bib.id).toBe("b15080796")

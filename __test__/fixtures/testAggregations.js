@@ -6,22 +6,12 @@ export const normalAggs = [
     field: "location",
     values: [
       {
-        value: "loc:mal82",
+        value: "ma",
         count: 572,
-        label: "Schwarzman Building - Main Reading Room 315",
+        label: "Stephen A. Schwarzman Building",
       },
       {
-        value: "loc:makk3",
-        count: 133,
-        label: "Schwarzman Building - Dewitt Wallace Reference Desk Room 108",
-      },
-      {
-        value: "loc:rc2ma",
-        count: 66,
-        label: "Offsite",
-      },
-      {
-        value: "loc:rcma2",
+        value: "rc",
         count: 66,
         label: "Offsite",
       },
@@ -83,9 +73,9 @@ export const aggsWithRepeatedValues = [
     field: "location",
     values: [
       {
-        value: "loc:mym32",
+        value: "pa",
         count: 8,
-        label: "Performing Arts Research Collections - Music",
+        label: "The New York Public Library for the Performing Arts",
       },
     ],
   },
