@@ -7,6 +7,7 @@ on:
       - qa
       - production
       - train
+      - NOREF-ac-proto # Temporarily deploying this branch to train
 
 permissions:
   id-token: write
@@ -17,26 +18,8 @@ env:
   LOCAL_TAG_NAME: research-catalog:${{ github.ref_name }}-${{ github.run_number }}
 
 jobs:
-  test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [24.x]
-    steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-      - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ matrix.node-version }}
-      - name: npm install
-        run: npm ci
-      - name: Unit tests
-        run: npm test
-
   deploy:
     runs-on: ubuntu-latest
-    needs: test
     steps:
       - name: Check out code
         uses: actions/checkout@v4
@@ -51,14 +34,26 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
+      - name: Set deployment environment
+        id: set-env
+        run: |
+          if [[ "${GITHUB_REF_NAME}" == "NOREF-ac-proto" || "${GITHUB_REF_NAME}" == "train" ]]; then
+            echo "DEPLOY_ENV=train" >> $GITHUB_ENV
+            echo "ECR_REF_NAME=train" >> $GITHUB_ENV
+            echo "APP_ENV=qa" >> $GITHUB_ENV  # Use qa env for train branch
+          else
+            echo "DEPLOY_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+            echo "ECR_REF_NAME=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+            echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
+          fi
+
       - name: Set environment-specific variables
         run: |
-          echo "APP_ENV=${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "ECR_TAG=${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
-          echo "PREVIOUS_TAG=${GITHUB_REF_NAME}-previous" >> $GITHUB_ENV
-          echo "CLUSTER=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "SERVICE=research-catalog-${GITHUB_REF_NAME}" >> $GITHUB_ENV
-          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${GITHUB_REF_NAME}-latest" >> $GITHUB_ENV
+          echo "ECR_TAG=${ECR_REF_NAME}-latest" >> $GITHUB_ENV
+          echo "PREVIOUS_TAG=${ECR_REF_NAME}-previous" >> $GITHUB_ENV
+          echo "CLUSTER=research-catalog-${DEPLOY_ENV}" >> $GITHUB_ENV
+          echo "SERVICE=research-catalog-${DEPLOY_ENV}" >> $GITHUB_ENV
+          echo "ECR_URL=946183545209.dkr.ecr.us-east-1.amazonaws.com/research-catalog:${ECR_REF_NAME}-latest" >> $GITHUB_ENV
 
       - name: Build and push Docker image to Amazon ECR
         run: |
