@@ -1,4 +1,4 @@
-import { createRef, useEffect, useState } from "react"
+import { createRef, useEffect, useRef, useState } from "react"
 import type { Hold, Patron } from "../../../types/myAccountTypes"
 import {
   Box,
@@ -12,9 +12,16 @@ import styles from "../../../../styles/components/MyAccount.module.scss"
 
 const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
   const [frozen, setFrozen] = useState(hold.frozen)
-  const [isDisabled, setIsDisabled] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  // Unfreezing a frozen hold is always allowed, hold.canFreeze only restricts freezing.
+  // Holds that have status confirmed or ready for pickup cannot be frozen.
+  const isDisabled =
+    isLoading ||
+    (!frozen && !hold.canFreeze) ||
+    hold.status !== "REQUEST PENDING"
   const [modalProps, setModalProps] = useState(null)
   const buttonRef = createRef<HTMLButtonElement>()
+  const wasLoadingRef = useRef(false)
   const { onOpen: openModal, onClose: closeModal, Modal } = useModal()
   const failureModalProps = {
     variant: "default",
@@ -37,7 +44,7 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     ),
     onClose: () => {
       closeModal()
-      setIsDisabled(false)
+      setIsLoading(false)
     },
   }
   const successModalProps = {
@@ -69,19 +76,21 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
     ),
     onClose: () => {
       closeModal()
-      setIsDisabled(false)
+      setIsLoading(false)
     },
   }
 
   useEffect(() => {
-    if (isDisabled === false) {
+    // Only refocus the button after a loading request finishes
+    if (wasLoadingRef.current && !isLoading) {
       buttonRef.current?.focus()
     }
-  }, [isDisabled, buttonRef])
+    wasLoadingRef.current = isLoading
+  }, [isLoading, buttonRef])
 
   const handleFreezeClick = async () => {
     // Disabling button while request happens.
-    setIsDisabled(true)
+    setIsLoading(true)
     const body = JSON.stringify({
       patronId: patron.id,
       freeze: !frozen,
@@ -102,10 +111,10 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
       setModalProps(successModalProps)
       openModal()
       setFrozen((frozen) => !frozen)
-      setIsDisabled(false)
+      setIsLoading(false)
     }
   }
-  const buttonLabel = isDisabled ? "Loading" : frozen ? "Unfreeze" : "Freeze"
+  const buttonLabel = isLoading ? "Loading" : frozen ? "Unfreeze" : "Freeze"
 
   return (
     <>
@@ -119,10 +128,10 @@ const FreezeButton = ({ hold, patron }: { hold: Hold; patron: Patron }) => {
         ref={buttonRef}
       >
         {" "}
-        {isDisabled && (
+        {isLoading && (
           <ProgressIndicator
             id={"freeze-loading"}
-            labelText="Renew"
+            labelText="Freeze"
             showLabel={false}
             size="small"
             indicatorType="circular"
