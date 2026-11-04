@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
+## [2.3.1] 2026-11-05
+
 ### Removed
 
 - Removed the parallel_tests folder and the separate account projects from the Playwright config [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
