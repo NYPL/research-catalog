@@ -94,7 +94,7 @@ export async function postHoldRequest(
     patron: patronId,
     record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdStripped),
+    bibId: bibIdStripped,
     requestType: "hold",
     recordType: "i",
     pickupLocation,
@@ -143,7 +143,7 @@ export async function postEDDRequest(
     patron: patronId,
     record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdStripped),
+    bibId: bibIdStripped,
     requestType: "edd",
     recordType: "i",
     docDeliveryData: {
