@@ -100,7 +100,7 @@ export const checkouts = {
 }
 
 export const holds = {
-  total: 5,
+  total: 6,
   entries: [
     {
       requestType: "hold",
@@ -301,6 +301,47 @@ export const holds = {
         isResearch: true,
       },
       discoveryUri: "b23296875",
+    },
+    {
+      requestType: "hold",
+      pickupLocation: {
+        code: "sn",
+        name: "SNFL (formerly Mid-Manhattan)",
+      },
+      pickupByDate: null,
+      sierraHold: {
+        id: "49438190",
+        frozen: false,
+        placed: "2024-05-10",
+        status: {
+          code: "i",
+          name: "Requested item ready for pickup.",
+        },
+        recordType: "i",
+        canFreeze: true,
+        record: "23167148",
+      },
+      platformHold: {
+        id: 5391,
+        createdDate: "2024-01-15T13:19:00+00:00",
+        updatedDate: "2024-05-09T14:44:32+00:00",
+        docDeliveryData: null,
+      },
+      platformItem: {
+        id: "23167148",
+        nyplSource: "sierra-nypl",
+        barcode: null,
+        callNumber: "813.6 K",
+        volume: null,
+      },
+      platformBib: {
+        id: "22739437",
+        nyplSource: "sierra-nypl",
+        title: "The deal (off-campus, #1)",
+        author: "Kennedy, Elle",
+        isResearch: false,
+      },
+      discoveryUri: "b22739437",
     },
   ],
 }

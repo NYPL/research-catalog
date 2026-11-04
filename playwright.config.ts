@@ -24,29 +24,6 @@ export default defineConfig({
   projects: [
     {
       name: "chromium-gha",
-      testMatch: "parallel_tests/**/*.ts",
-      use: {
-        ...devices["Desktop Chrome"],
-      },
-    },
-    {
-      testMatch: "parallel_tests/**/*.ts",
-      name: "firefox-gha",
-      use: {
-        ...devices["Desktop Firefox"],
-      },
-    },
-    {
-      testMatch: "parallel_tests/**/*.ts",
-      name: "webkit",
-      use: {
-        ...devices["Desktop Safari"],
-      },
-    },
-    // Each browser's account tests use their own test patron (see testPatrons.ts), so they can run in parallel
-    {
-      name: "my account chromium-gha",
-      testMatch: "account/account.spec.ts",
       use: {
         ...devices["Desktop Chrome"],
         // Full Chromium: Imperva blocks the default headless shell on login
@@ -54,15 +31,13 @@ export default defineConfig({
       },
     },
     {
-      name: "my account firefox-gha",
-      testMatch: "account/account.spec.ts",
+      name: "firefox-gha",
       use: {
         ...devices["Desktop Firefox"],
       },
     },
     {
-      testMatch: "account/account.spec.ts",
-      name: "my account webkit",
+      name: "webkit",
       use: {
         ...devices["Desktop Safari"],
       },
