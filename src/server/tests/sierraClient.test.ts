@@ -43,4 +43,12 @@ describe("sierraClient request logging", () => {
     const log = findSierraRequestLog("POST", "patrons/validate")
     expect(log[1].body).toBe(JSON.stringify({ barcode: "*****", pin: "*****" }))
   })
+
+  it("redacts numeric id path segments before logging the request path", async () => {
+    const client = await sierraClient()
+    await client.get("patrons/123456")
+
+    const log = findSierraRequestLog("GET", "patrons/*****")
+    expect(log).toBeDefined()
+  })
 })

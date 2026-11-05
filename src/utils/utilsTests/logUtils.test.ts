@@ -1,5 +1,9 @@
 import type { HTTPStatusCode } from "../../types/appTypes"
-import { logSingleFilterNoResults, redactSensitiveFields } from "../logUtils"
+import {
+  logSingleFilterNoResults,
+  redactSensitiveFields,
+  redactSensitivePath,
+} from "../logUtils"
 
 import { logger } from "@nypl/node-utils"
 
@@ -135,6 +139,42 @@ describe("logUtils", () => {
       expect(redactSensitiveFields(undefined)).toBeUndefined()
       expect(redactSensitiveFields("a string")).toBe("a string")
       expect(redactSensitiveFields(42)).toBe(42)
+    })
+  })
+
+  describe("redactSensitivePath", () => {
+    it("redacts numeric patron id path segments", () => {
+      expect(redactSensitivePath("patrons/123456")).toBe("patrons/*****")
+    })
+
+    it("redacts numeric hold/checkout id path segments", () => {
+      expect(redactSensitivePath("patrons/holds/12345")).toBe(
+        "patrons/holds/*****"
+      )
+      expect(redactSensitivePath("patrons/checkouts/987/renewal")).toBe(
+        "patrons/checkouts/*****/renewal"
+      )
+    })
+
+    it("redacts sensitive query param values", () => {
+      expect(
+        redactSensitivePath(
+          "/request/deliveryLocationsByBarcode?barcodes[]=12345&patronId=678910"
+        )
+      ).toBe(
+        "/request/deliveryLocationsByBarcode?barcodes[]=*****&patronId=*****"
+      )
+    })
+
+    it("leaves non-sensitive path segments and query params untouched", () => {
+      expect(redactSensitivePath("/discovery/vocabularies?sort=asc")).toBe(
+        "/discovery/vocabularies?sort=asc"
+      )
+    })
+
+    it("returns falsy paths unchanged", () => {
+      expect(redactSensitivePath("")).toBe("")
+      expect(redactSensitivePath(undefined)).toBeUndefined()
     })
   })
 })

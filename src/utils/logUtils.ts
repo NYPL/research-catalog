@@ -49,6 +49,32 @@ export const redactSensitiveFields = <T>(body: T): T => {
 }
 
 /**
+ * Redact sensitive path segments and query param values
+ */
+export const redactSensitivePath = (path: string): string => {
+  if (!path) return path
+
+  const [pathname, queryString] = path.split("?")
+
+  const redactedPathname = pathname.replace(/\/\d+(?=\/|$)/g, "/*****")
+
+  if (!queryString) return redactedPathname
+
+  const redactedQuery = queryString
+    .split("&")
+    .map((pair) => {
+      const [key, value] = pair.split("=")
+      const bareKey = key.replace(/\[\]$/, "")
+      return SENSITIVE_FIELDS.includes(bareKey) && value !== undefined
+        ? `${key}=*****`
+        : pair
+    })
+    .join("&")
+
+  return `${redactedPathname}?${redactedQuery}`
+}
+
+/**
  * logSingleFilterNoResults
  * Given location, SearchResultsResponse, SearchParams, and (possibly empty) request referer,
  * checks for a possible malformed incoming link
