@@ -1,0 +1,66 @@
+import { logger } from "@nypl/node-utils"
+
+jest.mock("../../config/appConfig", () => ({
+  appConfig: {
+    environment: "development",
+    apiEndpoints: {
+      platform: { development: "https://example.com/platform" },
+    },
+    urls: { tokenUrl: "https://example.com/token" },
+  },
+}))
+
+jest.mock("../../../lib/bootstrap", () => ({
+  bootstrapConfig: jest.fn().mockResolvedValue(undefined),
+}))
+
+const mockGet = jest.fn().mockResolvedValue({})
+const mockPost = jest.fn().mockResolvedValue({})
+const mockPatch = jest.fn().mockResolvedValue({})
+const mockDangerouslyCallDelete = jest.fn().mockResolvedValue({})
+
+jest.mock("@nypl/nypl-data-api-client", () =>
+  jest.fn().mockImplementation(() => ({
+    get: mockGet,
+    post: mockPost,
+    patch: mockPatch,
+    dangerouslyCallDelete: mockDangerouslyCallDelete,
+  }))
+)
+
+import nyplApiClient from "../nyplApiClient"
+
+const findPlatformRequestLog = (method: string) =>
+  (logger.info as jest.Mock).mock.calls.find(
+    (call) => call[0] === "Platform request" && call[1].method === method
+  )
+
+describe("nyplApiClient request logging", () => {
+  beforeAll(() => {
+    // @nypl/node-utils config mock (jest.setup.js) has no PLATFORM_API_CLIENT creds,
+    // so supply them here since nyplApiClient throws without them.
+    const { config } = jest.requireMock("@nypl/node-utils") as any
+    config.getConfig.mockReturnValue({
+      PLATFORM_API_CLIENT_ID: "id",
+      PLATFORM_API_CLIENT_SECRET: "secret",
+    })
+  })
+
+  afterEach(() => {
+    ;(logger.info as jest.Mock).mockClear()
+  })
+
+  it("redacts sensitive fields before logging request bodies", async () => {
+    const client = await nyplApiClient()
+    await client.post("/hold-requests", {
+      patron: "123456",
+      docDeliveryData: { emailAddress: "patron@example.com" },
+    })
+
+    const log = findPlatformRequestLog("POST")
+    expect(log[1].body).toEqual({
+      patron: "*****",
+      docDeliveryData: { emailAddress: "*****" },
+    })
+  })
+})

@@ -3,6 +3,7 @@ import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 import { appConfig } from "../../config/appConfig"
 import { withTimeout } from "../../utils/serverUtils"
+import { redactSensitiveFields } from "../../utils/logUtils"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
@@ -53,7 +54,7 @@ async function buildClient() {
       logger.info("Sierra request", {
         path,
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await post(path, body)
     })
@@ -64,7 +65,7 @@ async function buildClient() {
       logger.info("Sierra request", {
         path,
         method: "PUT",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await put(path, body)
     })
@@ -75,7 +76,7 @@ async function buildClient() {
       logger.info("Sierra request", {
         path,
         method: "DELETE",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await deleteRequest(path, body)
     })

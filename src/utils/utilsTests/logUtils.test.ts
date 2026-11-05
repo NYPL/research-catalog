@@ -1,5 +1,5 @@
 import type { HTTPStatusCode } from "../../types/appTypes"
-import { logSingleFilterNoResults } from "../logUtils"
+import { logSingleFilterNoResults, redactSensitiveFields } from "../logUtils"
 
 import { logger } from "@nypl/node-utils"
 
@@ -36,6 +36,103 @@ describe("logUtils", () => {
         undefined
       )
       expect(logger.warn).toHaveBeenCalledTimes(0)
+    })
+  })
+
+  describe("redactSensitiveFields", () => {
+    it("redacts a top-level sensitive field", () => {
+      expect(redactSensitiveFields({ pin: "1234", barcode: "999" })).toEqual({
+        pin: "*****",
+        barcode: "999",
+      })
+    })
+
+    it("redacts multiple sensitive fields", () => {
+      expect(
+        redactSensitiveFields({
+          oldPin: "1111",
+          newPin: "2222",
+          password: "hunter2",
+          patronId: "123",
+          patron: "123",
+          email: "a@test.com",
+          emails: ["a@test.com"],
+          emailAddress: "a@test.com",
+          phone: "555-5555",
+          phones: ["555-5555"],
+          phoneNumber: "555-5555",
+          safeToLog: "here",
+        })
+      ).toEqual({
+        oldPin: "*****",
+        newPin: "*****",
+        password: "*****",
+        patronId: "*****",
+        patron: "*****",
+        email: "*****",
+        emails: "*****",
+        emailAddress: "*****",
+        phone: "*****",
+        phones: "*****",
+        phoneNumber: "*****",
+        safeToLog: "here",
+      })
+    })
+
+    it("redacts hold id fields", () => {
+      expect(
+        redactSensitiveFields({
+          sierraHoldId: "12345",
+          holdId: "12345",
+          requestId: "123456",
+          type: "freeze",
+        })
+      ).toEqual({
+        sierraHoldId: "*****",
+        holdId: "*****",
+        requestId: "*****",
+        type: "freeze",
+      })
+    })
+
+    it("redacts sensitive fields nested in objects", () => {
+      expect(
+        redactSensitiveFields({
+          requestType: "edd",
+          docDeliveryData: {
+            emailAddress: "a@test.com",
+            chapterTitle: "ch 1",
+          },
+        })
+      ).toEqual({
+        requestType: "edd",
+        docDeliveryData: {
+          emailAddress: "*****",
+          chapterTitle: "ch 1",
+        },
+      })
+    })
+
+    it("redacts sensitive fields nested in arrays", () => {
+      expect(
+        redactSensitiveFields({
+          patrons: [{ patronId: "1" }, { patronId: "2" }],
+        })
+      ).toEqual({
+        patrons: [{ patronId: "*****" }, { patronId: "*****" }],
+      })
+    })
+
+    it("leaves non-sensitive fields untouched", () => {
+      const body = { itemId: "i1", bibId: "b1", pickupLocation: "loc1" }
+      expect(redactSensitiveFields(body)).toEqual(body)
+    })
+
+    it("returns primitives and null/undefined unchanged", () => {
+      expect(redactSensitiveFields(null)).toBeNull()
+      expect(redactSensitiveFields(undefined)).toBeUndefined()
+      expect(redactSensitiveFields("a string")).toBe("a string")
+      expect(redactSensitiveFields(42)).toBe(42)
     })
   })
 })
