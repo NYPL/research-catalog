@@ -2,7 +2,10 @@ import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
-import { redactSensitiveFields, redactSensitivePath } from "../../utils/logUtils"
+import {
+  redactSensitiveFields,
+  redactSensitivePath,
+} from "../../utils/logUtils"
 
 const CACHE: Record<string, NyplApiClient> = {}
 

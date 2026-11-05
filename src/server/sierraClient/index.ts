@@ -3,7 +3,10 @@ import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 import { appConfig } from "../../config/appConfig"
 import { withTimeout } from "../../utils/serverUtils"
-import { redactSensitiveFields, redactSensitivePath } from "../../utils/logUtils"
+import {
+  redactSensitiveFields,
+  redactSensitivePath,
+} from "../../utils/logUtils"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
