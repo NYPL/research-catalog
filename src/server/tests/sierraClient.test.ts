@@ -41,9 +41,7 @@ describe("sierraClient request logging", () => {
     await client.post("patrons/validate", { barcode: "123", pin: "4321" })
 
     const log = findSierraRequestLog("POST", "patrons/validate")
-    expect(log[1].body).toBe(
-      JSON.stringify({ barcode: "123", pin: "*****" })
-    )
+    expect(log[1].body).toBe(JSON.stringify({ barcode: "123", pin: "*****" }))
   })
 
   it("redacts sensitive fields before logging PUT request bodies", async () => {
@@ -67,8 +65,6 @@ describe("sierraClient request logging", () => {
     await client.put("patrons/12345", { varFields: [{ fieldTag: "u" }] })
 
     const log = findSierraRequestLog("PUT", "patrons/12345")
-    expect(log[1].body).toBe(
-      JSON.stringify({ varFields: [{ fieldTag: "u" }] })
-    )
+    expect(log[1].body).toBe(JSON.stringify({ varFields: [{ fieldTag: "u" }] }))
   })
 })
