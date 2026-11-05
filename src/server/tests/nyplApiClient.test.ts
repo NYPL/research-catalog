@@ -62,4 +62,16 @@ describe("nyplApiClient request logging", () => {
       docDeliveryData: { emailAddress: "*****" },
     })
   })
+
+  it("redacts sensitive query params and path segments before logging the request path", async () => {
+    const client = await nyplApiClient()
+    await client.get(
+      "/request/deliveryLocationsByBarcode?barcodes[]=123&patronId=456"
+    )
+
+    const log = findPlatformRequestLog("GET")
+    expect(log[1].path).toBe(
+      "https://example.com/platform/v0.1/request/deliveryLocationsByBarcode?barcodes[]=*****&patronId=*****"
+    )
+  })
 })
