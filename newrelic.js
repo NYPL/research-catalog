@@ -58,4 +58,24 @@ exports.config = {
       "request.parameters.barcodes*",
     ],
   },
+  /**
+   * Collapse the patron ID path segment on internal account API routes
+   */
+  rules: {
+    name: [
+      {
+        pattern: "^/api/account/settings/.+$",
+        name: "/api/account/settings/*",
+      },
+      {
+        pattern: "^/api/account/update-pin/.+$",
+        name: "/api/account/update-pin/*",
+      },
+      {
+        pattern: "^/api/account/username/.+$",
+        name: "/api/account/username/*",
+      },
+      { pattern: "^/api/account/[^/]+$", name: "/api/account/*" },
+    ],
+  },
 }

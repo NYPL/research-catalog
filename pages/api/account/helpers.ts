@@ -21,7 +21,7 @@ export async function updatePin(
       pin: oldPin,
     })
     await client.put(`patrons/${patronId}`, { pin: newPin })
-    return { status: 200, message: `Pin updated to ${newPin}` }
+    return { status: 200, message: "Pin updated successfully" }
   } catch (error) {
     return {
       status: error.response.status,

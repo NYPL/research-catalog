@@ -276,7 +276,7 @@ describe("updatePin", () => {
       pin: newPin,
     })
     expect(response.status).toBe(200)
-    expect(response.message).toBe(`Pin updated to ${newPin}`)
+    expect(response.message).toBe("Pin updated successfully")
   })
 
   it("should return a 400 error if pin is incorrect", async () => {
