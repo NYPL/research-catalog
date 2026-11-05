@@ -53,7 +53,7 @@ describe("cancelHold", () => {
         "My account cancel hold request",
         {
           itemId: "123",
-          patronBarcode: "patronBarcode",
+          patronBarcode: "*****",
           patronId: "*****",
           sierraHoldId: "*****",
         },
@@ -113,7 +113,7 @@ describe("cancelHold", () => {
       "My account cancel hold request failed",
       {
         itemId: "123",
-        patronBarcode: "patronBarcode",
+        patronBarcode: "*****",
         patronId: "*****",
         sierraHoldId: "*****",
         status: 500,
