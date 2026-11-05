@@ -64,7 +64,7 @@ export const redactSensitivePath = (path: string): string => {
     .split("&")
     .map((pair) => {
       const [key, value] = pair.split("=")
-      const bareKey = key.replace(/\[\]$/, "")
+      const bareKey = key.replace(/\[\]$/, "").replace(/s$/, "")
       return SENSITIVE_FIELDS.includes(bareKey) && value !== undefined
         ? `${key}=*****`
         : pair
