@@ -41,9 +41,9 @@ describe("logUtils", () => {
 
   describe("redactSensitiveFields", () => {
     it("redacts a top-level sensitive field", () => {
-      expect(redactSensitiveFields({ pin: "1234", barcode: "999" })).toEqual({
+      expect(redactSensitiveFields({ pin: "1234", itemId: "999" })).toEqual({
         pin: "*****",
-        barcode: "999",
+        itemId: "999",
       })
     })
 
@@ -61,6 +61,7 @@ describe("logUtils", () => {
           phone: "555-5555",
           phones: ["555-5555"],
           phoneNumber: "555-5555",
+          barcode: "123456789",
           safeToLog: "here",
         })
       ).toEqual({
@@ -75,6 +76,7 @@ describe("logUtils", () => {
         phone: "*****",
         phones: "*****",
         phoneNumber: "*****",
+        barcode: "*****",
         safeToLog: "here",
       })
     })

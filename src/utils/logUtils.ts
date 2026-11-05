@@ -26,6 +26,7 @@ const SENSITIVE_FIELDS = [
   "sierraHoldId",
   "holdId",
   "requestId",
+  "barcode",
 ]
 
 /**
