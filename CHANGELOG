@@ -16,6 +16,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated hold freezing logic: circ holds always show Freeze button (sometimes disabled), so holds can be unfrozen [SCC-5551]
 - Updated MyAccount checkouts and holds to use PatronServices endpoints to correctly display bound-with titles [SCC-5312](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5312)
+
+## [Hot fix] 2026-11-05
+
 - Redact sensitive information from logs
 
 ## [2.3.0] 2026-11-03
