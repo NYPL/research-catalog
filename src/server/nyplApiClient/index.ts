@@ -2,6 +2,10 @@ import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
+import {
+  redactSensitiveFields,
+  redactSensitivePath,
+} from "../../utils/logUtils"
 
 const CACHE: Record<string, NyplApiClient> = {}
 
@@ -51,7 +55,7 @@ const nyplApiClient = async ({
     client.get = async (path: string) => {
       logger.info("Platform request", {
         method: "GET",
-        path: `${baseUrl}${path}`,
+        path: redactSensitivePath(`${baseUrl}${path}`),
       })
       return await originalGet(path)
     }
@@ -60,8 +64,8 @@ const nyplApiClient = async ({
     client.post = async (path: string, body: unknown) => {
       logger.info("Platform request", {
         method: "POST",
-        path: `${baseUrl}${path}`,
-        body,
+        path: redactSensitivePath(`${baseUrl}${path}`),
+        body: redactSensitiveFields(body),
       })
       return await originalPost(path, body)
     }
@@ -70,8 +74,8 @@ const nyplApiClient = async ({
     client.patch = async (path: string, body: unknown) => {
       logger.info("Platform request", {
         method: "PATCH",
-        path: `${baseUrl}${path}`,
-        body,
+        path: redactSensitivePath(`${baseUrl}${path}`),
+        body: redactSensitiveFields(body),
       })
       return originalPatch(path, body)
     }
@@ -80,8 +84,8 @@ const nyplApiClient = async ({
     client.delete = async (path: string, body: unknown) => {
       logger.info("Platform request", {
         method: "DELETE",
-        path: `${baseUrl}${path}`,
-        body,
+        path: redactSensitivePath(`${baseUrl}${path}`),
+        body: redactSensitiveFields(body),
       })
       return originalDelete(path)
     }
