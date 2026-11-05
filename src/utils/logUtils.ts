@@ -28,6 +28,7 @@ const SENSITIVE_FIELDS = [
   "requestId",
   "barcode",
   "patronBarcode",
+  "requestNotes",
 ]
 
 /**
