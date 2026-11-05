@@ -53,6 +53,9 @@ exports.config = {
       "response.headers.proxyAuthorization",
       "response.headers.setCookie*",
       "response.headers.x*",
+      "request.parameters.patronId",
+      "request.parameters.barcode",
+      "request.parameters.barcodes*",
     ],
   },
 }
