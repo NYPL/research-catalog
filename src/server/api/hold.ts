@@ -197,10 +197,7 @@ export async function fetchHoldDetails(
       status: 200,
     }
   } catch (error) {
-    logServerError(
-      "fetchHoldDetails",
-      `requestId: ${requestId}, error message: ${error.message}`
-    )
+    logServerError("fetchHoldDetails", `error message: ${error.message}`)
 
     return { status: 500 }
   }
@@ -232,7 +229,7 @@ export async function fetchPatronEligibility(
     return { status: 200, ...eligibilityResult }
   } catch (error) {
     logger.error(
-      `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
+      "Error fetching hold request eligibility in fetchPatronEligibility",
       error.message
     )
 

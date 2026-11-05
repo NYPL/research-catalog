@@ -10,6 +10,41 @@ export const logServerWarn = (location: string, message: string): void => {
   logger.warn(`Warning in ${location}: ${message}`)
 }
 
+const SENSITIVE_FIELDS = [
+  "pin",
+  "oldPin",
+  "newPin",
+  "password",
+  "patronId",
+  "patron",
+  "email",
+  "emails",
+  "emailAddress",
+  "phone",
+  "phones",
+  "phoneNumber",
+  "sierraHoldId",
+  "holdId",
+  "requestId",
+]
+
+/**
+ * Redact fields in a request body, recursing into nested objects/arrays
+ */
+export const redactSensitiveFields = <T>(body: T): T => {
+  if (Array.isArray(body))
+    return body.map((item) => redactSensitiveFields(item)) as T
+
+  if (!body || typeof body !== "object") return body
+
+  return Object.entries(body).reduce((redacted, [key, value]) => {
+    redacted[key] = SENSITIVE_FIELDS.includes(key)
+      ? "*****"
+      : redactSensitiveFields(value)
+    return redacted
+  }, {} as Record<string, unknown>) as T
+}
+
 /**
  * logSingleFilterNoResults
  * Given location, SearchResultsResponse, SearchParams, and (possibly empty) request referer,

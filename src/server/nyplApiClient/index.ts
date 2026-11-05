@@ -2,6 +2,7 @@ import NyplApiClient from "@nypl/nypl-data-api-client"
 import { config, logger } from "@nypl/node-utils"
 import { appConfig } from "../../config/appConfig"
 import { bootstrapConfig } from "../../../lib/bootstrap"
+import { redactSensitiveFields } from "../../utils/logUtils"
 
 const CACHE: Record<string, NyplApiClient> = {}
 
@@ -61,7 +62,7 @@ const nyplApiClient = async ({
       logger.info("Platform request", {
         method: "POST",
         path: `${baseUrl}${path}`,
-        body,
+        body: redactSensitiveFields(body),
       })
       return await originalPost(path, body)
     }
@@ -71,7 +72,7 @@ const nyplApiClient = async ({
       logger.info("Platform request", {
         method: "PATCH",
         path: `${baseUrl}${path}`,
-        body,
+        body: redactSensitiveFields(body),
       })
       return originalPatch(path, body)
     }
@@ -81,7 +82,7 @@ const nyplApiClient = async ({
       logger.info("Platform request", {
         method: "DELETE",
         path: `${baseUrl}${path}`,
-        body,
+        body: redactSensitiveFields(body),
       })
       return originalDelete(path)
     }

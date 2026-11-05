@@ -318,7 +318,7 @@ describe("fetchPatronEligibility", () => {
 
     expect(patronEligibility.status).toEqual(500)
     expect(logger.error).toHaveBeenCalledWith(
-      "Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: 123",
+      "Error fetching hold request eligibility in fetchPatronEligibility",
       "Error getting patron eligibility status"
     )
   })

@@ -54,8 +54,8 @@ describe("cancelHold", () => {
         {
           itemId: "123",
           patronBarcode: "patronBarcode",
-          patronId: "123",
-          sierraHoldId: "12345",
+          patronId: "*****",
+          sierraHoldId: "*****",
         },
       ],
     ])
@@ -114,8 +114,8 @@ describe("cancelHold", () => {
       {
         itemId: "123",
         patronBarcode: "patronBarcode",
-        patronId: "123",
-        sierraHoldId: "12345",
+        patronId: "*****",
+        sierraHoldId: "*****",
         status: 500,
       },
     ])
@@ -124,6 +124,7 @@ describe("cancelHold", () => {
 
 describe("updateHold", () => {
   it("should return a success message if hold is updated", async () => {
+    logger.info = jest.fn()
     const holdId = "12345"
     const holdData = { freeze: false, pickupLocation: "sn" }
     const methodMock = jest.fn().mockResolvedValueOnce({
@@ -141,6 +142,18 @@ describe("updateHold", () => {
     expect(methodMock).toHaveBeenCalledWith(`patrons/holds/${holdId}`, holdData)
     expect(response.status).toBe(200)
     expect(response.message).toBe("Updated")
+    // @ts-ignore
+    expect(logger.info.mock.calls).toEqual([
+      [
+        "My account update hold request",
+        {
+          type: "pickup location",
+          sierraHoldId: "*****",
+          patronId: "*****",
+          itemId: "456",
+        },
+      ],
+    ])
   })
 
   it("should return a 400 error if request has invalid parameters", async () => {
