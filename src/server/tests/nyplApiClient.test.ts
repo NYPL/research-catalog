@@ -37,9 +37,8 @@ const findPlatformRequestLog = (method: string) =>
 
 describe("nyplApiClient request logging", () => {
   beforeAll(() => {
-    // @nypl/node-utils config mock (jest.setup.js) has no PLATFORM_API_CLIENT creds,
-    // so supply them here since nyplApiClient throws without them.
     const { config } = jest.requireMock("@nypl/node-utils") as any
+    // fake creds so it doesnt throw
     config.getConfig.mockReturnValue({
       PLATFORM_API_CLIENT_ID: "id",
       PLATFORM_API_CLIENT_SECRET: "secret",

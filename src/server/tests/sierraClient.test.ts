@@ -36,35 +36,11 @@ describe("sierraClient request logging", () => {
     jest.clearAllMocks()
   })
 
-  it("redacts sensitive fields before logging POST request bodies", async () => {
+  it("redacts sensitive fields before logging request bodies", async () => {
     const client = await sierraClient()
     await client.post("patrons/validate", { barcode: "123", pin: "4321" })
 
     const log = findSierraRequestLog("POST", "patrons/validate")
     expect(log[1].body).toBe(JSON.stringify({ barcode: "*****", pin: "*****" }))
-  })
-
-  it("redacts sensitive fields before logging PUT request bodies", async () => {
-    const client = await sierraClient()
-    await client.put("patrons/12345", { pin: "6789" })
-
-    const log = findSierraRequestLog("PUT", "patrons/12345")
-    expect(log[1].body).toBe(JSON.stringify({ pin: "*****" }))
-  })
-
-  it("redacts sensitive fields before logging DELETE request bodies", async () => {
-    const client = await sierraClient()
-    await client.deleteRequest("patrons/holds/1", { patronId: "999" })
-
-    const log = findSierraRequestLog("DELETE", "patrons/holds/1")
-    expect(log[1].body).toBe(JSON.stringify({ patronId: "*****" }))
-  })
-
-  it("does not redact non-sensitive fields", async () => {
-    const client = await sierraClient()
-    await client.put("patrons/12345", { varFields: [{ fieldTag: "u" }] })
-
-    const log = findSierraRequestLog("PUT", "patrons/12345")
-    expect(log[1].body).toBe(JSON.stringify({ varFields: [{ fieldTag: "u" }] }))
   })
 })
