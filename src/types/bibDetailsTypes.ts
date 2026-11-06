@@ -1,6 +1,10 @@
 import type { MarcDetail } from "./marcTypes"
 
-export type AnyBibDetail = BibDetail | LinkedBibDetail | SubjectHeadingDetail
+export type AnyBibDetail =
+  | BibDetail
+  | LinkedBibDetail
+  | SubjectHeadingDetail
+  | LinkingEntryDetail
 
 export type AnyMarcDetail = MarcDetail | MarcLinkedDetail
 
@@ -53,4 +57,15 @@ export interface DisplayComponentsEntry {
   displayLabel: string
   name: string
   nameTitle: string
+}
+
+export interface LinkingEntryDetail {
+  label: string
+  value: LinkingEntryValue[]
+}
+
+export interface LinkingEntryValue {
+  display: string
+  url: string
+  parallelDisplay?: string
 }
