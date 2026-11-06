@@ -179,4 +179,50 @@ describe("BibDetail component", () => {
       )
     })
   })
+
+  describe("linking entry details", () => {
+    it("renders the linking entry label and display text", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      expect(screen.getByText("Continues")).toBeInTheDocument()
+      expect(
+        screen.getByText("Povelja oktobra 0350-1469 (OCoLC)220384499")
+      ).toBeInTheDocument()
+    })
+
+    it("renders a '[Search as a query]' link pointing to the linking entry url", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const searchLinks = screen.getAllByText("[Search as a query]")
+      const continuesLink = searchLinks.find(
+        (link) =>
+          link.getAttribute("href") ===
+          "/search/linked-entry/b15349955/780/0/10305113855"
+      )
+      expect(continuesLink).toBeDefined()
+    })
+
+    it("renders the parallel display text", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      expect(
+        screen.getByText("Повеља октобра 0350-1469 (OCoLC)220384499")
+      ).toBeInTheDocument()
+    })
+
+    it("groups consecutive linking entries with the same label under one detail", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const supplementDetail = screen.getByTestId("has-supplement")
+      expect(supplementDetail.children).toHaveLength(2)
+      expect(
+        screen.getByText("Preporučeno 2005- 1452-3531")
+      ).toBeInTheDocument()
+      expect(screen.getByText("Vidi čuda 2006- 1452-7316")).toBeInTheDocument()
+    })
+  })
 })
