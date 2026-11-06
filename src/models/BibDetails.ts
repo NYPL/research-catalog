@@ -1,4 +1,4 @@
-import type { DiscoveryBibResult, Note } from "../types/bibTypes"
+import type { DiscoveryBibResult, Note, LinkingEntry } from "../types/bibTypes"
 import type {
   LinkedBibDetail,
   BibDetail,
@@ -8,6 +8,8 @@ import type {
   MarcLinkedDetail,
   AnyMarcDetail,
   DisplayComponentsEntry,
+  LinkingEntryDetail,
+  LinkingEntryValue,
 } from "../types/bibDetailsTypes"
 import {
   convertToSentenceCase,
@@ -198,6 +200,43 @@ export default class BibDetails {
       .filter((f) => f)
   }
 
+  buildLinkingEntryDetails(): LinkingEntryDetail[] {
+    if (!this.bib.linkingEntry?.length) return []
+
+    const details: LinkingEntryDetail[] = []
+    let currentLabel: string | null = null
+    let currentValues: LinkingEntryValue[] = []
+
+    const pushCurrentDetail = () => {
+      if (currentLabel !== null) {
+        details.push({ label: currentLabel, value: currentValues })
+      }
+    }
+
+    this.bib.linkingEntry.forEach((entry: LinkingEntry, index: number) => {
+      const url = `/search/linked-entry/${entry.path}`
+      const value: LinkingEntryValue = {
+        display: entry.display,
+        url,
+        parallelDisplay: this.bib.parallelLinkingEntry?.[index],
+      }
+
+      // If label changes, save current detail and start a new one
+      if (entry.label !== currentLabel) {
+        pushCurrentDetail()
+        currentLabel = entry.label
+        currentValues = [value]
+      } else {
+        currentValues.push(value)
+      }
+    })
+
+    // Last detail
+    pushCurrentDetail()
+
+    return details
+  }
+
   buildBottomDetails(): AnyBibDetail[] {
     const linkedFields = [
       "contributorLiteral",
@@ -248,8 +287,10 @@ export default class BibDetails {
       .filter((f) => f)
 
     const fieldsWithNotes = this.addNotes(resourceFields)
+    const linkingEntryDetails = this.buildLinkingEntryDetails()
     return this.combineBibDetailsData(
       fieldsWithNotes,
+      linkingEntryDetails,
       this.annotatedMarcDetails
     )
   }
@@ -278,37 +319,47 @@ export default class BibDetails {
 
   combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
+    linkingEntryDetails: LinkingEntryDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
     // Merge Series added entry and Series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
     )
+    // Combine resource and linking entry details
+    const resourceAndLinkingEntryDetails =
+      resourceEndpointDetails.concat(linkingEntryDetails)
 
     // Normalize and merge bib and annotated marc fields
     const normalizeValues = (val: any) => {
       if (!val) return []
       if (Array.isArray(val)) {
-        return val
-          .flat()
-          .map((v) =>
-            typeof v === "string"
-              ? v.trim()
-              : v?.content?.trim() || v?.searchValue?.trim()
-          )
+        return val.flat().flatMap((v) => {
+          if (typeof v === "string") return [v.trim()]
+          // linkingEntry values use `display`/`parallelDisplay`
+          return [
+            v?.content?.trim() || v?.searchValue?.trim() || v?.display?.trim(),
+            v?.parallelDisplay?.trim(),
+          ].filter(Boolean)
+        })
       }
       if (typeof val === "string") return [val.trim()]
       if (val?.content) return [val.content.trim()]
       return [val?.searchValue?.trim()]
     }
 
-    const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
-    const resourceValuesSet = new Set<string>()
-    const allDetails = [...resourceEndpointDetails, ...(this.topDetails || [])]
+    const labelsSet = new Set(
+      resourceAndLinkingEntryDetails.map((d) => d.label)
+    )
+    const resourceValues: string[] = []
+    const allDetails = [
+      ...resourceAndLinkingEntryDetails,
+      ...(this.topDetails || []),
+    ]
 
     allDetails.forEach((detail) => {
       normalizeValues(detail.value).forEach(
-        (v) => v && resourceValuesSet.add(stripPunctuation(v))
+        (v) => v && resourceValues.push(stripPunctuation(v))
       )
     })
 
@@ -323,9 +374,11 @@ export default class BibDetails {
       }
       const detailValues = normalizeValues(detail.value)
       const detailMarcTags = detail.marcTags
-      const overlap = detailValues.some((v) =>
-        resourceValuesSet.has(stripPunctuation(v))
-      )
+      const overlap = detailValues.some((v) => {
+        const stripped = stripPunctuation(v)
+        // filter out annotated marc that's a substring of any parsed marc bib detail
+        return resourceValues.some((rv) => rv.includes(stripped))
+      })
       if (!overlap) {
         filteredMarc.push(detail)
         // store both values and marc tags in one object per AM label
@@ -345,7 +398,7 @@ export default class BibDetails {
       )
     }
 
-    return resourceEndpointDetails.concat(filteredMarc)
+    return resourceAndLinkingEntryDetails.concat(filteredMarc)
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
@@ -510,6 +563,11 @@ export default class BibDetails {
     }
     const parallelFieldMatches = Object.keys(bib).map((key) => {
       if (key.match(/subject/i)) {
+        return null
+      }
+      // linkingEntries have own parallel handling in buildLinkingEntryDetails
+      // (match by index)
+      if (key.match(/linkingEntry/i)) {
         return null
       }
       const paralleledField =

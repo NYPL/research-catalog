@@ -39,6 +39,8 @@ export interface DiscoveryBibResult {
   description?: string[]
   summary?: string[]
   physicalDescription?: string[]
+  linkingEntry?: LinkingEntry[]
+  parallelLinkingEntry?: string[]
 }
 
 // export interface Holding {
@@ -80,6 +82,12 @@ export interface ElectronicResource {
   title?: string
   url?: string
   prefLabel?: string
+}
+
+export interface LinkingEntry {
+  label: string
+  display: string
+  path: string
 }
 
 export interface BibResponse {

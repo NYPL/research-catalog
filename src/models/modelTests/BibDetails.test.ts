@@ -12,6 +12,7 @@ import {
   bibWithSeries,
 } from "../../../__test__/fixtures/bibFixtures"
 import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
+import type { AnnotatedMarc } from "../../types/marcTypes"
 import BibDetailsModel from "../BibDetails"
 
 describe("Bib Details model", () => {
@@ -505,6 +506,83 @@ describe("Bib Details model", () => {
       expect(details).toHaveLength(
         bibWithSupplementaryContent.annotatedMarc.fields.length
       )
+    })
+  })
+
+  describe("linking entries", () => {
+    const model = new BibDetailsModel(
+      parallelsBib.resource,
+      parallelsBib.annotatedMarc as AnnotatedMarc
+    )
+
+    it("builds a linking entry detail for every distinct, consecutive label", () => {
+      const labels = parallelsBib.resource.linkingEntry.map((e) => e.label)
+      const distinctConsecutiveLabels = labels.filter(
+        (label, i) => label !== labels[i - 1]
+      )
+      distinctConsecutiveLabels.forEach((label) => {
+        expect(
+          model.bottomDetails.find((detail) => detail.label === label)
+        ).toBeDefined()
+      })
+    })
+
+    it("groups consecutive linking entries with the same label into a single bottom detail", () => {
+      const supplementDetail = model.bottomDetails.find(
+        (detail) => detail.label === "Has supplement"
+      )
+      expect(supplementDetail.value).toHaveLength(2)
+    })
+
+    it("builds each grouped value with display, url, and parallelDisplay", () => {
+      const supplementDetail = model.bottomDetails.find(
+        (detail) => detail.label === "Has supplement"
+      )
+      expect(supplementDetail.value).toEqual([
+        {
+          display: "Preporučeno 2005- 1452-3531",
+          url: "/search/linked-entry/b15349955/770/0/7416253458",
+          parallelDisplay: "Препоручено 2005- 1452-3531",
+        },
+        {
+          display: "Vidi čuda 2006- 1452-7316",
+          url: "/search/linked-entry/b15349955/770/1/4848864099",
+          parallelDisplay: "Види чуда 2006- 1452-7316",
+        },
+      ])
+    })
+
+    it("builds the linking entry detail with correct display, url, and parallel", () => {
+      const continuesDetail = model.bottomDetails.find(
+        (detail) => detail.label === "Continues"
+      )
+      expect(continuesDetail.value).toEqual([
+        {
+          display: "Povelja oktobra 0350-1469 (OCoLC)220384499",
+          url: "/search/linked-entry/b15349955/780/0/10305113855",
+          parallelDisplay: "Повеља октобра 0350-1469 (OCoLC)220384499",
+        },
+      ])
+    })
+
+    it("does not set parallelDisplay when there is no corresponding parallel linking entry", () => {
+      const otherFormsDetail = model.bottomDetails.find(
+        (detail) => detail.label === "Other forms"
+      )
+      expect(otherFormsDetail.value).toEqual([
+        {
+          display: "Online version: Povelja (OCoLC)760047199",
+          url: "/search/linked-entry/b15349955/776/0/2667508392",
+          parallelDisplay: null,
+        },
+      ])
+    })
+
+    it("does not keep a duplicate 'Alternate script for' annotated MARC field that's covered by the linking entry's parallelDisplay", () => {
+      const alternateScriptDetail = model.bottomDetails.find(
+        (detail) => detail.label === "Alternate script for continues"
+      )
+      expect(alternateScriptDetail).toBeUndefined()
     })
   })
 })
