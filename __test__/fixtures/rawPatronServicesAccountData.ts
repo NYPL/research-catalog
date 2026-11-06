@@ -5,13 +5,13 @@ export const checkouts = {
       dueDate: "2024-05-30T09:00:00Z",
       numberOfRenewals: 10,
       outDate: "2024-05-06T19:11:03Z",
-      id: "72171896",
+      id: "66527401",
       sierraItem: {
-        id: "66527401",
+        id: "40506104",
         bibIds: ["23129476"],
       },
       platformItem: {
-        id: "66527401",
+        id: "40506104",
         nyplSource: "sierra-nypl",
         barcode: "33333455951331",
         callNumber: "J PIC COUSINS",
@@ -30,13 +30,13 @@ export const checkouts = {
       dueDate: "2024-05-07T09:00:00Z",
       numberOfRenewals: 1,
       outDate: "2024-05-06T19:11:01Z",
-      id: "72171895",
+      id: "66527400",
       sierraItem: {
-        id: "66527400",
+        id: "18062994",
         bibIds: ["17226308"],
       },
       platformItem: {
-        id: "66527400",
+        id: "18062994",
         nyplSource: "sierra-nypl",
         barcode: "33333072760735",
         callNumber: "J PIC A",
@@ -55,10 +55,10 @@ export const checkouts = {
       dueDate: "2024-05-07T08:00:00Z",
       numberOfRenewals: 0,
       outDate: "2024-05-06T19:11:01Z",
-      id: "58536063",
-      sierraItem: { id: "66527399", bibIds: ["23296884"] },
+      id: "66527399",
+      sierraItem: { id: "40875357", bibIds: ["23296884"] },
       platformItem: {
-        id: "66527399",
+        id: "40875357",
         nyplSource: "recap-pul",
         barcode: "1715021087264",
         callNumber: "test 5/6 01 xx",
@@ -77,10 +77,10 @@ export const checkouts = {
       dueDate: "2024-04-24T08:00:00Z",
       numberOfRenewals: 0,
       outDate: "2024-04-23T20:25:06Z",
-      id: "58536064",
-      sierraItem: { id: "66527379", bibIds: ["23296866"] },
+      id: "66527379",
+      sierraItem: { id: "40875347", bibIds: ["23296866"] },
       platformItem: {
-        id: "66527379",
+        id: "40875347",
         nyplSource: "recap-cul",
         barcode: "CU25631586",
         callNumber: "PJ5055.37.O4222 H64 2016g",
@@ -100,7 +100,7 @@ export const checkouts = {
 }
 
 export const holds = {
-  total: 5,
+  total: 6,
   entries: [
     {
       requestType: "hold",
@@ -301,6 +301,47 @@ export const holds = {
         isResearch: true,
       },
       discoveryUri: "b23296875",
+    },
+    {
+      requestType: "hold",
+      pickupLocation: {
+        code: "sn",
+        name: "SNFL (formerly Mid-Manhattan)",
+      },
+      pickupByDate: null,
+      sierraHold: {
+        id: "49438190",
+        frozen: false,
+        placed: "2024-05-10",
+        status: {
+          code: "i",
+          name: "Requested item ready for pickup.",
+        },
+        recordType: "i",
+        canFreeze: true,
+        record: "23167148",
+      },
+      platformHold: {
+        id: 5391,
+        createdDate: "2024-01-15T13:19:00+00:00",
+        updatedDate: "2024-05-09T14:44:32+00:00",
+        docDeliveryData: null,
+      },
+      platformItem: {
+        id: "23167148",
+        nyplSource: "sierra-nypl",
+        barcode: null,
+        callNumber: "813.6 K",
+        volume: null,
+      },
+      platformBib: {
+        id: "22739437",
+        nyplSource: "sierra-nypl",
+        title: "The deal (off-campus, #1)",
+        author: "Kennedy, Elle",
+        isResearch: false,
+      },
+      discoveryUri: "b22739437",
     },
   ],
 }

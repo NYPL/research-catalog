@@ -38,7 +38,7 @@ describe("RequestsTab", () => {
   it("renders each hold request as a row", () => {
     const component = renderWithPatronDataContext()
     const bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
   })
 
   it("calls hold cancel endpoint when Cancel button is clicked", async () => {
@@ -47,12 +47,14 @@ describe("RequestsTab", () => {
       status: 200,
     } as Response)
     const component = renderWithPatronDataContext()
+    // "Cancel request" label is only used for research holds, processedHolds[1] is the first
+    const researchHold = processedHolds[1]
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/cancel/${processedHolds[0].id}`,
+      `/research/research-catalog/api/account/holds/cancel/${researchHold.id}`,
       {
         method: "POST",
         headers: {
@@ -61,7 +63,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: processedPatron.id,
           patronBarcode: processedPatron.barcode,
-          itemId: processedHolds[0].itemId,
+          itemId: researchHold.itemId,
         }),
       }
     )
@@ -84,12 +86,13 @@ describe("RequestsTab", () => {
         status: 200,
       } as Response)
     const component = renderWithPatronDataContext()
+    const researchHold = processedHolds[1]
 
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(global.fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/cancel/${processedHolds[0].id}`,
+      `/research/research-catalog/api/account/holds/cancel/${researchHold.id}`,
       {
         method: "POST",
         headers: {
@@ -98,7 +101,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: processedPatron.id,
           patronBarcode: processedPatron.barcode,
-          itemId: processedHolds[0].itemId,
+          itemId: researchHold.itemId,
         }),
       }
     )
@@ -113,14 +116,15 @@ describe("RequestsTab", () => {
       status: 400,
     } as Response)
     const component = renderWithPatronDataContext()
+    const researchHold = processedHolds[1]
 
     const bodyRows = component.getAllByRole("rowgroup")[1]
-    expect(within(bodyRows).getAllByRole("row").length).toBe(5)
+    expect(within(bodyRows).getAllByRole("row").length).toBe(6)
     await userEvent.click(component.getAllByText("Cancel request")[0])
     await userEvent.click(component.getAllByText("Yes, cancel request")[0])
 
     expect(fetch).toHaveBeenCalledWith(
-      `/research/research-catalog/api/account/holds/cancel/${processedHolds[0].id}`,
+      `/research/research-catalog/api/account/holds/cancel/${researchHold.id}`,
       {
         method: "POST",
         headers: {
@@ -129,7 +133,7 @@ describe("RequestsTab", () => {
         body: JSON.stringify({
           patronId: processedPatron.id,
           patronBarcode: processedPatron.barcode,
-          itemId: processedHolds[0].itemId,
+          itemId: researchHold.itemId,
         }),
       }
     )
@@ -151,13 +155,43 @@ describe("RequestsTab", () => {
     })
   })
 
-  it("displays freeze buttons only for holds that can be frozen", async () => {
+  it("displays freeze buttons for circ holds only, never for research holds", async () => {
     const component = renderWithPatronDataContext()
-    const numberOfFreezableHolds = processedHolds.filter(
-      (hold) => hold.status === "REQUEST PENDING" && !hold.isResearch
+    const numberOfCircHolds = processedHolds.filter(
+      (hold) => !hold.isResearch
     ).length
     const freezeButtons = component.getAllByText("Freeze")
-    expect(freezeButtons.length).toBe(numberOfFreezableHolds)
+    expect(freezeButtons.length).toBe(numberOfCircHolds)
+  })
+
+  it("disables the freeze button for circ holds that cannot be frozen, but doesn't remove it", () => {
+    const component = renderWithPatronDataContext()
+    const notFreezableRequest = processedHolds[0]
+    const row = component.getByText(notFreezableRequest.title).closest("tr")
+    const freezeButton = within(row).getByText("Freeze").closest("button")
+    expect(freezeButton).toBeInTheDocument()
+    expect(freezeButton).toBeDisabled()
+  })
+
+  it("disables the freeze button for freezeable circ holds that don't have status REQUEST PENDING", () => {
+    const component = renderWithPatronDataContext()
+    const notFreezableRequest = processedHolds[5]
+    const row = component.getByText(notFreezableRequest.title).closest("tr")
+    const freezeButton = within(row).getByText("Freeze").closest("button")
+    expect(freezeButton).toBeInTheDocument()
+    expect(freezeButton).toBeDisabled()
+  })
+
+  it("enables unfreezing an already-frozen hold even when canFreeze is false", () => {
+    const alreadyFrozenHold = {
+      ...processedHolds[2],
+      frozen: true,
+      canFreeze: false,
+    }
+    const component = renderWithPatronDataContext([alreadyFrozenHold])
+    const unfreezeButton = component.getByText("Unfreeze").closest("button")
+    expect(unfreezeButton).toBeInTheDocument()
+    expect(unfreezeButton).not.toBeDisabled()
   })
 
   it("freezes and unfreezes, with button reflecting current state", async () => {
@@ -184,8 +218,9 @@ describe("RequestsTab", () => {
     )
 
     await userEvent.click(screen.getAllByText("OK", { exact: false })[0])
-    expect(component.queryByText("Freeze")).not.toBeInTheDocument()
+    expect(within(row).queryByText("Freeze")).not.toBeInTheDocument()
     const unfreezeButton = within(row).getByText("Unfreeze")
+    expect(unfreezeButton.closest("button")).not.toBeDisabled()
     await userEvent.click(unfreezeButton)
 
     expect(fetch).toHaveBeenCalledWith(
@@ -201,9 +236,8 @@ describe("RequestsTab", () => {
       }
     )
 
-    expect(component.queryByText("Unfreeze")).not.toBeInTheDocument()
-    const freezeButtons = component.getAllByText("Freeze")
-    expect(freezeButtons.length).toBe(1)
+    expect(within(row).queryByText("Unfreeze")).not.toBeInTheDocument()
+    expect(within(row).getByText("Freeze")).toBeInTheDocument()
   })
 
   it("shows failure modal when freeze doesn't work and does not change frozen state", async () => {
@@ -237,24 +271,23 @@ describe("RequestsTab", () => {
     expect(row).toHaveTextContent("May 17, 2024")
     expect(row).toHaveTextContent("READY FOR PICKUP")
   })
-  it("does not show freeze button on freezable request when it is anything other than pending", () => {
+  it("never shows a freeze button for research holds, regardless of status", () => {
     const component = renderWithPatronDataContext()
 
-    const readyRequest = processedHolds[0]
-    const readyCircRequestRow = component
-      .getByText(readyRequest.title)
+    const researchPendingRequest = processedHolds[1]
+    const researchPendingRow = component
+      .getByText(researchPendingRequest.title)
       .closest("tr")
 
-    expect(readyCircRequestRow).toHaveTextContent("READY FOR PICKUP")
-    expect(readyCircRequestRow).not.toHaveTextContent("Freeze")
+    expect(researchPendingRow).toHaveTextContent("REQUEST PENDING")
+    expect(researchPendingRow).not.toHaveTextContent("Freeze")
 
-    const confirmedRequest = processedHolds[3]
-    const confirmedRequestRow = component
-      .getByText(confirmedRequest.title)
+    const researchPartnerRequest = processedHolds[4]
+    const researchPartnerRow = component
+      .getByText(researchPartnerRequest.title)
       .closest("tr")
 
-    expect(confirmedRequestRow).toHaveTextContent("REQUEST CONFIRMED")
-    expect(confirmedRequestRow).not.toHaveTextContent("Freeze")
+    expect(researchPartnerRow).not.toHaveTextContent("Freeze")
   })
 
   it("should focus on the holds table after successfully canceling a request", async () => {
