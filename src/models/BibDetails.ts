@@ -25,7 +25,7 @@ import type {
   MarcDetail,
 } from "../types/marcTypes"
 import { getSubjectSearchURL } from "../utils/browseUtils"
-import { BASE_URL, DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
+import { DISPLAY_LINKED_FIELD_MAPPING } from "../config/constants"
 
 export default class BibDetails {
   bib: DiscoveryBibResult
