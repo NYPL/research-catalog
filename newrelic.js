@@ -59,23 +59,16 @@ exports.config = {
     ],
   },
   /**
-   * Collapse the patron ID path segment on internal account API routes
+   * obfuscate numeric ID path segments everywhere, to cover both the
+   * request.uri attribute on Transaction/Distributed Traces and
+   * outbound Sierra/Platform API calls
    */
-  rules: {
-    name: [
-      {
-        pattern: "^/api/account/settings/.+$",
-        name: "/api/account/settings/*",
-      },
-      {
-        pattern: "^/api/account/update-pin/.+$",
-        name: "/api/account/update-pin/*",
-      },
-      {
-        pattern: "^/api/account/username/.+$",
-        name: "/api/account/username/*",
-      },
-      { pattern: "^/api/account/[^/]+$", name: "/api/account/*" },
-    ],
+  url_obfuscation: {
+    enabled: true,
+    regex: {
+      pattern: /\/\d+(?=\/|$)/,
+      flags: "g",
+      replacement: "/*****",
+    },
   },
 }
