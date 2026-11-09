@@ -190,7 +190,6 @@ describe("BibDetail component", () => {
         screen.getByText("Povelja oktobra 0350-1469 (OCoLC)220384499")
       ).toBeInTheDocument()
     })
-
     it("renders a '[Search as a query]' link pointing to the linking entry url", () => {
       render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
@@ -199,11 +198,27 @@ describe("BibDetail component", () => {
       const continuesLink = searchLinks.find(
         (link) =>
           link.getAttribute("href") ===
-          "/search/linked-entry/b15349955/780/0/10305113855"
+          "/search/linking-entry/b15349955/780/0/10305113855"
       )
       expect(continuesLink).toBeDefined()
     })
+    it("does not render '[Search as a query]' links for parallels", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
 
+      const supplementDetail = screen.getByTestId("has-supplement")
+      // Should have 2 list items for "Has supplement"
+      const listItems = supplementDetail.querySelectorAll("li")
+      expect(listItems).toHaveLength(2)
+      // Each list item should have exactly 1 "[Search as a query]" link (only primary)
+      listItems.forEach((item) => {
+        const linkElements = Array.from(item.querySelectorAll("a")).filter(
+          (a) => a.textContent === "[Search as a query]"
+        )
+        expect(linkElements).toHaveLength(1)
+      })
+    })
     it("renders the parallel display text", () => {
       render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,
@@ -212,7 +227,6 @@ describe("BibDetail component", () => {
         screen.getByText("Повеља октобра 0350-1469 (OCoLC)220384499")
       ).toBeInTheDocument()
     })
-
     it("groups consecutive linking entries with the same label under one detail", () => {
       render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
         wrapper: MemoryRouterProvider,

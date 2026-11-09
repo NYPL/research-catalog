@@ -11,7 +11,10 @@ import {
   physicalDescriptionBib,
   bibWithSeries,
 } from "../../../__test__/fixtures/bibFixtures"
-import type { LinkedBibDetail } from "../../types/bibDetailsTypes"
+import type {
+  LinkedBibDetail,
+  LinkingEntryValue,
+} from "../../types/bibDetailsTypes"
 import type { AnnotatedMarc } from "../../types/marcTypes"
 import BibDetailsModel from "../BibDetails"
 
@@ -541,12 +544,12 @@ describe("Bib Details model", () => {
       expect(supplementDetail.value).toEqual([
         {
           display: "Preporučeno 2005- 1452-3531",
-          url: "/search/linked-entry/b15349955/770/0/7416253458",
+          url: "/search/linking-entry/b15349955/770/0/7416253458",
           parallelDisplay: "Препоручено 2005- 1452-3531",
         },
         {
           display: "Vidi čuda 2006- 1452-7316",
-          url: "/search/linked-entry/b15349955/770/1/4848864099",
+          url: "/search/linking-entry/b15349955/770/1/4848864099",
           parallelDisplay: "Види чуда 2006- 1452-7316",
         },
       ])
@@ -559,7 +562,7 @@ describe("Bib Details model", () => {
       expect(continuesDetail.value).toEqual([
         {
           display: "Povelja oktobra 0350-1469 (OCoLC)220384499",
-          url: "/search/linked-entry/b15349955/780/0/10305113855",
+          url: "/search/linking-entry/b15349955/780/0/10305113855",
           parallelDisplay: "Повеља октобра 0350-1469 (OCoLC)220384499",
         },
       ])
@@ -572,7 +575,7 @@ describe("Bib Details model", () => {
       expect(otherFormsDetail.value).toEqual([
         {
           display: "Online version: Povelja (OCoLC)760047199",
-          url: "/search/linked-entry/b15349955/776/0/2667508392",
+          url: "/search/linking-entry/b15349955/776/0/2667508392",
           parallelDisplay: null,
         },
       ])
@@ -583,6 +586,105 @@ describe("Bib Details model", () => {
         (detail) => detail.label === "Alternate script for continues"
       )
       expect(alternateScriptDetail).toBeUndefined()
+    })
+
+    describe("label switching behavior", () => {
+      it("creates a separate detail for each distinct consecutive label", () => {
+        const linkingEntryLabels = [
+          "Has supplement",
+          "Has supplement",
+          "Other forms",
+          "Continues",
+        ]
+        const distinctConsecutiveLabels = linkingEntryLabels.filter(
+          (label, i) => label !== linkingEntryLabels[i - 1]
+        )
+
+        expect(distinctConsecutiveLabels).toEqual([
+          "Has supplement",
+          "Other forms",
+          "Continues",
+        ])
+
+        const bottomDetailLabels = model.bottomDetails
+          .filter((detail) => distinctConsecutiveLabels.includes(detail.label))
+          .map((detail) => detail.label)
+
+        expect(bottomDetailLabels).toEqual(distinctConsecutiveLabels)
+      })
+
+      it("groups consecutive entries with the same label into a single value array", () => {
+        const supplementDetail = model.bottomDetails.find(
+          (detail) => detail.label === "Has supplement"
+        )
+        expect(supplementDetail).toBeDefined()
+        const values = supplementDetail.value as LinkingEntryValue[]
+        expect(values).toHaveLength(2)
+        expect(values[0].display).toBe("Preporučeno 2005- 1452-3531")
+        expect(values[1].display).toBe("Vidi čuda 2006- 1452-7316")
+      })
+
+      it("starts a new detail when label changes from 'Has supplement' to 'Other forms'", () => {
+        const otherFormsDetail = model.bottomDetails.find(
+          (detail) => detail.label === "Other forms"
+        )
+        expect(otherFormsDetail).toBeDefined()
+        const values = otherFormsDetail.value as LinkingEntryValue[]
+        expect(values).toHaveLength(1)
+        expect(values[0].display).toBe(
+          "Online version: Povelja (OCoLC)760047199"
+        )
+      })
+
+      it("captures final label after last label switch", () => {
+        const continuesDetail = model.bottomDetails.find(
+          (detail) => detail.label === "Continues"
+        )
+        expect(continuesDetail).toBeDefined()
+        const values = continuesDetail.value as LinkingEntryValue[]
+        expect(values).toHaveLength(1)
+        expect(values[0].display).toBe(
+          "Povelja oktobra 0350-1469 (OCoLC)220384499"
+        )
+      })
+
+      it("preserves correct order of grouped labels and their values", () => {
+        const linkingLabels = model.bottomDetails
+          .filter((detail) =>
+            ["Has supplement", "Other forms", "Continues"].includes(
+              detail.label
+            )
+          )
+          .map((detail) => ({
+            label: detail.label,
+            valueCount: (detail.value as LinkingEntryValue[]).length,
+          }))
+
+        expect(linkingLabels).toEqual([
+          { label: "Has supplement", valueCount: 2 },
+          { label: "Other forms", valueCount: 1 },
+          { label: "Continues", valueCount: 1 },
+        ])
+      })
+    })
+
+    describe("parallelDisplay handling", () => {
+      it("includes parallelDisplay values for entries with parallel data", () => {
+        const supplementDetail = model.bottomDetails.find(
+          (detail) => detail.label === "Has supplement"
+        )
+        const values = supplementDetail.value as LinkingEntryValue[]
+        expect(values[0].parallelDisplay).toBe("Препоручено 2005- 1452-3531")
+        expect(values[1].parallelDisplay).toBe("Види чуда 2006- 1452-7316")
+      })
+
+      it("sets parallelDisplay to null when no corresponding parallel entry exists", () => {
+        const otherFormsDetail = model.bottomDetails.find(
+          (detail) => detail.label === "Other forms"
+        )
+        const values = otherFormsDetail.value as LinkingEntryValue[]
+        expect(values[0].parallelDisplay).toBeNull()
+      })
     })
   })
 })
