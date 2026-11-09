@@ -216,7 +216,7 @@ export default class BibDetails {
         parallelDisplay: this.bib.parallelLinkingEntry?.[index],
       }
 
-      // Handle label changes - save current detail and start new one
+      // Handle label change - save current detail and start new one
       if (entry.label !== currentLabel) {
         // Push previous detail if not first iteration
         if (index > 0 && currentLabel !== null) {
@@ -224,6 +224,7 @@ export default class BibDetails {
         }
         currentLabel = entry.label
         currentValues = [value]
+        // No label change - add value to current label group
       } else {
         currentValues.push(value)
       }
