@@ -213,6 +213,7 @@ export default class BibDetails {
       }
     }
 
+    // Group consecutive values with the same label
     this.bib.linkingEntry.forEach((entry: LinkingEntry, index: number) => {
       const url = `/search/linked-entry/${entry.path}`
       const value: LinkingEntryValue = {
@@ -336,7 +337,7 @@ export default class BibDetails {
       if (Array.isArray(val)) {
         return val.flat().flatMap((v) => {
           if (typeof v === "string") return [v.trim()]
-          // linkingEntry values use `display`/`parallelDisplay`
+          // Check both display and parallelDisplay on linkingEntry values
           return [
             v?.content?.trim() || v?.searchValue?.trim() || v?.display?.trim(),
             v?.parallelDisplay?.trim(),
@@ -565,8 +566,7 @@ export default class BibDetails {
       if (key.match(/subject/i)) {
         return null
       }
-      // linkingEntries have own parallel handling in buildLinkingEntryDetails
-      // (match by index)
+      // linkingEntries have own parallel handling in buildLinkingEntryDetails (match by index)
       if (key.match(/linkingEntry/i)) {
         return null
       }
