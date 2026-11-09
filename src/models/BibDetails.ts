@@ -207,33 +207,32 @@ export default class BibDetails {
     let currentLabel: string | null = null
     let currentValues: LinkingEntryValue[] = []
 
-    const pushCurrentDetail = () => {
-      if (currentLabel !== null) {
-        details.push({ label: currentLabel, value: currentValues })
-      }
-    }
-
     // Group consecutive values with the same label
     this.bib.linkingEntry.forEach((entry: LinkingEntry, index: number) => {
-      const url = `/search/linked-entry/${entry.path}`
+      const url = `/search/linking-entry/${entry.path}`
       const value: LinkingEntryValue = {
         display: entry.display,
         url,
         parallelDisplay: this.bib.parallelLinkingEntry?.[index],
       }
 
-      // If label changes, save current detail and start a new one
+      // Handle label changes - save current detail and start new one
       if (entry.label !== currentLabel) {
-        pushCurrentDetail()
+        // Push previous detail if not first iteration
+        if (index > 0 && currentLabel !== null) {
+          details.push({ label: currentLabel, value: currentValues })
+        }
         currentLabel = entry.label
         currentValues = [value]
       } else {
         currentValues.push(value)
       }
-    })
 
-    // Last detail
-    pushCurrentDetail()
+      // Push final detail on last iteration
+      if (index === this.bib.linkingEntry.length - 1) {
+        details.push({ label: currentLabel, value: currentValues })
+      }
+    })
 
     return details
   }

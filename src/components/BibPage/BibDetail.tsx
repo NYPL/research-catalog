@@ -30,7 +30,7 @@ function isLinkingEntryDetail(
     detail.value[0] !== null &&
     "url" in detail.value[0] &&
     typeof detail.value[0].url === "string" &&
-    detail.value[0].url.includes("linked-entry")
+    detail.value[0].url.includes("linking-entry")
   )
 }
 
