@@ -94,7 +94,7 @@ export async function postHoldRequest(
     patron: patronId,
     record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdStripped),
+    bibId: bibIdStripped,
     requestType: "hold",
     recordType: "i",
     pickupLocation,
@@ -143,7 +143,7 @@ export async function postEDDRequest(
     patron: patronId,
     record: itemIdStripped,
     nyplSource: source,
-    bibId: parseInt(bibIdStripped),
+    bibId: bibIdStripped,
     requestType: "edd",
     recordType: "i",
     docDeliveryData: {
@@ -197,10 +197,7 @@ export async function fetchHoldDetails(
       status: 200,
     }
   } catch (error) {
-    logServerError(
-      "fetchHoldDetails",
-      `requestId: ${requestId}, error message: ${error.message}`
-    )
+    logServerError("fetchHoldDetails", `error message: ${error.message}`)
 
     return { status: 500 }
   }
@@ -232,7 +229,7 @@ export async function fetchPatronEligibility(
     return { status: 200, ...eligibilityResult }
   } catch (error) {
     logger.error(
-      `Error fetching hold request eligibility in fetchPatronEligibility server function, patronId: ${patronId}`,
+      "Error fetching hold request eligibility in fetchPatronEligibility",
       error.message
     )
 

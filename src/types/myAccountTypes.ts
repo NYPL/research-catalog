@@ -33,81 +33,46 @@ export interface SierraCheckout {
   dueDate: string
 }
 
-export interface PatronServicesCheckouts {
-  total: number
-  entries: PatronServicesCheckout[]
-}
-
-export interface PatronServicesCheckout {
-  dueDate: string
-  numberOfRenewals: number
-  outDate: string
-  id: string
-  sierraItem: SierraItem
-  platformItem: PlatformItem
-  platformBib: PlatformBib
-  discoveryUri?: string
-}
-
 export interface Phone {
   number: string
   type: string
 }
 
-export type NyplSource = "sierra-nypl" | "recap-pul" | "recap-cul" | "recap-hl"
-
 export interface SierraItem {
   id: string
+  updatedDate: string
+  createdDate: string
+  deleted: boolean
   bibIds: string[]
+  location: SierraCodeName
+  status: {
+    code: string
+    display: string
+    duedate: string
+  }
+  volumes: string[]
+  barcode: string
+  callNumber: string
 }
 
 export interface SierraHold {
   id: string
-  record: string
+  record: SierraRecord
   frozen: boolean
   canFreeze: boolean
   status: SierraCodeName
-  recordType: string
-  placed: string
-}
-
-export interface PlatformHold {
-  id: string | number
-  createdDate: string
-  updatedDate: string
-  docDeliveryData
-}
-
-export interface PlatformItem {
-  id: string
-  nyplSource: NyplSource
-  barcode: string
-  callNumber: string
-  volume: string
-}
-
-export interface PlatformBib {
-  id: string
-  nyplSource: NyplSource
-  title: string
-  author: string
-  isResearch: boolean
-}
-
-export interface PatronServicesHolds {
-  total: number
-  entries: PatronServicesHold[]
-}
-
-export interface PatronServicesHold {
-  requestType: "edd" | "hold"
   pickupLocation: SierraCodeName
   pickupByDate: string
-  sierraHold: SierraHold
-  platformHold: PlatformHold
-  platformItem: PlatformItem
-  platformBib: PlatformBib
-  discoveryUri?: string
+  patron: string
+  recordType: string
+}
+
+export interface SierraRecord {
+  id?: string
+  title?: string
+  bibIds: string[]
+  barcode: string
+  callNumber: string
 }
 
 export type FixedField = { label: string; value: "z" | "p" }
@@ -142,7 +107,7 @@ export interface Checkout {
 
 export interface SierraCodeName {
   code: string
-  name?: string
+  name: string
 }
 
 export interface Hold {
@@ -239,3 +204,8 @@ export interface Fine {
     date: string
   }[]
 }
+
+export type BibDataMapType = Record<
+  string,
+  { title: string; isResearch: boolean; isNyplOwned: boolean }
+>

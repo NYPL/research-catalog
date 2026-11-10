@@ -85,7 +85,7 @@ const RequestsTab = () => {
       <Box
         sx={{
           display: "flex",
-          gap: "8px",
+          gap: "4px",
           flexDirection: { base: "column", md: "row" },
         }}
       >
@@ -94,7 +94,9 @@ const RequestsTab = () => {
           hold={hold}
           patron={patron}
         />
-        {!hold.isResearch && <FreezeButton hold={hold} patron={patron} />}
+        {hold.canFreeze && hold.status === "REQUEST PENDING" && (
+          <FreezeButton hold={hold} patron={patron} />
+        )}{" "}
       </Box>
     ) : null,
   ])
@@ -107,7 +109,6 @@ const RequestsTab = () => {
   }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
-    if (!status) return null
     if (status == "READY FOR PICKUP") {
       return (
         <StatusBadge className={styles.statusBadge} variant="positive">
