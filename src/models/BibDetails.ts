@@ -286,12 +286,11 @@ export default class BibDetails {
         return detail
       })
       .filter((f) => f)
+      .concat(this.buildLinkingEntryDetails())
 
     const fieldsWithNotes = this.addNotes(resourceFields)
-    const linkingEntryDetails = this.buildLinkingEntryDetails()
     return this.combineBibDetailsData(
       fieldsWithNotes,
-      linkingEntryDetails,
       this.annotatedMarcDetails
     )
   }
@@ -320,16 +319,12 @@ export default class BibDetails {
 
   combineBibDetailsData(
     resourceEndpointDetails: AnyBibDetail[],
-    linkingEntryDetails: LinkingEntryDetail[],
     annotatedMarcDetails: AnyMarcDetail[]
   ): AnyBibDetail[] {
     // Merge Series added entry and Series uniform title fields
     resourceEndpointDetails = this.combineSeriesAddedEntries(
       resourceEndpointDetails
     )
-    // Combine resource and linking entry details
-    const resourceAndLinkingEntryDetails =
-      resourceEndpointDetails.concat(linkingEntryDetails)
 
     // Normalize and merge bib and annotated marc fields
     const normalizeValues = (val: any) => {
@@ -349,14 +344,9 @@ export default class BibDetails {
       return [val?.searchValue?.trim()]
     }
 
-    const labelsSet = new Set(
-      resourceAndLinkingEntryDetails.map((d) => d.label)
-    )
+    const labelsSet = new Set(resourceEndpointDetails.map((d) => d.label))
     const resourceValues: string[] = []
-    const allDetails = [
-      ...resourceAndLinkingEntryDetails,
-      ...(this.topDetails || []),
-    ]
+    const allDetails = [...resourceEndpointDetails, ...(this.topDetails || [])]
 
     allDetails.forEach((detail) => {
       normalizeValues(detail.value).forEach(
@@ -399,7 +389,7 @@ export default class BibDetails {
       )
     }
 
-    return resourceAndLinkingEntryDetails.concat(filteredMarc)
+    return resourceEndpointDetails.concat(filteredMarc)
   }
 
   buildHoldingDetail(holding, fieldMapping: FieldMapping) {
