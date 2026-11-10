@@ -493,22 +493,6 @@ export const processedHolds = [
     catalogHref: null,
     volume: null,
   },
-  {
-    itemId: "23167148",
-    patron: "6742743",
-    id: "49438190",
-    pickupByDate: null,
-    canFreeze: true,
-    frozen: false,
-    status: "READY FOR PICKUP",
-    pickupLocation: { code: "sn", name: "SNFL (formerly Mid-Manhattan)" },
-    title: "The deal (off-campus, #1) / Kennedy, Elle",
-    isResearch: false,
-    bibId: "22739437",
-    isNyplOwned: true,
-    catalogHref: "https://borrow.nypl.org/search/card?recordId=22739437",
-    volume: null,
-  },
 ]
 
 export const processedFines = {
