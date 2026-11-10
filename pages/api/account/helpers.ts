@@ -2,6 +2,7 @@ import sierraClient from "../../../src/server/sierraClient"
 import type { HTTPResponse } from "../../../src/types/appTypes"
 import nyplApiClient from "../../../src/server/nyplApiClient"
 import { logger } from "@nypl/node-utils"
+import { redactSensitiveFields } from "../../../src/utils/logUtils"
 
 /**
  * PUT request to Sierra to update patron PIN, first validating with previous PIN.
@@ -20,7 +21,7 @@ export async function updatePin(
       pin: oldPin,
     })
     await client.put(`patrons/${patronId}`, { pin: newPin })
-    return { status: 200, message: `Pin updated to ${newPin}` }
+    return { status: 200, message: "Pin updated successfully" }
   } catch (error) {
     return {
       status: error.response.status,
@@ -109,20 +110,26 @@ export async function updateHold(
 ): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
-    logger.info("My account update hold request", {
-      type: holdData.freeze ? "freeze" : "pickup location",
-      sierraHoldId: holdId,
-      ...updateHoldLogInfo,
-    })
+    logger.info(
+      "My account update hold request",
+      redactSensitiveFields({
+        type: holdData.freeze ? "freeze" : "pickup location",
+        sierraHoldId: holdId,
+        ...updateHoldLogInfo,
+      })
+    )
     await client.put(`patrons/holds/${holdId}`, holdData)
     return { status: 200, message: "Updated" }
   } catch (error) {
-    logger.info("My account hold update failed", {
-      type: holdData.freeze ? "freeze" : "pickup location",
-      sierraHoldId: holdId,
-      ...updateHoldLogInfo,
-      status: error.response.status,
-    })
+    logger.info(
+      "My account hold update failed",
+      redactSensitiveFields({
+        type: holdData.freeze ? "freeze" : "pickup location",
+        sierraHoldId: holdId,
+        ...updateHoldLogInfo,
+        status: error.response.status,
+      })
+    )
     return {
       status: error.response.status,
       message: error.response.data.message || error.response.data.description,
@@ -139,18 +146,24 @@ export async function cancelHold(
 ): Promise<HTTPResponse> {
   try {
     const client = await sierraClient()
-    logger.info("My account cancel hold request", {
-      ...cancelHoldLogInfo,
-      sierraHoldId: holdId,
-    })
+    logger.info(
+      "My account cancel hold request",
+      redactSensitiveFields({
+        ...cancelHoldLogInfo,
+        sierraHoldId: holdId,
+      })
+    )
     await client.deleteRequest(`patrons/holds/${holdId}`)
     return { status: 200, message: "Canceled" }
   } catch (error) {
-    logger.info("My account cancel hold request failed", {
-      ...cancelHoldLogInfo,
-      sierraHoldId: holdId,
-      status: error.response.status,
-    })
+    logger.info(
+      "My account cancel hold request failed",
+      redactSensitiveFields({
+        ...cancelHoldLogInfo,
+        sierraHoldId: holdId,
+        status: error.response.status,
+      })
+    )
     return {
       status: error.response.status,
       message: error.response.data.name || error.response.data.description,
