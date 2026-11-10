@@ -21,7 +21,7 @@ export default async function handler(
   const { listId } = req.query
 
   const { description, listName, records } = req.body || {}
-  const accountModel = new MyAccount({ patronId: cookiePatronId })
+  const accountModel = new MyAccount(null, cookiePatronId)
 
   if (req.method == "GET") {
     if (!listId || typeof listId !== "string") {

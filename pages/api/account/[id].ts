@@ -1,16 +1,10 @@
 import type { NextApiRequest, NextApiResponse } from "next"
 import sierraClient from "../../../src/server/sierraClient"
 import { MyAccountFactory } from "../../../src/models/MyAccount"
-import nyplApiClient from "../../../src/server/nyplApiClient"
 
 export const getPatronData = async (id: string) => {
-  const sierra = await sierraClient()
-  const platform = await nyplApiClient()
-  return await MyAccountFactory({
-    sierraClient: sierra,
-    platformClient: platform,
-    patronId: id,
-  })
+  const client = await sierraClient()
+  return await MyAccountFactory(id, client)
 }
 
 export const fetchPatronData = async (id: string) => {

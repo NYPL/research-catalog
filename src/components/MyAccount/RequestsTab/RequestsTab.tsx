@@ -107,7 +107,6 @@ const RequestsTab = () => {
   }, [focusOnRequestTab, patronDataLoading])
 
   function getStatusBadge(status) {
-    if (!status) return null
     if (status == "READY FOR PICKUP") {
       return (
         <StatusBadge className={styles.statusBadge} variant="positive">
