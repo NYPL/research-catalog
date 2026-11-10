@@ -14,6 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
+- Upgraded Playwright from 1.58.2 to 1.65.0 so tests run on GitHub's Ubuntu 26.04 runner [SCC-5804](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5804)
 - Updated hold freezing logic: circ holds always show Freeze button (sometimes disabled), so holds can be unfrozen [SCC-5551]
 - Updated MyAccount checkouts and holds to use PatronServices endpoints to correctly display bound-with titles [SCC-5312](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5312)
 
