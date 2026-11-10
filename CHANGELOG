@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Prerelease
 
-- Redact sensitive information from logs
+- Redact sensitive information from logs and obfuscate New Relic traces [SCC-5792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5792)
 
 ### Removed
 
