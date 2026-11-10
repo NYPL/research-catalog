@@ -3,6 +3,10 @@ import { config, logger } from "@nypl/node-utils"
 import { bootstrapConfig } from "../../../lib/bootstrap"
 import { appConfig } from "../../config/appConfig"
 import { withTimeout } from "../../utils/serverUtils"
+import {
+  redactSensitiveFields,
+  redactSensitivePath,
+} from "../../utils/logUtils"
 
 export class SierraClientError extends Error {
   constructor(message: string) {
@@ -41,7 +45,7 @@ async function buildClient() {
   wrapper.get = async function (path) {
     return await withTimeout(async () => {
       logger.info("Sierra request", {
-        path,
+        path: redactSensitivePath(path),
         method: "GET",
       })
       return await get(path)
@@ -51,9 +55,9 @@ async function buildClient() {
   wrapper.post = async function (path, body) {
     return await withTimeout(async () => {
       logger.info("Sierra request", {
-        path,
+        path: redactSensitivePath(path),
         method: "POST",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await post(path, body)
     })
@@ -62,9 +66,9 @@ async function buildClient() {
   wrapper.put = async function (path, body) {
     return await withTimeout(async () => {
       logger.info("Sierra request", {
-        path,
+        path: redactSensitivePath(path),
         method: "PUT",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await put(path, body)
     })
@@ -73,9 +77,9 @@ async function buildClient() {
   wrapper.deleteRequest = async function (path, body) {
     return await withTimeout(async () => {
       logger.info("Sierra request", {
-        path,
+        path: redactSensitivePath(path),
         method: "DELETE",
-        body: JSON.stringify(body),
+        body: JSON.stringify(redactSensitiveFields(body)),
       })
       return await deleteRequest(path, body)
     })

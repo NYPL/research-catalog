@@ -53,6 +53,22 @@ exports.config = {
       "response.headers.proxyAuthorization",
       "response.headers.setCookie*",
       "response.headers.x*",
+      "request.parameters.patronId",
+      "request.parameters.barcode",
+      "request.parameters.barcodes*",
     ],
+  },
+  /**
+   * obfuscate numeric ID path segments everywhere, to cover both the
+   * request.uri attribute on Transaction/Distributed Traces and
+   * outbound Sierra/Platform API calls
+   */
+  url_obfuscation: {
+    enabled: true,
+    regex: {
+      pattern: /\/\d+(?=\/|$)/,
+      flags: "g",
+      replacement: "/*****",
+    },
   },
 }
