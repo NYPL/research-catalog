@@ -9,13 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Updated
 
-- Redact sensitive information from logs and obfuscate New Relic traces [SCC-5792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5792)
 - Upgraded Playwright from 1.58.2 to 1.65.0 so tests run on GitHub's Ubuntu 26.04 runner [SCC-5804](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5804)
 
 ### Removed
 
 - Removed the parallel_tests folder and the separate account projects from the Playwright config [SCC-5627](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5627)
 - Removed `parseInt`ing bib IDs in hold requests
+
+## [Hot fix] 2026-11-05
+
+- Redact sensitive information from logs [SCC-5792](https://newyorkpubliclibrary.atlassian.net/browse/SCC-5792)
 
 ## [2.3.0] 2026-11-03
 
