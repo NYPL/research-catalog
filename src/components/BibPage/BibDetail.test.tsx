@@ -6,6 +6,7 @@ import {
 } from "../../../__test__/fixtures/bibFixtures"
 import BibDetailsModel from "../../models/BibDetails"
 import BibDetails from "./BibDetail"
+import type { LinkingEntryDetail } from "../../types/bibDetailsTypes"
 
 import { render, screen } from "@testing-library/react"
 import { MemoryRouterProvider } from "next-router-mock/MemoryRouterProvider"
@@ -177,6 +178,107 @@ describe("BibDetail component", () => {
         "href",
         expect.stringContaining("/search?filters[series][0]=Childhood")
       )
+    })
+  })
+
+  describe("linking entry details", () => {
+    it("renders the linking entry label and display text", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      expect(screen.getByText("Continues")).toBeInTheDocument()
+      expect(
+        screen.getByText("Povelja oktobra 0350-1469 (OCoLC)220384499")
+      ).toBeInTheDocument()
+    })
+    it("renders a '[Search as a query]' link pointing to the linking entry url", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const searchLinks = screen.getAllByText("[Search as a query]")
+      const continuesLink = searchLinks.find(
+        (link) =>
+          link.getAttribute("href") ===
+          "/search/linking-entry/b15349955/780/0/10305113855"
+      )
+      expect(continuesLink).toBeDefined()
+    })
+    it("does not render '[Search as a query]' links for parallels", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+
+      const supplementDetail = screen.getByTestId("has-supplement")
+      // Should have 2 list items for "Has supplement"
+      const listItems = supplementDetail.querySelectorAll("li")
+      expect(listItems).toHaveLength(2)
+      // Each list item should have exactly 1 "[Search as a query]" link (only primary)
+      listItems.forEach((item) => {
+        const linkElements = Array.from(item.querySelectorAll("a")).filter(
+          (a) => a.textContent === "[Search as a query]"
+        )
+        expect(linkElements).toHaveLength(1)
+      })
+    })
+    it("renders the parallel display text", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      expect(
+        screen.getByText("Повеља октобра 0350-1469 (OCoLC)220384499")
+      ).toBeInTheDocument()
+    })
+    it("groups consecutive linking entries with the same label under one detail", () => {
+      render(<BibDetails details={parallelsBibModel.bottomDetails} />, {
+        wrapper: MemoryRouterProvider,
+      })
+      const supplementDetail = screen.getByTestId("has-supplement")
+      expect(supplementDetail.children).toHaveLength(2)
+      expect(
+        screen.getByText("Preporučeno 2005- 1452-3531")
+      ).toBeInTheDocument()
+      expect(screen.getByText("Vidi čuda 2006- 1452-7316")).toBeInTheDocument()
+    })
+    it("renders orphaned parallels (no display, only parallelDisplay) without search link", () => {
+      const mockOrphanedParallelDetail: LinkingEntryDetail = {
+        label: "Test Linking Entry",
+        value: [
+          {
+            display: "the spaghetti",
+            url: "/search/linking-entry/test/test/test/test",
+            parallelDisplay: "le spaghetti",
+          },
+          {
+            display: null,
+            url: null,
+            parallelDisplay: "hello",
+          },
+        ],
+      }
+
+      render(<BibDetails details={[mockOrphanedParallelDetail]} />, {
+        wrapper: MemoryRouterProvider,
+      })
+
+      // Find all list items
+      const listItems = screen.getAllByRole("listitem")
+      expect(listItems).toHaveLength(2)
+
+      // First item should have display and search link
+      const firstItem = listItems[0]
+      expect(firstItem.textContent).toContain("the spaghetti")
+      const firstItemSearchLinks = Array.from(
+        firstItem.querySelectorAll("a")
+      ).filter((a) => a.textContent === "[Search as a query]")
+      expect(firstItemSearchLinks).toHaveLength(1)
+
+      // Second item should only have parallelDisplay text, no search link
+      const orphanedItem = listItems[1]
+      expect(orphanedItem.textContent).toContain("hello")
+      const orphanSearchLinks = Array.from(
+        orphanedItem.querySelectorAll("a")
+      ).filter((a) => a.textContent === "[Search as a query]")
+      expect(orphanSearchLinks).toHaveLength(0)
     })
   })
 })

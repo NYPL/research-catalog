@@ -7,6 +7,8 @@ import type {
   BibDetailURL,
   LinkedBibDetail,
   AnyBibDetail,
+  LinkingEntryDetail,
+  LinkingEntryValue,
 } from "../../types/bibDetailsTypes"
 import { rtlOrLtr, splitTextByQuery } from "../../utils/bibUtils"
 import { Fragment, type ReactNode } from "react"
@@ -16,6 +18,20 @@ import { encodeURIComponentWithPeriods } from "../../utils/appUtils"
 interface BibDetailsProps {
   details: AnyBibDetail[]
   heading?: string
+}
+
+function isLinkingEntryDetail(
+  detail: AnyBibDetail
+): detail is LinkingEntryDetail {
+  return (
+    "value" in detail &&
+    Array.isArray(detail.value) &&
+    typeof detail.value[0] === "object" &&
+    detail.value[0] !== null &&
+    "url" in detail.value[0] &&
+    typeof detail.value[0].url === "string" &&
+    detail.value[0].url.includes("linking-entry")
+  )
 }
 
 const BibDetails = ({ details, heading }: BibDetailsProps) =>
@@ -33,7 +49,7 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
       showRowDividers={false}
       className={`${styles.bibDetails} ${styles.inBibPage}`}
     >
-      {details.map((detail: BibDetail | LinkedBibDetail) => {
+      {details.map((detail: AnyBibDetail) => {
         if (!detail) return
         if ("link" in detail)
           if (
@@ -47,6 +63,9 @@ const BibDetails = ({ details, heading }: BibDetailsProps) =>
                 detail.label === "Subject" ? "subjects" : "contributors",
             })
           else return LinkedDetailElement(detail as LinkedBibDetail)
+        if (isLinkingEntryDetail(detail)) {
+          return LinkingEntryDetailElement(detail)
+        }
         return PlainTextElement(detail as BibDetail)
       })}
     </List>
@@ -120,6 +139,44 @@ export const BrowseLinkDetailElement = ({
   )
 }
 
+export const LinkingEntryDetailElement = (field: LinkingEntryDetail) => {
+  const listItems = field.value.map((entry: LinkingEntryValue, i: number) => (
+    <li key={`${kebabCase(field.label)}-${i}`}>
+      {entry.display && (
+        <div>
+          <span dir={rtlOrLtr(entry.display)}>{entry.display}</span>
+          {entry.url && (
+            <>
+              {" - "}
+              <Link
+                href={entry.url}
+                isExternal={false}
+                fontWeight="700"
+                aria-label={`Search as a query for "${entry.display}"`}
+                textDecoration="none"
+                translate="yes"
+              >
+                [Search as a query]
+              </Link>
+            </>
+          )}
+        </div>
+      )}
+      {entry.parallelDisplay && (
+        <div>
+          <div key={`${kebabCase(field.label)}-${i}-parallel`}>
+            <span dir={rtlOrLtr(entry.parallelDisplay)}>
+              {entry.parallelDisplay}
+            </span>
+          </div>
+        </div>
+      )}
+    </li>
+  ))
+
+  return DetailElement(field.label, listItems)
+}
+
 const LinkElement = (
   url: BibDetailURL,
   linkType: "internal" | "external",
@@ -127,7 +184,7 @@ const LinkElement = (
   ariaLabel?: string,
   translate = "no"
 ) => {
-  const { text, searchValue, browseValue, url: href } = url
+  const { text, searchValue, url: href } = url
 
   if (!text) {
     return (
