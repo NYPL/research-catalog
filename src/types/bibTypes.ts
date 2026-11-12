@@ -86,8 +86,9 @@ export interface ElectronicResource {
 
 export interface LinkingEntry {
   label: string
-  display: string
-  path: string
+  display: string | null
+  path: string | null
+  parallelDisplay: string | null
 }
 
 export interface BibResponse {

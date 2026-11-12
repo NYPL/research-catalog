@@ -142,20 +142,26 @@ export const BrowseLinkDetailElement = ({
 export const LinkingEntryDetailElement = (field: LinkingEntryDetail) => {
   const listItems = field.value.map((entry: LinkingEntryValue, i: number) => (
     <li key={`${kebabCase(field.label)}-${i}`}>
-      <div>
-        <span dir={rtlOrLtr(entry.display)}>{entry.display}</span>
-        {" - "}
-        <Link
-          href={entry.url}
-          isExternal={false}
-          fontWeight="700"
-          aria-label={`Search as a query for "${entry.display}"`}
-          textDecoration="none"
-          translate="yes"
-        >
-          [Search as a query]
-        </Link>
-      </div>
+      {entry.display && (
+        <div>
+          <span dir={rtlOrLtr(entry.display)}>{entry.display}</span>
+          {entry.url && (
+            <>
+              {" - "}
+              <Link
+                href={entry.url}
+                isExternal={false}
+                fontWeight="700"
+                aria-label={`Search as a query for "${entry.display}"`}
+                textDecoration="none"
+                translate="yes"
+              >
+                [Search as a query]
+              </Link>
+            </>
+          )}
+        </div>
+      )}
       {entry.parallelDisplay && (
         <div>
           <div key={`${kebabCase(field.label)}-${i}-parallel`}>

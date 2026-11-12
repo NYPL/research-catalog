@@ -213,7 +213,7 @@ export default class BibDetails {
       const value: LinkingEntryValue = {
         display: entry.display,
         url,
-        parallelDisplay: this.bib.parallelLinkingEntry?.[index],
+        parallelDisplay: entry.parallelDisplay,
       }
 
       if (index === 0) {

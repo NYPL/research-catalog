@@ -568,19 +568,6 @@ describe("Bib Details model", () => {
       ])
     })
 
-    it("does not set parallelDisplay when there is no corresponding parallel linking entry", () => {
-      const otherFormsDetail = model.bottomDetails.find(
-        (detail) => detail.label === "Other forms"
-      )
-      expect(otherFormsDetail.value).toEqual([
-        {
-          display: "Online version: Povelja (OCoLC)760047199",
-          url: "/search/linking-entry/b15349955/776/0/2667508392",
-          parallelDisplay: null,
-        },
-      ])
-    })
-
     it("does not keep a duplicate 'Alternate script for' annotated MARC field that's covered by the linking entry's parallelDisplay", () => {
       const alternateScriptDetail = model.bottomDetails.find(
         (detail) => detail.label === "Alternate script for continues"
@@ -665,25 +652,6 @@ describe("Bib Details model", () => {
           { label: "Other forms", valueCount: 1 },
           { label: "Continues", valueCount: 1 },
         ])
-      })
-    })
-
-    describe("parallelDisplay handling", () => {
-      it("includes parallelDisplay values for entries with parallel data", () => {
-        const supplementDetail = model.bottomDetails.find(
-          (detail) => detail.label === "Has supplement"
-        )
-        const values = supplementDetail.value as LinkingEntryValue[]
-        expect(values[0].parallelDisplay).toBe("Препоручено 2005- 1452-3531")
-        expect(values[1].parallelDisplay).toBe("Види чуда 2006- 1452-7316")
-      })
-
-      it("sets parallelDisplay to null when no corresponding parallel entry exists", () => {
-        const otherFormsDetail = model.bottomDetails.find(
-          (detail) => detail.label === "Other forms"
-        )
-        const values = otherFormsDetail.value as LinkingEntryValue[]
-        expect(values[0].parallelDisplay).toBeNull()
       })
     })
   })

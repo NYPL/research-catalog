@@ -8485,28 +8485,26 @@ export const parallelsBib = {
         label: "Has supplement",
         display: "Preporučeno 2005- 1452-3531",
         path: "b15349955/770/0/7416253458",
+        parallelDisplay: "Препоручено 2005- 1452-3531",
       },
       {
         label: "Has supplement",
         display: "Vidi čuda 2006- 1452-7316",
         path: "b15349955/770/1/4848864099",
+        parallelDisplay: "Види чуда 2006- 1452-7316",
       },
       {
         label: "Other forms",
         display: "Online version: Povelja (OCoLC)760047199",
         path: "b15349955/776/0/2667508392",
+        parallelDisplay: null,
       },
       {
         label: "Continues",
         display: "Povelja oktobra 0350-1469 (OCoLC)220384499",
         path: "b15349955/780/0/10305113855",
+        parallelDisplay: "Повеља октобра 0350-1469 (OCoLC)220384499",
       },
-    ],
-    parallelLinkingEntry: [
-      "Препоручено 2005- 1452-3531",
-      "Види чуда 2006- 1452-7316",
-      null,
-      "Повеља октобра 0350-1469 (OCoLC)220384499",
     ],
     mediaType: [
       {
