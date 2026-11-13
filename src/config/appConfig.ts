@@ -48,8 +48,7 @@ export const appConfig: AppConfig = {
   serviceAnnouncement: {
     development: "",
     qa: "Test: Due to winter holiday closures, the delivery time for offsite requests will be delayed from December 22 until early January 2024. Please submit requests for offsite materials as early as possible.",
-    production:
-      "Please note that all NYPL locations will be closed on Wednesday, November 11, 2026. Offsite materials requested between Monday, November 9 at 2:30pm and Wednesday, November 11 at 2:30pm will be delivered Thursday, November 12. You can check the status of your requests by logging into your patron account.",
+    production: "",
   },
   urls: {
     circulatingCatalog: "https://borrow.nypl.org",
